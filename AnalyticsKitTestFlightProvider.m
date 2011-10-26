@@ -14,7 +14,7 @@
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)testFlightKey {
     self = [super init];
     if (self) {
-        [TestFlight takeOff:TESTFLIGHT_TEAM_TOKEN];
+        [TestFlight takeOff:testFlightKey];
     }
     return self;
 }
