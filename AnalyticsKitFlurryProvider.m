@@ -19,6 +19,17 @@
     return self;
 }
 
+-(void)runInMainThread:(void (^)(void))block{
+    //Flurry requires calls to be made from main thread
+    if ([NSThread isMainThread]){
+        block();
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            block();
+        });
+    }
+}
+
 -(void)applicationWillEnterForeground {}
 -(void)applicationDidEnterBackground {}
 -(void)applicationWillTerminate {}
@@ -31,39 +42,53 @@
 -(void)logScreen:(NSString *)screenName {}
 
 -(void)logEvent:(NSString *)value {
-    [FlurryAnalytics logEvent:value];
+    [self runInMainThread:^{
+        [FlurryAnalytics logEvent:value];
+    }];
 }
 
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {
-    [FlurryAnalytics logEvent:event withParameters:dict];
+    [self runInMainThread:^{
+        [FlurryAnalytics logEvent:event withParameters:dict];
+    }];
 }
 
 -(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value {
-    [FlurryAnalytics logEvent:event withParameters:[NSDictionary dictionaryWithObject:value forKey:key]];
+    [self runInMainThread:^{
+        [FlurryAnalytics logEvent:event withParameters:[NSDictionary dictionaryWithObject:value forKey:key]];
+    }];
 }
 
-
 - (void)logEvent:(NSString *)eventName timed:(BOOL)timed{
-    [FlurryAnalytics logEvent:eventName timed:timed];
+    [self runInMainThread:^{
+        [FlurryAnalytics logEvent:eventName timed:timed];
+    }];
 }
 
 - (void)logEvent:(NSString *)eventName withProperties:(NSDictionary *)dict timed:(BOOL)timed{
-    [FlurryAnalytics logEvent:eventName withParameters:dict timed:timed];
-    
+    [self runInMainThread:^{
+        [FlurryAnalytics logEvent:eventName withParameters:dict timed:timed];
+        
+    }];
 }
 
 -(void)endTimedEvent:(NSString *)eventName withProperties:(NSDictionary *)dict{
-    // non-nil parameters will update the parameters
-     [FlurryAnalytics endTimedEvent:eventName withParameters:dict];
+    [self runInMainThread:^{
+        // non-nil parameters will update the parameters
+        [FlurryAnalytics endTimedEvent:eventName withParameters:dict];
+     }];
 }
 
 -(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception {
-    [FlurryAnalytics logError:name message:message exception:exception];
+    [self runInMainThread:^{
+        [FlurryAnalytics logError:name message:message exception:exception];
+    }];
 }
 
 -(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error {
-    [FlurryAnalytics logError:name message:message error:error];
-
+    [self runInMainThread:^{
+        [FlurryAnalytics logError:name message:message error:error];
+    }];
 }
 
 @end
