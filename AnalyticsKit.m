@@ -78,6 +78,27 @@ static NSArray *_loggers = nil;
     }
 }
 
++(void)logEvent:(NSString *)eventName timed:(BOOL)timed{
+    INFO(@"%@ timed: %@", event, timed ? @"YES" : @"NO");
+    for (id<AnalyticsKitProvider> logger in _loggers) {
+        [logger logEvent:eventName timed:timed];
+    }
+}
+
++(void)logEvent:(NSString *)eventName withProperties:(NSDictionary *)dict timed:(BOOL)timed{
+    INFO(@"%@ withProperties: %@ timed: %@", event, dict, timed ? @"YES" : @"NO");
+    for (id<AnalyticsKitProvider> logger in _loggers) {
+        [logger logEvent:eventName withProperties:dict timed:timed];
+    }
+}
+
++(void)endTimedEvent:(NSString *)eventName withProperties:(NSDictionary *)dict{
+    INFO(@"%@ withProperties: %@ ended", event, dict);
+    for (id<AnalyticsKitProvider> logger in _loggers) {
+        [logger endTimedEvent:eventName withProperties:dict];
+    }
+}
+
 +(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception {
     ERROR(@"%@: %@", name, message);
     for (id<AnalyticsKitProvider> logger in _loggers) {

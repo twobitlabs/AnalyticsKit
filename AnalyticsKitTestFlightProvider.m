@@ -34,6 +34,11 @@
 
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {}
 -(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value {}
+
+-(void)logEvent:(NSString *)eventName timed:(BOOL)timed{}
+
+-(void)logEvent:(NSString *)eventName withProperties:(NSDictionary *)dict timed:(BOOL)timed{}
+-(void)endTimedEvent:(NSString *)eventName withProperties:(NSDictionary *)dict{}
 -(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception {}
 -(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error {}
 
