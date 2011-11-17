@@ -64,6 +64,16 @@
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:event attributes:[NSDictionary dictionaryWithObject:value forKey:key]];
 }
 
+-(void)logEvent:(NSString *)eventName timed:(BOOL)timed {
+    [self logEvent:eventName];
+}
+
+-(void)logEvent:(NSString *)eventName withProperties:(NSDictionary *)dict timed:(BOOL)timed {
+    [self logEvent:eventName withProperties:dict];
+}
+
+-(void)endTimedEvent:(NSString *)eventName withProperties:(NSDictionary *)dict {}
+
 -(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception {
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:@"Exceptions" attributes:
      [NSDictionary dictionaryWithObjectsAndKeys:
@@ -81,9 +91,9 @@
           name, @"name",
           message, @"message",        
           [error localizedDescription], @"description",
-          [error code], @"code",
+          [NSString stringWithFormat:@"%d", [error code]], @"code",
           [error domain], @"domain",
-          [error userInfo], @"userInfo",
+          [[error userInfo] description], @"userInfo",
       nil]];
 }
 
