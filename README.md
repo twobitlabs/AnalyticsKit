@@ -13,3 +13,4 @@ INCLUDED PROVIDERS
 ==================
 TestFlight
 Localytics
+Flurry
