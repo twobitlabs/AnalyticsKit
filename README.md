@@ -30,29 +30,28 @@ USAGE
 3. In your AppDelegate's applicationDidFinishLaunchingWithOptions (or in a method called from there), create an AnalyticsKit*Provider (where * is the provider); add it to your loggers array; and call initializeLoggers
 
 ```obj-c
- // Create the AnalyticsKitApsalarProvider
-    NSString *apsalarKey = @"myAPIKey";
-    NSString *apsalarSecret = @"mySecret";
+// Create the AnalyticsKitApsalarProvider
+NSString *apsalarKey = @"myAPIKey";
+NSString *apsalarSecret = @"mySecret";
     
 //if you don't want your simulator activity to be logged, use bogus keys
 #if (TARGET_IPHONE_SIMULATOR)
     apsalarKey = @"XXXXXXXXXXXXXXXXXXXX";
     apsalarSecret = @"XXXXXXXXXXXXXXXXXXXX";
 #endif
- 
-    NSMutableArray *loggers = [[NSMutableArray arrayWithObject:[[[AnalyticsKitApsalarProvider alloc] initWithAPIKey:apsalarKey andSecret:apsalarSecret andLaunchOptions:launchOptions] autorelease]] retain];
-    
+
+NSMutableArray *loggers = [NSMutableArray arrayWithObject:[[AnalyticsKitApsalarProvider alloc] initWithAPIKey:apsalarKey andSecret:apsalarSecret andLaunchOptions:launchOptions]];
+
 //if you are using more than one analytics provider, create as many AnalyticsKit*Providers as you need,
 //and add them to loggers array
 
-    //initialize AnalyticsKit to send messages to Flurry and TestFlight
-    [AnalyticsKit initializeLoggers:loggers];
+[AnalyticsKit initializeLoggers:loggers];
 ```
 
 3. Where significant events occur, call AnalyticsKit logEvent: or other appropriate method. Example:
 
 ```obj-c
-    [AnalyticsKit logEvent:@"Notifications - Displaying Webview For Notification" withProperties:eventDict];
+[AnalyticsKit logEvent:@"Notifications - Displaying Webview For Notification" withProperties:eventDict];
 ```
     
 4. You may also want to make AnalyticsKit calls at application lifecycle events, such as applicationDidEnterBackground, applicationWillTerminate, applicationWillEnterForeground
