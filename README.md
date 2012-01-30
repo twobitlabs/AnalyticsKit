@@ -34,7 +34,7 @@ USAGE
 NSString *apsalarKey = @"myAPIKey";
 NSString *apsalarSecret = @"mySecret";
     
-//if you don't want your simulator activity to be logged, use bogus keys
+//if you don't want your simulator activity to be logged, use bogus keys. We prefer this approach to not inlcuding the provider in simulator builds so that the code running in the simulator is as close as possible to the code running on the device.
 #if (TARGET_IPHONE_SIMULATOR)
     apsalarKey = @"XXXXXXXXXXXXXXXXXXXX";
     apsalarSecret = @"XXXXXXXXXXXXXXXXXXXX";
