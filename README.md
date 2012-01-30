@@ -11,10 +11,10 @@ analytics provider, or add an additional one, you need to write/change much less
 
 INCLUDED PROVIDERS
 ==================
-TestFlight
-Localytics
-Flurry
-Apsalar
+* TestFlight
+* Localytics
+* Flurry
+* Apsalar
 
 
 USAGE
@@ -23,6 +23,7 @@ USAGE
 
 2. In your AppDelegate's applicationDidFinishLaunchingWithOptions (or in a method called from there), create an AnalyticsKit*Provider (where * is the provider); add it to your loggers array; and call initializeLoggers
 
+```obj-c
 /******* SAMPLE CODE
  // Create the AnalyticsKitApsalarProvider
     NSString *apsalarKey = @"myAPIKey";
@@ -43,9 +44,13 @@ USAGE
     [AnalyticsKit initializeLoggers:loggers];
     
 **************/
+```
 
 3. Where significant events occur, call AnalyticsKit logEvent: or other appropriate method. Example:
+
+```obj-c
     [AnalyticsKit logEvent:@"Notifications - Displaying Webview For Notification" withProperties:eventDict];
+```
     
 4. You may also want to make AnalyticsKit calls at application lifecycle events, such as applicationDidEnterBackground, applicationWillTerminate, applicationWillEnterForeground
 
