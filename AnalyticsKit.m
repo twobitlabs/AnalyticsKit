@@ -21,28 +21,28 @@ static NSArray *_loggers = nil;
 }
 
 +(void)applicationWillEnterForeground {
-    INFO(@"");
+    AKINFO(@"");
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger applicationWillEnterForeground];
     }    
 }
 
 +(void)applicationDidEnterBackground {
-    INFO(@"");
+    AKINFO(@"");
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger applicationDidEnterBackground];
     }        
 }
 
 +(void)applicationWillTerminate {
-    INFO(@"");
+    AKINFO(@"");
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger applicationWillTerminate];
     }    
 }
 
 +(void)uncaughtException:(NSException *)exception {
-    INFO(@"");
+    AKINFO(@"");
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger uncaughtException:exception];
     }    
@@ -50,7 +50,7 @@ static NSArray *_loggers = nil;
 }
 
 +(void)logScreen:(NSString *)screenName {
-    INFO(@"%@", screenName);
+    AKINFO(@"%@", screenName);
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logScreen:screenName];
     }
@@ -58,56 +58,56 @@ static NSArray *_loggers = nil;
 }
 
 +(void)logEvent:(NSString *)event {
-    INFO(@"%@", event);
+    AKINFO(@"%@", event);
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logEvent:event];
     }
 }
 
 +(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {
-    INFO(@"%@ withProperties: %@", event, dict);
+    AKINFO(@"%@ withProperties: %@", event, dict);
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logEvent:event withProperties:dict];
     }    
 }
 
 +(void)logEvent:(NSString *)event withProperty:(NSString *)property andValue:(NSString *)value {
-    INFO(@"%@ withProperty: %@ andValue: %@", event, property, value);
+    AKINFO(@"%@ withProperty: %@ andValue: %@", event, property, value);
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logEvent:event withProperty:property andValue:value];
     }
 }
 
 +(void)logEvent:(NSString *)eventName timed:(BOOL)timed{
-    INFO(@"%@ timed: %@", eventName, timed ? @"YES" : @"NO");
+    AKINFO(@"%@ timed: %@", eventName, timed ? @"YES" : @"NO");
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logEvent:eventName timed:timed];
     }
 }
 
 +(void)logEvent:(NSString *)eventName withProperties:(NSDictionary *)dict timed:(BOOL)timed{
-    INFO(@"%@ withProperties: %@ timed: %@", eventName, dict, timed ? @"YES" : @"NO");
+    AKINFO(@"%@ withProperties: %@ timed: %@", eventName, dict, timed ? @"YES" : @"NO");
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logEvent:eventName withProperties:dict timed:timed];
     }
 }
 
 +(void)endTimedEvent:(NSString *)eventName withProperties:(NSDictionary *)dict{
-    INFO(@"%@ withProperties: %@ ended", eventName, dict);
+    AKINFO(@"%@ withProperties: %@ ended", eventName, dict);
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger endTimedEvent:eventName withProperties:dict];
     }
 }
 
 +(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception {
-    ERROR(@"%@: %@", name, message);
+    AKERROR(@"%@: %@", name, message);
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logError:name message:message exception:exception];
     }    
 }
 
 +(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error {
-    ERROR(@"%@: %@", name, message);
+    AKERROR(@"%@: %@", name, message);
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logError:name message:message error:error];
     }

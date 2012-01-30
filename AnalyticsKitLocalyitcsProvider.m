@@ -20,25 +20,21 @@
 }
 
 -(void)applicationWillEnterForeground {
-    INFO(@"");
     [[LocalyticsSession sharedLocalyticsSession] resume];
     [[LocalyticsSession sharedLocalyticsSession] upload];
 }
 
 -(void)applicationDidEnterBackground {
-    INFO(@"");
     [[LocalyticsSession sharedLocalyticsSession] close];
     [[LocalyticsSession sharedLocalyticsSession] upload];
 }
 
--(void)applicationWillTerminate {
-    INFO(@"");    
+-(void)applicationWillTerminate { 
     [[LocalyticsSession sharedLocalyticsSession] close];
     [[LocalyticsSession sharedLocalyticsSession] upload];
 }
 
 -(void)uncaughtException:(NSException *)exception {
-    INFO(@"%@", exception);
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:@"Uncaught Exceptions" attributes:
      [NSDictionary dictionaryWithObjectsAndKeys:
           [exception name], @"ename",

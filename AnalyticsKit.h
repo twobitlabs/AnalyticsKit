@@ -8,6 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
+#pragma mark -
+#pragma mark Macros - Logging
+
+#define AKLOG(fmt, ...) NSLog(@"%s:%d (%s): " fmt, __FILE__, __LINE__, __func__, ## __VA_ARGS__)
+#ifdef DEBUG
+#define AKINFO(fmt, ...) AKLOG(fmt, ## __VA_ARGS__)
+#else
+// do nothing
+#define AKINFO(fmt, ...) 
+#endif
+
+#define AKERROR(fmt, ...) AKLOG(fmt, ## __VA_ARGS__)
+
 @protocol AnalyticsKitProvider <NSObject>
 
 // Lifecycle
@@ -16,6 +29,7 @@
 -(void)applicationWillTerminate;
 -(void)uncaughtException:(NSException *)exception;
 
+//Logging events
 -(void)logScreen:(NSString *)screenName;
 -(void)logEvent:(NSString *)value;
 -(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value;

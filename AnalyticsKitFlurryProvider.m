@@ -14,7 +14,7 @@
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)apiKey {
     self = [super init];
     if (self) {
-        [FlurryAnalytics startSession:(NSString *)apiKey];
+        [FlurryAnalytics startSession:apiKey];
     }
     return self;
 }
