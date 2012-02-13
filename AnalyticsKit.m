@@ -13,10 +13,14 @@
 static NSArray *_loggers = nil;
 
 +(void)initialize {
-    _loggers = [NSArray array];
+    _loggers = [[NSArray alloc] init];
 }
 
 +(void)initializeLoggers:(NSArray *)loggers {
+#if !__has_feature(objc_arc)
+        [loggers retain];
+        [_loggers release];
+#endif
     _loggers = loggers;
 }
 
