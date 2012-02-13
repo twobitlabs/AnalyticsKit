@@ -1,0 +1,15 @@
+Vendor::Spec.new do |s|
+  s.name           "AnalyticsKit"
+  s.version        "1.0"
+                   
+  s.authors        "twobitlabs"
+  s.email          "contact@twobitlabs.com"
+  s.description    "An analytics provider wrapper for iOS"
+                   
+  s.homepage       "https://github.com/twobitlabs/AnalyticsKit"
+  s.source         "https://github.com/twobitlabs/AnalyticsKit"
+
+  s.per_file_flag  "-fno-objc-arc"
+
+  s.files          Dir['**/*.{h,m,a}']
+end
