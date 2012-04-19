@@ -8,6 +8,7 @@
 
 #import "AnalyticsKitTestFlightProvider.h"
 #import "TestFlight.h"
+#import <UIKit/UIKit.h>
 
 @implementation AnalyticsKitTestFlightProvider
 
