@@ -14,6 +14,10 @@
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)testFlightKey {
     self = [super init];
     if (self) {
+        #ifdef DEBUG
+            // Since Apple no longer allows UDID, TestFlight recommends sending it only in DEBUG builds
+            [TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
+        #endif
         [TestFlight takeOff:testFlightKey];
     }
     return self;
