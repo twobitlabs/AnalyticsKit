@@ -10,9 +10,37 @@
 
 @implementation AnalyticsKitDebug
 
+#pragma mark -
+#pragma mark Lifecycle
+
+-(void)applicationWillEnterForeground{}
+
+-(void)applicationDidEnterBackground{}
+
+-(void)applicationWillTerminate{}
+
+-(void)uncaughtException:(NSException *)exception{}
+
+#pragma mark -
+#pragma mark Event Logging
+
+-(void)logScreen:(NSString *)screenName{}
+
+-(void)logEvent:(NSString *)value {}
+
+-(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value {}
+
+-(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {}
+
+-(void)logEvent:(NSString *)eventName timed:(BOOL)timed{}
+
+-(void)logEvent:(NSString *)eventName withProperties:(NSDictionary *)dict timed:(BOOL)timed{}
+
+-(void)endTimedEvent:(NSString *)eventName withProperties:(NSDictionary *)dict{}
+
 -(void)showDebugAlert:(NSString *)message{
     if (DEBUG == 1){
-        UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"AnalyticsKit Error" 
+        UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"AnalyticsKit Received Error" 
                                                          message:message
                                                         delegate:self cancelButtonTitle:@"Ok" 
                                                otherButtonTitles:nil] autorelease];
