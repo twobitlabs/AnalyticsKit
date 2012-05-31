@@ -40,11 +40,13 @@
 
 -(void)showDebugAlert:(NSString *)message{
     if (DEBUG == 1){
-        UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"AnalyticsKit Received Error" 
-                                                         message:message
-                                                        delegate:self cancelButtonTitle:@"Ok" 
-                                               otherButtonTitles:nil] autorelease];
-        [alert show];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"AnalyticsKit Received Error" 
+                                                             message:message
+                                                            delegate:self cancelButtonTitle:@"Ok" 
+                                                   otherButtonTitles:nil] autorelease];
+            [alert show];
+        }];
     }
 }
 
