@@ -51,11 +51,13 @@
 }
 
 -(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception{
-    [self showDebugAlert:message];
+    NSString *detail = [NSString stringWithFormat:@"%@\n\n%@\n\n%@", name, message, exception];
+    [self showDebugAlert:detail];
 }
 
 -(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error{
-    [self showDebugAlert:message];
+    NSString *detail = [NSString stringWithFormat:@"%@\n\n%@\n\n%@", name, message, error];    
+    [self showDebugAlert:detail];
 }
 
 @end
