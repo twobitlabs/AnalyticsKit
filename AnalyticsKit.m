@@ -17,10 +17,10 @@ static NSArray *_loggers = nil;
 }
 
 +(void)initializeLoggers:(NSArray *)loggers {
-#if !__has_feature(objc_arc)
-        [loggers retain];
-        [_loggers release];
-#endif
+    #if !__has_feature(objc_arc)
+    [loggers retain];
+    [_loggers release];
+    #endif
     _loggers = loggers;
 }
 
