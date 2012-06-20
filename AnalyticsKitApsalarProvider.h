@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Bleacher Report. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "AnalyticsKit.h"
 
 @interface AnalyticsKitApsalarProvider : NSObject <AnalyticsKitProvider>
 
