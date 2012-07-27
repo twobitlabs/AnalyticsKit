@@ -16,8 +16,10 @@
     self = [super init];
     if (self) {
         #ifdef DEBUG
-            // Since Apple no longer allows UDID, TestFlight recommends sending it only in DEBUG builds
-            [TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
+            #if (!TARGET_IPHONE_SIMULATOR)
+                // Since Apple no longer allows UDID, TestFlight recommends sending it only in DEBUG builds
+                [TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
+            #endif
         #endif
         [TestFlight takeOff:testFlightKey];
     }
