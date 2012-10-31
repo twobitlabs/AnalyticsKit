@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 Bleacher Report. All rights reserved.
 //
 
-#import "FlurryAnalytics.h"
+#import "Flurry.h"
 #import "AnalyticsKitFlurryProvider.h"
 
 @implementation AnalyticsKitFlurryProvider
@@ -14,7 +14,7 @@
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)apiKey {
     self = [super init];
     if (self) {
-        [FlurryAnalytics startSession:apiKey];
+        [Flurry startSession:apiKey];
     }
     return self;
 }
@@ -36,38 +36,38 @@
 
 -(void)uncaughtException:(NSException *)exception {
     NSString *message = [NSString stringWithFormat:@"Crash on iOS %@", [[UIDevice currentDevice] systemVersion]];
-    [FlurryAnalytics logError:@"Uncaught" message:message exception:exception];
+    [Flurry logError:@"Uncaught" message:message exception:exception];
 }
 
 -(void)logScreen:(NSString *)screenName {}
 
 -(void)logEvent:(NSString *)value {
     [self runInMainThread:^{
-        [FlurryAnalytics logEvent:value];
+        [Flurry logEvent:value];
     }];
 }
 
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {
     [self runInMainThread:^{
-        [FlurryAnalytics logEvent:event withParameters:dict];
+        [Flurry logEvent:event withParameters:dict];
     }];
 }
 
 -(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value {
     [self runInMainThread:^{
-        [FlurryAnalytics logEvent:event withParameters:[NSDictionary dictionaryWithObject:value forKey:key]];
+        [Flurry logEvent:event withParameters:[NSDictionary dictionaryWithObject:value forKey:key]];
     }];
 }
 
 - (void)logEvent:(NSString *)eventName timed:(BOOL)timed{
     [self runInMainThread:^{
-        [FlurryAnalytics logEvent:eventName timed:timed];
+        [Flurry logEvent:eventName timed:timed];
     }];
 }
 
 - (void)logEvent:(NSString *)eventName withProperties:(NSDictionary *)dict timed:(BOOL)timed{
     [self runInMainThread:^{
-        [FlurryAnalytics logEvent:eventName withParameters:dict timed:timed];
+        [Flurry logEvent:eventName withParameters:dict timed:timed];
         
     }];
 }
@@ -75,19 +75,19 @@
 -(void)endTimedEvent:(NSString *)eventName withProperties:(NSDictionary *)dict{
     [self runInMainThread:^{
         // non-nil parameters will update the parameters
-        [FlurryAnalytics endTimedEvent:eventName withParameters:dict];
+        [Flurry endTimedEvent:eventName withParameters:dict];
      }];
 }
 
 -(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception {
     [self runInMainThread:^{
-        [FlurryAnalytics logError:name message:message exception:exception];
+        [Flurry logError:name message:message exception:exception];
     }];
 }
 
 -(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error {
     [self runInMainThread:^{
-        [FlurryAnalytics logError:name message:message error:error];
+        [Flurry logError:name message:message error:error];
     }];
 }
 
