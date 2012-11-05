@@ -8,18 +8,19 @@ regardless of which analytics provider you're using behind the scenes.
 The benefit of using AnalyticsKit is that if you decide to start using a new 
 analytics provider, or add an additional one, you need to write/change much less code!
 
-If you have additions or enhancements please submit pull requests.
-
 AnalyticsKit works both in ARC based projects and non-ARC projects.
 
+CONTRIBUTIONS
+=============
+[Analytics Kit](https://github.com/twobitlabs/AnalyticsKit) relies on the contributions of the open-source community! To submit a fix or an enhancement fork the repository, make your changes, add your name to the *Contributors* section in README.markdown, and send us a pull request! If you're active and do good work we'll add you as a collaborator!
 
 INCLUDED PROVIDERS
 ==================
-* TestFlight
-* Localytics
-* Flurry
-* Apsalar
-
+* [TestFlight](https://testflightapp.com/)
+* [Localytics](http://www.localytics.com/)
+* [Flurry](http://www.flurry.com/)
+* [Apsalar](http://apsalar.com/)
+* [Mixpanel](https://mixpanel.com/)
 
 USAGE
 =====
@@ -57,3 +58,13 @@ NSMutableArray *loggers = [NSMutableArray arrayWithObject:[[AnalyticsKitApsalarP
 4. You may also want to make AnalyticsKit calls at application lifecycle events, such as applicationDidEnterBackground, applicationWillTerminate, applicationWillEnterForeground
 
 See AnalyticsKit.h for an overview of the methods available. Doublecheck that the methods you call are implemented in the AnalyticsKit*Provider.m that you are using!
+
+Contributors
+============
+ - [Two Bit Labs](http://twobitlabs.com/)
+ - [Todd Huss](https://github.com/thuss)
+ - [Susan Detwiler](https://github.com/sherpachick)
+ - [Christopher Pickslay](https://github.com/chrispix)
+ - [Zac Shenker](https://github.com/zacshenker)
+
+
