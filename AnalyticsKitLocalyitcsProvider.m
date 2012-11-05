@@ -45,7 +45,7 @@
 }
 
 -(void)logScreen:(NSString *)screenName {    
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:[@"Screen - " stringByAppendingString:screenName]];
+    [[LocalyticsSession sharedLocalyticsSession] tagScreen:screenName];
 }
 
 -(void)logEvent:(NSString *)event {
