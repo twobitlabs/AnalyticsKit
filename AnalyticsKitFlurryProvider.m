@@ -39,7 +39,11 @@
     [Flurry logError:@"Uncaught" message:message exception:exception];
 }
 
--(void)logScreen:(NSString *)screenName {}
+-(void)logScreen:(NSString *)screenName {
+    [self runInMainThread:^{
+        [Flurry logEvent:[@"Screen - " stringByAppendingString:screenName]];
+    }];
+}
 
 -(void)logEvent:(NSString *)value {
     [self runInMainThread:^{
