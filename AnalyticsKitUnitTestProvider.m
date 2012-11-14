@@ -17,20 +17,28 @@
     return provider;
 }
 
-+ (void)clearEvents {
-    // Remove the events stored in the unit test provider
++ (AnalyticsKitUnitTestProvider *)unitTestProvider {
+    AnalyticsKitUnitTestProvider *unitProvider = nil;
     NSArray *loggers = [AnalyticsKit loggers];
     for (AnalyticsKitUnitTestProvider *provider in loggers) {
-        if ([provider isKindOfClass:[AnalyticsKitUnitTestProvider class]]) {
-            provider.events = nil;
-        }
+        if ([provider isKindOfClass:[AnalyticsKitUnitTestProvider class]]) unitProvider = provider;
     }
+    return unitProvider;
+}
+
++ (void)clearEvents {
+    // Remove the events stored in the unit test provider
+    [[self unitTestProvider] clearEvents];
 }
 
 + (void)tearDown {
     [self clearEvents];
     // Wipe out any loggers
     [AnalyticsKit initialize];
+}
+
+- (void)clearEvents {
+    [self setEvents:[NSMutableArray arrayWithCapacity:20]];
 }
 
 - (BOOL)hasEventLoggedWithName:(NSString *)eventName {
