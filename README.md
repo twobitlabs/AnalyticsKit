@@ -21,6 +21,8 @@ INCLUDED PROVIDERS
 * [Flurry](http://www.flurry.com/)
 * [Apsalar](http://apsalar.com/)
 * [Mixpanel](https://mixpanel.com/)
+* Debug Provider: that shows an AlertView whenever an error is logged
+* Unit Test Provider: that allows you to introspect events that were logged
 
 USAGE
 =====
@@ -52,7 +54,7 @@ NSMutableArray *loggers = [NSMutableArray arrayWithObject:[[AnalyticsKitApsalarP
 3. Where significant events occur, call AnalyticsKit logEvent: or other appropriate method. Example:
 
 ```obj-c
-[AnalyticsKit logEvent:@"Notifications - Displaying Webview For Notification" withProperties:eventDict];
+[AnalyticsKit logEvent:@"User logged in" withProperties:eventDict];
 ```
     
 4. You may also want to make AnalyticsKit calls at application lifecycle events, such as applicationDidEnterBackground, applicationWillTerminate, applicationWillEnterForeground

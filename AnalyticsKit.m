@@ -24,6 +24,10 @@ static NSArray *_loggers = nil;
     _loggers = loggers;
 }
 
++(NSArray *)loggers {
+    return _loggers;
+}
+
 +(void)applicationWillEnterForeground {
     AKINFO(@"");
     for (id<AnalyticsKitProvider> logger in _loggers) {

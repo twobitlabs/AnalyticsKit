@@ -3,7 +3,7 @@
 //  TeamStream
 //
 //  Created by Susan Detwiler on 1/26/12.
-//  Copyright (c) 2012 Bleacher Report. All rights reserved.
+//  Copyright (c) 2012 Two Bit Labs. All rights reserved.
 //
 
 #import "AnalyticsKit.h"
