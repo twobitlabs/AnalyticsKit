@@ -85,14 +85,22 @@
 
 -(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception {
     [self runInMainThread:^{
-        [Flurry logError:name message:message exception:exception];
+        [Flurry logError:name message:message exception:exception];        
+        [self incrementErrorCounterEventWithName:name];
     }];
 }
 
 -(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error {
     [self runInMainThread:^{
         [Flurry logError:name message:message error:error];
+        [self incrementErrorCounterEventWithName:name];
     }];
+}
+
+-(void)incrementErrorCounterEventWithName:(NSString *)name {
+    if (name != nil) {
+        [self logEvent:@"Error Counter" withProperty:@"name" andValue:name];
+    }
 }
 
 @end
