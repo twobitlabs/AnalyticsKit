@@ -42,7 +42,7 @@
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AnalyticsKit Received Error" 
                                                              message:message
-                                                            delegate:self cancelButtonTitle:@"Ok" 
+                                                            delegate:self cancelButtonTitle:@"OK" 
                                                    otherButtonTitles:nil];
             #if !__has_feature(objc_arc)
             [alert autorelease];
