@@ -63,21 +63,47 @@
                         withAction:key
                          withLabel:event
                          withValue:nil];
-    
 }
 
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict
 {
+    NSString* category = nil;
+    NSString* action = nil;
+    NSNumber* value = nil;
+    
+    
+    if (dict[@"Category"]) {
+        category = dict[@"Category"];
+    }
+    if (dict[@"category"]) {
+        category = dict[@"category"];
+    }
+
+    if (dict[@"Action"]) {
+        action = dict[@"Action"];
+    }
+    if (dict[@"action"]) {
+        action = dict[@"action"];
+    }
+
+    if (dict[@"Value"]) {
+        value = dict[@"Value"];
+    }
+    if (dict[@"value"]) {
+        value = dict[@"value"];
+    }
+    
     id tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker sendEventWithCategory:nil
-                        withAction:nil
+    [tracker sendEventWithCategory:category
+                        withAction:action
                          withLabel:event
-                         withValue:nil];
+                         withValue:value];
     
 
 }
 -(void)logEvent:(NSString *)event timed:(BOOL)timed
 {
+    
     NSLog(@"Not implemented yet");
 }
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict timed:(BOOL)timed
