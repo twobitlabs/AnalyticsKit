@@ -30,12 +30,21 @@ static NSString* const kProperties = @"properties";
 
 @implementation AnalyticsKitGoogleAnalyticsProvider
 
+#if !__has_feature(objc_arc)
+-(void)dealloc
+{
+    dispatch_release(timingQueue);
+    [timedEvents release];
+    [super dealloc];
+}
+#endif
+
 -(id<AnalyticsKitProvider>)initWithTrackingID:(NSString *)trackingID
 {
     self = [super init];
     if (self) {
         [[GAI sharedInstance] trackerWithTrackingId:trackingID];
-        timedEvents = [NSMutableDictionary dictionary];
+        timedEvents = [[NSMutableDictionary alloc] init];
         timingQueue = dispatch_queue_create("analyticsKit.goolgeAnalytics.provider", DISPATCH_QUEUE_SERIAL);
     }
     return self;
