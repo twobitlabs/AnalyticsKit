@@ -17,6 +17,11 @@ static NSString* const kLabel = @"Label";
 static NSString* const kAction = @"Action";
 static NSString* const kValue = @"Value";
 
+// Constants for timedEvents structure
+static NSString* const kTime = @"time";
+static NSString* const kProperties = @"properties";
+
+
 @interface AnalyticsKitGoogleAnalyticsProvider ()
 
 -(id)valueFromDictionnary:(NSDictionary*)dictionnary forKey:(NSString*)key;
@@ -107,22 +112,36 @@ static NSString* const kValue = @"Value";
 }
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict timed:(BOOL)timed
 {
-    if (timed) {
-        
-    }else{
+    if (!timed) {
         [self logEvent:event withProperties:dict];
+    }else{
+        dispatch_sync(timingQueue, ^{
+            timedEvents[event] = @{kTime : [NSDate date],
+                                   kProperties: dict};
+        });
     }
     
 }
 -(void)endTimedEvent:(NSString *)event withProperties:(NSDictionary *)dict
 {
-    NSString* category = [self valueFromDictionnary:dict forKey:kCategory];
-    NSString* label = [self valueFromDictionnary:dict forKey:kLabel];
+    NSMutableDictionary* properties =  [[NSMutableDictionary alloc] initWithDictionary:dict];
+    NSDate* startDate;
+    id timeEvent = timedEvents[event];
+
+    // merging properties from started event with given properties if necessary
+    if ([timeEvent isKindOfClass:[NSDictionary class]]) {
+        [properties addEntriesFromDictionary:timeEvent[kProperties]];
+        startDate = timeEvent[kTime];
+    }else{
+        startDate = timeEvent;
+    }
+    
+    NSString* category = [self valueFromDictionnary:properties forKey:kCategory];
+    NSString* label = [self valueFromDictionnary:properties forKey:kLabel];
 
     __block NSTimeInterval time;
     dispatch_sync(timingQueue, ^{
         // calculating the elapsed time
-        NSDate* startDate = timedEvents[event];
         NSDate* endDate = [NSDate date];
         time = endDate.timeIntervalSince1970 - startDate.timeIntervalSince1970;
         // removed time which will be logged
