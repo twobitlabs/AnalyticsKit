@@ -68,5 +68,5 @@ Contributors
  - [Susan Detwiler](https://github.com/sherpachick)
  - [Christopher Pickslay](https://github.com/chrispix)
  - [Zac Shenker](https://github.com/zacshenker)
-
+ - [Sinnerschrader Mobile](https://github.com/sinnerschrader-mobile)
 
