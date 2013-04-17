@@ -108,29 +108,35 @@ static NSString* const kProperties = @"properties";
     
     
 }
+
 -(void)logEvent:(NSString *)event timed:(BOOL)timed
 {
     if (!timed) {
         [self logEvent:event];
     }else{
-        
         dispatch_sync(timingQueue, ^{
                           timedEvents[event] = [NSDate date];
                       });
     }    
 }
+
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict timed:(BOOL)timed
 {
     if (!timed) {
         [self logEvent:event withProperties:dict];
     }else{
+        __block NSDictionary* properties = dict;
         dispatch_sync(timingQueue, ^{
+            if (properties == nil) {
+                properties = @{};
+            }
             timedEvents[event] = @{kTime : [NSDate date],
-                                   kProperties: dict};
+                                   kProperties: properties};
         });
     }
     
 }
+
 -(void)endTimedEvent:(NSString *)event withProperties:(NSDictionary *)dict
 {
     NSMutableDictionary* properties =  [[NSMutableDictionary alloc] initWithDictionary:dict];
@@ -171,12 +177,14 @@ static NSString* const kProperties = @"properties";
 -(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception
 {
     id tracker = [[GAI sharedInstance] defaultTracker];
+    // isFatal = NO, presume here, Exeption is not fatal.
     [tracker sendException:NO withNSException:exception];
 }
 
 -(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error
 {
     id tracker = [[GAI sharedInstance] defaultTracker];
+    // isFatal = NO, presume here, Exeption is not fatal.
     [tracker sendException:NO withNSError:error];
     
 }
