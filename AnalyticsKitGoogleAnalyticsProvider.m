@@ -17,6 +17,12 @@ static NSString* const kLabel = @"Label";
 static NSString* const kAction = @"Action";
 static NSString* const kValue = @"Value";
 
+@interface AnalyticsKitGoogleAnalyticsProvider ()
+
+-(id)valueFromDictionnary:(NSDictionary*)dictionnary forKey:(NSString*)key;
+@end
+
+
 @implementation AnalyticsKitGoogleAnalyticsProvider
 
 -(id<AnalyticsKitProvider>)initWithTrackingID:(NSString *)trackingID
@@ -76,30 +82,9 @@ static NSString* const kValue = @"Value";
 
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict
 {
-    NSString* category = nil;
-    NSString* label = nil;
-    NSNumber* value = nil;
-    
-    if (dict[kCategory]) {
-        category = dict[kCategory];
-    }
-    if (dict[kCategory.lowercaseString]) {
-        category = dict[kCategory.lowercaseString];
-    }
-    
-    if (dict[kLabel]) {
-        label = dict[kLabel];
-    }
-    if (dict[kLabel.lowercaseString]) {
-        label = dict[kLabel.lowercaseString];
-    }
-    
-    if (dict[kValue]) {
-        value = dict[kValue];
-    }
-    if (dict[kValue.lowercaseString]) {
-        value = dict[kValue.lowercaseString];
-    }
+    NSString* category = [self valueFromDictionnary:dict forKey:kCategory];
+    NSString* label = [self valueFromDictionnary:dict forKey:kLabel];
+    NSNumber* value = [self valueFromDictionnary:dict forKey:kValue];
     
     id tracker = [[GAI sharedInstance] defaultTracker];
     [tracker sendEventWithCategory:category
@@ -131,22 +116,8 @@ static NSString* const kValue = @"Value";
 }
 -(void)endTimedEvent:(NSString *)event withProperties:(NSDictionary *)dict
 {
-    NSString* category = nil;
-    NSString* label = nil;
-    
-    if (dict[kCategory]) {
-        category = dict[kCategory];
-    }
-    if (dict[kCategory.lowercaseString]) {
-        category = dict[kCategory.lowercaseString];
-    }
-    
-    if (dict[kLabel]) {
-        label = dict[kLabel];
-    }
-    if (dict[kLabel.lowercaseString]) {
-        label = dict[kLabel.lowercaseString];
-    }
+    NSString* category = [self valueFromDictionnary:dict forKey:kCategory];
+    NSString* label = [self valueFromDictionnary:dict forKey:kLabel];
 
     __block NSTimeInterval time;
     dispatch_sync(timingQueue, ^{
@@ -190,4 +161,17 @@ static NSString* const kValue = @"Value";
     [GAI sharedInstance].trackUncaughtExceptions = enabled;
 }
 
+#pragma mark - Private methods
+
+-(id)valueFromDictionnary:(NSDictionary*)dictionnary forKey:(NSString*)key
+{
+    if (dictionnary[key.lowercaseString]) {
+        return dictionnary[key.lowercaseString];
+    }
+
+    if (dictionnary[key]) {
+        return dictionnary[key];
+    }
+    return nil;
+}
 @end
