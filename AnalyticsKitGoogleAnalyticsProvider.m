@@ -153,6 +153,10 @@ static NSString* const kProperties = @"properties";
                           withValue:time
                            withName:event
                           withLabel:label];
+#if !__has_feature(objc_arc)
+    [properties release];
+#endif
+
 }
 
 -(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception
