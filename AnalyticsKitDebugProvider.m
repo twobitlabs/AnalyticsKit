@@ -39,13 +39,16 @@
 -(void)endTimedEvent:(NSString *)eventName withProperties:(NSDictionary *)dict{}
 
 -(void)showDebugAlert:(NSString *)message{
-    if (DEBUG == 1){
-        UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"AnalyticsKit Received Error" 
-                                                         message:message
-                                                        delegate:nil cancelButtonTitle:@"Ok" 
-                                               otherButtonTitles:nil] autorelease];
-        [alert show];
-    }
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AnalyticsKit Received Error" 
+                                                             message:message
+                                                            delegate:self cancelButtonTitle:@"OK" 
+                                                   otherButtonTitles:nil];
+            #if !__has_feature(objc_arc)
+            [alert autorelease];
+            #endif
+            [alert show];
+        }];
 }
 
 -(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception{
