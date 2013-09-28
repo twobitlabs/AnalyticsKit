@@ -21,7 +21,7 @@ INCLUDED PROVIDERS
 * [Flurry](http://www.flurry.com/)
 * [Apsalar](http://apsalar.com/)
 * [Mixpanel](https://mixpanel.com/)
-* [Google Analytics](https://www.google.com/analytics) (version 2.0 beta4 and above)
+* [Google Analytics](https://www.google.com/analytics) (version 2.0 beta4)
 * Debug Provider: that shows an AlertView whenever an error is logged
 * Unit Test Provider: that allows you to introspect events that were logged
 
