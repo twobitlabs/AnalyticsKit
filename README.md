@@ -25,6 +25,16 @@ INCLUDED PROVIDERS
 * Debug Provider: that shows an AlertView whenever an error is logged
 * Unit Test Provider: that allows you to introspect events that were logged
 
+COCOAPODS
+=====
+
+You can setup the project via cocoapods using subspecs. List of supported providers:
+
+* TestFlight - `pod 'AnalyticsKit/TestFlight'`
+* Flurry - `pod 'AnalyticsKit/Flurry'`
+* Mixpanel - `pod 'AnalyticsKit/Mixpanel'`
+* Google Analytics - `pod 'AnalyticsKit/GoogleAnalytics'`
+
 USAGE
 =====
 1. Download the provider's SDK and add it to your project
