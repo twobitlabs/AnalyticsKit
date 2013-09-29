@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "AnalyticsKit"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.summary      = "Analytics framework for iOS"
 
   s.description  = <<-DESC
@@ -59,7 +59,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'AdjustIO' do |a|
     a.source_files = 'AnalyticsKitAdjustIOProvider.{h,m}'
-    a.dependency 'AdjustIO', '2.0.1'
+    #a.dependency 'AdjustIO', '2.1.0'
     a.dependency 'AnalyticsKit/Core'  
   end  
 end

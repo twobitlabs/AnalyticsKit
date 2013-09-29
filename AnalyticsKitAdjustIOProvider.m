@@ -18,6 +18,15 @@
     return self;
 }
 
+-(void)enableProductionEnvironment:(BOOL)enabled
+{
+    if (enabled) {
+        [AdjustIo setEnvironment:AIEnvironmentProduction];
+    }else{
+        [AdjustIo setEnvironment:AIEnvironmentSandbox];
+    }
+}
+
 #pragma mark - AnalyticsKitProvider Protocol
 
 -(void)applicationWillEnterForeground {}
