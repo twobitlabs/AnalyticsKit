@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "AnalyticsKit"
-  s.version      = "0.0.2"
+  s.version      = "0.0.3"
   s.summary      = "Analytics framework for iOS"
 
   s.description  = <<-DESC
@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
 
   
   s.platform     = :ios
-  s.source       = { :git => "https://github.com/twobitlabs/AnalyticsKit.git", :commit => "48b49dc1aeb990408b4321b7ba2ce97bb169941e" }
+  s.source       = { :git => "https://github.com/twobitlabs/AnalyticsKit.git", :commit => "38eff13568f672e2058e343f18a20b94278f943b" }
 
   s.subspec 'Core' do |core|
     core.source_files  = 'AnalyticsKit.{h,m}', 'AnalyticsKitEvent.{h,m}', 'AnalyticsKitDebugProvider.{h,m}'
@@ -59,7 +59,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'AdjustIO' do |a|
     a.source_files = 'AnalyticsKitAdjustIOProvider.{h,m}'
-    #a.dependency 'AdjustIO', '2.1.0'
+    a.dependency 'AdjustIO', '2.1.0'
     a.dependency 'AnalyticsKit/Core'  
   end  
 end
