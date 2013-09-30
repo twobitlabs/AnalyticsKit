@@ -21,9 +21,21 @@ INCLUDED PROVIDERS
 * [Flurry](http://www.flurry.com/)
 * [Apsalar](http://apsalar.com/)
 * [Mixpanel](https://mixpanel.com/)
-* [Google Analytics](https://www.google.com/analytics) (version 2.0 beta4 and above)
+* [Google Analytics](https://www.google.com/analytics) (version 2.0 beta4)
+* [New Relic](http://www.newrelic.com) 
 * Debug Provider: that shows an AlertView whenever an error is logged
 * Unit Test Provider: that allows you to introspect events that were logged
+
+COCOAPODS
+=====
+
+You can setup the project via cocoapods using subspecs. List of supported providers:
+
+* TestFlight - `pod 'AnalyticsKit/TestFlight'`
+* Flurry - `pod 'AnalyticsKit/Flurry'`
+* Mixpanel - `pod 'AnalyticsKit/Mixpanel'`
+* Google Analytics - `pod 'AnalyticsKit/GoogleAnalytics'`
+* New Relic - `pod 'AnalyticsKit/NewRelic'`
 
 USAGE
 =====
