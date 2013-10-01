@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
 
   
   s.platform     = :ios
-  s.source       = { :git => "https://github.com/twobitlabs/AnalyticsKit.git", :tag => "1.0.1" }
+  s.source       = { :git => "https://github.com/twobitlabs/AnalyticsKit.git", :tag => s.version.to_s }
 
   s.subspec 'Core' do |core|
     core.source_files  = 'AnalyticsKit.{h,m}', 'AnalyticsKitEvent.{h,m}', 'AnalyticsKitDebugProvider.{h,m}'
