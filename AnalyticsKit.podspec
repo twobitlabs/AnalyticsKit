@@ -23,7 +23,7 @@
   s.source       = { :git => "https://github.com/twobitlabs/AnalyticsKit.git", :tag => s.version.to_s }
 
   s.subspec 'Core' do |core|
-    core.source_files  = 'AnalyticsKit.{h,m}', 'AnalyticsKitEvent.{h,m}', 'AnalyticsKitDebugProvider.{h,m}'
+    core.source_files  = 'AnalyticsKit.{h,m}', 'AnalyticsKitEvent.{h,m}', 'AnalyticsKitDebugProvider.{h,m}', 'NSNumber+Buckets.{h,m}'
   end
 
   s.subspec 'Flurry' do |f|
