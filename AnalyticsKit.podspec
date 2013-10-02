@@ -1,5 +1,6 @@
   s.name         = "AnalyticsKit"
   s.version      = "1.0.2"
+
   s.summary      = "Analytics framework for iOS"
 
   s.description  = <<-DESC
