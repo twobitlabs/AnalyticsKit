@@ -1,6 +1,6 @@
-Pod::Spec.new do |s|
   s.name         = "AnalyticsKit"
-  s.version      = "1.0.1"
+  s.version      = "1.0.2"
+
   s.summary      = "Analytics framework for iOS"
 
   s.description  = <<-DESC
@@ -56,5 +56,10 @@ Pod::Spec.new do |s|
     ga.dependency 'GoogleAnalytics-iOS-SDK', '~> 2.0beta4'
     ga.dependency 'AnalyticsKit/Core'
   end
-  
+
+  s.subspec 'AdjustIO' do |a|
+    a.source_files = 'AnalyticsKitAdjustIOProvider.{h,m}'
+    a.dependency 'AdjustIO', '2.1.0'
+    a.dependency 'AnalyticsKit/Core'  
+  end  
 end

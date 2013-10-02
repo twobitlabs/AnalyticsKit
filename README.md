@@ -23,6 +23,7 @@ INCLUDED PROVIDERS
 * [Mixpanel](https://mixpanel.com/)
 * [Google Analytics](https://www.google.com/analytics) (version 2.0 beta4)
 * [New Relic](http://www.newrelic.com) 
+* [AdjustIO](https://www.adjust.io/)
 * Debug Provider: that shows an AlertView whenever an error is logged
 * Unit Test Provider: that allows you to introspect events that were logged
 
@@ -36,6 +37,7 @@ You can setup the project via cocoapods using subspecs. List of supported provid
 * Mixpanel - `pod 'AnalyticsKit/Mixpanel'`
 * Google Analytics - `pod 'AnalyticsKit/GoogleAnalytics'`
 * New Relic - `pod 'AnalyticsKit/NewRelic'`
+* AdjustIO - `pod 'AnalyticsKit/AdjustIO'`
 
 USAGE
 =====
