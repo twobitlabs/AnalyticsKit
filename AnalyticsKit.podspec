@@ -1,3 +1,4 @@
+Pod::Spec.new do |s|
   s.name         = "AnalyticsKit"
   s.version      = "1.0.2"
 
@@ -62,4 +63,10 @@
     a.dependency 'AdjustIO', '2.1.0'
     a.dependency 'AnalyticsKit/Core'  
   end  
+  
+  s.subspec 'Localytics' do |l|
+    l.source_files = 'AnalyticsKitLocalyticsProvider.{h,m}'
+    l.dependency 'Localytics'
+    l.dependency 'AnalyticsKit/Core'
+  end
 end
