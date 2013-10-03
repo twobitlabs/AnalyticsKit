@@ -57,4 +57,10 @@ Pod::Spec.new do |s|
     ga.dependency 'AnalyticsKit/Core'
   end
   
+  s.subspec 'Parse' do |p|
+    p.source_files = 'AnalyticsKitParseProvider.{h,m}'
+    p.dependency 'Parse-iOS-SDK'
+    p.dependency 'AnalyticsKit/Core'
+  end
+  
 end
