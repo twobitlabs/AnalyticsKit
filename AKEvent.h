@@ -1,5 +1,5 @@
 //
-//  AnalyticsKitEvent.h
+//  AKEvent.h
 //  TeamStream
 //
 //  Created by Todd Huss on 11/14/12.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface AnalyticsKitEvent : NSObject
+@interface AKEvent : NSObject
 
 @property(nonatomic,strong)NSString *name;
 @property(nonatomic,strong)NSDictionary *properties;

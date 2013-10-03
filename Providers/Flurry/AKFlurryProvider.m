@@ -1,5 +1,5 @@
 //
-//  AnalyticsKitFlurryProvider.m
+//  AKFlurryProvider.m
 //  TeamStream
 //
 //  Created by Susan Detwiler on 11/10/11.
@@ -7,9 +7,9 @@
 //
 
 #import "Flurry.h"
-#import "AnalyticsKitFlurryProvider.h"
+#import "AKFlurryProvider.h"
 
-@implementation AnalyticsKitFlurryProvider
+@implementation AKFlurryProvider
 
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)apiKey {
     self = [super init];

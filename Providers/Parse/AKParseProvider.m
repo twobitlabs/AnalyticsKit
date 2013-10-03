@@ -1,14 +1,14 @@
 //
-//  AnalyticsKitParseProvider.h
+//  AKParseProvider.h
 //
 //  Created by Bradley David Bergeron on 10/02/2013.
 //  Copyright (c) 2013 Bradley David Bergeron. All rights reserved.
 //
 
 #import <Parse-iOS-SDK/Parse.h>
-#import "AnalyticsKitParseProvider.h"
+#import "AKParseProvider.h"
 
-@implementation AnalyticsKitParseProvider
+@implementation AKParseProvider
 
 -(id<AnalyticsKitProvider>)initWithApplicationId:(NSString *)applicationId clientKey:(NSString *)clientKey {
     self = [super init];

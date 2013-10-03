@@ -1,5 +1,5 @@
 //
-//  AnalyticsKitTestFlightProvider.h
+//  AKTestFlightProvider.h
 //  AnalyticsKit
 //
 //  Created by Christopher Pickslay on 9/8/11.
@@ -8,7 +8,7 @@
 
 #import "AnalyticsKit.h"
 
-@interface AnalyticsKitTestFlightProvider : NSObject<AnalyticsKitProvider>
+@interface AKTestFlightProvider : NSObject<AnalyticsKitProvider>
 
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)testFlightKey;
 

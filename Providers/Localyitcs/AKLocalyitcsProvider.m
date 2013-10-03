@@ -1,15 +1,15 @@
 //
-//  AnalyticsKitLocalyitcsProvider.m
+//  AKLocalyitcsProvider.m
 //  AnalyticsKit
 //
 //  Created by Todd Huss on 10/17/11.
 //  Copyright (c) 2011 Two Bit Labs. All rights reserved.
 //
 
-#import "AnalyticsKitLocalyitcsProvider.h"
+#import "AKLocalyitcsProvider.h"
 #import "LocalyticsSession.h"
 
-@implementation AnalyticsKitLocalyitcsProvider
+@implementation AKLocalyitcsProvider
 
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)localyticsKey {
     self = [super init];

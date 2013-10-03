@@ -1,5 +1,5 @@
 //
-//  AnalyticsKitLocalyitcsProvider.h
+//  AKLocalyitcsProvider.h
 //  AnalyticsKit
 //
 //  Created by Todd Huss on 10/17/11.
@@ -8,7 +8,7 @@
 
 #import "AnalyticsKit.h"
 
-@interface AnalyticsKitLocalyitcsProvider : NSObject<AnalyticsKitProvider>
+@interface AKLocalyitcsProvider : NSObject<AnalyticsKitProvider>
 
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)localyticsKey;
 
