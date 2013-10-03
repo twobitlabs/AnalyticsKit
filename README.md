@@ -1,87 +1,70 @@
-AnalyticsKit : an analytics provider wrapper for iOS
+# AnalyticsKit
 
-INTRODUCTION
-============
-The goal of AnalyticsKit is to provide a consistent API for analytics
-regardless of which analytics provider you're using behind the scenes.
+The goal of `AnalyticsKit` is to provide a consistent API for analytics regardless of the provider. With `AnalyticsKit`, you just call one logging method and `AnalyticsKit` relays that logging message to each registered provider. 
 
-The benefit of using AnalyticsKit is that if you decide to start using a new 
-analytics provider, or add an additional one, you need to write/change much less code!
+## Supported Providers
 
-AnalyticsKit works both in ARC based projects and non-ARC projects.
-
-CONTRIBUTIONS
-=============
-[Analytics Kit](https://github.com/twobitlabs/AnalyticsKit) relies on the contributions of the open-source community! To submit a fix or an enhancement fork the repository, make your changes, add your name to the *Contributors* section in README.markdown, and send us a pull request! If you're active and do good work we'll add you as a collaborator!
-
-INCLUDED PROVIDERS
-==================
-* [TestFlight](https://testflightapp.com/)
-* [Localytics](http://www.localytics.com/)
-* [Flurry](http://www.flurry.com/)
-* [Apsalar](http://apsalar.com/)
-* [Mixpanel](https://mixpanel.com/)
-* [Google Analytics](https://www.google.com/analytics) (version 2.0 beta4)
-* [New Relic](http://www.newrelic.com) 
 * [AdjustIO](https://www.adjust.io/)
-* Debug Provider: that shows an AlertView whenever an error is logged
-* Unit Test Provider: that allows you to introspect events that were logged
+* [Apsalar](http://apsalar.com/)
+* [Flurry](http://www.flurry.com/)
+* [Google Analytics](https://www.google.com/analytics)
+* [Localytics](http://www.localytics.com/)
+* [Mixpanel](https://mixpanel.com/)
+* [New Relic](http://www.newrelic.com)
+* [Parse](http://parse.com/)
+* [TestFlight](https://testflightapp.com/)
 
-COCOAPODS
-=====
+* Debug Provider - shows an AlertView whenever an error is logged
+* Unit Test Provider - allows you to inspect logged events
 
-You can setup the project via cocoapods using subspecs. List of supported providers:
+If you would like to add support for a new provider or to update the code for an existing one, simply fork the master repo, make your changes, and submit a pull request.
 
-* TestFlight - `pod 'AnalyticsKit/TestFlight'`
-* Flurry - `pod 'AnalyticsKit/Flurry'`
-* Mixpanel - `pod 'AnalyticsKit/Mixpanel'`
-* Google Analytics - `pod 'AnalyticsKit/GoogleAnalytics'`
-* New Relic - `pod 'AnalyticsKit/NewRelic'`
+## How to Use
+
+### Cocoapods
+If your project uses Cocoapods, you can simply inlcude `AnalyticsKit` for full provider support, or you can specify your provider using Cocoapods subspecs.
+
 * AdjustIO - `pod 'AnalyticsKit/AdjustIO'`
+* Flurry - `pod 'AnalyticsKit/Flurry'`
+* Google Analytics - `pod 'AnalyticsKit/GoogleAnalytics'`
+* Mixpanel - `pod 'AnalyticsKit/Mixpanel'`
+* New Relic - `pod 'AnalyticsKit/NewRelic'`
+* Parse - `pod 'AnalyticsKit/Parse'`
+* TestFlight - `pod 'AnalyticsKit/TestFlight'`
 
-USAGE
-=====
-1. Download the provider's SDK and add it to your project
+### Installation
+1. Download the provider's SDK and add it to your project, or install via cocoapods.
+2. Add AnalyticsKit to your project either as a git submodule or copying the source into your project. In Xcode, only include AnalyticsKit.h/.m and any providers you plan to use.
+3. In your AppDelegate's applicationDidFinishLaunchingWithOptions: method, create an array with your provider instance(s) and call `initializeLoggers:`.
 
-2. Add AnalyticsKit to your project either as a git-submodule or copying the source into your project. In Xcode only include AnalyticsKit.m and AnalyticsKit.h and any providers you plan to use
+```objc
+NSString *flurryKey = @"0123456789ABCDEF";
 
-3. In your AppDelegate's applicationDidFinishLaunchingWithOptions (or in a method called from there), create an AnalyticsKit*Provider (where * is the provider); add it to your loggers array; and call initializeLoggers
-
-```obj-c
-// Create the AnalyticsKitApsalarProvider
-NSString *apsalarKey = @"myAPIKey";
-NSString *apsalarSecret = @"mySecret";
-    
-//if you don't want your simulator activity to be logged, use bogus keys. We prefer this approach to not inlcuding the provider in simulator builds so that the code running in the simulator is as close as possible to the code running on the device.
-#if (TARGET_IPHONE_SIMULATOR)
-    apsalarKey = @"XXXXXXXXXXXXXXXXXXXX";
-    apsalarSecret = @"XXXXXXXXXXXXXXXXXXXX";
+// If you're running tethered or in the simulator, it's best to use different/fake keys
+// instead of bypassing AnalyticsKit completely.
+#if DEBUG
+	flurryKey = @"0000000000000000";
 #endif
 
-NSMutableArray *loggers = [NSMutableArray arrayWithObject:[[AnalyticsKitApsalarProvider alloc] initWithAPIKey:apsalarKey andSecret:apsalarSecret andLaunchOptions:launchOptions]];
+AnalyticsKitFlurryProvider *flurry = [[AnalyticsKitFlurryProvider alloc] initWithAPIKey:flurryKey];
 
-//if you are using more than one analytics provider, create as many AnalyticsKit*Providers as you need,
-//and add them to loggers array
-
-[AnalyticsKit initializeLoggers:loggers];
+[AnalyticsKit initializeLoggers:@[flurry]];
 ```
 
-3. Where significant events occur, call AnalyticsKit logEvent: or other appropriate method. Example:
+To log an event, simply call the `logEvent:` method.
 
-```obj-c
-[AnalyticsKit logEvent:@"User logged in" withProperties:eventDict];
+```objc
+[AnalyticsKit logEvent:@"Log In" withProperties:infoDict];
 ```
-    
-4. You may also want to make AnalyticsKit calls at application lifecycle events, such as applicationDidEnterBackground, applicationWillTerminate, applicationWillEnterForeground
 
-See AnalyticsKit.h for an overview of the methods available. Doublecheck that the methods you call are implemented in the AnalyticsKit*Provider.m that you are using!
+See AnalyticsKit.h for an exhaustive list of the logging methods available.
 
-Contributors
-============
+
+## Contributors
  - [Two Bit Labs](http://twobitlabs.com/)
  - [Todd Huss](https://github.com/thuss)
  - [Susan Detwiler](https://github.com/sherpachick)
  - [Christopher Pickslay](https://github.com/chrispix)
  - [Zac Shenker](https://github.com/zacshenker)
  - [Sinnerschrader Mobile](https://github.com/sinnerschrader-mobile)
-
+ - [Bradley David Bergeron](https://github.com/bdbergeron) - Parse

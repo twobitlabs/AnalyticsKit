@@ -12,4 +12,3 @@
 -(id<AnalyticsKitProvider>)initWithAppToken:(NSString *)appToken;
 -(void)enableProductionEnvironment:(BOOL)enabled;
 @end
-
