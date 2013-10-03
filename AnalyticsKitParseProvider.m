@@ -5,7 +5,7 @@
 //  Copyright (c) 2013 Bradley David Bergeron. All rights reserved.
 //
 
-#import <Parse/Parse.h>
+#import <Parse-iOS-SDK/Parse.h>
 #import "AnalyticsKitParseProvider.h"
 
 @implementation AnalyticsKitParseProvider
@@ -22,15 +22,26 @@
 -(void)applicationDidEnterBackground {}
 -(void)applicationWillTerminate {}
 
--(void)uncaughtException:(NSException *)exception {}
+-(void)uncaughtException:(NSException *)exception {
+    [PFAnalytics trackEvent:@"Uncaught Exception"
+                 dimensions:[NSDictionary dictionaryWithObject:[[UIDevice currentDevice]systemVersion] forKey:@"version"]];
+}
 
--(void)logScreen:(NSString *)screenName {}
+-(void)logScreen:(NSString *)screenName {
+    [PFAnalytics trackEvent:[@"Screen - " stringByAppendingString:screenName]];
+}
 
--(void)logEvent:(NSString *)event {}
+-(void)logEvent:(NSString *)event {
+    [PFAnalytics trackEvent:event];
+}
 
--(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {}
+-(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {
+    [PFAnalytics trackEvent:event dimensions:dict];
+}
 
--(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value {}
+-(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value {
+    [self logEvent:event withProperties:[NSDictionary dictionaryWithObject:value forKey:key]];
+}
 
 - (void)logEvent:(NSString *)eventName timed:(BOOL)timed{}
 
@@ -38,8 +49,12 @@
 
 -(void)endTimedEvent:(NSString *)eventName withProperties:(NSDictionary *)dict{}
 
--(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception {}
+-(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception {
+    [PFAnalytics trackEvent:name dimensions:[NSDictionary dictionaryWithObjectsAndKeys:message, @"message", exception, @"exception", nil]];
+}
 
--(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error {}
+-(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error {
+    [PFAnalytics trackEvent:name dimensions:[NSDictionary dictionaryWithObjectsAndKeys:message, @"message", error, @"error", nil]];
+}
 
 @end
