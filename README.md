@@ -4,14 +4,16 @@ The goal of `AnalyticsKit` is to provide a consistent API for analytics regardle
 
 ## Supported Providers
 
-* [TestFlight](https://testflightapp.com/)
-* [Localytics](http://www.localytics.com/)
-* [Flurry](http://www.flurry.com/)
+* [AdjustIO](https://www.adjust.io/)
 * [Apsalar](http://apsalar.com/)
-* [Mixpanel](https://mixpanel.com/)
-* [Parse](http://parse.com/)
+* [Flurry](http://www.flurry.com/)
 * [Google Analytics](https://www.google.com/analytics) (version 2.0 beta4)
+* [Localytics](http://www.localytics.com/)
+* [Mixpanel](https://mixpanel.com/)
 * [New Relic](http://www.newrelic.com)
+* [Parse](http://parse.com/)
+* [TestFlight](https://testflightapp.com/)
+
 * Debug Provider - shows an AlertView whenever an error is logged
 * Unit Test Provider - allows you to inspect logged events
 
@@ -22,12 +24,13 @@ If you would like to add support for a new provider or to update the code for an
 ### Cocoapods
 If your project uses Cocoapods, you can simply inlcude `AnalyticsKit` for full provider support, or you can specify your provider using Cocoapods subspecs.
 
-* TestFlight - `pod 'AnalyticsKit/TestFlight'`
+* AdjustIO - `pod 'AnalyticsKit/AdjustIO'`
 * Flurry - `pod 'AnalyticsKit/Flurry'`
-* Mixpanel - `pod 'AnalyticsKit/Mixpanel'`
-* Parse - `pod 'AnalyticsKit/Parse'`
 * Google Analytics - `pod 'AnalyticsKit/GoogleAnalytics'`
+* Mixpanel - `pod 'AnalyticsKit/Mixpanel'`
 * New Relic - `pod 'AnalyticsKit/NewRelic'`
+* Parse - `pod 'AnalyticsKit/Parse'`
+* TestFlight - `pod 'AnalyticsKit/TestFlight'`
 
 ### Installation
 1. Download the provider's SDK and add it to your project, or install via cocoapods.

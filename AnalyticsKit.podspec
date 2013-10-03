@@ -1,6 +1,7 @@
 Pod::Spec.new do |s|
   s.name         = "AnalyticsKit"
-  s.version      = "1.0.1"
+  s.version      = "1.0.2"
+
   s.summary      = "Analytics framework for iOS"
 
   s.description  = <<-DESC
@@ -23,13 +24,31 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/twobitlabs/AnalyticsKit.git", :tag => s.version.to_s }
 
   s.subspec 'Core' do |core|
-    core.source_files  = 'AnalyticsKit.{h,m}', 'AnalyticsKitEvent.{h,m}', 'AnalyticsKitDebugProvider.{h,m}'
+    core.source_files  = 'AnalyticsKit.{h,m}', 'AnalyticsKitEvent.{h,m}', 'AnalyticsKitDebugProvider.{h,m}', 'NSNumber+Buckets.{h,m}'
+  end
+  
+  s.subspec 'AdjustIO' do |a|
+    a.source_files = 'AnalyticsKitAdjustIOProvider.{h,m}'
+    a.dependency 'AdjustIO', '2.1.0'
+    a.dependency 'AnalyticsKit/Core'  
   end
 
   s.subspec 'Flurry' do |f|
     f.source_files = 'AnalyticsKitFlurryProvider.{h,m}'
     f.dependency 'FlurrySDK'
     f.dependency 'AnalyticsKit/Core'
+  end
+  
+  s.subspec 'GoogleAnalytics' do |ga|
+    ga.source_files = 'AnalyticsKitGoogleAnalyticsProvider.{h,m}'
+    ga.dependency 'GoogleAnalytics-iOS-SDK', '~> 2.0beta4'
+    ga.dependency 'AnalyticsKit/Core'
+  end
+  
+  s.subspec 'Localytics' do |l|
+    l.source_files = 'AnalyticsKitLocalyticsProvider.{h,m}'
+    l.dependency 'Localytics'
+    l.dependency 'AnalyticsKit/Core'
   end
 
   s.subspec 'Mixpanel' do |m|
@@ -45,22 +64,16 @@ Pod::Spec.new do |s|
     nr.platform     = :ios, '5.0'
   end
   
-  s.subspec 'TestFlight' do |tf|
-    tf.source_files = 'AnalyticsKitTestFlightProvider.{h,m}'
-    tf.dependency 'TestFlightSDK'
-    tf.dependency 'AnalyticsKit/Core'
-  end
-
-  s.subspec 'GoogleAnalytics' do |ga|
-    ga.source_files = 'AnalyticsKitGoogleAnalyticsProvider.{h,m}'
-    ga.dependency 'GoogleAnalytics-iOS-SDK', '~> 2.0beta4'
-    ga.dependency 'AnalyticsKit/Core'
-  end
-  
   s.subspec 'Parse' do |p|
     p.source_files = 'AnalyticsKitParseProvider.{h,m}'
     p.dependency 'Parse-iOS-SDK'
     p.dependency 'AnalyticsKit/Core'
   end
   
+  s.subspec 'TestFlight' do |tf|
+    tf.source_files = 'AnalyticsKitTestFlightProvider.{h,m}'
+    tf.dependency 'TestFlightSDK'
+    tf.dependency 'AnalyticsKit/Core'
+  end
+
 end
