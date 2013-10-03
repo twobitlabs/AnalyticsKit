@@ -1,14 +1,14 @@
 //
-//  AnalyticsKitDebug.m
+//  AKDebugProvider.m
 //  TeamStream
 //
 //  Created by Susan Detwiler on 5/29/12.
 //  Copyright (c) 2012 Two Bit Labs. All rights reserved.
 //
 
-#import "AnalyticsKitDebugProvider.h"
+#import "AKDebugProvider.h"
 
-@implementation AnalyticsKitDebugProvider
+@implementation AKDebugProvider
 
 #pragma mark -
 #pragma mark Lifecycle

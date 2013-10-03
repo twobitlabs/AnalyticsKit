@@ -1,5 +1,5 @@
 //
-//  AnalyticsKitApsalarProvider.h
+//  AKApsalarProvider.h
 //  TeamStream
 //
 //  Created by Susan Detwiler on 1/26/12.
@@ -8,7 +8,7 @@
 
 #import "AnalyticsKit.h"
 
-@interface AnalyticsKitApsalarProvider : NSObject <AnalyticsKitProvider>
+@interface AKApsalarProvider : NSObject <AnalyticsKitProvider>
 
 @property(retain)NSString *apiKey;
 @property(retain)NSString *secret;

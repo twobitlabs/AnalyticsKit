@@ -1,5 +1,5 @@
 //
-//  AnalyticsKitNewRelicProvider.m
+//  AKNewRelicProvider.m
 //
 //
 //  Created by Zac Shenker on 26/03/13.
@@ -7,9 +7,9 @@
 //
 
 #import <NewRelicAgent/NewRelicAgent.h>
-#import "AnalyticsKitNewRelicProvider.h"
+#import "AKNewRelicProvider.h"
 
-@implementation AnalyticsKitNewRelicProvider
+@implementation AKNewRelicProvider
 
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)apiKey {
     self = [super init];

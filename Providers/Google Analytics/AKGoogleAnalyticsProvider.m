@@ -1,12 +1,12 @@
 //
-//  AnalyticsKitGoogleAnalyticsProvider.m
+//  AKGoogleAnalyticsProvider.m
 //  S2M
 //
 //  Created by François Benaiteau on 02/14//13.
 //
 
 #import "GAI.h"
-#import "AnalyticsKitGoogleAnalyticsProvider.h"
+#import "AKGoogleAnalyticsProvider.h"
 
 static NSMutableDictionary *timedEvents;
 static dispatch_queue_t timingQueue;
@@ -22,13 +22,13 @@ static NSString* const kTime = @"time";
 static NSString* const kProperties = @"properties";
 
 
-@interface AnalyticsKitGoogleAnalyticsProvider ()
+@interface AKGoogleAnalyticsProvider ()
 
 -(id)valueFromDictionnary:(NSDictionary*)dictionnary forKey:(NSString*)key;
 @end
 
 
-@implementation AnalyticsKitGoogleAnalyticsProvider
+@implementation AKGoogleAnalyticsProvider
 
 #if !__has_feature(objc_arc)
 -(void)dealloc

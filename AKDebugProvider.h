@@ -1,5 +1,5 @@
 //
-//  AnalyticsKitDebug.h
+//  AKDebugProvider.h
 //  TeamStream
 //
 //  Created by Susan Detwiler on 5/29/12.
@@ -8,6 +8,6 @@
 
 #import "AnalyticsKit.h"
 
-@interface AnalyticsKitDebugProvider : NSObject<AnalyticsKitProvider>
+@interface AKDebugProvider : NSObject<AnalyticsKitProvider>
 
 @end

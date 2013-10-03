@@ -1,16 +1,16 @@
 //
-//  AnalyticsKit.m
+//  AKTestFlightProvider.m
 //  AnalyticsKit
 //
 //  Created by Christopher Pickslay on 9/8/11.
 //  Copyright (c) 2011 Two Bit Labs. All rights reserved.
 //
 
-#import "AnalyticsKitTestFlightProvider.h"
+#import "AKTestFlightProvider.h"
 #import "TestFlight.h"
 #import <UIKit/UIKit.h>
 
-@implementation AnalyticsKitTestFlightProvider
+@implementation AKTestFlightProvider
 
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)testFlightKey {
     self = [super init];

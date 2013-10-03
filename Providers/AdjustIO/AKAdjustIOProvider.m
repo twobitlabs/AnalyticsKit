@@ -1,14 +1,14 @@
 //
-//  AnalyticsKitAdjustIOProvider.m
+//  AKAdjustIOProvider.m
 //  S2M
 //
 //  Created by François Benaiteau on 10/29/13.
 //
 
 #import "AdjustIo.h"
-#import "AnalyticsKitAdjustIOProvider.h"
+#import "AKAdjustIOProvider.h"
 
-@implementation AnalyticsKitAdjustIOProvider
+@implementation AKAdjustIOProvider
 
 -(id<AnalyticsKitProvider>)initWithAppToken:(NSString *)appToken {
     self = [super init];

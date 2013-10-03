@@ -1,5 +1,5 @@
 //
-//  AnalyticsKitUnitTestProvider.h
+//  AKUnitTestProvider.h
 //  TeamStream
 //
 //  Created by Todd Huss on 11/14/12.
@@ -8,20 +8,20 @@
 
 #import <Foundation/Foundation.h>
 #import "AnalyticsKit.h"
-#import "AnalyticsKitEvent.h"
+#import "AKEvent.h"
 
-@interface AnalyticsKitUnitTestProvider : NSObject<AnalyticsKitProvider>
+@interface AKUnitTestProvider : NSObject<AnalyticsKitProvider>
 
 @property(nonatomic,strong)NSMutableArray *events;
 
-+ (AnalyticsKitUnitTestProvider *)setUp;
++ (AKUnitTestProvider *)setUp;
 + (void)tearDown;
-+ (AnalyticsKitUnitTestProvider *)unitTestProvider; // setup must be called first, returns the instance
++ (AKUnitTestProvider *)unitTestProvider; // setup must be called first, returns the instance
 + (void)clearEvents; // also called by tearDown; does same thing as instance method
 
 - (void)clearEvents;
 - (BOOL)hasEventLoggedWithName:(NSString *)eventName;
-- (AnalyticsKitEvent *)firstEventLoggedWithName:(NSString *)eventName;
+- (AKEvent *)firstEventLoggedWithName:(NSString *)eventName;
 - (NSArray *)eventsLoggedWithName:(NSString *)eventName;
 
 @end

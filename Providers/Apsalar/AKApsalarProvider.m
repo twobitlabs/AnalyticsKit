@@ -1,15 +1,15 @@
 //
-//  AnalyticsKitApsalarProvider.m
+//  AKApsalarProvider.m
 //  TeamStream
 //
 //  Created by Susan Detwiler on 1/26/12.
 //  Copyright (c) 2012 Two Bit Labs. All rights reserved.
 //
 
-#import "AnalyticsKitApsalarProvider.h"
+#import "AKApsalarProvider.h"
 #import "Apsalar.h"
 
-@implementation AnalyticsKitApsalarProvider
+@implementation AKApsalarProvider
 
 @synthesize apiKey = _apiKey;
 @synthesize secret = _secret;

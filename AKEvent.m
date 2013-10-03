@@ -1,14 +1,14 @@
 //
-//  AnalyticsKitEvent.m
+//  AKEvent.m
 //  TeamStream
 //
 //  Created by Todd Huss on 11/14/12.
 //  Copyright (c) 2012 Two Bit Labs. All rights reserved.
 //
 
-#import "AnalyticsKitEvent.h"
+#import "AKEvent.h"
 
-@implementation AnalyticsKitEvent
+@implementation AKEvent
 
 - (id)initEvent:(NSString *)event withProperties:(NSDictionary *)dict {
     self = [super init];

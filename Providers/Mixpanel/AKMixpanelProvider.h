@@ -1,5 +1,5 @@
 //
-//  AnalyticsKitMixpanelProvider.h
+//  AKMixpanelProvider.h
 //  
 //
 //  Created by Zac Shenker on 5/11/2012.
@@ -8,7 +8,7 @@
 
 #import "AnalyticsKit.h"
 
-@interface AnalyticsKitMixpanelProvider : NSObject<AnalyticsKitProvider>
+@interface AKMixpanelProvider : NSObject<AnalyticsKitProvider>
 
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)apiKey;
 

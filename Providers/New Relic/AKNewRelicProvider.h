@@ -1,5 +1,5 @@
 //
-//  AnalyticsKitNewRelicProvider.h
+//  AKNewRelicProvider.h
 //  
 //
 //  Created by Zac Shenker on 26/03/2013.
@@ -8,7 +8,7 @@
 
 #import "AnalyticsKit.h"
 
-@interface AnalyticsKitNewRelicProvider : NSObject<AnalyticsKitProvider>
+@interface AKNewRelicProvider : NSObject<AnalyticsKitProvider>
 
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)apiKey;
 

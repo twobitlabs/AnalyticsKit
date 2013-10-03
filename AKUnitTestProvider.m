@@ -1,27 +1,27 @@
 //
-//  AnalyticsKitUnitTestProvider.m
+//  AKUnitTestProvider.m
 //  TeamStream
 //
 //  Created by Todd Huss on 11/14/12.
 //  Copyright (c) 2012 Two Bit Labs. All rights reserved.
 //
 
-#import "AnalyticsKitUnitTestProvider.h"
+#import "AKUnitTestProvider.h"
 
-@implementation AnalyticsKitUnitTestProvider
+@implementation AKUnitTestProvider
 
-+ (AnalyticsKitUnitTestProvider *)setUp {
-    AnalyticsKitUnitTestProvider *provider = [[AnalyticsKitUnitTestProvider alloc] init];
++ (AKUnitTestProvider *)setUp {
+    AKUnitTestProvider *provider = [[AKUnitTestProvider alloc] init];
     provider.events = [NSMutableArray arrayWithCapacity:20];
     [AnalyticsKit initializeLoggers:@[provider]];
     return provider;
 }
 
-+ (AnalyticsKitUnitTestProvider *)unitTestProvider {
-    AnalyticsKitUnitTestProvider *unitProvider = nil;
++ (AKUnitTestProvider *)unitTestProvider {
+    AKUnitTestProvider *unitProvider = nil;
     NSArray *loggers = [AnalyticsKit loggers];
-    for (AnalyticsKitUnitTestProvider *provider in loggers) {
-        if ([provider isKindOfClass:[AnalyticsKitUnitTestProvider class]]) unitProvider = provider;
+    for (AKUnitTestProvider *provider in loggers) {
+        if ([provider isKindOfClass:[AKUnitTestProvider class]]) unitProvider = provider;
     }
     return unitProvider;
 }
@@ -45,8 +45,8 @@
     return [self firstEventLoggedWithName:eventName] != nil;
 }
 
-- (AnalyticsKitEvent *)firstEventLoggedWithName:(NSString *)eventName {
-    AnalyticsKitEvent *event = nil;
+- (AKEvent *)firstEventLoggedWithName:(NSString *)eventName {
+    AKEvent *event = nil;
     NSArray *matchingEvents = [self eventsLoggedWithName:eventName];
     if ([matchingEvents count] > 0) event = matchingEvents[0];
     return event;
@@ -54,7 +54,7 @@
 
 - (NSArray *)eventsLoggedWithName:(NSString *)eventName {
     NSMutableArray *matchingEvents = [NSMutableArray arrayWithCapacity:5];
-    for (AnalyticsKitEvent *event in self.events) {
+    for (AKEvent *event in self.events) {
         if ([eventName isEqualToString:event.name]) [matchingEvents addObject:event];
     }
     return matchingEvents;
@@ -88,7 +88,7 @@
 }
 
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {
-    [self.events addObject:[[AnalyticsKitEvent alloc] initEvent:event withProperties:dict]];
+    [self.events addObject:[[AKEvent alloc] initEvent:event withProperties:dict]];
 }
 
 -(void)logEvent:(NSString *)event timed:(BOOL)timed{
