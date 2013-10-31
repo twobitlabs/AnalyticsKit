@@ -1,6 +1,6 @@
 Vendor::Spec.new do |s|
   s.name           "AnalyticsKit"
-  s.version        "1.0"
+  s.version        "1.0.4"
                    
   s.authors        "twobitlabs"
   s.email          "contact@twobitlabs.com"
