@@ -1,0 +1,392 @@
+TAnalyticsKit
+v6
+r1
+cCheck dependencies
+cProcessPCH /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch.pch AnalyticsKit/AnalyticsKit-Prefix.pch normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitNewRelicProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/New\ Relic/AnalyticsKitNewRelicProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitLocalyitcsProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/Localyitcs/AnalyticsKitLocalyitcsProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitViewController.o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitViewController.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKit.o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitEvent.o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKitEvent.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/NSNumber+Buckets.o /Users/cpickslay/projects/AnalyticsKit/Categories/NSNumber+Buckets.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAdjustIOProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/AdjustIO/AnalyticsKitAdjustIOProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitMixpanelProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/Mixpanel/AnalyticsKitMixpanelProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAppDelegate.o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitAppDelegate.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/SDKSettings.plist
+c0000000052532C4000000000000003B5
+t1381182528
+s949
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/CoreServices/SystemVersion.plist
+c000000005267F3A000000000000001A0
+t1382544288
+s416
+
+N/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/5.0/include/module.map
+c0000000052532C7F0000000000000AC9
+t1381182591
+s2761
+
+N/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit.m
+c000000005268004A0000000000000D80
+t1382547530
+s3456
+
+N/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKit-Prefix.pch
+c000000005268017D0000000000000158
+t1382547837
+s344
+
+N/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitAppDelegate.m
+c0000000052680394000000000000039B
+t1382548372
+s923
+
+N/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitViewController.m
+c000000005268017D000000000000022D
+t1382547837
+s557
+
+N/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKit.o
+t2
+s0
+
+N/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAdjustIOProvider.o
+t2
+s0
+
+N/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAppDelegate.o
+t2
+s0
+
+N/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitEvent.o
+t2
+s0
+
+N/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitLocalyitcsProvider.o
+t2
+s0
+
+N/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitMixpanelProvider.o
+t2
+s0
+
+N/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitNewRelicProvider.o
+t2
+s0
+
+N/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitViewController.o
+t2
+s0
+
+N/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/NSNumber+Buckets.o
+t2
+s0
+
+N/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch.pch
+t1382548412
+s108288
+
+N/Users/cpickslay/projects/AnalyticsKit/AnalyticsKitEvent.m
+c000000005268004A0000000000000202
+t1382547530
+s514
+
+N/Users/cpickslay/projects/AnalyticsKit/Categories/NSNumber+Buckets.m
+c000000005268004A00000000000003A0
+t1382547530
+s928
+
+N/Users/cpickslay/projects/AnalyticsKit/Providers/AdjustIO/AnalyticsKitAdjustIOProvider.m
+c000000005268004A0000000000000688
+t1382547530
+s1672
+
+N/Users/cpickslay/projects/AnalyticsKit/Providers/Localyitcs/AnalyticsKitLocalyitcsProvider.m
+c000000005268004A0000000000000C69
+t1382547530
+s3177
+
+N/Users/cpickslay/projects/AnalyticsKit/Providers/Mixpanel/AnalyticsKitMixpanelProvider.m
+c000000005268004A0000000000000A13
+t1382547530
+s2579
+
+N/Users/cpickslay/projects/AnalyticsKit/Providers/New Relic/AnalyticsKitNewRelicProvider.m
+c000000005268004A000000000000051F
+t1382547530
+s1311
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitAppDelegate.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitViewController.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/main.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/AnalyticsKitDebugProvider.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/AnalyticsKitEvent.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/AnalyticsKitUnitTestProvider.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/Categories/NSNumber+Buckets.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/Providers/AdjustIO/AnalyticsKitAdjustIOProvider.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/Providers/Apsalar/AnalyticsKitApsalarProvider.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/Providers/Flurry/AnalyticsKitFlurryProvider.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/Providers/Google\ Analytics/AnalyticsKitGoogleAnalyticsProvider.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/Providers/Localyitcs/AnalyticsKitLocalyitcsProvider.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/Providers/Mixpanel/AnalyticsKitMixpanelProvider.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/Providers/New\ Relic/AnalyticsKitNewRelicProvider.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/Providers/Parse/AnalyticsKitParseProvider.m
+r0
+
+CBuild AST from /Users/cpickslay/projects/AnalyticsKit/Providers/TestFlight/AnalyticsKitTestFlightProvider.m
+r0
+
+CCheck dependencies
+r0
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependenciesff05623b3b18b841^e2cda63e3b18b841^---0#1#1#--18"Check dependencies36"E8A93A61-27B2-46B0-9CA9-B21ECACEFECC-
+
+CCompileAssetCatalog /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/AnalyticsKit.app /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/Images.xcassets
+r0
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKit.o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s404241212.668704
+e404241212.819893
+r1
+xCompileC
+xBuild/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKit.o
+x/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit.m
+d/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection61"Compile /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit.m245"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKit.o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler2651ab3c3b18b841^c64fa73e3b18b841^---0#0#1#-19%DVTDocumentLocation2@60"file:///Users/cpickslay/projects/AnalyticsKit/AnalyticsKit.m0000000000000000^3971"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKit.o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/cpickslay/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -fexceptions -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -fobjc-abi-version=2 -fobjc-legacy-dispatch -mios-simulator-version-min=7.0 -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-generated-files.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-own-target-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-all-target-headers.hmap -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-project-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources/i386 -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources -F/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator -include /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch -MMD -MT dependencies -MF /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKit.d --serialize-diagnostics /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKit.dia -c /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit.m -o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKit.o36"B938ED33-989F-4C3C-B9D7-72ED85E65B88-
+b762A51A1-CC56-4C9F-9AB2-C98CB8213212
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAdjustIOProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/AdjustIO/AnalyticsKitAdjustIOProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s404241212.670371
+e404241212.732752
+r0
+xCompileC
+xBuild/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAdjustIOProvider.o
+x/Users/cpickslay/projects/AnalyticsKit/Providers/AdjustIO/AnalyticsKitAdjustIOProvider.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+o/Users/cpickslay/projects/AnalyticsKit/Providers/AdjustIO/AnalyticsKitAdjustIOProvider.m:8:9: fatal error: 'AdjustIo.h' file not found
+o#import "AdjustIo.h"
+o        ^
+o1 error generated.
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection96"Compile /Users/cpickslay/projects/AnalyticsKit/Providers/AdjustIO/AnalyticsKitAdjustIOProvider.m296"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAdjustIOProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/AdjustIO/AnalyticsKitAdjustIOProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler6edbab3c3b18b841^8140a73e3b18b841^-185"/Users/cpickslay/projects/AnalyticsKit/Providers/AdjustIO/AnalyticsKitAdjustIOProvider.m:8:9: fatal error: 'AdjustIo.h' file not found#import "AdjustIo.h"        ^1 error generated.1(36%IDEClangDiagnosticActivityLogMessage2@27"'AdjustIo.h' file not found-404241212#18446744073709551615#0#-2#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@95"file:///Users/cpickslay/projects/AnalyticsKit/Providers/AdjustIO/AnalyticsKitAdjustIOProvider.m0000000000000000^7#8#7#8#109#0#29"Lexical or Preprocessor Issue--0#0#1#-19%DVTDocumentLocation4@95"file:///Users/cpickslay/projects/AnalyticsKit/Providers/AdjustIO/AnalyticsKitAdjustIOProvider.m0000000000000000^4105"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAdjustIOProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/AdjustIO/AnalyticsKitAdjustIOProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/cpickslay/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -fexceptions -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -fobjc-abi-version=2 -fobjc-legacy-dispatch -mios-simulator-version-min=7.0 -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-generated-files.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-own-target-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-all-target-headers.hmap -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-project-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources/i386 -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources -F/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator -include /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch -MMD -MT dependencies -MF /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAdjustIOProvider.d --serialize-diagnostics /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAdjustIOProvider.dia -c /Users/cpickslay/projects/AnalyticsKit/Providers/AdjustIO/AnalyticsKitAdjustIOProvider.m -o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAdjustIOProvider.o36"22A61019-E684-49B2-9FAC-B226554BB036-
+b762A51A1-CC56-4C9F-9AB2-C98CB8213212
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAppDelegate.o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitAppDelegate.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s404241212.735791
+e404241212.834307
+r1
+xCompileC
+xBuild/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAppDelegate.o
+x/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitAppDelegate.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitAppDelegate.m
+d/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitAppDelegate.h
+d/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit.h
+d/Users/cpickslay/projects/AnalyticsKit/AnalyticsKitDebugProvider.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection98"Compile /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitAppDelegate.m241"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAppDelegate.o AnalyticsKit/AnalyticsKitAppDelegate.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler9390bc3c3b18b841^ce51a73e3b18b841^---0#0#1#-19%DVTDocumentLocation2@97"file:///Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitAppDelegate.m0000000000000000^4037"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAppDelegate.o AnalyticsKit/AnalyticsKitAppDelegate.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/cpickslay/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -fexceptions -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -fobjc-abi-version=2 -fobjc-legacy-dispatch -mios-simulator-version-min=7.0 -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-generated-files.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-own-target-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-all-target-headers.hmap -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-project-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources/i386 -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources -F/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator -include /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch -MMD -MT dependencies -MF /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAppDelegate.d --serialize-diagnostics /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAppDelegate.dia -c /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitAppDelegate.m -o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitAppDelegate.o36"2E354FBA-CBAD-4E41-B976-5D46180FA4F8-
+b762A51A1-CC56-4C9F-9AB2-C98CB8213212
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitApsalarProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/Apsalar/AnalyticsKitApsalarProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitDebugProvider.o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKitDebugProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitEvent.o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKitEvent.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s404241212.669243
+e404241212.807137
+r1
+xCompileC
+xBuild/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitEvent.o
+x/Users/cpickslay/projects/AnalyticsKit/AnalyticsKitEvent.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/cpickslay/projects/AnalyticsKit/AnalyticsKitEvent.m
+d/Users/cpickslay/projects/AnalyticsKit/AnalyticsKitEvent.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection66"Compile /Users/cpickslay/projects/AnalyticsKit/AnalyticsKitEvent.m255"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitEvent.o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKitEvent.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compilereeb2ab3c3b18b841^884aa73e3b18b841^---0#0#1#-19%DVTDocumentLocation2@65"file:///Users/cpickslay/projects/AnalyticsKit/AnalyticsKitEvent.m0000000000000000^4001"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitEvent.o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKitEvent.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/cpickslay/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -fexceptions -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -fobjc-abi-version=2 -fobjc-legacy-dispatch -mios-simulator-version-min=7.0 -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-generated-files.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-own-target-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-all-target-headers.hmap -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-project-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources/i386 -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources -F/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator -include /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch -MMD -MT dependencies -MF /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitEvent.d --serialize-diagnostics /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitEvent.dia -c /Users/cpickslay/projects/AnalyticsKit/AnalyticsKitEvent.m -o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitEvent.o36"EDC29501-B8F9-4C9F-BF6C-2590FD63F9FF-
+b762A51A1-CC56-4C9F-9AB2-C98CB8213212
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitFlurryProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/Flurry/AnalyticsKitFlurryProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitGoogleAnalyticsProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/Google\ Analytics/AnalyticsKitGoogleAnalyticsProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitLocalyitcsProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/Localyitcs/AnalyticsKitLocalyitcsProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s404241212.667825
+e404241212.903687
+r0
+xCompileC
+xBuild/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitLocalyitcsProvider.o
+x/Users/cpickslay/projects/AnalyticsKit/Providers/Localyitcs/AnalyticsKitLocalyitcsProvider.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+o/Users/cpickslay/projects/AnalyticsKit/Providers/Localyitcs/AnalyticsKitLocalyitcsProvider.m:10:9: fatal error: 'LocalyticsSession.h' file not found
+o#import "LocalyticsSession.h"
+o        ^
+o1 error generated.
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection100"Compile /Users/cpickslay/projects/AnalyticsKit/Providers/Localyitcs/AnalyticsKitLocalyitcsProvider.m302"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitLocalyitcsProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/Localyitcs/AnalyticsKitLocalyitcsProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler6119ab3c3b18b841^145da73e3b18b841^-208"/Users/cpickslay/projects/AnalyticsKit/Providers/Localyitcs/AnalyticsKitLocalyitcsProvider.m:10:9: fatal error: 'LocalyticsSession.h' file not found#import "LocalyticsSession.h"        ^1 error generated.1(36%IDEClangDiagnosticActivityLogMessage2@36"'LocalyticsSession.h' file not found-404241212#18446744073709551615#0#-2#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@99"file:///Users/cpickslay/projects/AnalyticsKit/Providers/Localyitcs/AnalyticsKitLocalyitcsProvider.m0000000000000000^9#8#9#8#211#0#29"Lexical or Preprocessor Issue--0#0#1#-19%DVTDocumentLocation4@99"file:///Users/cpickslay/projects/AnalyticsKit/Providers/Localyitcs/AnalyticsKitLocalyitcsProvider.m0000000000000000^4121"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitLocalyitcsProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/Localyitcs/AnalyticsKitLocalyitcsProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/cpickslay/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -fexceptions -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -fobjc-abi-version=2 -fobjc-legacy-dispatch -mios-simulator-version-min=7.0 -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-generated-files.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-own-target-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-all-target-headers.hmap -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-project-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources/i386 -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources -F/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator -include /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch -MMD -MT dependencies -MF /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitLocalyitcsProvider.d --serialize-diagnostics /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitLocalyitcsProvider.dia -c /Users/cpickslay/projects/AnalyticsKit/Providers/Localyitcs/AnalyticsKitLocalyitcsProvider.m -o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitLocalyitcsProvider.o36"C14F6DD4-54CE-477A-80AC-EBD8530699C0-
+b762A51A1-CC56-4C9F-9AB2-C98CB8213212
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitMixpanelProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/Mixpanel/AnalyticsKitMixpanelProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s404241212.672110
+e404241212.732592
+r0
+xCompileC
+xBuild/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitMixpanelProvider.o
+x/Users/cpickslay/projects/AnalyticsKit/Providers/Mixpanel/AnalyticsKitMixpanelProvider.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+o/Users/cpickslay/projects/AnalyticsKit/Providers/Mixpanel/AnalyticsKitMixpanelProvider.m:9:9: fatal error: 'Mixpanel.h' file not found
+o#import "Mixpanel.h"
+o        ^
+o1 error generated.
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection96"Compile /Users/cpickslay/projects/AnalyticsKit/Providers/Mixpanel/AnalyticsKitMixpanelProvider.m296"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitMixpanelProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/Mixpanel/AnalyticsKitMixpanelProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler5931ac3c3b18b841^103ba73e3b18b841^-185"/Users/cpickslay/projects/AnalyticsKit/Providers/Mixpanel/AnalyticsKitMixpanelProvider.m:9:9: fatal error: 'Mixpanel.h' file not found#import "Mixpanel.h"        ^1 error generated.1(36%IDEClangDiagnosticActivityLogMessage2@27"'Mixpanel.h' file not found-404241212#18446744073709551615#0#-2#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@95"file:///Users/cpickslay/projects/AnalyticsKit/Providers/Mixpanel/AnalyticsKitMixpanelProvider.m0000000000000000^8#8#8#8#150#0#29"Lexical or Preprocessor Issue--0#0#1#-19%DVTDocumentLocation4@95"file:///Users/cpickslay/projects/AnalyticsKit/Providers/Mixpanel/AnalyticsKitMixpanelProvider.m0000000000000000^4105"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitMixpanelProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/Mixpanel/AnalyticsKitMixpanelProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/cpickslay/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -fexceptions -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -fobjc-abi-version=2 -fobjc-legacy-dispatch -mios-simulator-version-min=7.0 -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-generated-files.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-own-target-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-all-target-headers.hmap -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-project-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources/i386 -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources -F/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator -include /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch -MMD -MT dependencies -MF /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitMixpanelProvider.d --serialize-diagnostics /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitMixpanelProvider.dia -c /Users/cpickslay/projects/AnalyticsKit/Providers/Mixpanel/AnalyticsKitMixpanelProvider.m -o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitMixpanelProvider.o36"7395828D-77EB-4180-BACC-56BF85ACB9F2-
+b762A51A1-CC56-4C9F-9AB2-C98CB8213212
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitNewRelicProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/New\ Relic/AnalyticsKitNewRelicProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s404241212.667396
+e404241212.732789
+r0
+xCompileC
+xBuild/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitNewRelicProvider.o
+x/Users/cpickslay/projects/AnalyticsKit/Providers/New Relic/AnalyticsKitNewRelicProvider.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+o/Users/cpickslay/projects/AnalyticsKit/Providers/New Relic/AnalyticsKitNewRelicProvider.m:9:9: fatal error: 'NewRelicAgent/NewRelicAgent.h' file not found
+o#import <NewRelicAgent/NewRelicAgent.h>
+o        ^
+o1 error generated.
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection97"Compile /Users/cpickslay/projects/AnalyticsKit/Providers/New Relic/AnalyticsKitNewRelicProvider.m298"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitNewRelicProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/New\ Relic/AnalyticsKitNewRelicProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compilerde00ab3c3b18b841^7443a73e3b18b841^-224"/Users/cpickslay/projects/AnalyticsKit/Providers/New Relic/AnalyticsKitNewRelicProvider.m:9:9: fatal error: 'NewRelicAgent/NewRelicAgent.h' file not found#import <NewRelicAgent/NewRelicAgent.h>        ^1 error generated.1(36%IDEClangDiagnosticActivityLogMessage2@46"'NewRelicAgent/NewRelicAgent.h' file not found-404241212#18446744073709551615#0#-2#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@98"file:///Users/cpickslay/projects/AnalyticsKit/Providers/New%20Relic/AnalyticsKitNewRelicProvider.m0000000000000000^8#8#8#8#151#0#29"Lexical or Preprocessor Issue--0#0#1#-19%DVTDocumentLocation4@98"file:///Users/cpickslay/projects/AnalyticsKit/Providers/New%20Relic/AnalyticsKitNewRelicProvider.m0000000000000000^4109"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitNewRelicProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/New\ Relic/AnalyticsKitNewRelicProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/cpickslay/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -fexceptions -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -fobjc-abi-version=2 -fobjc-legacy-dispatch -mios-simulator-version-min=7.0 -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-generated-files.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-own-target-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-all-target-headers.hmap -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-project-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources/i386 -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources -F/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator -include /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch -MMD -MT dependencies -MF /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitNewRelicProvider.d --serialize-diagnostics /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitNewRelicProvider.dia -c /Users/cpickslay/projects/AnalyticsKit/Providers/New\ Relic/AnalyticsKitNewRelicProvider.m -o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitNewRelicProvider.o36"B5A43CC5-B9C0-4ACA-AFCE-01213F31136E-
+b762A51A1-CC56-4C9F-9AB2-C98CB8213212
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitParseProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/Parse/AnalyticsKitParseProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitTestFlightProvider.o /Users/cpickslay/projects/AnalyticsKit/Providers/TestFlight/AnalyticsKitTestFlightProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitUnitTestProvider.o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKitUnitTestProvider.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitViewController.o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitViewController.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s404241212.668225
+e404241212.811024
+r1
+xCompileC
+xBuild/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitViewController.o
+x/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitViewController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitViewController.m
+d/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitViewController.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection101"Compile /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitViewController.m247"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitViewController.o AnalyticsKit/AnalyticsKitViewController.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler9e41ab3c3b18b841^cf4da73e3b18b841^---0#0#1#-19%DVTDocumentLocation2@100"file:///Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitViewController.m0000000000000000^4055"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitViewController.o AnalyticsKit/AnalyticsKitViewController.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/cpickslay/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -fexceptions -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -fobjc-abi-version=2 -fobjc-legacy-dispatch -mios-simulator-version-min=7.0 -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-generated-files.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-own-target-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-all-target-headers.hmap -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-project-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources/i386 -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources -F/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator -include /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch -MMD -MT dependencies -MF /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitViewController.d --serialize-diagnostics /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitViewController.dia -c /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKitViewController.m -o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/AnalyticsKitViewController.o36"A4E93049-214D-48D0-A83A-AB0732928FE9-
+b762A51A1-CC56-4C9F-9AB2-C98CB8213212
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/NSNumber+Buckets.o /Users/cpickslay/projects/AnalyticsKit/Categories/NSNumber+Buckets.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s404241212.669708
+e404241212.807130
+r1
+xCompileC
+xBuild/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/NSNumber+Buckets.o
+x/Users/cpickslay/projects/AnalyticsKit/Categories/NSNumber+Buckets.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/cpickslay/projects/AnalyticsKit/Categories/NSNumber+Buckets.m
+d/Users/cpickslay/projects/AnalyticsKit/Categories/NSNumber+Buckets.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection76"Compile /Users/cpickslay/projects/AnalyticsKit/Categories/NSNumber+Buckets.m264"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/NSNumber+Buckets.o /Users/cpickslay/projects/AnalyticsKit/Categories/NSNumber+Buckets.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler5298ab3c3b18b841^4147a73e3b18b841^---0#0#1#-19%DVTDocumentLocation2@75"file:///Users/cpickslay/projects/AnalyticsKit/Categories/NSNumber+Buckets.m0000000000000000^4017"CompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/NSNumber+Buckets.o /Users/cpickslay/projects/AnalyticsKit/Categories/NSNumber+Buckets.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/cpickslay/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -fexceptions -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -fobjc-abi-version=2 -fobjc-legacy-dispatch -mios-simulator-version-min=7.0 -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-generated-files.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-own-target-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-all-target-headers.hmap -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-project-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources/i386 -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources -F/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator -include /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch -MMD -MT dependencies -MF /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/NSNumber+Buckets.d --serialize-diagnostics /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/NSNumber+Buckets.dia -c /Users/cpickslay/projects/AnalyticsKit/Categories/NSNumber+Buckets.m -o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/NSNumber+Buckets.o36"74560457-1C12-4668-A79C-8F03D925427A-
+b762A51A1-CC56-4C9F-9AB2-C98CB8213212
+
+CCompileC Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/Objects-normal/i386/main.o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/main.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileStoryboard /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/Base.lproj/Main.storyboard
+r0
+
+CCopyStringsFile /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/AnalyticsKit.app/en.lproj/InfoPlist.strings AnalyticsKit/en.lproj/InfoPlist.strings
+r0
+
+CGenerateDSYMFile /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/AnalyticsKit.app.dSYM /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/AnalyticsKit.app/AnalyticsKit
+r0
+
+CLd /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/AnalyticsKit.app/AnalyticsKit normal i386
+r0
+
+CProcessInfoPlistFile /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/AnalyticsKit.app/Info.plist /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKit-Info.plist
+r0
+
+CProcessPCH /Users/cpickslay/Library/Developer/Xcode/DerivedData/AnalyticsKit-efavjucffisukwdvztfmdbdmklsv/Index/PrecompiledHeaders/AnalyticsKit-Prefix-cnqhvcjfzcuigtarlodyahnmnggl_ast/AnalyticsKit-Prefix.pch.pch AnalyticsKit/AnalyticsKit-Prefix.pch normal i386 objective-c com.apple.compilers.llvm.clang.1_0.astbuilder
+r0
+
+CProcessPCH /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch.pch AnalyticsKit/AnalyticsKit-Prefix.pch normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s404241211.485073
+e404241212.666630
+r1
+xProcessPCH
+x/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch.pch
+xAnalyticsKit/AnalyticsKit-Prefix.pch
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKit-Prefix.pch
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection47"Precompile AnalyticsKit/AnalyticsKit-Prefix.pch231"ProcessPCH Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch.pch AnalyticsKit/AnalyticsKit-Prefix.pch normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler925a7c3b3b18b841^3220a73e3b18b841^---0#0#1#-19%DVTDocumentLocation2@95"file:///Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKit-Prefix.pch0000000000000000^3825"ProcessPCH Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch.pch AnalyticsKit/AnalyticsKit-Prefix.pch normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c-header -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/cpickslay/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -fexceptions -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -fobjc-abi-version=2 -fobjc-legacy-dispatch -mios-simulator-version-min=7.0 -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-generated-files.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-own-target-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-all-target-headers.hmap -iquote /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/AnalyticsKit-project-headers.hmap -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources/i386 -I/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/AnalyticsKit.build/Debug-iphonesimulator/AnalyticsKit.build/DerivedSources -F/Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator --serialize-diagnostics /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch.dia -MMD -MT dependencies -MF /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch.d -c /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/AnalyticsKit/AnalyticsKit-Prefix.pch -o /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Intermediates/PrecompiledHeaders/AnalyticsKit-Prefix-falqcxncynzpdbgryrjgghscpvgo/AnalyticsKit-Prefix.pch.pch36"80FF40A9-7D70-4304-9CD7-8BA97B6268D5-
+b762A51A1-CC56-4C9F-9AB2-C98CB8213212
+
+CTouch /Users/cpickslay/projects/AnalyticsKit/AnalyticsKit/Build/Products/Debug-iphonesimulator/AnalyticsKit.app
+r0
+

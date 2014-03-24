@@ -5,7 +5,7 @@
 //  Copyright (c) 2013 Bradley David Bergeron. All rights reserved.
 //
 
-#import <Parse-iOS-SDK/Parse.h>
+#import <Parse/Parse.h>
 #import "AnalyticsKitParseProvider.h"
 
 @implementation AnalyticsKitParseProvider

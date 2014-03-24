@@ -29,6 +29,16 @@
 -(void)applicationWillTerminate;
 -(void)uncaughtException:(NSException *)exception;
 
+/**
+ Note about timed events
+ 
+ If the analytics provider supports timed events directly, their logic around event timing is used.
+ If the analytics provider does not support timed events, event timing is keyed on `event`, ignoring properties
+ (though the properties will be logged with the event). Successive calls to `logEvent:timed:YES` with the same
+ event name will reset the start time of the event. Calling `endTimedEvent:withProperties:` will clear the start 
+ time and log a new event, adding the lapsed time to the properties with the key "AnalyticsKitEventTimeSeconds".
+ */
+
 //Logging events
 -(void)logScreen:(NSString *)screenName;
 -(void)logEvent:(NSString *)event;
@@ -44,6 +54,8 @@
 @end
 
 @interface AnalyticsKit : NSObject
+
+OBJC_EXPORT NSString* const AnalyticsKitEventTimeSeconds;
 
 +(void)initialize;
 +(void)initializeLoggers:(NSArray *)loggers;

@@ -5,7 +5,7 @@
 //  Created by François Benaiteau on 10/29/13.
 //
 
-#import "AdjustIo.h"
+#import "Adjust.h"
 #import "AnalyticsKitAdjustIOProvider.h"
 
 @implementation AnalyticsKitAdjustIOProvider
@@ -13,7 +13,7 @@
 -(id<AnalyticsKitProvider>)initWithAppToken:(NSString *)appToken {
     self = [super init];
     if (self) {
-        [AdjustIo appDidLaunch:appToken];
+        [Adjust appDidLaunch:appToken];
     }
     return self;
 }
@@ -21,9 +21,9 @@
 -(void)enableProductionEnvironment:(BOOL)enabled
 {
     if (enabled) {
-        [AdjustIo setEnvironment:AIEnvironmentProduction];
+        [Adjust setEnvironment:AIEnvironmentProduction];
     }else{
-        [AdjustIo setEnvironment:AIEnvironmentSandbox];
+        [Adjust setEnvironment:AIEnvironmentSandbox];
     }
 }
 
@@ -40,15 +40,15 @@
 }
 
 -(void)logEvent:(NSString *)value {
-    [AdjustIo trackEvent:value];
+    [Adjust trackEvent:value];
 }
 
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {
-    [AdjustIo trackEvent:event withParameters:dict];
+    [Adjust trackEvent:event withParameters:dict];
 }
 
 -(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value {
-    [AdjustIo trackEvent:event withParameters:@{key: value}];
+    [Adjust trackEvent:event withParameters:@{key: value}];
 }
 
 -(void)logEvent:(NSString *)eventName timed:(BOOL)timed{}

@@ -10,10 +10,13 @@
 
 @interface AnalyticsKitEvent : NSObject
 
-@property(nonatomic,strong)NSString *name;
+@property(nonatomic,copy)NSString *name;
 @property(nonatomic,strong)NSDictionary *properties;
+@property(strong)NSDate *startTime;
 
-- (id)initEvent:(NSString *)event withProperties:(NSDictionary *)dict;
-- (id)initEvent:(NSString *)event;
+- (instancetype)initEvent:(NSString *)event;
+- (instancetype)initEvent:(NSString *)event withProperties:(NSDictionary *)dict;
+- (instancetype)initEvent:(NSString *)event withKey:(NSString *)key andValue:(NSString *)value;
+- (void)setProperty:(id)value forKey:(NSString *)key;
 
 @end

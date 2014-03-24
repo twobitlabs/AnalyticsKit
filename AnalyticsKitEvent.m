@@ -10,17 +10,37 @@
 
 @implementation AnalyticsKitEvent
 
-- (id)initEvent:(NSString *)event withProperties:(NSDictionary *)dict {
+- (instancetype)initEvent:(NSString *)event {
+    return [self initEvent:event withProperties:nil];
+}
+
+- (instancetype)initEvent:(NSString *)event withProperties:(NSDictionary *)dict {
     self = [super init];
     if (self) {
-        self.name = [event copy];
+        self.name = event;
         self.properties = dict;
     }
     return self;
 }
 
-- (id)initEvent:(NSString *)event {
-    return [self initEvent:event withProperties:nil];
+- (instancetype)initEvent:(NSString *)event withKey:(NSString *)key andValue:(NSString *)value {
+    self = [super init];
+    if (self) {
+        self.name = event;
+        if ([key conformsToProtocol:@protocol(NSCopying)] && value != nil) {
+            self.properties = @{key : value};
+        }
+    }
+    return self;
 }
+
+- (void)setProperty:(id)value forKey:(NSString *)key {
+    if ([key conformsToProtocol:@protocol(NSCopying)] && value != nil) {
+        NSMutableDictionary *properties = [@{key:value} mutableCopy];
+        [properties addEntriesFromDictionary:self.properties];
+        self.properties = properties;
+    }
+}
+
 
 @end

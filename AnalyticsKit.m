@@ -10,6 +10,8 @@
 
 @implementation AnalyticsKit
 
+NSString* const AnalyticsKitEventTimeSeconds = @"AnalyticsKitEventTimeSeconds";
+
 static NSArray *_loggers = nil;
 
 +(void)initialize {

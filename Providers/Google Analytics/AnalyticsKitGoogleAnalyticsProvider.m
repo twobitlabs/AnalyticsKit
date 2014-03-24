@@ -6,6 +6,8 @@
 //
 
 #import "GAI.h"
+#import "GAIDictionaryBuilder.h"
+#import "GAIFields.h"
 #import "AnalyticsKitGoogleAnalyticsProvider.h"
 
 static NSMutableDictionary *timedEvents;
@@ -63,7 +65,9 @@ static NSString* const kProperties = @"properties";
 -(void)uncaughtException:(NSException *)exception
 {
     id tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker sendException:YES withNSException:exception];
+    [tracker send:[[GAIDictionaryBuilder
+                    createExceptionWithDescription:[[exception userInfo] description]
+                    withFatal:@(YES)] build]];
 }
 
 
@@ -71,27 +75,28 @@ static NSString* const kProperties = @"properties";
 -(void)logScreen:(NSString *)screenName
 {
     id tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker sendView:screenName];
+    [tracker set:kGAIDescription
+           value:screenName];
+    
+    [tracker send:[[GAIDictionaryBuilder createAppView] build]];
 }
 
 -(void)logEvent:(NSString *)event
 {
     id tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker sendEventWithCategory:nil
-                        withAction:event
-                         withLabel:nil
-                         withValue:nil];
-    
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:nil
+                                                          action:event
+                                                           label:nil
+                                                           value:nil] build]];
 }
 
 -(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value
 {
     id tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker sendEventWithCategory:key
-                        withAction:event
-                         withLabel:value
-                         withValue:nil];
-    
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:key
+                                                      action:event
+                                                       label:value
+                                                       value:nil] build]];
 }
 
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict
@@ -101,19 +106,17 @@ static NSString* const kProperties = @"properties";
     NSNumber* value = [self valueFromDictionnary:dict forKey:kValue];
     
     id tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker sendEventWithCategory:category
-                        withAction:event
-                         withLabel:label
-                         withValue:value];
-    
-    
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:category
+                                                          action:event
+                                                           label:label
+                                                           value:value] build]];
 }
 
 -(void)logEvent:(NSString *)event timed:(BOOL)timed
 {
     if (!timed) {
         [self logEvent:event];
-    }else{
+    } else {
         dispatch_sync(timingQueue, ^{
                           timedEvents[event] = [NSDate date];
                       });
@@ -124,7 +127,7 @@ static NSString* const kProperties = @"properties";
 {
     if (!timed) {
         [self logEvent:event withProperties:dict];
-    }else{
+    } else {
         __block NSDictionary* properties = dict;
         dispatch_sync(timingQueue, ^{
             if (properties == nil) {
@@ -164,10 +167,10 @@ static NSString* const kProperties = @"properties";
     });
 
     id tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker sendTimingWithCategory:category
-                          withValue:time
-                           withName:event
-                          withLabel:label];
+    [tracker send:[[GAIDictionaryBuilder createTimingWithCategory:category
+                                                         interval:@(time)
+                                                             name:event
+                                                            label:label] build]];
 #if !__has_feature(objc_arc)
     [properties release];
 #endif
@@ -178,22 +181,26 @@ static NSString* const kProperties = @"properties";
 {
     id tracker = [[GAI sharedInstance] defaultTracker];
     // isFatal = NO, presume here, Exeption is not fatal.
-    [tracker sendException:NO withNSException:exception];
+    [tracker send:[[GAIDictionaryBuilder
+                    createExceptionWithDescription:message
+                    withFatal:@(NO)] build]];
+
 }
 
 -(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error
 {
     id tracker = [[GAI sharedInstance] defaultTracker];
     // isFatal = NO, presume here, Exeption is not fatal.
-    [tracker sendException:NO withNSError:error];
-    
+    [tracker send:[[GAIDictionaryBuilder
+                    createExceptionWithDescription:message
+                    withFatal:@(NO)] build]];
 }
 
 #pragma mark - Extra methods
 
 -(void)enableDebug:(BOOL)enabled
 {
-    [GAI sharedInstance].debug = enabled;
+    [[GAI sharedInstance] setDryRun:enabled];
 }
 
 -(void)enableHandleUncaughtExceptions:(BOOL)enabled
