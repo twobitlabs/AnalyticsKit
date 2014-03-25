@@ -643,7 +643,6 @@
 				9C0EF3AB18E0FC0800D19A2C /* AnalyticsKitLocalyticsProvider.h */,
 				9C0EF3AC18E0FC0800D19A2C /* AnalyticsKitLocalyticsProvider.m */,
 			);
-			name = Localytics;
 			path = Localytics;
 			sourceTree = "<group>";
 		};
