@@ -13,7 +13,7 @@ The goal of `AnalyticsKit` is to provide a consistent API for analytics regardle
 * [New Relic](http://www.newrelic.com)
 * [Parse](http://parse.com/)
 * [TestFlight](https://testflightapp.com/)
-
+* [Crashlytics](http://crashlytics.com)
 * Debug Provider - shows an AlertView whenever an error is logged
 * Unit Test Provider - allows you to inspect logged events
 
@@ -22,6 +22,9 @@ If you would like to add support for a new provider or to update the code for an
 ## How to Use
 
 ### Cocoapods
+
+__***Please Note__ -- While we welcome contributions, Two Bit Labs does not officially support Cocoapods for AnalyticsKit. If you run into problems integrating AnalyticsKit using Cocoapods, please log a GitHub issue.
+
 If your project uses Cocoapods, you can simply inlcude `AnalyticsKit` for full provider support, or you can specify your provider using Cocoapods subspecs.
 
 * AdjustIO - `pod 'AnalyticsKit/AdjustIO'`
