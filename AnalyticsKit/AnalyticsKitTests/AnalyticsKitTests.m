@@ -36,10 +36,11 @@
                            [AnalyticsKitDebugProvider new],
                            [[AnalyticsKitFlurryProvider alloc] initWithAPIKey:nil],
                            [[AnalyticsKitGoogleAnalyticsProvider alloc] initWithTrackingID:nil],
+                           // Localytics validates the key when you initialize it, so it can't be empty or fake
 //                           [[AnalyticsKitLocalyticsProvider alloc] initWithAPIKey:nil],
                            [[AnalyticsKitMixpanelProvider alloc] initWithAPIKey:nil],
                            [[AnalyticsKitNewRelicProvider alloc] initWithAPIKey:nil],
-//                           [[AnalyticsKitParseProvider alloc] initWithApplicationId:nil clientKey:nil],
+                           [[AnalyticsKitParseProvider alloc] initWithApplicationId:@"x" clientKey:@"y"],
                            [[AnalyticsKitTestFlightProvider alloc] initWithAPIKey:nil],
                            [AnalyticsKitUnitTestProvider new]
                            ];
