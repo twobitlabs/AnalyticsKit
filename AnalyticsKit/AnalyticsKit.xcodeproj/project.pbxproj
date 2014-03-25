@@ -14,7 +14,6 @@
 		9C0EF31318E0D19F00D19A2C /* AnalyticsKitApsalarProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799F418183A6B00488101 /* AnalyticsKitApsalarProvider.m */; };
 		9C0EF31418E0D1A700D19A2C /* AnalyticsKitFlurryProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799F718183A6B00488101 /* AnalyticsKitFlurryProvider.m */; };
 		9C0EF31518E0D1AD00D19A2C /* AnalyticsKitGoogleAnalyticsProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799FA18183A6B00488101 /* AnalyticsKitGoogleAnalyticsProvider.m */; };
-		9C0EF31618E0D1B200D19A2C /* AnalyticsKitLocalyitcsProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799FD18183A6B00488101 /* AnalyticsKitLocalyitcsProvider.m */; };
 		9C0EF31718E0D1B800D19A2C /* AnalyticsKitMixpanelProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C379A0018183A6B00488101 /* AnalyticsKitMixpanelProvider.m */; };
 		9C0EF31818E0D1BF00D19A2C /* AnalyticsKitNewRelicProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C379A0318183A6B00488101 /* AnalyticsKitNewRelicProvider.m */; };
 		9C0EF31918E0D1C500D19A2C /* AnalyticsKitParseProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C379A0618183A6B00488101 /* AnalyticsKitParseProvider.m */; };
@@ -56,6 +55,7 @@
 		9C0EF3A518E0F89D00D19A2C /* libFlurry_4.3.2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF36518E0ED8800D19A2C /* libFlurry_4.3.2.a */; };
 		9C0EF3A618E0F8AB00D19A2C /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF36B18E0EE1800D19A2C /* libGoogleAnalyticsServices.a */; };
 		9C0EF3A718E0F8BC00D19A2C /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF37918E0F41A00D19A2C /* libTestFlight.a */; };
+		9C0EF3AD18E0FC0800D19A2C /* AnalyticsKitLocalyticsProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0EF3AC18E0FC0800D19A2C /* AnalyticsKitLocalyticsProvider.m */; };
 		9C3799AE181838FD00488101 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3799AD181838FD00488101 /* Foundation.framework */; };
 		9C3799B0181838FD00488101 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3799AF181838FD00488101 /* CoreGraphics.framework */; };
 		9C3799B2181838FD00488101 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3799B1181838FD00488101 /* UIKit.framework */; };
@@ -167,6 +167,8 @@
 		9C0EF39A18E0F57E00D19A2C /* NSData+MPBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MPBase64.m"; sourceTree = "<group>"; };
 		9C0EF39C18E0F57E00D19A2C /* ODIN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODIN.h; sourceTree = "<group>"; };
 		9C0EF39D18E0F57E00D19A2C /* ODIN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODIN.m; sourceTree = "<group>"; };
+		9C0EF3AB18E0FC0800D19A2C /* AnalyticsKitLocalyticsProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyticsKitLocalyticsProvider.h; path = ../Localytics/AnalyticsKitLocalyticsProvider.h; sourceTree = "<group>"; };
+		9C0EF3AC18E0FC0800D19A2C /* AnalyticsKitLocalyticsProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyticsKitLocalyticsProvider.m; path = ../Localytics/AnalyticsKitLocalyticsProvider.m; sourceTree = "<group>"; };
 		9C3799AA181838FD00488101 /* AnalyticsKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnalyticsKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C3799AD181838FD00488101 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9C3799AF181838FD00488101 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -203,8 +205,6 @@
 		9C3799F718183A6B00488101 /* AnalyticsKitFlurryProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsKitFlurryProvider.m; sourceTree = "<group>"; };
 		9C3799F918183A6B00488101 /* AnalyticsKitGoogleAnalyticsProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsKitGoogleAnalyticsProvider.h; sourceTree = "<group>"; };
 		9C3799FA18183A6B00488101 /* AnalyticsKitGoogleAnalyticsProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsKitGoogleAnalyticsProvider.m; sourceTree = "<group>"; };
-		9C3799FC18183A6B00488101 /* AnalyticsKitLocalyitcsProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsKitLocalyitcsProvider.h; sourceTree = "<group>"; };
-		9C3799FD18183A6B00488101 /* AnalyticsKitLocalyitcsProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsKitLocalyitcsProvider.m; sourceTree = "<group>"; };
 		9C3799FF18183A6B00488101 /* AnalyticsKitMixpanelProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsKitMixpanelProvider.h; sourceTree = "<group>"; };
 		9C379A0018183A6B00488101 /* AnalyticsKitMixpanelProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsKitMixpanelProvider.m; sourceTree = "<group>"; };
 		9C379A0218183A6B00488101 /* AnalyticsKitNewRelicProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsKitNewRelicProvider.h; sourceTree = "<group>"; };
@@ -591,7 +591,7 @@
 				9C379A1818183BAD00488101 /* Crashlytics */,
 				9C3799F518183A6B00488101 /* Flurry */,
 				9C3799F818183A6B00488101 /* Google Analytics */,
-				9C3799FB18183A6B00488101 /* Localyitcs */,
+				9C3799FB18183A6B00488101 /* Localytics */,
 				9C3799FE18183A6B00488101 /* Mixpanel */,
 				9C379A0118183A6B00488101 /* New Relic */,
 				9C379A0418183A6B00488101 /* Parse */,
@@ -637,13 +637,14 @@
 			path = "Google Analytics";
 			sourceTree = "<group>";
 		};
-		9C3799FB18183A6B00488101 /* Localyitcs */ = {
+		9C3799FB18183A6B00488101 /* Localytics */ = {
 			isa = PBXGroup;
 			children = (
-				9C3799FC18183A6B00488101 /* AnalyticsKitLocalyitcsProvider.h */,
-				9C3799FD18183A6B00488101 /* AnalyticsKitLocalyitcsProvider.m */,
+				9C0EF3AB18E0FC0800D19A2C /* AnalyticsKitLocalyticsProvider.h */,
+				9C0EF3AC18E0FC0800D19A2C /* AnalyticsKitLocalyticsProvider.m */,
 			);
-			path = Localyitcs;
+			name = Localytics;
+			path = Localytics;
 			sourceTree = "<group>";
 		};
 		9C3799FE18183A6B00488101 /* Mixpanel */ = {
@@ -792,6 +793,7 @@
 				9C0EF31A18E0D1CB00D19A2C /* AnalyticsKitTestFlightProvider.m in Sources */,
 				9C379A0A18183A6B00488101 /* AnalyticsKit.m in Sources */,
 				9C0EF38F18E0F51500D19A2C /* Mixpanel.m in Sources */,
+				9C0EF3AD18E0FC0800D19A2C /* AnalyticsKitLocalyticsProvider.m in Sources */,
 				9C0EF35B18E0ED4C00D19A2C /* NSString+AIAdditions.m in Sources */,
 				9C0EF31718E0D1B800D19A2C /* AnalyticsKitMixpanelProvider.m in Sources */,
 				9C379A1B1818507A00488101 /* AnalyticsKitCrashlyticsProvider.m in Sources */,
@@ -801,7 +803,6 @@
 				9C0EF31318E0D19F00D19A2C /* AnalyticsKitApsalarProvider.m in Sources */,
 				9C0EF31818E0D1BF00D19A2C /* AnalyticsKitNewRelicProvider.m in Sources */,
 				9C0EF3A018E0F57E00D19A2C /* MPCSerializedJSONData.m in Sources */,
-				9C0EF31618E0D1B200D19A2C /* AnalyticsKitLocalyitcsProvider.m in Sources */,
 				9C0EF3A218E0F57E00D19A2C /* ODIN.m in Sources */,
 				9C0EF35E18E0ED4C00D19A2C /* AILogger.m in Sources */,
 				9C379A0C18183A6B00488101 /* AnalyticsKitEvent.m in Sources */,
@@ -961,16 +962,11 @@
 				INFOPLIST_FILE = "AnalyticsKit/AnalyticsKit-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/AnalyticsKit/Provider",
-					Libraries/ApSalar,
-					"$(PROJECT_DIR)/AnalyticsKit/Provider",
-					Libraries/Localytics,
-					"$(PROJECT_DIR)/AnalyticsKit/Provider",
-					Libraries/Flurry,
-					"$(PROJECT_DIR)/AnalyticsKit/Provider",
-					Libraries/GoogleAnalytics,
-					"$(PROJECT_DIR)/AnalyticsKit/Provider",
-					Libraries/TestFlight,
+					"\"$(PROJECT_DIR)/AnalyticsKit/Provider Libraries/ApSalar\"",
+					"\"$(PROJECT_DIR)/AnalyticsKit/Provider Libraries/Localytics\"",
+					"\"$(PROJECT_DIR)/AnalyticsKit/Provider Libraries/Flurry\"",
+					"\"$(PROJECT_DIR)/AnalyticsKit/Provider Libraries/GoogleAnalytics\"",
+					"\"$(PROJECT_DIR)/AnalyticsKit/Provider Libraries/TestFlight\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -998,16 +994,11 @@
 				INFOPLIST_FILE = "AnalyticsKit/AnalyticsKit-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/AnalyticsKit/Provider",
-					Libraries/ApSalar,
-					"$(PROJECT_DIR)/AnalyticsKit/Provider",
-					Libraries/Localytics,
-					"$(PROJECT_DIR)/AnalyticsKit/Provider",
-					Libraries/Flurry,
-					"$(PROJECT_DIR)/AnalyticsKit/Provider",
-					Libraries/GoogleAnalytics,
-					"$(PROJECT_DIR)/AnalyticsKit/Provider",
-					Libraries/TestFlight,
+					"\"$(PROJECT_DIR)/AnalyticsKit/Provider Libraries/ApSalar\"",
+					"\"$(PROJECT_DIR)/AnalyticsKit/Provider Libraries/Localytics\"",
+					"\"$(PROJECT_DIR)/AnalyticsKit/Provider Libraries/Flurry\"",
+					"\"$(PROJECT_DIR)/AnalyticsKit/Provider Libraries/GoogleAnalytics\"",
+					"\"$(PROJECT_DIR)/AnalyticsKit/Provider Libraries/TestFlight\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;

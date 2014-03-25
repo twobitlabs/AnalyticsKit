@@ -15,7 +15,7 @@
 #import "AnalyticsKitDebugProvider.h"
 #import "AnalyticsKitFlurryProvider.h"
 #import "AnalyticsKitGoogleAnalyticsProvider.h"
-#import "AnalyticsKitLocalyitcsProvider.h"
+#import "AnalyticsKitLocalyticsProvider.h"
 #import "AnalyticsKitMixpanelProvider.h"
 #import "AnalyticsKitNewRelicProvider.h"
 #import "AnalyticsKitParseProvider.h"
@@ -36,7 +36,7 @@
                            [AnalyticsKitDebugProvider new],
                            [[AnalyticsKitFlurryProvider alloc] initWithAPIKey:nil],
                            [[AnalyticsKitGoogleAnalyticsProvider alloc] initWithTrackingID:nil],
-//                           [[AnalyticsKitLocalyitcsProvider alloc] initWithAPIKey:nil],
+//                           [[AnalyticsKitLocalyticsProvider alloc] initWithAPIKey:nil],
                            [[AnalyticsKitMixpanelProvider alloc] initWithAPIKey:nil],
                            [[AnalyticsKitNewRelicProvider alloc] initWithAPIKey:nil],
 //                           [[AnalyticsKitParseProvider alloc] initWithApplicationId:nil clientKey:nil],
