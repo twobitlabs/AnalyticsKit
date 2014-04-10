@@ -15,16 +15,7 @@
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)testFlightKey {
     self = [super init];
     if (self) {
-        #ifdef DEBUG
-            #if (!TARGET_IPHONE_SIMULATOR)
-                // Since Apple no longer allows UDID, TestFlight recommends sending it only in DEBUG builds
-                #pragma clang diagnostic push
-                #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-                NSString *deviceId = [[UIDevice currentDevice] uniqueIdentifier];
-                #pragma clang diagnostic pop
-                [TestFlight setDeviceIdentifier:deviceId];
-            #endif
-        #endif
+        // Removed setDeviceIdentifier:
         [TestFlight takeOff:testFlightKey];
     }
     return self;
