@@ -75,7 +75,7 @@ static NSString* const kProperties = @"properties";
 -(void)logScreen:(NSString *)screenName
 {
     id tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker set:kGAIDescription
+    [tracker set:kGAIScreenName
            value:screenName];
     
     [tracker send:[[GAIDictionaryBuilder createAppView] build]];
