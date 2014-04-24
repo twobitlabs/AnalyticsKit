@@ -8,6 +8,12 @@
 
 #import "AnalyticsKitDebugProvider.h"
 
+@interface AnalyticsKitDebugProvider()
+
+@property(nonatomic,weak)UIAlertView *alert;
+
+@end
+
 @implementation AnalyticsKitDebugProvider
 
 #pragma mark -
@@ -40,12 +46,15 @@
 
 -(void)showDebugAlert:(NSString *)message{
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AnalyticsKit Received Error" 
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AnalyticsKit Received Error"
                                                              message:message
                                                             delegate:nil cancelButtonTitle:@"OK"
                                                    otherButtonTitles:nil];
             #if !__has_feature(objc_arc)
             [alert autorelease];
+            #else
+            if (self.alert) [alert dismissWithClickedButtonIndex:0 animated:NO];
+            self.alert = alert;
             #endif
             [alert show];
         }];
