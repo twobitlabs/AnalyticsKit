@@ -82,6 +82,8 @@ static NSArray *_loggers = nil;
 }
 
 +(void)logEvent:(NSString *)event withProperty:(NSString *)property andValue:(NSString *)value {
+    if (property == nil) property = @"nil";
+    if (value == nil) value = @"nil";
     AKINFO(@"%@ withProperty: %@ andValue: %@", event, property, value);
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logEvent:event withProperty:property andValue:value];
