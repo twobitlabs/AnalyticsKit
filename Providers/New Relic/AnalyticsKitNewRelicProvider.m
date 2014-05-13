@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Collusion. All rights reserved.
 //
 
-#import <NewRelicAgent/NewRelicAgent.h>
+#import <NewRelicAgent/NewRelic.h>
 #import "AnalyticsKitNewRelicProvider.h"
 
 @implementation AnalyticsKitNewRelicProvider
