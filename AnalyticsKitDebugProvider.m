@@ -10,7 +10,9 @@
 
 @interface AnalyticsKitDebugProvider()
 
+#if __has_feature(objc_arc)
 @property(nonatomic,weak)UIAlertView *alert;
+#endif
 
 @end
 
