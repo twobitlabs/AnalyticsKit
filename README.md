@@ -30,10 +30,12 @@ If your project uses Cocoapods, you can simply inlcude `AnalyticsKit` for full p
 * AdjustIO - `pod 'AnalyticsKit/AdjustIO'`
 * Flurry - `pod 'AnalyticsKit/Flurry'`
 * Google Analytics - `pod 'AnalyticsKit/GoogleAnalytics'`
+* Localytics - `pod 'AnalyticsKit/Localytics'`
 * Mixpanel - `pod 'AnalyticsKit/Mixpanel'`
 * New Relic - `pod 'AnalyticsKit/NewRelic'`
-* Parse - `pod 'AnalyticsKit/Parse'`
 * TestFlight - `pod 'AnalyticsKit/TestFlight'`
+
+__***Please Note__ -- The Parse subspec has been removed, as it won't integrate correctly using Cocoapods.
 
 ### Installation
 1. Download the provider's SDK and add it to your project, or install via cocoapods.
