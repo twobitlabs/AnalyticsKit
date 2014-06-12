@@ -293,15 +293,6 @@ customerValueIncrease:(NSNumber *)customerValueIncrease;
  */
 - (void)setCustomerEmail:(NSString *)email;
 
-#ifdef MARKETING_PLATFORM
-/*!
- @method handleRemoteNotification
- @abstract Used to record performance data for push notifications
- @param notificationInfo The dictionary from either didFinishLaunchingWithOptions
- or didReceiveRemoteNotification should be passed on to this method
- */
-- (void)handleRemoteNotification:(NSDictionary *)notificationInfo;
-#endif
 
 @end
 
