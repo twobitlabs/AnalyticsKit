@@ -10,13 +10,6 @@ install:
     - brew update
     - brew upgrade xctool
 
-## Test matrix
-
-env:
-    matrix:
-        - TEST_COMMAND=test:unit                TEST_SDK=6.1
-        - TEST_COMMAND=test:unit                TEST_SDK=7.1
-
-## Test script
-
-script: rake $TEST_COMMAND
+script: 
+	- xctool -project AnalyticsKit/AnalyticsKit.xcodeproj -scheme AnalyticsKit -sdk iphonesimulator
+	- xctool test -project AnalyticsKit/AnalyticsKit.xcodeproj -scheme AnalyticsKit -sdk iphonesimulator
