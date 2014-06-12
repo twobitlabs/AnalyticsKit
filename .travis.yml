@@ -1,0 +1,22 @@
+language: objective-c
+
+## Setup
+
+# Travis initializes git submodules before `install` runs
+
+install:
+    # - `xctool`, required to build the unit test and documentation targets
+    #   Workaround for https://github.com/travis-ci/travis-ci/issues/2051#issuecomment-40817341
+    - brew update
+    - brew upgrade xctool
+
+## Test matrix
+
+env:
+    matrix:
+        - TEST_COMMAND=test:unit                TEST_SDK=6.1
+        - TEST_COMMAND=test:unit                TEST_SDK=7.1
+
+## Test script
+
+script: rake $TEST_COMMAND
