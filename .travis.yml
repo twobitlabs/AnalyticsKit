@@ -10,6 +10,6 @@ install:
     - brew update
     - brew upgrade xctool
 
-script: 
+script:
 	- xctool -project AnalyticsKit/AnalyticsKit.xcodeproj -scheme AnalyticsKit -sdk iphonesimulator
 	- xctool test -project AnalyticsKit/AnalyticsKit.xcodeproj -scheme AnalyticsKit -sdk iphonesimulator
