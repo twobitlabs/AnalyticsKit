@@ -1,0 +1,15 @@
+language: objective-c
+
+## Setup
+
+# Travis initializes git submodules before `install` runs
+
+install:
+    # - `xctool`, required to build the unit test and documentation targets
+    #   Workaround for https://github.com/travis-ci/travis-ci/issues/2051#issuecomment-40817341
+    - brew update
+    - brew upgrade xctool
+
+script:
+    - xctool -project AnalyticsKit/AnalyticsKit.xcodeproj -scheme AnalyticsKit -sdk iphonesimulator
+    - xctool test -project AnalyticsKit/AnalyticsKit.xcodeproj -scheme AnalyticsKit -sdk iphonesimulator

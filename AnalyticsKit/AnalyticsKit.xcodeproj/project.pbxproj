@@ -50,7 +50,6 @@
 		9C0EF3A118E0F57E00D19A2C /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0EF39A18E0F57E00D19A2C /* NSData+MPBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9C0EF3A218E0F57E00D19A2C /* ODIN.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0EF39D18E0F57E00D19A2C /* ODIN.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9C0EF3A318E0F87500D19A2C /* libApsalar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF37D18E0F4C100D19A2C /* libApsalar.a */; };
-		9C0EF3A418E0F88A00D19A2C /* libLocalyticsAMP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF37718E0F40400D19A2C /* libLocalyticsAMP.a */; };
 		9C0EF3A518E0F89D00D19A2C /* libFlurry_4.3.2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF36518E0ED8800D19A2C /* libFlurry_4.3.2.a */; };
 		9C0EF3A618E0F8AB00D19A2C /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF36B18E0EE1800D19A2C /* libGoogleAnalyticsServices.a */; };
 		9C0EF3A718E0F8BC00D19A2C /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF37918E0F41A00D19A2C /* libTestFlight.a */; };
@@ -75,6 +74,11 @@
 		9C379A0D18183A6B00488101 /* AnalyticsKitUnitTestProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799EA18183A6B00488101 /* AnalyticsKitUnitTestProvider.m */; };
 		9C379A0E18183A6B00488101 /* NSNumber+Buckets.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799ED18183A6B00488101 /* NSNumber+Buckets.m */; };
 		9C379A1B1818507A00488101 /* AnalyticsKitCrashlyticsProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C379A1A1818507A00488101 /* AnalyticsKitCrashlyticsProvider.m */; };
+		9C5DE4B3194A609500C4C938 /* LocalyticsDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5DE4A4194A5FDF00C4C938 /* LocalyticsDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9C5DE4B4194A609500C4C938 /* LocalyticsDatapointHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5DE4A6194A5FDF00C4C938 /* LocalyticsDatapointHelper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9C5DE4B5194A609500C4C938 /* LocalyticsSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5DE4A8194A5FDF00C4C938 /* LocalyticsSession.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9C5DE4B6194A609500C4C938 /* LocalyticsUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5DE4AB194A5FDF00C4C938 /* LocalyticsUploader.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9C5DE4B7194A609500C4C938 /* LocalyticsUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5DE4AD194A5FDF00C4C938 /* LocalyticsUtil.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,7 +113,6 @@
 		9C0EF32E18E0E78800D19A2C /* GAILogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAILogger.h; sourceTree = "<group>"; };
 		9C0EF32F18E0E78800D19A2C /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
 		9C0EF33018E0E78800D19A2C /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
-		9C0EF33218E0E79B00D19A2C /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
 		9C0EF33418E0ED4C00D19A2C /* Adjust.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Adjust.h; sourceTree = "<group>"; };
 		9C0EF33518E0ED4C00D19A2C /* Adjust.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Adjust.m; sourceTree = "<group>"; };
 		9C0EF33618E0ED4C00D19A2C /* AIActivityHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIActivityHandler.h; sourceTree = "<group>"; };
@@ -151,7 +154,6 @@
 		9C0EF37118E0EFC700D19A2C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		9C0EF37318E0EFED00D19A2C /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		9C0EF37518E0F12A00D19A2C /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
-		9C0EF37718E0F40400D19A2C /* libLocalyticsAMP.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLocalyticsAMP.a; sourceTree = "<group>"; };
 		9C0EF37918E0F41A00D19A2C /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
 		9C0EF37B18E0F4AB00D19A2C /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		9C0EF37D18E0F4C100D19A2C /* libApsalar.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libApsalar.a; sourceTree = "<group>"; };
@@ -215,6 +217,18 @@
 		9C379A0918183A6B00488101 /* AnalyticsKitTestFlightProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsKitTestFlightProvider.m; sourceTree = "<group>"; };
 		9C379A191818507A00488101 /* AnalyticsKitCrashlyticsProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyticsKitCrashlyticsProvider.h; path = Crashlytics/AnalyticsKitCrashlyticsProvider.h; sourceTree = "<group>"; };
 		9C379A1A1818507A00488101 /* AnalyticsKitCrashlyticsProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyticsKitCrashlyticsProvider.m; path = Crashlytics/AnalyticsKitCrashlyticsProvider.m; sourceTree = "<group>"; };
+		9C5DE4A2194A5FDF00C4C938 /* LocalyticsConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsConstants.h; sourceTree = "<group>"; };
+		9C5DE4A3194A5FDF00C4C938 /* LocalyticsDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsDatabase.h; sourceTree = "<group>"; };
+		9C5DE4A4194A5FDF00C4C938 /* LocalyticsDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsDatabase.m; sourceTree = "<group>"; };
+		9C5DE4A5194A5FDF00C4C938 /* LocalyticsDatapointHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsDatapointHelper.h; sourceTree = "<group>"; };
+		9C5DE4A6194A5FDF00C4C938 /* LocalyticsDatapointHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsDatapointHelper.m; sourceTree = "<group>"; };
+		9C5DE4A7194A5FDF00C4C938 /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
+		9C5DE4A8194A5FDF00C4C938 /* LocalyticsSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsSession.m; sourceTree = "<group>"; };
+		9C5DE4A9194A5FDF00C4C938 /* LocalyticsSession+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LocalyticsSession+Private.h"; sourceTree = "<group>"; };
+		9C5DE4AA194A5FDF00C4C938 /* LocalyticsUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsUploader.h; sourceTree = "<group>"; };
+		9C5DE4AB194A5FDF00C4C938 /* LocalyticsUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsUploader.m; sourceTree = "<group>"; };
+		9C5DE4AC194A5FDF00C4C938 /* LocalyticsUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsUtil.h; sourceTree = "<group>"; };
+		9C5DE4AD194A5FDF00C4C938 /* LocalyticsUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsUtil.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,7 +252,6 @@
 				9C209A32192400840052633C /* Parse.framework in Frameworks */,
 				9C0EF32618E0DB7F00D19A2C /* NewRelicAgent.framework in Frameworks */,
 				9C0EF31118E0D12000D19A2C /* Crashlytics.framework in Frameworks */,
-				9C0EF3A418E0F88A00D19A2C /* libLocalyticsAMP.a in Frameworks */,
 				9C0EF3A318E0F87500D19A2C /* libApsalar.a in Frameworks */,
 				9C3799AE181838FD00488101 /* Foundation.framework in Frameworks */,
 			);
@@ -383,8 +396,18 @@
 		9C0EF33118E0E79B00D19A2C /* Localytics */ = {
 			isa = PBXGroup;
 			children = (
-				9C0EF37718E0F40400D19A2C /* libLocalyticsAMP.a */,
-				9C0EF33218E0E79B00D19A2C /* LocalyticsSession.h */,
+				9C5DE4A2194A5FDF00C4C938 /* LocalyticsConstants.h */,
+				9C5DE4A3194A5FDF00C4C938 /* LocalyticsDatabase.h */,
+				9C5DE4A4194A5FDF00C4C938 /* LocalyticsDatabase.m */,
+				9C5DE4A5194A5FDF00C4C938 /* LocalyticsDatapointHelper.h */,
+				9C5DE4A6194A5FDF00C4C938 /* LocalyticsDatapointHelper.m */,
+				9C5DE4A7194A5FDF00C4C938 /* LocalyticsSession.h */,
+				9C5DE4A8194A5FDF00C4C938 /* LocalyticsSession.m */,
+				9C5DE4A9194A5FDF00C4C938 /* LocalyticsSession+Private.h */,
+				9C5DE4AA194A5FDF00C4C938 /* LocalyticsUploader.h */,
+				9C5DE4AB194A5FDF00C4C938 /* LocalyticsUploader.m */,
+				9C5DE4AC194A5FDF00C4C938 /* LocalyticsUtil.h */,
+				9C5DE4AD194A5FDF00C4C938 /* LocalyticsUtil.m */,
 			);
 			name = Localytics;
 			path = ProviderLibraries/Localytics;
@@ -788,6 +811,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C5DE4B4194A609500C4C938 /* LocalyticsDatapointHelper.m in Sources */,
 				9C3799C4181838FD00488101 /* AnalyticsKitViewController.m in Sources */,
 				9C0EF31A18E0D1CB00D19A2C /* AnalyticsKitTestFlightProvider.m in Sources */,
 				9C379A0A18183A6B00488101 /* AnalyticsKit.m in Sources */,
@@ -796,11 +820,13 @@
 				9C0EF35B18E0ED4C00D19A2C /* NSString+AIAdditions.m in Sources */,
 				9C0EF31718E0D1B800D19A2C /* AnalyticsKitMixpanelProvider.m in Sources */,
 				9C379A1B1818507A00488101 /* AnalyticsKitCrashlyticsProvider.m in Sources */,
+				9C5DE4B6194A609500C4C938 /* LocalyticsUploader.m in Sources */,
 				9C0EF35C18E0ED4C00D19A2C /* UIDevice+AIAdditions.m in Sources */,
 				9C0EF31418E0D1A700D19A2C /* AnalyticsKitFlurryProvider.m in Sources */,
 				9C0EF36218E0ED4C00D19A2C /* AIResponseData.m in Sources */,
 				9C0EF31318E0D19F00D19A2C /* AnalyticsKitApsalarProvider.m in Sources */,
 				9C0EF31818E0D1BF00D19A2C /* AnalyticsKitNewRelicProvider.m in Sources */,
+				9C5DE4B3194A609500C4C938 /* LocalyticsDatabase.m in Sources */,
 				9C0EF3A018E0F57E00D19A2C /* MPCSerializedJSONData.m in Sources */,
 				9C0EF3A218E0F57E00D19A2C /* ODIN.m in Sources */,
 				9C0EF35E18E0ED4C00D19A2C /* AILogger.m in Sources */,
@@ -813,6 +839,7 @@
 				9C0EF39E18E0F57E00D19A2C /* MPCJSONDataSerializer.m in Sources */,
 				9C0EF35918E0ED4C00D19A2C /* AIActivityState.m in Sources */,
 				9C379A0E18183A6B00488101 /* NSNumber+Buckets.m in Sources */,
+				9C5DE4B7194A609500C4C938 /* LocalyticsUtil.m in Sources */,
 				9C0EF39F18E0F57E00D19A2C /* MPCJSONSerializer.m in Sources */,
 				9C3799BE181838FD00488101 /* AnalyticsKitAppDelegate.m in Sources */,
 				9C0EF31918E0D1C500D19A2C /* AnalyticsKitParseProvider.m in Sources */,
@@ -827,6 +854,7 @@
 				9C0EF36018E0ED4C00D19A2C /* AIPackageHandler.m in Sources */,
 				9C0EF35A18E0ED4C00D19A2C /* NSData+AIAdditions.m in Sources */,
 				9C0EF35F18E0ED4C00D19A2C /* AIPackageBuilder.m in Sources */,
+				9C5DE4B5194A609500C4C938 /* LocalyticsSession.m in Sources */,
 				9C0EF36118E0ED4C00D19A2C /* AIRequestHandler.m in Sources */,
 				9C0EF35818E0ED4C00D19A2C /* AIActivityPackage.m in Sources */,
 			);
@@ -967,6 +995,7 @@
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/GoogleAnalytics\"",
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/TestFlight\"",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1030,6 +1059,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/AnalyticsKitTests/OCMock",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -1066,6 +1096,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/AnalyticsKitTests/OCMock",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
