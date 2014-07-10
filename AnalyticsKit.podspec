@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
 
                       The benefit of using AnalyticsKit is that if you decide to start using a new analytics provider, or add an additional one, you need to write/change much less code!
 
-                      AnalyticsKit works both in ARC based projects and non-ARC projects. 
+                      AnalyticsKit works both in ARC based projects and non-ARC projects.
                   DESC
 
   s.homepage     = "https://github.com/twobitlabs/AnalyticsKit"
@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.authors      = { "Two Bit Labs" => "", "Todd Huss" => "", "Susan Detwiler" => "", "Christopher Pickslay" => "", "Zac Shenker" => "", "Sinnerschrader Mobile" => "" }
 
 
-  
+
   s.platform     = :ios, '6.0'
   s.source       = { :git => "https://github.com/twobitlabs/AnalyticsKit.git", :tag => s.version.to_s }
   s.requires_arc = false
@@ -27,11 +27,11 @@ Pod::Spec.new do |s|
   s.subspec 'Core' do |core|
     core.source_files  = 'AnalyticsKit.{h,m}', 'AnalyticsKitEvent.{h,m}', 'AnalyticsKitDebugProvider.{h,m}', 'AnalyticsKitUnitTestProvider.{h,m}', 'Categories/NSNumber+Buckets.{h,m}'
   end
-  
+
   s.subspec 'AdjustIO' do |a|
     a.source_files = 'Providers/AdjustIO/AnalyticsKitAdjustIOProvider.{h,m}'
-    a.dependency 'Adjust', '~> 3.2.1'
-    a.dependency 'AnalyticsKit/Core'  
+    a.dependency 'Adjust', '~> 3.3.5'
+    a.dependency 'AnalyticsKit/Core'
   end
 
   s.subspec 'Flurry' do |f|
@@ -39,13 +39,13 @@ Pod::Spec.new do |s|
     f.dependency 'FlurrySDK'
     f.dependency 'AnalyticsKit/Core'
   end
-  
+
   s.subspec 'GoogleAnalytics' do |ga|
     ga.source_files = 'Providers/Google Analytics/AnalyticsKitGoogleAnalyticsProvider.{h,m}'
     ga.dependency 'GoogleAnalytics-iOS-SDK', '~> 3.0'
     ga.dependency 'AnalyticsKit/Core'
   end
-  
+
   s.subspec 'Localytics' do |l|
     l.source_files = 'Providers/Localytics/AnalyticsKitLocalyticsProvider.{h,m}'
     l.dependency 'Localytics-AMP'
@@ -64,13 +64,13 @@ Pod::Spec.new do |s|
     nr.dependency 'AnalyticsKit/Core'
     nr.platform     = :ios, '5.0'
   end
-  
+
   # s.subspec 'Parse' do |p|
   #   p.source_files = 'Providers/Parse/AnalyticsKitParseProvider.{h,m}'
   #   p.dependency 'Parse-iOS-SDK'
   #   p.dependency 'AnalyticsKit/Core'
   # end
-  
+
   s.subspec 'TestFlight' do |tf|
     tf.source_files = 'Providers/TestFlight/AnalyticsKitTestFlightProvider.{h,m}'
     tf.dependency 'TestFlightSDK'
