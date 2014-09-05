@@ -8,7 +8,7 @@ install:
     # - `xctool`, required to build the unit test and documentation targets
     #   Workaround for https://github.com/travis-ci/travis-ci/issues/2051#issuecomment-40817341
     - brew update
-    - brew upgrade xctool
+    - if brew outdated | grep -qx xctool; then brew upgrade xctool; fi
 
 script:
     - xctool -project AnalyticsKit/AnalyticsKit.xcodeproj -scheme AnalyticsKit -sdk iphonesimulator
