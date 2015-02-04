@@ -46,10 +46,11 @@ __***Please Note__ -- The Parse subspec has been removed, as it won't integrate 
 3. In your AppDelegate's applicationDidFinishLaunchingWithOptions: method, create an array with your provider instance(s) and call `initializeLoggers:`. 
  
 Objective-C:
+ 
+Initialize AnalyticsKit in applicationDidFinishLaunchingWithOptions
 
 ```objc
-AnalyticsKitFlurryProvider *flurry = [[AnalyticsKitFlurryProvider alloc] initWithAPIKey:@"[YOUR KEY]];
-
+AnalyticsKitFlurryProvider *flurry = [[AnalyticsKitFlurryProvider alloc] initWithAPIKey:@"[YOUR KEY]"];
 [AnalyticsKit initializeLoggers:@[flurry]];
 ```
 
@@ -60,7 +61,8 @@ To log an event, simply call the `logEvent:` method.
 ```
  
 Depending on which analytics providers you use you may need to include the following method calls in your app delegate (or just go ahead and include them to be safe):
-```
+ 
+```objc
 [AnalyticsKit applicationWillEnterForeground]; 
 [AnalyticsKit applicationDidEnterBackground];  
 [AnalyticsKit applicationWillTerminate];  
@@ -77,13 +79,14 @@ Import AnalyticsKit and any providers in your bridging header:
  
 Initialize AnalyticsKit in application:didFinishLaunchingWithOptions:
  
-```
+```swift
 let newRelic = AnalyticsKitNewRelicProvider(APIKey: "[YOUR KEY]")
 AnalyticsKit.initializeLoggers([newRelic])
 ```
  
 Depending on which analytics providers you use you may need to include the following method calls in your app delegate (or just go ahead and include them to be safe):
-```
+
+```swift
 AnalyticsKit.applicationWillEnterForeground()
 AnalyticsKit.applicationDidEnterBackground() 
 AnalyticsKit.applicationWillTerminate]()
