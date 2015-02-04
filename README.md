@@ -3,7 +3,7 @@
 
 # AnalyticsKit
 
-The goal of `AnalyticsKit` is to provide a consistent API for analytics regardless of the provider. With `AnalyticsKit`, you just call one logging method and `AnalyticsKit` relays that logging message to each registered provider. 
+The goal of `AnalyticsKit` is to provide a consistent API for analytics regardless of the provider. With `AnalyticsKit`, you just call one logging method and `AnalyticsKit` relays that logging message to each registered provider. AnalyticsKit works in both Swift and Objective-C projects
 
 ## Supported Providers
 
@@ -28,7 +28,7 @@ If you would like to add support for a new provider or to update the code for an
 
 __***Please Note__ -- While we welcome contributions, Two Bit Labs does not officially support Cocoapods for AnalyticsKit. If you run into problems integrating AnalyticsKit using Cocoapods, please log a GitHub issue.
 
-If your project uses Cocoapods, you can simply inlcude `AnalyticsKit` for full provider support, or you can specify your provider using Cocoapods subspecs.
+If your project uses Cocoapods, you can simply include `AnalyticsKit` for full provider support, or you can specify your provider using Cocoapods subspecs.
 
 * AdjustIO - `pod 'AnalyticsKit/AdjustIO'`
 * Flurry - `pod 'AnalyticsKit/Flurry'`
@@ -43,18 +43,12 @@ __***Please Note__ -- The Parse subspec has been removed, as it won't integrate 
 ### Installation
 1. Download the provider's SDK and add it to your project, or install via cocoapods.
 2. Add AnalyticsKit to your project either as a git submodule or copying the source into your project. In Xcode, only include AnalyticsKit.h/.m and any providers you plan to use.
-3. In your AppDelegate's applicationDidFinishLaunchingWithOptions: method, create an array with your provider instance(s) and call `initializeLoggers:`.
+3. In your AppDelegate's applicationDidFinishLaunchingWithOptions: method, create an array with your provider instance(s) and call `initializeLoggers:`. 
+ 
+Objective-C:
 
 ```objc
-NSString *flurryKey = @"0123456789ABCDEF";
-
-// If you're running tethered or in the simulator, it's best to use different/fake keys
-// instead of bypassing AnalyticsKit completely.
-#if DEBUG
-	flurryKey = @"0000000000000000";
-#endif
-
-AnalyticsKitFlurryProvider *flurry = [[AnalyticsKitFlurryProvider alloc] initWithAPIKey:flurryKey];
+AnalyticsKitFlurryProvider *flurry = [[AnalyticsKitFlurryProvider alloc] initWithAPIKey:@"[YOUR KEY]];
 
 [AnalyticsKit initializeLoggers:@[flurry]];
 ```
@@ -63,6 +57,36 @@ To log an event, simply call the `logEvent:` method.
 
 ```objc
 [AnalyticsKit logEvent:@"Log In" withProperties:infoDict];
+```
+ 
+Depending on which analytics providers you use you may need to include the following method calls in your app delegate (or just go ahead and include them to be safe):
+```
+[AnalyticsKit applicationWillEnterForeground]; 
+[AnalyticsKit applicationDidEnterBackground];  
+[AnalyticsKit applicationWillTerminate];  
+```
+ 
+Swift:
+ 
+Import AnalyticsKit and any providers in your bridging header:
+ 
+```objc
+#import "AnalyticsKit.h"
+#import "AnalyticsKitNewRelicProvider.h"
+```
+ 
+Initialize AnalyticsKit in application:didFinishLaunchingWithOptions:
+ 
+```
+let newRelic = AnalyticsKitNewRelicProvider(APIKey: "[YOUR KEY]")
+AnalyticsKit.initializeLoggers([newRelic])
+```
+ 
+Depending on which analytics providers you use you may need to include the following method calls in your app delegate (or just go ahead and include them to be safe):
+```
+AnalyticsKit.applicationWillEnterForeground()
+AnalyticsKit.applicationDidEnterBackground() 
+AnalyticsKit.applicationWillTerminate]()
 ```
 
 See AnalyticsKit.h for an exhaustive list of the logging methods available.
