@@ -11,6 +11,7 @@
 @interface AnalyticsKitNewRelicProvider : NSObject<AnalyticsKitProvider>
 
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)apiKey;
+-(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)apiKey crashReporting:(BOOL)crashReporting;
 
 @end
 

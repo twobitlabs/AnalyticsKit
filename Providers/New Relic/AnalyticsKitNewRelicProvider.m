@@ -19,6 +19,16 @@
     return self;
 }
 
+-(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)apiKey crashReporting:(BOOL)crashReporting {
+    self = [super init];
+    if (self) {
+        [NewRelic enableCrashReporting:crashReporting];
+        [NewRelicAgent startWithApplicationToken:apiKey];
+    }
+    return self;
+}
+
+
 -(void)applicationWillEnterForeground {}
 -(void)applicationDidEnterBackground {}
 -(void)applicationWillTerminate {}
