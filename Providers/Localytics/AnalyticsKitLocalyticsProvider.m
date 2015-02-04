@@ -87,7 +87,7 @@
           name, @"name",
           message, @"message",        
           [error localizedDescription], @"description",
-          [NSString stringWithFormat:@"%d", [error code]], @"code",
+          [NSString stringWithFormat:@"%ld", (long)[error code]], @"code",
           [error domain], @"domain",
           [[error userInfo] description], @"userInfo",
       nil]];
