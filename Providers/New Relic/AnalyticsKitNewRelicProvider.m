@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 Collusion. All rights reserved.
 //
 
-#import <NewRelicAgent/NewRelic.h>
 #import "AnalyticsKitNewRelicProvider.h"
 
 @implementation AnalyticsKitNewRelicProvider
@@ -23,6 +22,16 @@
     self = [super init];
     if (self) {
         [NewRelic enableCrashReporting:crashReporting];
+        [NewRelicAgent startWithApplicationToken:apiKey];
+    }
+    return self;
+}
+
+-(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)apiKey crashReporting:(BOOL)crashReporting disableFeatures:(NRMAFeatureFlags)featuresToDisable {
+    self = [super init];
+    if (self) {
+        [NewRelic enableCrashReporting:crashReporting];
+        [NewRelic disableFeatures:featuresToDisable];
         [NewRelicAgent startWithApplicationToken:apiKey];
     }
     return self;
