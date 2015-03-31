@@ -59,7 +59,10 @@ static NSString* const kProperties = @"properties";
 
 -(void)applicationWillTerminate{
     id tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker close];
+    
+    if ([tracker respondsToSelector:@selector(close)]) {
+        [tracker close];
+    }
 }
 
 -(void)uncaughtException:(NSException *)exception
