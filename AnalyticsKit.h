@@ -41,6 +41,10 @@
 
 //Logging events
 -(void)logScreen:(NSString *)screenName;
+-(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict;
+-(void)logScreen:(NSString *)screenName timed:(BOOL)timed;
+-(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict timed:(BOOL)timed;
+-(void)endTimedScreen:(NSString *)screenName withProperties:(NSDictionary *)dict;
 -(void)logEvent:(NSString *)event;
 -(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value;
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict;
@@ -66,6 +70,10 @@ OBJC_EXPORT NSString* const AnalyticsKitEventTimeSeconds;
 +(void)uncaughtException:(NSException *)exception;
 
 +(void)logScreen:(NSString *)screenName;
++(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict;
++(void)logScreen:(NSString *)screenName timed:(BOOL)timed;
++(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict timed:(BOOL)timed;
++(void)endTimedScreen:(NSString *)screenName withProperties:(NSDictionary *)dict;
 +(void)logEvent:(NSString *)event;
 +(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value;
 +(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict;

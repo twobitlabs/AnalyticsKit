@@ -64,7 +64,38 @@ static NSArray *_loggers = nil;
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logScreen:screenName];
     }
-    
+}
+
++(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict
+{
+    AKINFO(@"%@ withProperties: %@", screenName, dict);
+    for (id<AnalyticsKitProvider> logger in _loggers) {
+        [logger logScreen:screenName withProperties:dict];
+    }
+}
+
++(void)logScreen:(NSString *)screenName timed:(BOOL)timed
+{
+    AKINFO(@"%@ timed: %@", screenName, timed ? @"YES" : @"NO");
+    for (id<AnalyticsKitProvider> logger in _loggers) {
+        [logger logScreen:screenName timed:timed];
+    }
+}
+
++(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict timed:(BOOL)timed
+{
+    AKINFO(@"%@ withProperties: %@ timed: %@", screenName, dict, timed ? @"YES" : @"NO");
+    for (id<AnalyticsKitProvider> logger in _loggers) {
+        [logger logScreen:screenName withProperties:dict timed:timed];
+    }
+}
+
++(void)endTimedScreen:(NSString *)screenName withProperties:(NSDictionary *)dict
+{
+    AKINFO(@"%@ withProperties: %@ ended", screenName, dict);
+    for (id<AnalyticsKitProvider> logger in _loggers) {
+        [logger endTimedScreen:screenName withProperties:dict];
+    }
 }
 
 +(void)logEvent:(NSString *)event {

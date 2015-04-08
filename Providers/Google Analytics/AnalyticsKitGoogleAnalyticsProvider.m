@@ -81,7 +81,39 @@ static NSString* const kProperties = @"properties";
     [tracker set:kGAIScreenName
            value:screenName];
     
-    [tracker send:[[GAIDictionaryBuilder createAppView] build]];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+}
+
+-(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict
+{
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:screenName];
+    
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+}
+
+-(void)logScreen:(NSString *)screenName timed:(BOOL)timed
+{
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:screenName];
+    
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+}
+
+-(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict timed:(BOOL)timed
+{
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:screenName];
+    
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+}
+
+-(void) endTimedScreen:(NSString *)screenName withProperties:(NSDictionary *)dict
+{
+    
 }
 
 -(void)logEvent:(NSString *)event
