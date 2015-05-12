@@ -94,6 +94,55 @@ AnalyticsKit.applicationWillTerminate]()
 
 See AnalyticsKit.h for an exhaustive list of the logging methods available.
 
+## Apple Watch Analytics
+
+AnalyticsKit now provides support for logging from your Apple Watch Extension.
+
+### Supported Providers
+
+* [Flurry](http://www.flurry.com/)
+
+### Installation
+1. If you haven't already done so, follow the installation steps above to add your provider's SDK and AnalyticsKit to your project.
+2. Adding Provider's API Key.
+ - Flurry: Follow steps outlined in [Flurry's Apple Watch Extension](https://developer.yahoo.com/flurry/docs/analytics/gettingstarted/technicalquickstart/applewatch/) guide to add the API Key to the Extension's info.plist.
+
+Objective-C:
+
+Initialize AnalyticsKit in awakeWithContext
+
+```objc
+AnalyticsKitWatchExtensionFlurryProvider *flurry = [AnalyticsKitWatchExtensionFlurryProvider new];
+[AnalyticsKit initializeLoggers:@[flurry]];
+```
+
+To log an event, simply call the `logEvent:` method.
+
+```objc
+[AnalyticsKit logEvent:@"Launching Watch App"];
+```
+
+Swift:
+
+Import AnalyticsKit and any providers in your bridging header:
+ 
+```objc
+#import "AnalyticsKit.h"
+#import "AnalyticsKitWatchExtensionFlurryProvider.h"
+```
+ 
+Initialize AnalyticsKit in awakeWithContext
+ 
+```swift
+let flurryLogger = AnalyticsKitWatchExtensionFlurryProvider()
+AnalyticsKit.initializeLoggers([flurryLogger])
+```
+
+To log an event, simply call the `logEvent` method.
+
+```swift
+AnalyticsKit.logEvent("Launching Watch App");
+```
 
 ## Contributors
  - [Two Bit Labs](http://twobitlabs.com/)
@@ -103,3 +152,4 @@ See AnalyticsKit.h for an exhaustive list of the logging methods available.
  - [Zac Shenker](https://github.com/zacshenker)
  - [Sinnerschrader Mobile](https://github.com/sinnerschrader-mobile)
  - [Bradley David Bergeron](https://github.com/bdbergeron) - Parse
+ - [Jeremy Medford](https://github.com/jeremymedford)
