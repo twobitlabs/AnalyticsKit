@@ -38,6 +38,7 @@
  *
  **/
 OBJC_EXTERN void CLSLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
+OBJC_EXTERN void CLSLogv(NSString *format, va_list args) NS_FORMAT_FUNCTION(1,0);
 
 /**
  *
@@ -46,6 +47,8 @@ OBJC_EXTERN void CLSLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
  *
  **/
 OBJC_EXTERN void CLSNSLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
+OBJC_EXTERN void CLSNSLogv(NSString *format, va_list args) NS_FORMAT_FUNCTION(1,0);
+
 
 @protocol CrashlyticsDelegate;
 
@@ -135,6 +138,43 @@ OBJC_EXTERN void CLSNSLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
 + (void)setBoolValue:(BOOL)value forKey:(NSString *)key;
 + (void)setFloatValue:(float)value forKey:(NSString *)key;
 
+
+/**
+ * PRIVATE BETA
+ *
+ * Log an event to be sent to Answers, optionally providing a set of attributes
+ * with more information about the event.
+ *
+ * @param eventName the name of the event to be tracked.
+ *
+ * @param attributes the NSDictionary of attributes to associate with the event. The keys in this
+ * dictionary must be of type NSString, values must be of type NSNumber or NSString. There may be
+ * at most 20 attributes for an event.
+ *
+ * How we treat NSNumbers:
+ * We will provide information about the distribution of values over time.
+ *
+ * How we treat NSStrings:
+ * NSStrings are used as categorical data, allowing comparison across different category values.
+ * Strings are limited to a maximum length of 100 characters, attributes over this length will be
+ * truncated.
+ *
+ * Example:
+ * When tracking the Tweet views to better understand user engagement, sending the tweet's length
+ * and the type of media present in the tweet allows you to track how tweet length and the type of media influence
+ * engagement.
+ *
+ * [Crashlytics logEvent:@"Tweet Viewed" attributes:@{
+ *      @"Media Type": @"Image",
+ *      @"Length": @120
+ * }];
+ *
+ **/
+- (void)logEvent:(NSString *)eventName;
+- (void)logEvent:(NSString *)eventName attributes:(NSDictionary *)attributes;
+
++ (void)logEvent:(NSString *)eventName;
++ (void)logEvent:(NSString *)eventName attributes:(NSDictionary *)attributes;
 @end
 
 /**
@@ -215,3 +255,8 @@ OBJC_EXTERN void CLSNSLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
 - (void)crashlytics:(Crashlytics *)crashlytics didDetectCrashDuringPreviousExecution:(id <CLSCrashReport>)crash;
 
 @end
+
+/**
+ *  `CrashlyticsKit` can be used as a parameter to `[Fabric with:@[CrashlyticsKit]];` in Objective-C. In Swift, simply use `Crashlytics()`
+ */
+#define CrashlyticsKit [Crashlytics sharedInstance]
