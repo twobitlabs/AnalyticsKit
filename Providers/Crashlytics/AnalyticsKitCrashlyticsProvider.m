@@ -29,7 +29,7 @@
 
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {
     CLSLog(@"event: %@, properties: %@", event, dict);
-    [Crashlytics logEvent:event attributes:dict];
+    [[Crashlytics sharedInstance] logEvent:event attributes:dict];
 }
 
 -(void)logEvent:(NSString *)event timed:(BOOL)timed {
