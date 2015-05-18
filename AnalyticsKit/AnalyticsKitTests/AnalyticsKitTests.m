@@ -17,7 +17,6 @@
 #import "AnalyticsKitGoogleAnalyticsProvider.h"
 #import "AnalyticsKitLocalyticsProvider.h"
 #import "AnalyticsKitMixpanelProvider.h"
-#import "AnalyticsKitNewRelicProvider.h"
 #import "AnalyticsKitParseProvider.h"
 #import "AnalyticsKitTestFlightProvider.h"
 #import "AnalyticsKitUnitTestProvider.h"
@@ -39,7 +38,6 @@
                            // Localytics validates the key when you initialize it, so it can't be empty or fake
 //                           [[AnalyticsKitLocalyticsProvider alloc] initWithAPIKey:nil],
                            [[AnalyticsKitMixpanelProvider alloc] initWithAPIKey:nil],
-                           [[AnalyticsKitNewRelicProvider alloc] initWithAPIKey:nil],
                            [[AnalyticsKitParseProvider alloc] initWithApplicationId:@"x" clientKey:@"y"],
                            [[AnalyticsKitTestFlightProvider alloc] initWithAPIKey:nil],
                            [AnalyticsKitUnitTestProvider new]

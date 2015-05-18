@@ -1,3 +1,4 @@
+//  New Relic version 5.0.3
 //
 //  New Relic for Mobile -- iOS edition
 //
@@ -5,27 +6,28 @@
 //    https://docs.newrelic.com/docs/mobile-apps for information
 //    https://docs.newrelic.com/docs/releases/ios for release notes
 //
-//  Copyright (c) 2013 New Relic. All rights reserved.
+//  Copyright (c) 2014 New Relic. All rights reserved.
 //  See https://docs.newrelic.com/docs/licenses/ios-agent-licenses for license details
 //
 
 
 /*
- *  This document describes various APIs available to further customize New Relic
- *  data consumption. Using these APIs should provide a way to gain insight into
- *  un-instrumented methods and interactions.
- *
+ *  This document describes various APIs available to further customize New Relic's
+ *  data collection.
  */
 
+#import "NewRelicFeatureFlags.h"
 #import "NRConstants.h"
 #import "NRTimer.h"
 #import "NRLogger.h"
+#import "NewRelicCustomInteractionInterface.h"
 #import "NRGCDOverride.h"
-#import "NewRelicFeatureFlags.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+
 
 @interface NewRelic : NSObject
 
@@ -34,19 +36,53 @@ extern "C" {
 /**************************************/
 
 
+#pragma mark - Helpers for trying out New Relic features
+
+/*!
+ * Throws a demo run-time exception named "NewRelicDemoException" to test 
+ * New Relic Crash Reporting. 
+ *
+ * @param message the message attached to the exception
+ *
+ */
+
++ (void) crashNow:(NSString*)message;
+
+/*!
+ * Throws a demo run-time exception named "NewRelicDemoException" to test 
+ * New Relic Crash Reporting. 
+ *
+ *
+ */
+
++ (void) crashNow;
+
+
+#pragma mark - Configuring the New Relic SDK
+
 /*!
  Set this bit-wise flag to enable/disable  features.
 
- @param NRMAFeatureFlag the NR_OPTIONS bitwise-flag 
+ @param NRFeatureFlags the NR_OPTIONS bitwise-flag
  
  Note these flags must be set before calling -startWithApplicationToken:
       See NewRelicFeatureFlags.h for more flag details.
 
 */
-
 + (void) enableFeatures:(NRMAFeatureFlags)featureFlags;
-
 + (void) disableFeatures:(NRMAFeatureFlags)featureFlags;
+
+
+/*! 
+
+ @param BOOL enable or disable crash reporting
+
+ @note call this method before +startWithApplicationToken.
+       it will only be effective called before this method.
+
+*/
++ (void) enableCrashReporting:(BOOL)enabled;
+
 /*!
  Sets the version of the application reported to New Relic.
 
@@ -58,7 +94,15 @@ extern "C" {
 + (void)setApplicationVersion:(NSString *)versionString;
 
 /*!
- Starts the New Relic agent.
+ Returns the current anonymous Session Identifier string reported to New Relic.
+ The SessionId changes each time your app comes to the foreground on the device.
+ This value will be present in all events recorded in New Relic Insights.
+ */
++ (NSString*) currentSessionId;
+
+
+/*!
+ Starts New Relic data collection.
 
  Call this at the beginning of your UIApplicationDelegate's application:didFinishLaunchingWithOptions: method.
  You can find your App Token in the Settings tab of your mobile app on https://rpm.newrelic.com/
@@ -69,7 +113,7 @@ extern "C" {
 
 
 /*!
- Starts the New Relic agent and optionally reports data to New Relic over unencrypted HTTP.
+ Starts New Relic data collection and optionally reports data to New Relic over unencrypted HTTP.
 
  Call this at the beginning of your UIApplicationDelegate's application:didFinishLaunchingWithOptions: method.
  You can find your App Token in the Settings tab of your mobile app on https://rpm.newrelic.com/
@@ -80,6 +124,8 @@ extern "C" {
  */
 + (void)startWithApplicationToken:(NSString*)appToken withoutSecurity:(BOOL)disableSSL;
 
+
+#pragma mark - Custom instrumentation
 
 /*!
  Create and start a timer object.
@@ -99,117 +145,120 @@ extern "C" {
 /************************/
 
 /*******************************************************************************
- * + (void) startInteractionFromMethodName:(NSString*)selectorName 
+ * + (NSString*) startInteractionFromMethodName:(NSString*)selectorName
  *                                  object:(id)object
  *
- * Parameters:
- *      NSString *selectorNamed:
- *          should be the selector of the surrounding method.
- *          cannot be nil.
- *      id object:
- *          the object/Class that executes the selector.
- *          cannot be nil;
+ * Method Deprecated.
+ * see "+(NSString*)startInteractionWithName:(NSString*)interactionName" instead.
  *
- * Discussion:
- *      This method will start an Interaction Trace if one is not already 
- *      running (otherwise nothing will happen) using [object class] + "#" + 
- *      selectorNamed as the name. The interaction will record all instrumented
- *      methods until a timeout occures
- *      TODO: link to Interaction Traces document
- *
- *
- * Note:
- *     - NR_INTERACTION_START is a helper macro that will handle most cases.
+ * NOTE:
+ *  This method no longer has a function. Under the hood this method calls
+ *  [NewRelic startInteractionFromMethodName:selectorName
+ *                                     object:object
+ *                             customizedName:nil]
+ *  and customizedName is now a required parameter.
+ *  this function will log an warning and return nil now.
  *
  ******************************************************************************/
 
 
-+ (void) startInteractionFromMethodName:(NSString*)selectorName object:(id)object;
++ (NSString*) startInteractionFromMethodName:(NSString*)selectorName object:(id)object __attribute__((deprecated));
 #define NR_INTERACTION_START [NewRelic startInteractionFromMethodName:NSStringFromSelector(_cmd) object:self]
 
 
 
 
 /*******************************************************************************
-* + (void) startInteractionFromMethodName:(NSString*)selectorName
-*                                  object:(id)object
-*                          customizedName:(NSString*)interactionName
-*
-* Parameters:
-*      NSString *selectorNamed:
-*          should be the selector of the surrounding method.
-*          cannot be nil.
-*      id object:
-*          the object/Class that executes the selector.
-*          cannot be nil;
-*      NSString* interactionName:
-*          setting this parameter will override the default
-*          [object class] + "#" + selectorNamed default name.
-*
-* Discussion:
-*      This method will start an Interaction Trace if one is not already
-*      running (otherwise nothing will happen) using interactionName as the
-*      name, with [object class] + "#" + selectorNamed default if
-*      interactionNamed == nil. The interaction will record all instrumented
-*      methods until a timeout occures.
-*      TODO: link to Interaction Traces document
-*
-*
-* Note:
-*     - NR_INTERACTION_START(NSString* name) is a helper macro that will
-*       handle most cases.
-*
-********************************************************************************/
+ * + (NSString*) startInteractionFromMethodName:(NSString*)selectorName
+ *                                  object:(id)object
+ *                          customizedName:(NSString*)interactionName
+ *
+ * Method Deprecated.
+ * see "+(NSString*)startInteractionWithName:(NSString*)interactionName" instead.
+ *
+ * NOTE:
+ *  this method will function the same as +startInteractionWithName: if the
+ *  parameter, interactionName, is passed. All other parameters are ignored.
+ *  If interactionName is nil, a warning will be logged and nil will be returned.
+ *  All other parameters are ignored. 
+ *
+ *******************************************************************************/
 
 
-+ (void) startInteractionFromMethodName:(NSString*)selectorName object:(id)object customizedName:(NSString*)interactionName;
++ (NSString*) startInteractionFromMethodName:(NSString*)selectorName object:(id)object customizedName:(NSString*)interactionName __attribute__((deprecated));
 #define NR_INTERACTION_START_WITH_NAME(name) [NewRelic startInteractionFromMethodName:NSStringFromSelector(_cmd) object:self customizedName:name]
 
 
 
 
 /*******************************************************************************
- * + (void) startInteractionFromMethodName:(NSString*)selectorName
+ * + (NSString*) startInteractionFromMethodName:(NSString*)selectorName
  *                                  object:(id)object
  *                          customizedName:(NSString*)interactionName 
  *                   invalidateActiveTrace:(BOOL)invalidate;
  *
- * Parameters:
- *      NSString *selectorNamed:
- *          should be the selector of the surrounding method.
- *          cannot be nil.
- *      id object:
- *          the object/Class that executes the selector.
- *          cannot be nil;
- *      NSString* interactionName:
- *          setting this parameter will override the default [object class] +
- *          "#" + selectorNamed default name.
- *      BOOL invalidate:
- *          setting this to YES will stop the currently running Interaction 
- *          Trace. NO is the default behaivor.
+ * Method Deprecated.
+ * see "+(NSString*)startInteractionWithName:(NSString*)interactionName" instead.
  *
- * Discussion:
- *      This method will start an Interaction Trace. If the invalidate flag is 
- *      set, it will stop the currently running Interaction Trace.
- *      Using interactionName as the name, with [object class] + "#" +
- *      selectorNamed default if interactionNamed == nil.
- *      The interaction will record all instrumented methods until a timeout 
- *      occures.
- *      TODO: link to Interaction Traces document
- *
- * Note:
- *     - NR_INTERACTION_START(NSString* name, BOOL invalidate) is a helper 
- *       macro that will handle most cases.
+ * NOTE:
+ *  this method will function the same as +startInteractionWithName: if the
+ *  parameter, interactionName, is passed. All other parameters are ignored.
+ *  If interactionName is nil, a warning will be logged and nil will be returned.
+ *  All other parameters are ignored. 
  ******************************************************************************/
-+ (void) startInteractionFromMethodName:(NSString*)selectorName
++ (NSString*) startInteractionFromMethodName:(NSString*)selectorName
                                  object:(id)object
                          customizedName:(NSString*)interactionName
-                  cancelRunningTrace:(BOOL)cancel;
+                  cancelRunningTrace:(BOOL)cancel __attribute__((deprecated));
 
 #define NR_INTERACTION_START_WITH_NAME_CANCEL(name,cancel) [NewRelic startInteractionFromMethodName:NSStringFromSelector(_cmd) object:self customizedName:name cancelRunningTrace:cancel]
 
+/*******************************************************************************
+ * + (NSString*) startInteractionWithName:(NSString*)interactionName;
+ *
+ * Parameters:
+ *      NSString* interactionName:
+ *          required parameter.
+ *
+ * Return Value:
+ *      The return value is an interactionIdentifier that must be passed to stopCurrentInteraction:
+ *      if stopCurrentInteraction: is called.
+ *      it's not required to call stopCurrentInteraction: after calling start
+ *      because startInteractionWithName: will eventually complete intelligently.
+ * Discussion:
+ *      This method will start an Interaction Trace.
+ *      Using interactionName as the name
+ *      The interaction will record all instrumented methods until a timeout
+ *      occurs, or stopCurrentInteraction is called.
+ *
+ *      https://docs.newrelic.com/docs/mobile-monitoring/mobile-sdk-api/new-relic-mobile-sdk-api/working-ios-sdk-api#interactions
+ *
+ * Note:
+ *     - NR_START_NAMED_INTERACTION(NSString* name) is a helper
+ *       macro that will handle most cases.
+ ******************************************************************************/
++ (NSString*) startInteractionWithName:(NSString*)interactionName;
 
-
+#define NR_START_NAMED_INTERACTION(name) [NewRelic startInteractionWithName:name]
+/*******************************************************************************
+ *  + (void) stopCurrentInteraction(NSString*)InteractionIdentifier;
+ *
+ *  Parameters:
+ *      NSString* InteractionIdentifier:
+ *          the value returned by startInteractionWithName:
+ *          It is required to pass this string to manually complete the Interaction Trace.
+ *  Discussion:
+ *      this method will stop the Interaction trace associated with the interactionIdentifier (returned
+ *      by the startInteractionWithName: method). It's not necessary to call this method to
+ *      complete an interaction trace (an interaction trace will intelligently complete on its own).
+ *      However, use this method if you want a more discrete interaction period.
+ *  
+ *  Note:
+ *      NR_INTERACTION_STOP(NSString* interactionIdentifier) is a helper macro for stopCurrentInteraction.
+ *
+ ******************************************************************************/
++ (void) stopCurrentInteraction:(NSString*)interactionIdentifier;
+#define NR_INTERACTION_STOP(interactionIdentifier) [NewRelic stopCurrentInteraction:interactionIdentifier]
 
 /************************/
 /**   Method Tracing   **/
@@ -245,9 +294,9 @@ extern "C" {
  *
  *      Note:
  *          - NR_TRACE_METHOD_START is a helper macro that handles the
- *            creation of tue NRTimer and the +startTraceMethod:... method call
+ *            creation of the NRTimer and the +startTraceMethod:... method call
  *            Please observer that this should be called in tandem with 
- *            NR_ARC_TRACE_METHOD_STOP or NR_NONARC_TRACE_METHOD_STOP 
+ *            NR_ARC_TRACE_METHOD_STOP or NR_NONARC_TRACE_METHOD_STOP
  *            see +endTracingMethodWithTimer: for more details.
 
  ******************************************************************************/
@@ -280,7 +329,7 @@ extern "C" {
  *  Note: 
  *      - NR_ARC_TRACE_METHOD_STOP and NR_NONARC_TRACE_METHOD_STOP are helper
  *        macros designed to be used in tandem with NR_TRACE_METHOD_START.
- *        the only difference between the two is NR_NONARC_TRACE_METHOD_STOP 
+ *        the only difference between the two is NR_NONARC_TRACE_METHOD_STOP
  *        cleans up the NRTimer created with NR_TRACE_METHOD_START;
  *
  ******************************************************************************/
@@ -297,7 +346,7 @@ extern "C" {
 
 
 
-
+#pragma mark - Recording custom metrics
 
 /************************/
 /**      Metrics       **/
@@ -307,9 +356,9 @@ extern "C" {
 // category             : a descriptive identifier to categorize the metric
 // name                 : a recognizable name
 // valueUnit (optional) : the units describing the value added to the metric
-//                        (eg. seconds, percent) countUnit (optional) : the unit
-//                        of the metric itself (eg.  calls, operations, views)
-//  eg. /Custom/ViewLoadingPerformance/MyView[seconds|load]
+//                        (e.g.: seconds, percent) countUnit (optional) : the unit
+//                        of the metric itself (e.g.:  calls, operations, views)
+//  e.g.: /Custom/ViewLoadingPerformance/MyView[seconds|load]
 //      this metric would represent the the load time of MyView in seconds.
 //      The unit of the value passed is seconds, and each metric recorded
 //      represents a view 'load'.
@@ -346,7 +395,7 @@ extern "C" {
  *      This method will record a metric without units and a value of 1
  *
  *  Note:
- *      Avoid Using variable string in names and categories, such as guids, to 
+ *      Avoid Using variable string in names and categories, such as GUIDs, to 
  *      avoid metric grouping issues.
 *       More details @ http://docs.newrelic.com/docs/features/metric-grouping-issues
  *
@@ -373,7 +422,7 @@ extern "C" {
  *  Discussion:
  *      This method will record a metric without units
  *  Note:
- *      Avoid Using variable string in names and categories, such as guids, to
+ *      Avoid Using variable string in names and categories, such as GUIDs, to
  *      avoid metric grouping issues.
  *       More details @ http://docs.newrelic.com/docs/features/metric-grouping-issues
  *
@@ -387,7 +436,7 @@ extern "C" {
 
 // adds a unit for the value
 /*
- * while there are a few pre-defined units please feel free to add your own by
+ * while there are a few predefined units please feel free to add your own by
  * typecasting an NSString.
  *
  * The unit names may be mixed case and may consist strictly of alphabetical
@@ -421,11 +470,11 @@ extern "C" {
  *      case and must consist strictly of alphabetical characters as well as
  *      the _, % and / symbols. Case is preserved. Recommendation: Use 
  *      uncapitalized words, spelled out in full. For example, use second not
- *      Sec. While there are a few pre-defined units please feel free to add
+ *      Sec. While there are a few predefined units please feel free to add
  *       your own by typecasting an NSString.
  *
  *  Note:
- *      Avoid Using variable string in names and categories, such as guids, to
+ *      Avoid Using variable string in names and categories, such as GUIDs, to
  *      avoid metric grouping issues.
  *       More details @ http://docs.newrelic.com/docs/features/metric-grouping-issues
  *
@@ -464,18 +513,18 @@ extern "C" {
  *          Optional: represents the units of the metric.
  *
  *  Discussion:
- *      This method adds on the last with the addition of setting the opptional
+ *      This method adds on the last with the addition of setting the optional
  *      parameter countUnits.
  *
  *      NRMetricUnit is a redefinition of NSString.  The unit names may be mixed
  *      case and must consist strictly of alphabetical characters as well as
  *      the _, % and / symbols. Case is preserved. Recommendation: Use
  *      uncapitalized words, spelled out in full. For example, use second not
- *      Sec. While there are a few pre-defined units please feel free to add
+ *      Sec. While there are a few predefined units please feel free to add
  *       your own by typecasting an NSString.
  *
  *  Note:
- *      Avoid Using variable string in names and categories, such as guids, to
+ *      Avoid Using variable string in names and categories, such as GUIDs, to
  *      avoid metric grouping issues.
  *       More details @ http://docs.newrelic.com/docs/features/metric-grouping-issues
  *
@@ -490,6 +539,7 @@ extern "C" {
 
 
 
+#pragma mark - Recording custom network events
 
 /*********************************/
 /**      Network Requests       **/
@@ -498,8 +548,8 @@ extern "C" {
 /*******************************************************************************
  * Manually record any transactional, HTTP-like network request that completes.
  *  Parameters:
- *      NSURL* url:
- *          The url of the request.
+ *      NSURL* URL:
+ *          The URL of the request.
  *      NRTimer* timer:
  *          A timer that captures the start and end of the request.
  *      NSDictionary* headers:
@@ -526,7 +576,9 @@ extern "C" {
  * and encoding from the headers dictionary and the response body data as a
  * server error in the New Relic UI.
  *******************************************************************************/
+
 + (void)noticeNetworkRequestForURL:(NSURL*)url
+                        httpMethod:(NSString*)httpMethod
                          withTimer:(NRTimer *)timer
                    responseHeaders:(NSDictionary *)headers
                         statusCode:(NSInteger)httpStatusCode
@@ -534,6 +586,16 @@ extern "C" {
                      bytesReceived:(NSUInteger)bytesReceived
                       responseData:(NSData *)responseData
                          andParams:(NSDictionary *)params;
+
++ (void)noticeNetworkRequestForURL:(NSURL*)url
+                         withTimer:(NRTimer *)timer
+                   responseHeaders:(NSDictionary *)headers
+                        statusCode:(NSInteger)httpStatusCode
+                         bytesSent:(NSUInteger)bytesSent
+                     bytesReceived:(NSUInteger)bytesReceived
+                      responseData:(NSData *)responseData
+                         andParams:(NSDictionary *)params __attribute__((deprecated));
+
 
 
 /*******************************************************************************
@@ -548,8 +610,119 @@ extern "C" {
  * http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Constants/Reference/reference.html#//apple_ref/doc/uid/TP40003793-CH3g-SW40
  *******************************************************************************/
 + (void)noticeNetworkFailureForURL:(NSURL *)url
+                        httpMethod:(NSString*)httpMethod
                          withTimer:(NRTimer *)timer
                     andFailureCode:(NSInteger)iOSFailureCode;
+
+
++ (void)noticeNetworkFailureForURL:(NSURL *)url
+                         withTimer:(NRTimer *)timer
+                    andFailureCode:(NSInteger)iOSFailureCode __attribute__((deprecated));
+
+
+
+#pragma mark - Recording custom events
+
+/*!
+ Records a event.
+ @param name a name for the event. This will be stored in the 'category' attribute of Mobile events in New Relic Insights.
+ @param attributes A NSDictionary of attributes associated with the event. Attributes should have NSString keys and NSString or NSNumber values.
+ @return YES if successfully added event, NO if failed with error in log.
+ 
+ @note Events are transmitted at the end of the application session. Each event will include all global attributes defined at the end of the session.
+   If a session runs for more than `maxEventBufferTime` seconds, events will be transmitted mid-session and include all global attributes defined at the time of transmission.
+ */
++ (BOOL) recordEvent:(NSString*)name
+          attributes:(NSDictionary*)attributes;
+
+
+#pragma mark - Configuring event collection
+
+/*!
+ Change the maximum length of time before the SDK sends queued events to New Relic.
+ 
+ @param seconds The number of seconds to wait before sending any events to New Relic.
+ 
+ The default timeout before sending events is 600 seconds (10 minutes). If the user 
+ keeps your app open for longer than that, any stored events will be transmitted and the timer resets. 
+ 
+ @note events transmitted before the end of session will not have a `sessionDuration` attribute.
+ */
++ (void) setMaxEventBufferTime:(unsigned int)seconds;
+
+
+/*!
+ Change the maximum number of events that will be stored in memory.
+ 
+ @param size the maximum number of events to store in memory
+ 
+ By default the SDK will store up to 1000 events in memory. If more events are
+  recorded before `maxEventBufferTime` seconds elapse, events are sampled using 
+  a Reservoir Sampling algorithm. http://en.wikipedia.org/wiki/Reservoir_sampling
+ If `maxEventBufferTime` seconds elapse, the existing event buffer will be transmitted and then emptied.
+ */
++ (void) setMaxEventPoolSize:(unsigned int)size;
+
+
+#pragma mark - Tracking global attributes
+
+/*!
+ Records an attribute that will be added to all events in this app install.
+ Attributes are maintained across sessions and endure until removed or modified.
+ 
+  @param name The name of the attribute
+  @param value The value associated with the attribute; either an NSString* or NSNumber*
+  @return YES if successfully set attribute value, NO if failed with error in log.
+ 
+  @note The SDK limits you to storing 64 named attributes. Adding more than 64 will fail and return NO.
+ */
+
++ (BOOL) setAttribute:(NSString*)name
+                value:(id) value;
+
+/*!
+ Increments the value of the named attribute by 1.
+ 
+ @param name The name of the attribute
+ @return YES if successfully modified attribute value, NO if failed with error in log.
+ 
+ @note This method will create an attribute with value 1 if the attribute does not exist. 
+ @note Calling incrementAttribute on an attribute with a NSString* value is an error and will not alter the value of the attribute.
+ */
++ (BOOL) incrementAttribute:(NSString*)name;
+
+/*!
+ Increments the value of the named attribute by the supplied amount.
+ 
+ @param name The name of the attribute
+ @param amount Numeric value to add to the attribute
+ @return YES if successfully modified attribute value, NO if failed with error in log.
+ 
+ @note This method will create an attribute with value 'amount' if the attribute does not exist.
+ @note Calling incrementAttribute on an attribute with a NSString* value is an error and will not alter the value of the attribute.
+ */
++ (BOOL) incrementAttribute:(NSString*)name
+                      value:(NSNumber*)amount;
+
+
+/*!
+ Removes the named attribute.
+ 
+ @param name The name of the attribute to remove
+ @return YES if successfully removed attribute, NO if failed with error in log.
+ 
+ @note removing an attribute will remove it from all events that have been recorded but not yet sent to New Relic's server.
+ */
++ (BOOL) removeAttribute:(NSString*)name;
+
+/*!
+ Removes all defined attributes.
+ 
+ @return YES if successfully removed attributes, NO if failed with error in log.
+ 
+ @note removing attributes will remove them from all events that have been recorded but not yet sent to New Relic's server.
+ */
++ (BOOL) removeAllAttributes;
 
 
 
