@@ -960,7 +960,6 @@
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics\"",
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Flurry\"",
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/GoogleAnalytics\"",
-					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/TestFlight\"",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -993,7 +992,6 @@
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics\"",
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Flurry\"",
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/GoogleAnalytics\"",
-					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/TestFlight\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
