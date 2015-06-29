@@ -50,11 +50,11 @@
 -(void)endTimedEvent:(NSString *)eventName withProperties:(NSDictionary *)dict{}
 
 -(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception {
-    [PFAnalytics trackEvent:name dimensions:[NSDictionary dictionaryWithObjectsAndKeys:message, @"message", exception, @"exception", nil]];
+    [PFAnalytics trackEvent:name dimensions:[NSDictionary dictionaryWithObjectsAndKeys:message, @"message", exception.name, @"exception", nil]];
 }
 
 -(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error {
-    [PFAnalytics trackEvent:name dimensions:[NSDictionary dictionaryWithObjectsAndKeys:message, @"message", error, @"error", nil]];
+    [PFAnalytics trackEvent:name dimensions:[NSDictionary dictionaryWithObjectsAndKeys:message, @"message", error.localizedDescription, @"error", nil]];
 }
 
 @end

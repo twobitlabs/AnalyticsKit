@@ -20,14 +20,14 @@
     NSUInteger intVal = [self unsignedIntegerValue];
 
     if( intVal < bucketSize )
-        return [NSString stringWithFormat:@"< %i", bucketSize];
+        return [NSString stringWithFormat:@"< %lu", (unsigned long)bucketSize];
 
     NSUInteger multiple = intVal / bucketSize;
 
     if( multiple >= maxBuckets )
-        return [NSString stringWithFormat:@">= %i", ( bucketSize * maxBuckets )];
+        return [NSString stringWithFormat:@">= %lu", ( bucketSize * maxBuckets )];
     
-    return [NSString stringWithFormat:@"%i - %i",
+    return [NSString stringWithFormat:@"%lu - %lu",
 		    ( multiple * bucketSize ),
 		    ( ( ( multiple + 1 ) * bucketSize ) - 1)];
 }
