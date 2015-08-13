@@ -17,9 +17,7 @@
 #import "AnalyticsKitGoogleAnalyticsProvider.h"
 #import "AnalyticsKitLocalyticsProvider.h"
 #import "AnalyticsKitMixpanelProvider.h"
-#import "AnalyticsKitNewRelicProvider.h"
 #import "AnalyticsKitParseProvider.h"
-#import "AnalyticsKitTestFlightProvider.h"
 #import "AnalyticsKitUnitTestProvider.h"
 
 @interface AnalyticsKitTests : XCTestCase
@@ -35,13 +33,14 @@
                            [AnalyticsKitCrashlyticsProvider new],
                            [AnalyticsKitDebugProvider new],
                            [[AnalyticsKitFlurryProvider alloc] initWithAPIKey:nil],
-                           [[AnalyticsKitGoogleAnalyticsProvider alloc] initWithTrackingID:nil],
+                           // testing multiple google tracker instances
+                           [[AnalyticsKitGoogleAnalyticsProvider alloc] initWithTrackingID:@"trackerId1"],
+                           [[AnalyticsKitGoogleAnalyticsProvider alloc] initWithTrackingID:@"trackerId2"],
                            // Localytics validates the key when you initialize it, so it can't be empty or fake
-//                           [[AnalyticsKitLocalyticsProvider alloc] initWithAPIKey:nil],
+                           // This key is for the "AnalyticsKit iOS app"
+                           [[AnalyticsKitLocalyticsProvider alloc] initWithAPIKey:@"03a5f224fe2408887ac32dd-68937c2c-fd90-11e4-b9d0-00eba64cb0ec"],
                            [[AnalyticsKitMixpanelProvider alloc] initWithAPIKey:nil],
-                           [[AnalyticsKitNewRelicProvider alloc] initWithAPIKey:nil],
                            [[AnalyticsKitParseProvider alloc] initWithApplicationId:@"x" clientKey:@"y"],
-                           [[AnalyticsKitTestFlightProvider alloc] initWithAPIKey:nil],
                            [AnalyticsKitUnitTestProvider new]
                            ];
     [AnalyticsKit initializeLoggers:providers];

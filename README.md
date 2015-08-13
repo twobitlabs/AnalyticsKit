@@ -13,12 +13,19 @@ The goal of `AnalyticsKit` is to provide a consistent API for analytics regardle
 * [Google Analytics](https://www.google.com/analytics)
 * [Localytics](http://www.localytics.com/)
 * [Mixpanel](https://mixpanel.com/)
-* [New Relic](http://www.newrelic.com)
 * [Parse](http://parse.com/)
 * [TestFlight](https://testflightapp.com/)
 * [Crashlytics](http://crashlytics.com)
 * Debug Provider - shows an AlertView whenever an error is logged
 * Unit Test Provider - allows you to inspect logged events
+
+## Unsupported Providers
+
+The following providers are included but not supported. YMMV.
+
+* [New Relic](http://www.newrelic.com)
+
+	We've had a number of problems integrating the New Relic framework into the test app, so we can't verify that events are logged correctly.
 
 If you would like to add support for a new provider or to update the code for an existing one, simply fork the master repo, make your changes, and submit a pull request.
 
