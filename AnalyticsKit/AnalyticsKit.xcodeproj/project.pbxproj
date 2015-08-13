@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		9C0EF2F118DCFE9B00D19A2C /* AnalyticsKitTimedEventHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0EF2F018DCFE9B00D19A2C /* AnalyticsKitTimedEventHelper.m */; };
 		9C0EF30918E0C33700D19A2C /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF30118E0C33700D19A2C /* libOCMock.a */; };
-		9C0EF31118E0D12000D19A2C /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF31018E0D12000D19A2C /* Crashlytics.framework */; };
 		9C0EF31218E0D19300D19A2C /* AnalyticsKitAdjustIOProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799F118183A6B00488101 /* AnalyticsKitAdjustIOProvider.m */; };
 		9C0EF31318E0D19F00D19A2C /* AnalyticsKitApsalarProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799F418183A6B00488101 /* AnalyticsKitApsalarProvider.m */; };
 		9C0EF31418E0D1A700D19A2C /* AnalyticsKitFlurryProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799F718183A6B00488101 /* AnalyticsKitFlurryProvider.m */; };
@@ -51,6 +50,8 @@
 		9C0EF3A618E0F8AB00D19A2C /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF36B18E0EE1800D19A2C /* libGoogleAnalyticsServices.a */; };
 		9C0EF3AD18E0FC0800D19A2C /* AnalyticsKitLocalyticsProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0EF3AC18E0FC0800D19A2C /* AnalyticsKitLocalyticsProvider.m */; };
 		9C209A32192400840052633C /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C209A31192400840052633C /* Parse.framework */; };
+		9C351F9A1B7D5C0A00FEC5D4 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C351F981B7D5C0000FEC5D4 /* Crashlytics.framework */; };
+		9C351F9C1B7D5C4500FEC5D4 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C351F9B1B7D5C4500FEC5D4 /* Fabric.framework */; };
 		9C3799AE181838FD00488101 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3799AD181838FD00488101 /* Foundation.framework */; };
 		9C3799B0181838FD00488101 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3799AF181838FD00488101 /* CoreGraphics.framework */; };
 		9C3799B2181838FD00488101 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3799B1181838FD00488101 /* UIKit.framework */; };
@@ -97,7 +98,6 @@
 		9C0EF30618E0C33700D19A2C /* OCMock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMock.h; sourceTree = "<group>"; };
 		9C0EF30718E0C33700D19A2C /* OCMockObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMockObject.h; sourceTree = "<group>"; };
 		9C0EF30818E0C33700D19A2C /* OCMockRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMockRecorder.h; sourceTree = "<group>"; };
-		9C0EF31018E0D12000D19A2C /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		9C0EF31F18E0DB7F00D19A2C /* Mixpanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mixpanel.h; sourceTree = "<group>"; };
 		9C0EF32318E0DB7F00D19A2C /* Apsalar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apsalar.h; sourceTree = "<group>"; };
 		9C0EF32518E0DB7F00D19A2C /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
@@ -164,6 +164,8 @@
 		9C0EF3AB18E0FC0800D19A2C /* AnalyticsKitLocalyticsProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyticsKitLocalyticsProvider.h; path = ../Localytics/AnalyticsKitLocalyticsProvider.h; sourceTree = "<group>"; };
 		9C0EF3AC18E0FC0800D19A2C /* AnalyticsKitLocalyticsProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyticsKitLocalyticsProvider.m; path = ../Localytics/AnalyticsKitLocalyticsProvider.m; sourceTree = "<group>"; };
 		9C209A31192400840052633C /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		9C351F981B7D5C0000FEC5D4 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		9C351F9B1B7D5C4500FEC5D4 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		9C3799AA181838FD00488101 /* AnalyticsKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnalyticsKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C3799AD181838FD00488101 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9C3799AF181838FD00488101 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -238,11 +240,12 @@
 				9C0EF3A518E0F89D00D19A2C /* libFlurry_4.3.2.a in Frameworks */,
 				9C0EF36818E0EDB100D19A2C /* CoreTelephony.framework in Frameworks */,
 				9C3799B0181838FD00488101 /* CoreGraphics.framework in Frameworks */,
+				9C351F9A1B7D5C0A00FEC5D4 /* Crashlytics.framework in Frameworks */,
 				9C3799B2181838FD00488101 /* UIKit.framework in Frameworks */,
 				9C0EF3A618E0F8AB00D19A2C /* libGoogleAnalyticsServices.a in Frameworks */,
 				9C209A32192400840052633C /* Parse.framework in Frameworks */,
-				9C0EF31118E0D12000D19A2C /* Crashlytics.framework in Frameworks */,
 				9C0EF3A318E0F87500D19A2C /* libApsalar.a in Frameworks */,
+				9C351F9C1B7D5C4500FEC5D4 /* Fabric.framework in Frameworks */,
 				9C3799AE181838FD00488101 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -303,9 +306,11 @@
 		9C0EF30F18E0D0FE00D19A2C /* Crashlytics */ = {
 			isa = PBXGroup;
 			children = (
-				9C0EF31018E0D12000D19A2C /* Crashlytics.framework */,
+				9C351F9B1B7D5C4500FEC5D4 /* Fabric.framework */,
+				9C351F981B7D5C0000FEC5D4 /* Crashlytics.framework */,
 			);
 			name = Crashlytics;
+			path = ProviderLibraries/Crashlytics;
 			sourceTree = "<group>";
 		};
 		9C0EF31C18E0DB7F00D19A2C /* NewRelic */ = {
@@ -945,6 +950,7 @@
 					"$(PROJECT_DIR)/AnalyticsKit",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/NewRelic",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Parse",
+					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Crashlytics",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AnalyticsKit/AnalyticsKit-Prefix.pch";
@@ -977,6 +983,7 @@
 					"$(PROJECT_DIR)/AnalyticsKit",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/NewRelic",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Parse",
+					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Crashlytics",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AnalyticsKit/AnalyticsKit-Prefix.pch";
@@ -1008,6 +1015,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)/AnalyticsKitTests",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/NewRelic",
+					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Crashlytics",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AnalyticsKit/AnalyticsKit-Prefix.pch";
@@ -1050,6 +1058,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)/AnalyticsKitTests",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/NewRelic",
+					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Crashlytics",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AnalyticsKit/AnalyticsKit-Prefix.pch";

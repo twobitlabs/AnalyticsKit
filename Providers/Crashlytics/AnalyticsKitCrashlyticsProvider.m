@@ -19,14 +19,17 @@
 
 -(void)logEvent:(NSString *)event {
     CLSLog(@"event: %@", event);
+    [self logEvent:event withProperties:nil];
 }
 
 -(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value {
     CLSLog(@"event: %@, key: %@, value: %@", event, key, value);
+    [self logEvent:event withProperties:@{key: value}];
 }
 
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {
     CLSLog(@"event: %@, properties: %@", event, dict);
+    [[Crashlytics sharedInstance] logEvent:event attributes:dict];
 }
 
 -(void)logEvent:(NSString *)event timed:(BOOL)timed {
