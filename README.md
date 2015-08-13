@@ -160,3 +160,4 @@ AnalyticsKit.logEvent("Launching Watch App");
  - [Sinnerschrader Mobile](https://github.com/sinnerschrader-mobile)
  - [Bradley David Bergeron](https://github.com/bdbergeron) - Parse
  - [Jeremy Medford](https://github.com/jeremymedford)
+ - [Sean Woolfolk] (https://github.com/seanw4)
