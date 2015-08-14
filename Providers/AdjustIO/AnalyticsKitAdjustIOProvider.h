@@ -9,6 +9,6 @@
 
 @interface AnalyticsKitAdjustIOProvider : NSObject<AnalyticsKitProvider>
 
--(id<AnalyticsKitProvider>)initWithAppToken:(NSString *)appToken;
--(void)enableProductionEnvironment:(BOOL)enabled;
+-(id<AnalyticsKitProvider>)initWithAppToken:(NSString *)appToken productionEnvironmentEnabled:(BOOL)enabled;
 @end
+

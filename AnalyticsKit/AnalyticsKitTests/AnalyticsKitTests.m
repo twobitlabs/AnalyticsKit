@@ -28,7 +28,7 @@
 
 -(void)testExample {
     NSArray *providers = @[
-                           [[AnalyticsKitAdjustIOProvider alloc] initWithAppToken:nil],
+                           [[AnalyticsKitAdjustIOProvider alloc] initWithAppToken:nil productionEnvironmentEnabled:NO],
                            [[AnalyticsKitApsalarProvider alloc] initWithAPIKey:nil andSecret:nil andLaunchOptions:nil],
                            [AnalyticsKitCrashlyticsProvider new],
                            [AnalyticsKitDebugProvider new],
