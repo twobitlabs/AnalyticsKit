@@ -1,25 +1,25 @@
 //
-//  AILogger.h
+//  ADJLogger.h
 //  Adjust
 //
 //  Created by Christian Wellenbrock on 2012-11-15.
-//  Copyright (c) 2012-2013 adeven. All rights reserved.
+//  Copyright (c) 2012-2014 adjust GmbH. All rights reserved.
 //
 #import <Foundation/Foundation.h>
 
 typedef enum {
-    AILogLevelVerbose = 1,
-    AILogLevelDebug   = 2,
-    AILogLevelInfo    = 3,
-    AILogLevelWarn    = 4,
-    AILogLevelError   = 5,
-    AILogLevelAssert  = 6
-} AILogLevel;
+    ADJLogLevelVerbose = 1,
+    ADJLogLevelDebug   = 2,
+    ADJLogLevelInfo    = 3,
+    ADJLogLevelWarn    = 4,
+    ADJLogLevelError   = 5,
+    ADJLogLevelAssert  = 6
+} ADJLogLevel;
 
 // A simple logger with multiple log levels.
-@protocol AILogger
+@protocol ADJLogger
 
-- (void)setLogLevel:(AILogLevel)logLevel;
+- (void)setLogLevel:(ADJLogLevel)logLevel;
 
 - (void)verbose:(NSString *)message, ...;
 - (void)debug:  (NSString *)message, ...;
@@ -30,5 +30,8 @@ typedef enum {
 
 @end
 
-@interface AILogger : NSObject <AILogger>
+@interface ADJLogger : NSObject <ADJLogger>
+
++ (ADJLogLevel) LogLevelFromString: (NSString *) logLevelString;
+
 @end
