@@ -56,11 +56,9 @@
 		9C379A0D18183A6B00488101 /* AnalyticsKitUnitTestProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799EA18183A6B00488101 /* AnalyticsKitUnitTestProvider.m */; };
 		9C379A0E18183A6B00488101 /* NSNumber+Buckets.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799ED18183A6B00488101 /* NSNumber+Buckets.m */; };
 		9C379A1B1818507A00488101 /* AnalyticsKitCrashlyticsProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C379A1A1818507A00488101 /* AnalyticsKitCrashlyticsProvider.m */; };
-		9C5DE4B3194A609500C4C938 /* LocalyticsDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5DE4A4194A5FDF00C4C938 /* LocalyticsDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9C5DE4B4194A609500C4C938 /* LocalyticsDatapointHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5DE4A6194A5FDF00C4C938 /* LocalyticsDatapointHelper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9C5DE4B5194A609500C4C938 /* LocalyticsSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5DE4A8194A5FDF00C4C938 /* LocalyticsSession.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9C5DE4B6194A609500C4C938 /* LocalyticsUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5DE4AB194A5FDF00C4C938 /* LocalyticsUploader.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9C5DE4B7194A609500C4C938 /* LocalyticsUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5DE4AD194A5FDF00C4C938 /* LocalyticsUtil.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9C5654E81BB3651900687A80 /* iOSa_3.5.0.version in Resources */ = {isa = PBXBuildFile; fileRef = 9C5654E41BB3651900687A80 /* iOSa_3.5.0.version */; settings = {ASSET_TAGS = (); }; };
+		9C5654E91BB3651900687A80 /* libLocalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C5654E51BB3651900687A80 /* libLocalytics.a */; settings = {ASSET_TAGS = (); }; };
+		9C5654EA1BB3651A00687A80 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 9C5654E61BB3651900687A80 /* LICENSE */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -164,18 +162,10 @@
 		9C379A0618183A6B00488101 /* AnalyticsKitParseProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsKitParseProvider.m; sourceTree = "<group>"; };
 		9C379A191818507A00488101 /* AnalyticsKitCrashlyticsProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyticsKitCrashlyticsProvider.h; path = Crashlytics/AnalyticsKitCrashlyticsProvider.h; sourceTree = "<group>"; };
 		9C379A1A1818507A00488101 /* AnalyticsKitCrashlyticsProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyticsKitCrashlyticsProvider.m; path = Crashlytics/AnalyticsKitCrashlyticsProvider.m; sourceTree = "<group>"; };
-		9C5DE4A2194A5FDF00C4C938 /* LocalyticsConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsConstants.h; sourceTree = "<group>"; };
-		9C5DE4A3194A5FDF00C4C938 /* LocalyticsDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsDatabase.h; sourceTree = "<group>"; };
-		9C5DE4A4194A5FDF00C4C938 /* LocalyticsDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsDatabase.m; sourceTree = "<group>"; };
-		9C5DE4A5194A5FDF00C4C938 /* LocalyticsDatapointHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsDatapointHelper.h; sourceTree = "<group>"; };
-		9C5DE4A6194A5FDF00C4C938 /* LocalyticsDatapointHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsDatapointHelper.m; sourceTree = "<group>"; };
-		9C5DE4A7194A5FDF00C4C938 /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
-		9C5DE4A8194A5FDF00C4C938 /* LocalyticsSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsSession.m; sourceTree = "<group>"; };
-		9C5DE4A9194A5FDF00C4C938 /* LocalyticsSession+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LocalyticsSession+Private.h"; sourceTree = "<group>"; };
-		9C5DE4AA194A5FDF00C4C938 /* LocalyticsUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsUploader.h; sourceTree = "<group>"; };
-		9C5DE4AB194A5FDF00C4C938 /* LocalyticsUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsUploader.m; sourceTree = "<group>"; };
-		9C5DE4AC194A5FDF00C4C938 /* LocalyticsUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsUtil.h; sourceTree = "<group>"; };
-		9C5DE4AD194A5FDF00C4C938 /* LocalyticsUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsUtil.m; sourceTree = "<group>"; };
+		9C5654E41BB3651900687A80 /* iOSa_3.5.0.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iOSa_3.5.0.version; sourceTree = "<group>"; };
+		9C5654E51BB3651900687A80 /* libLocalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLocalytics.a; sourceTree = "<group>"; };
+		9C5654E61BB3651900687A80 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		9C5654E71BB3651900687A80 /* Localytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Localytics.h; sourceTree = "<group>"; };
 		9CF1470B1B09ABAD00D62A4E /* NewRelicAgent.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NewRelicAgent.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -195,6 +185,7 @@
 				9C0EF3A518E0F89D00D19A2C /* libFlurry_4.3.2.a in Frameworks */,
 				9C0EF36818E0EDB100D19A2C /* CoreTelephony.framework in Frameworks */,
 				9C3799B0181838FD00488101 /* CoreGraphics.framework in Frameworks */,
+				9C5654E91BB3651900687A80 /* libLocalytics.a in Frameworks */,
 				9C351F9A1B7D5C0A00FEC5D4 /* Crashlytics.framework in Frameworks */,
 				9C3799B2181838FD00488101 /* UIKit.framework in Frameworks */,
 				9C0EF3A618E0F8AB00D19A2C /* libGoogleAnalyticsServices.a in Frameworks */,
@@ -335,18 +326,10 @@
 		9C0EF33118E0E79B00D19A2C /* Localytics */ = {
 			isa = PBXGroup;
 			children = (
-				9C5DE4A2194A5FDF00C4C938 /* LocalyticsConstants.h */,
-				9C5DE4A3194A5FDF00C4C938 /* LocalyticsDatabase.h */,
-				9C5DE4A4194A5FDF00C4C938 /* LocalyticsDatabase.m */,
-				9C5DE4A5194A5FDF00C4C938 /* LocalyticsDatapointHelper.h */,
-				9C5DE4A6194A5FDF00C4C938 /* LocalyticsDatapointHelper.m */,
-				9C5DE4A7194A5FDF00C4C938 /* LocalyticsSession.h */,
-				9C5DE4A8194A5FDF00C4C938 /* LocalyticsSession.m */,
-				9C5DE4A9194A5FDF00C4C938 /* LocalyticsSession+Private.h */,
-				9C5DE4AA194A5FDF00C4C938 /* LocalyticsUploader.h */,
-				9C5DE4AB194A5FDF00C4C938 /* LocalyticsUploader.m */,
-				9C5DE4AC194A5FDF00C4C938 /* LocalyticsUtil.h */,
-				9C5DE4AD194A5FDF00C4C938 /* LocalyticsUtil.m */,
+				9C5654E41BB3651900687A80 /* iOSa_3.5.0.version */,
+				9C5654E51BB3651900687A80 /* libLocalytics.a */,
+				9C5654E61BB3651900687A80 /* LICENSE */,
+				9C5654E71BB3651900687A80 /* Localytics.h */,
 			);
 			name = Localytics;
 			path = ProviderLibraries/Localytics;
@@ -682,6 +665,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C3799C6181838FD00488101 /* Images.xcassets in Resources */,
+				9C5654E81BB3651900687A80 /* iOSa_3.5.0.version in Resources */,
+				9C5654EA1BB3651A00687A80 /* LICENSE in Resources */,
 				9C3799B8181838FD00488101 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -701,17 +686,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C5DE4B4194A609500C4C938 /* LocalyticsDatapointHelper.m in Sources */,
 				9C3799C4181838FD00488101 /* AnalyticsKitViewController.m in Sources */,
 				9C379A0A18183A6B00488101 /* AnalyticsKit.m in Sources */,
 				9C0EF38F18E0F51500D19A2C /* Mixpanel.m in Sources */,
 				9C0EF3AD18E0FC0800D19A2C /* AnalyticsKitLocalyticsProvider.m in Sources */,
 				9C0EF31718E0D1B800D19A2C /* AnalyticsKitMixpanelProvider.m in Sources */,
 				9C379A1B1818507A00488101 /* AnalyticsKitCrashlyticsProvider.m in Sources */,
-				9C5DE4B6194A609500C4C938 /* LocalyticsUploader.m in Sources */,
 				9C0EF31418E0D1A700D19A2C /* AnalyticsKitFlurryProvider.m in Sources */,
 				9C0EF31318E0D19F00D19A2C /* AnalyticsKitApsalarProvider.m in Sources */,
-				9C5DE4B3194A609500C4C938 /* LocalyticsDatabase.m in Sources */,
 				9C0EF3A018E0F57E00D19A2C /* MPCSerializedJSONData.m in Sources */,
 				9C0EF3A218E0F57E00D19A2C /* ODIN.m in Sources */,
 				9C379A0C18183A6B00488101 /* AnalyticsKitEvent.m in Sources */,
@@ -719,7 +701,6 @@
 				9C0EF3A118E0F57E00D19A2C /* NSData+MPBase64.m in Sources */,
 				9C0EF39E18E0F57E00D19A2C /* MPCJSONDataSerializer.m in Sources */,
 				9C379A0E18183A6B00488101 /* NSNumber+Buckets.m in Sources */,
-				9C5DE4B7194A609500C4C938 /* LocalyticsUtil.m in Sources */,
 				9C0EF39F18E0F57E00D19A2C /* MPCJSONSerializer.m in Sources */,
 				9C3799BE181838FD00488101 /* AnalyticsKitAppDelegate.m in Sources */,
 				9C0EF31918E0D1C500D19A2C /* AnalyticsKitParseProvider.m in Sources */,
@@ -728,7 +709,6 @@
 				9C379A0B18183A6B00488101 /* AnalyticsKitDebugProvider.m in Sources */,
 				9C0EF31518E0D1AD00D19A2C /* AnalyticsKitGoogleAnalyticsProvider.m in Sources */,
 				9C0EF31218E0D19300D19A2C /* AnalyticsKitAdjustIOProvider.m in Sources */,
-				9C5DE4B5194A609500C4C938 /* LocalyticsSession.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -845,6 +825,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/AnalyticsKit",
@@ -867,6 +848,7 @@
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics\"",
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Flurry\"",
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/GoogleAnalytics\"",
+					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -879,6 +861,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/AnalyticsKit",
@@ -901,6 +884,7 @@
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics\"",
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Flurry\"",
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/GoogleAnalytics\"",
+					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
