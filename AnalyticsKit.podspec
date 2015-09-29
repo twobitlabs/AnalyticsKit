@@ -42,7 +42,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'GoogleAnalytics' do |ga|
     ga.source_files = 'Providers/Google Analytics/AnalyticsKitGoogleAnalyticsProvider.{h,m}'
-    ga.dependency 'GoogleAnalytics-iOS-SDK', '~> 3.0'
+    ga.dependency 'GoogleAnalytics', '~> 3.0'
     ga.dependency 'AnalyticsKit/Core'
   end
 
