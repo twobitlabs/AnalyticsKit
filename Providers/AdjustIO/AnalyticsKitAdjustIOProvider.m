@@ -5,26 +5,22 @@
 //  Created by François Benaiteau on 10/29/13.
 //
 
-#import "Adjust.h"
+#import <Adjust/Adjust.h>
 #import "AnalyticsKitAdjustIOProvider.h"
 
 @implementation AnalyticsKitAdjustIOProvider
 
--(id<AnalyticsKitProvider>)initWithAppToken:(NSString *)appToken {
+-(id<AnalyticsKitProvider>)initWithAppToken:(NSString *)appToken productionEnvironmentEnabled:(BOOL)enabled {
     self = [super init];
     if (self) {
-        [Adjust appDidLaunch:appToken];
+        NSString *environment = ADJEnvironmentSandbox;
+        if (enabled) {
+            environment = ADJEnvironmentProduction;
+        }
+        ADJConfig *adjustConfig = [ADJConfig configWithAppToken:appToken environment:environment];
+        [Adjust appDidLaunch:adjustConfig];
     }
     return self;
-}
-
--(void)enableProductionEnvironment:(BOOL)enabled
-{
-    if (enabled) {
-        [Adjust setEnvironment:AIEnvironmentProduction];
-    }else{
-        [Adjust setEnvironment:AIEnvironmentSandbox];
-    }
 }
 
 #pragma mark - AnalyticsKitProvider Protocol
@@ -40,15 +36,25 @@
 }
 
 -(void)logEvent:(NSString *)value {
-    [Adjust trackEvent:value];
+    ADJEvent *event = [[ADJEvent alloc] initWithEventToken:value];
+    [Adjust trackEvent:event];
 }
 
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {
-    [Adjust trackEvent:event withParameters:dict];
+    ADJEvent *adjustEvent = [ADJEvent eventWithEventToken:event];
+    for (id key in dict) {
+        id obj = [dict objectForKey:key];
+        if ([key isKindOfClass:[NSString class]] && [obj isKindOfClass:[NSString class]]) {
+            [adjustEvent addPartnerParameter:key value:obj];
+        }
+    }
+    [Adjust trackEvent:adjustEvent];
 }
 
 -(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value {
-    [Adjust trackEvent:event withParameters:@{key: value}];
+    ADJEvent *adjustEvent = [ADJEvent eventWithEventToken:event];
+    [adjustEvent addPartnerParameter:key value:value];
+    [Adjust trackEvent:adjustEvent];
 }
 
 -(void)logEvent:(NSString *)eventName timed:(BOOL)timed{}

@@ -7,35 +7,36 @@
 //
 
 #import "AnalyticsKitLocalyticsProvider.h"
-#import "LocalyticsSession.h"
+#import "Localytics.h"
 
 @implementation AnalyticsKitLocalyticsProvider
 
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)localyticsKey {
     self = [super init];
     if (self) {
-        [[LocalyticsSession sharedLocalyticsSession] startSession:localyticsKey];
+        [Localytics integrate:localyticsKey];
+        [Localytics openSession];
     }
     return self;
 }
 
 -(void)applicationWillEnterForeground {
-    [[LocalyticsSession sharedLocalyticsSession] resume];
-    [[LocalyticsSession sharedLocalyticsSession] upload];
+    [Localytics openSession];
+    [Localytics upload];
 }
 
 -(void)applicationDidEnterBackground {
-    [[LocalyticsSession sharedLocalyticsSession] close];
-    [[LocalyticsSession sharedLocalyticsSession] upload];
+    [Localytics closeSession];
+    [Localytics upload];
 }
 
 -(void)applicationWillTerminate { 
-    [[LocalyticsSession sharedLocalyticsSession] close];
-    [[LocalyticsSession sharedLocalyticsSession] upload];
+    [Localytics closeSession];
+    [Localytics upload];
 }
 
 -(void)uncaughtException:(NSException *)exception {
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:@"Uncaught Exceptions" attributes:
+    [Localytics tagEvent:@"Uncaught Exceptions" attributes:
      [NSDictionary dictionaryWithObjectsAndKeys:
           [exception name], @"ename",
           [exception reason], @"reason",
@@ -45,19 +46,19 @@
 }
 
 -(void)logScreen:(NSString *)screenName {    
-    [[LocalyticsSession sharedLocalyticsSession] tagScreen:screenName];
+    [Localytics tagScreen:screenName];
 }
 
 -(void)logEvent:(NSString *)event {
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:event];
+    [Localytics tagEvent:event];
 }
 
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:event attributes:dict];
+    [Localytics tagEvent:event attributes:dict];
 }
 
 -(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value {
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:event attributes:[NSDictionary dictionaryWithObject:value forKey:key]];
+    [Localytics tagEvent:event attributes:[NSDictionary dictionaryWithObject:value forKey:key]];
 }
 
 -(void)logEvent:(NSString *)eventName timed:(BOOL)timed {
@@ -71,7 +72,7 @@
 -(void)endTimedEvent:(NSString *)eventName withProperties:(NSDictionary *)dict {}
 
 -(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception {
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:@"Exceptions" attributes:
+    [Localytics tagEvent:@"Exceptions" attributes:
      [NSDictionary dictionaryWithObjectsAndKeys:
         name, @"name",
         message, @"message",        
@@ -82,7 +83,7 @@
 }
 
 -(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error {
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:@"Errors" attributes:
+    [Localytics tagEvent:@"Errors" attributes:
      [NSDictionary dictionaryWithObjectsAndKeys:
           name, @"name",
           message, @"message",        

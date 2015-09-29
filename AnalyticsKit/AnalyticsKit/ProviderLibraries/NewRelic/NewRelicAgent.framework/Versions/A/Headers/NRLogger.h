@@ -5,7 +5,7 @@
 //    https://docs.newrelic.com/docs/mobile-apps for information
 //    https://docs.newrelic.com/docs/releases/ios for release notes
 //
-//  Copyright (c) 2013 New Relic. All rights reserved.
+//  Copyright (c) 2014 New Relic. All rights reserved.
 //  See https://docs.newrelic.com/docs/licenses/ios-agent-licenses for license details
 //
 
@@ -100,7 +100,7 @@ withMessage:(NSString *)message;
  
  @param levels A single NRLogLevels constant, or a bitwise ORed combination of NRLogLevels
  
- Note: If you provide a single constant, e.g. NRLogLevelInfo, all higher priority info will also be output. 
+ Note: If you provide a single constant, e.g. NRLogLevelInfo, all higher priority info will also be output.
  If you provide a combination, e.g. NRLogLevelError | NRLogLevelInfo, only the levels explicitly requested will be output.
  */
 + (void)setLogLevels:(unsigned int)levels;

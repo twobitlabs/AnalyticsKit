@@ -5,7 +5,7 @@
 //    https://docs.newrelic.com/docs/mobile-apps for information
 //    https://docs.newrelic.com/docs/releases/ios for release notes
 //
-//  Copyright (c) 2013 New Relic. All rights reserved.
+//  Copyright (c) 2014 New Relic. All rights reserved.
 //  See https://docs.newrelic.com/docs/licenses/ios-agent-licenses for license details
 //
 
@@ -46,7 +46,7 @@ x / 1000000000
 @end
 
 
-double NR_NanosecondsFromTimeInterval(double timeInterval);
+double NRMA_NanosecondsFromTimeInterval(double timeInterval);
 
 #ifdef __cplusplus
 }

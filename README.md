@@ -13,12 +13,19 @@ The goal of `AnalyticsKit` is to provide a consistent API for analytics regardle
 * [Google Analytics](https://www.google.com/analytics)
 * [Localytics](http://www.localytics.com/)
 * [Mixpanel](https://mixpanel.com/)
-* [New Relic](http://www.newrelic.com)
 * [Parse](http://parse.com/)
 * [TestFlight](https://testflightapp.com/)
 * [Crashlytics](http://crashlytics.com)
 * Debug Provider - shows an AlertView whenever an error is logged
 * Unit Test Provider - allows you to inspect logged events
+
+## Unsupported Providers
+
+The following providers are included but not supported. YMMV.
+
+* [New Relic](http://www.newrelic.com)
+
+	We've had a number of problems integrating the New Relic framework into the test app, so we can't verify that events are logged correctly.
 
 If you would like to add support for a new provider or to update the code for an existing one, simply fork the master repo, make your changes, and submit a pull request.
 
@@ -94,6 +101,55 @@ AnalyticsKit.applicationWillTerminate]()
 
 See AnalyticsKit.h for an exhaustive list of the logging methods available.
 
+## Apple Watch Analytics
+
+AnalyticsKit now provides support for logging from your Apple Watch Extension.
+
+### Supported Providers
+
+* [Flurry](http://www.flurry.com/)
+
+### Installation
+1. If you haven't already done so, follow the installation steps above to add your provider's SDK and AnalyticsKit to your project.
+2. Adding Provider's API Key.
+ - Flurry: Follow steps outlined in [Flurry's Apple Watch Extension](https://developer.yahoo.com/flurry/docs/analytics/gettingstarted/technicalquickstart/applewatch/) guide to add the API Key to the Extension's info.plist.
+
+Objective-C:
+
+Initialize AnalyticsKit in awakeWithContext
+
+```objc
+AnalyticsKitWatchExtensionFlurryProvider *flurry = [AnalyticsKitWatchExtensionFlurryProvider new];
+[AnalyticsKit initializeLoggers:@[flurry]];
+```
+
+To log an event, simply call the `logEvent:` method.
+
+```objc
+[AnalyticsKit logEvent:@"Launching Watch App"];
+```
+
+Swift:
+
+Import AnalyticsKit and any providers in your bridging header:
+ 
+```objc
+#import "AnalyticsKit.h"
+#import "AnalyticsKitWatchExtensionFlurryProvider.h"
+```
+ 
+Initialize AnalyticsKit in awakeWithContext
+ 
+```swift
+let flurryLogger = AnalyticsKitWatchExtensionFlurryProvider()
+AnalyticsKit.initializeLoggers([flurryLogger])
+```
+
+To log an event, simply call the `logEvent` method.
+
+```swift
+AnalyticsKit.logEvent("Launching Watch App");
+```
 
 ## Contributors
  - [Two Bit Labs](http://twobitlabs.com/)
@@ -103,3 +159,5 @@ See AnalyticsKit.h for an exhaustive list of the logging methods available.
  - [Zac Shenker](https://github.com/zacshenker)
  - [Sinnerschrader Mobile](https://github.com/sinnerschrader-mobile)
  - [Bradley David Bergeron](https://github.com/bdbergeron) - Parse
+ - [Jeremy Medford](https://github.com/jeremymedford)
+ - [Sean Woolfolk] (https://github.com/seanw4)

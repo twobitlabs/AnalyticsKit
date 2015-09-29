@@ -34,7 +34,7 @@
 + (void)tearDown {
     [self clearEvents];
     // Wipe out any loggers
-    [AnalyticsKit initialize];
+    [AnalyticsKit initializeLoggers:[[NSArray alloc] init]];
 }
 
 - (void)clearEvents {
