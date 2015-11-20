@@ -60,7 +60,9 @@ static NSString* const kProperties = @"properties";
 -(void)applicationDidEnterBackground{}
 
 -(void)applicationWillTerminate{
+    if ([_tracker respondsToSelector:@selector(close)]) {
     [_tracker close];
+    }
 }
 
 -(void)uncaughtException:(NSException *)exception
@@ -78,6 +80,38 @@ static NSString* const kProperties = @"properties";
            value:screenName];
     
     [_tracker send:[[GAIDictionaryBuilder createAppView] build]];
+}
+
+-(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict
+{
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:screenName];
+    
+    [_tracker send:[[GAIDictionaryBuilder createAppView] build]];
+}
+
+-(void)logScreen:(NSString *)screenName timed:(BOOL)timed
+{
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:screenName];
+    
+    [_tracker send:[[GAIDictionaryBuilder createAppView] build]];
+}
+
+-(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict timed:(BOOL)timed
+{
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:screenName];
+    
+    [_tracker send:[[GAIDictionaryBuilder createAppView] build]];
+}
+
+-(void) endTimedScreen:(NSString *)screenName withProperties:(NSDictionary *)dict
+{
+    
 }
 
 -(void)logEvent:(NSString *)event

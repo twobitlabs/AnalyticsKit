@@ -45,6 +45,35 @@
     }];
 }
 
+-(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict
+{
+    [self runInMainThread:^{
+        [Flurry logEvent:[@"Screen - " stringByAppendingString:screenName] withParameters:dict];
+    }];
+}
+
+-(void)logScreen:(NSString *)screenName timed:(BOOL)timed
+{
+    [self runInMainThread:^{
+        [Flurry logEvent:[@"Screen - " stringByAppendingString:screenName] timed:timed];
+    }];
+}
+
+-(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict timed:(BOOL)timed
+{
+    [self runInMainThread:^{
+        [Flurry logEvent:[@"Screen - " stringByAppendingString:screenName] withParameters:dict timed:timed];
+    }];
+}
+
+-(void)endTimedScreen:(NSString *)screenName withProperties:(NSDictionary *)dict
+{
+    [self runInMainThread:^{
+        // non-nil parameters will update the parameters
+        [Flurry endTimedEvent:[@"Screen - " stringByAppendingString:screenName] withParameters:dict];
+    }];
+}
+
 -(void)logEvent:(NSString *)value {
     [self runInMainThread:^{
         [Flurry logEvent:value];

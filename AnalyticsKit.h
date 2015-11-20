@@ -41,6 +41,10 @@
 
 //Logging events
 -(void)logScreen:(NSString *)screenName;
+-(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict;
+-(void)logScreen:(NSString *)screenName timed:(BOOL)timed;
+-(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict timed:(BOOL)timed;
+-(void)endTimedScreen:(NSString *)screenName withProperties:(NSDictionary *)dict;
 -(void)logEvent:(NSString *)event;
 -(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value;
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict;
@@ -50,6 +54,14 @@
 -(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception;
 -(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error;
 
+@optional
+
+-(void) logSignUpWithMethod:(NSString*) method withProperties:(NSDictionary *)dict;
+-(void) logLogInWithMethod:(NSString*) method withProperties:(NSDictionary *)dict;
+-(void) logInviteWithMethod:(NSString*) method withProperties:(NSDictionary *)dict;
+-(void) logStartCheckoutItem:(NSString*) item withProperties:(NSDictionary *)dict;
+-(void) logPurchaseItem:(NSString*) item withProperties:(NSDictionary *)dict;
+-(void) logShareWithMethod:(NSString*) method withType:(NSString*) type withProperties:(NSDictionary *)dict;
 
 @end
 
@@ -66,6 +78,10 @@ OBJC_EXPORT NSString* const AnalyticsKitEventTimeSeconds;
 +(void)uncaughtException:(NSException *)exception;
 
 +(void)logScreen:(NSString *)screenName;
++(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict;
++(void)logScreen:(NSString *)screenName timed:(BOOL)timed;
++(void)logScreen:(NSString *)screenName withProperties:(NSDictionary *)dict timed:(BOOL)timed;
++(void)endTimedScreen:(NSString *)screenName withProperties:(NSDictionary *)dict;
 +(void)logEvent:(NSString *)event;
 +(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value;
 +(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict;
@@ -74,5 +90,12 @@ OBJC_EXPORT NSString* const AnalyticsKitEventTimeSeconds;
 +(void)endTimedEvent:(NSString *)event withProperties:(NSDictionary *)dict;
 +(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception;
 +(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error;
+
++(void) logSignUpWithMethod:(NSString*) method withProperties:(NSDictionary *)dict;
++(void) logLogInWithMethod:(NSString*) method withProperties:(NSDictionary *)dict;
++(void) logInviteWithMethod:(NSString*) method withProperties:(NSDictionary *)dict;
++(void) logStartCheckoutItem:(NSString*) item withProperties:(NSDictionary *)dict;
++(void) logPurchaseItem:(NSString*) item withProperties:(NSDictionary *)dict;
++(void) logShareWithMethod:(NSString*) method withType:(NSString*) type withProperties:(NSDictionary *)dict;
 
 @end
