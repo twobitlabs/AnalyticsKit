@@ -54,6 +54,14 @@
 -(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception;
 -(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error;
 
+@optional
+
+-(void) logSignUpWithMethod:(NSString*) method withProperties:(NSDictionary *)dict;
+-(void) logLogInWithMethod:(NSString*) method withProperties:(NSDictionary *)dict;
+-(void) logInviteWithMethod:(NSString*) method withProperties:(NSDictionary *)dict;
+-(void) logStartCheckoutItem:(NSString*) item withProperties:(NSDictionary *)dict;
+-(void) logPurchaseItem:(NSString*) item withProperties:(NSDictionary *)dict;
+-(void) logShareWithMethod:(NSString*) method withType:(NSString*) type withProperties:(NSDictionary *)dict;
 
 @end
 
@@ -82,5 +90,12 @@ OBJC_EXPORT NSString* const AnalyticsKitEventTimeSeconds;
 +(void)endTimedEvent:(NSString *)event withProperties:(NSDictionary *)dict;
 +(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception;
 +(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error;
+
++(void) logSignUpWithMethod:(NSString*) method withProperties:(NSDictionary *)dict;
++(void) logLogInWithMethod:(NSString*) method withProperties:(NSDictionary *)dict;
++(void) logInviteWithMethod:(NSString*) method withProperties:(NSDictionary *)dict;
++(void) logStartCheckoutItem:(NSString*) item withProperties:(NSDictionary *)dict;
++(void) logPurchaseItem:(NSString*) item withProperties:(NSDictionary *)dict;
++(void) logShareWithMethod:(NSString*) method withType:(NSString*) type withProperties:(NSDictionary *)dict;
 
 @end
