@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'AdjustIO' do |a|
     a.source_files = 'Providers/AdjustIO/AnalyticsKitAdjustIOProvider.{h,m}'
-    a.dependency 'Adjust', '~> 3.3.5'
+    a.dependency 'Adjust', '~> 4.2.7'
     a.dependency 'AnalyticsKit/Core'
   end
 
