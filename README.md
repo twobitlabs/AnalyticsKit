@@ -161,3 +161,4 @@ AnalyticsKit.logEvent("Launching Watch App");
  - [Bradley David Bergeron](https://github.com/bdbergeron) - Parse
  - [Jeremy Medford](https://github.com/jeremymedford)
  - [Sean Woolfolk] (https://github.com/seanw4)
+ - [François Benaiteau](https://github.com/netbe)
