@@ -36,7 +36,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Flurry' do |f|
     f.source_files = 'Providers/Flurry/AnalyticsKitFlurryProvider.{h,m}'
-    f.dependency 'FlurrySDK'
+    f.dependency 'Flurry-iOS-SDK/FlurrySDK'
     f.dependency 'AnalyticsKit/Core'
   end
 
