@@ -57,8 +57,10 @@ static NSString* const kProperties = @"properties";
 
 -(void)applicationDidEnterBackground{}
 
--(void)applicationWillTerminate{
-    [_tracker close];
+-(void)applicationWillTerminate {
+    if ([_tracker respondsToSelector:@selector(close)]) {
+        [_tracker close];
+    }
 }
 
 -(void)uncaughtException:(NSException *)exception
