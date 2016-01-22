@@ -37,26 +37,33 @@
 }
 
 -(void)logEvent:(NSString *)event {
-    [[Mixpanel sharedInstance] track:event];
+    [self logEvent:event withProperties:nil timed:NO];
 }
 
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {
-    [[Mixpanel sharedInstance] track:event properties:dict];
+    [self logEvent:event withProperties:dict timed:NO];
 }
 
 -(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value {
-    [[Mixpanel sharedInstance]  track:event properties:[NSDictionary dictionaryWithObject:value forKey:key]];
+    [self logEvent:event withProperties:[NSDictionary dictionaryWithObject:value forKey:key]];
 }
 
-- (void)logEvent:(NSString *)eventName timed:(BOOL)timed{
-    [self logEvent:eventName];
+- (void)logEvent:(NSString *)eventName timed:(BOOL)timed {
+    [self logEvent:eventName withProperties:nil timed:timed];
 }
 
-- (void)logEvent:(NSString *)eventName withProperties:(NSDictionary *)dict timed:(BOOL)timed{
-    [self logEvent:eventName withProperties:dict];
+- (void)logEvent:(NSString *)eventName withProperties:(NSDictionary *)dict timed:(BOOL)timed {
+    if (timed) {
+        [[Mixpanel sharedInstance] timeEvent:eventName];
+    } else {
+        [[Mixpanel sharedInstance] track:eventName properties:dict];
+    }
 }
 
--(void)endTimedEvent:(NSString *)eventName withProperties:(NSDictionary *)dict{}
+-(void)endTimedEvent:(NSString *)eventName withProperties:(NSDictionary *)dict {
+    // Mixpanel documentation: timeEvent followed by a track with the same event name would record the duration
+    [[Mixpanel sharedInstance] track:eventName properties:dict];
+}
 
 -(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception {
     [[Mixpanel sharedInstance] track:@"Exceptions" properties:

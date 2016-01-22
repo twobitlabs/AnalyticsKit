@@ -162,3 +162,4 @@ AnalyticsKit.logEvent("Launching Watch App");
  - [Jeremy Medford](https://github.com/jeremymedford)
  - [Sean Woolfolk] (https://github.com/seanw4)
  - [François Benaiteau](https://github.com/netbe)
+ - [Ying Quan Tan](https://github.com/brightredchilli)
