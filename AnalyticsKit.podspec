@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "AnalyticsKit"
-  s.version      = "1.2.8"
+  s.version      = "1.2.9"
 
   s.summary      = "Analytics framework for iOS"
 
@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
 
 
 
-  s.platform     = :ios, '6.0'
+  s.platform     = :ios, '8.0'
   s.source       = { :git => "https://github.com/twobitlabs/AnalyticsKit.git", :tag => s.version.to_s }
   s.requires_arc = false
 
