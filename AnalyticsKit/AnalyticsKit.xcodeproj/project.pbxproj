@@ -76,6 +76,7 @@
 		2E80B47E1C526AE900F8AD7A /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E80B43C1C526AE900F8AD7A /* UIView+MPHelpers.m */; };
 		2E80B4811C526B3500F8AD7A /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E80B4801C526B3500F8AD7A /* Mixpanel.m */; };
 		2E80B4831C526EFC00F8AD7A /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E80B4821C526EFC00F8AD7A /* libicucore.tbd */; };
+		2EE8B81C1C52CAF300DC2534 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E80B4821C526EFC00F8AD7A /* libicucore.tbd */; };
 		9C0EF2F118DCFE9B00D19A2C /* AnalyticsKitTimedEventHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0EF2F018DCFE9B00D19A2C /* AnalyticsKitTimedEventHelper.m */; };
 		9C0EF30918E0C33700D19A2C /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF30118E0C33700D19A2C /* libOCMock.a */; };
 		9C0EF31218E0D19300D19A2C /* AnalyticsKitAdjustIOProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799F118183A6B00488101 /* AnalyticsKitAdjustIOProvider.m */; };
@@ -373,6 +374,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EE8B81C1C52CAF300DC2534 /* libicucore.tbd in Frameworks */,
 				9C3799CD181838FD00488101 /* XCTest.framework in Frameworks */,
 				9C0EF30918E0C33700D19A2C /* libOCMock.a in Frameworks */,
 				9C3799CF181838FD00488101 /* UIKit.framework in Frameworks */,
