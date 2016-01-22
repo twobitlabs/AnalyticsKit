@@ -58,13 +58,6 @@ Pod::Spec.new do |s|
     m.dependency 'AnalyticsKit/Core'
   end
 
-  s.subspec 'NewRelic' do |nr|
-    nr.source_files = 'Providers/New Relic/AnalyticsKitNewRelicProvider.{h,m}'
-    nr.dependency 'NewRelicAgent', '~>3.289'
-    nr.dependency 'AnalyticsKit/Core'
-    nr.platform     = :ios, '5.0'
-  end
-
   s.subspec 'Parse' do |p|
     p.source_files = 'Providers/Parse/AnalyticsKitParseProvider.{h,m}'
     p.dependency 'Parse'
