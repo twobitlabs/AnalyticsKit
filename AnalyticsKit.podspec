@@ -40,12 +40,6 @@ Pod::Spec.new do |s|
     f.dependency 'AnalyticsKit/Core'
   end
 
-  s.subspec 'GoogleAnalytics' do |ga|
-    ga.source_files = 'Providers/Google Analytics/AnalyticsKitGoogleAnalyticsProvider.{h,m}'
-    ga.dependency 'GoogleAnalytics', '~> 3.14'
-    ga.dependency 'AnalyticsKit/Core'
-  end
-
   s.subspec 'Localytics' do |l|
     l.source_files = 'Providers/Localytics/AnalyticsKitLocalyticsProvider.{h,m}'
     l.dependency 'Localytics-AMP'
