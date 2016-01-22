@@ -54,7 +54,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Mixpanel' do |m|
     m.source_files = 'Providers/Mixpanel/AnalyticsKitMixpanelProvider.{h,m}'
-    m.dependency 'Mixpanel'
+    m.dependency 'Mixpanel', '~> 2.5.3'
     m.dependency 'AnalyticsKit/Core'
   end
 
