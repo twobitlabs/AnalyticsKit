@@ -1,18 +1,10 @@
-//
-//  AnalyticsKitDebug.m
-//  TeamStream
-//
-//  Created by Susan Detwiler on 5/29/12.
-//  Copyright (c) 2012 Two Bit Labs. All rights reserved.
-//
 
 #import "AnalyticsKitDebugProvider.h"
 
 @interface AnalyticsKitDebugProvider()
 
-#if __has_feature(objc_arc)
-@property(nonatomic,weak)UIAlertView *alert;
-#endif
+// borrowing from https://github.com/dbettermann/DBAlertController/blob/master/Source/DBAlertController.swift
+@property(nonatomic,strong)UIWindow *alertWindow;
 
 @end
 
@@ -48,17 +40,28 @@
 
 -(void)showDebugAlert:(NSString *)message{
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AnalyticsKit Received Error"
-                                                             message:message
-                                                            delegate:nil cancelButtonTitle:@"OK"
-                                                   otherButtonTitles:nil];
-            #if !__has_feature(objc_arc)
-            [alert autorelease];
-            #else
-            if (self.alert) [alert dismissWithClickedButtonIndex:0 animated:NO];
-            self.alert = alert;
-            #endif
-            [alert show];
+            if (self.alertWindow != nil) {
+                [[self.alertWindow rootViewController] dismissViewControllerAnimated:NO completion:nil];
+                self.alertWindow.rootViewController = nil;
+                self.alertWindow.hidden = true;
+                self.alertWindow = nil;
+            }
+
+            UIWindow *alertWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+            self.alertWindow = alertWindow;
+            alertWindow.rootViewController = [UIViewController new];
+            alertWindow.backgroundColor = [UIColor clearColor];
+            [alertWindow makeKeyAndVisible];
+
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AnalyticsKit Received Error" message:message preferredStyle:UIAlertControllerStyleAlert];
+            __weak AnalyticsKitDebugProvider *weakSelf = self;
+            [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                weakSelf.alertWindow.rootViewController = nil;
+                weakSelf.alertWindow.hidden = true;
+                weakSelf.alertWindow = nil;
+            }]];
+
+            [[alertWindow rootViewController] presentViewController:alertController animated:YES completion:nil];
         }];
 }
 
