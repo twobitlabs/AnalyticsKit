@@ -25,11 +25,11 @@
     NSUInteger multiple = intVal / bucketSize;
 
     if( multiple >= maxBuckets )
-        return [NSString stringWithFormat:@">= %lu", ( bucketSize * maxBuckets )];
+        return [NSString stringWithFormat:@">= %lu", (unsigned long)( bucketSize * maxBuckets )];
     
     return [NSString stringWithFormat:@"%lu - %lu",
-		    ( multiple * bucketSize ),
-		    ( ( ( multiple + 1 ) * bucketSize ) - 1)];
+		    (unsigned long)( multiple * bucketSize ),
+		    (unsigned long)( ( ( multiple + 1 ) * bucketSize ) - 1)];
 }
 
 @end
