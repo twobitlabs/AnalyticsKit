@@ -7,6 +7,7 @@
 //
 
 #import "AnalyticsKit.h"
+#import <os/trace.h>
 
 @implementation AnalyticsKit
 
@@ -113,6 +114,10 @@ static NSArray *_loggers = nil;
 
 +(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception {
     AKERROR(@"%@: %@", name, message);
+    
+    // os_trace_error per #20
+    // os_trace_fault may be a better fit.
+    os_trace_error("#AnalyticsKit #Critical exception logged");
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logError:name message:message exception:exception];
     }    
@@ -120,6 +125,9 @@ static NSArray *_loggers = nil;
 
 +(void)logError:(NSString *)name message:(NSString *)message error:(NSError *)error {
     AKERROR(@"%@: %@", name, message);
+    
+    // os_trace_error per #20
+    os_trace_error("#AnalyticsKit #Error logged: %ld", (unsigned long)[error code]);
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logError:name message:message error:error];
     }
