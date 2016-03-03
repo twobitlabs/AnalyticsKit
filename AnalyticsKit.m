@@ -62,6 +62,8 @@ static NSArray *_loggers = nil;
 
 +(void)logScreen:(NSString *)screenName {
     AKINFO(@"%@", screenName);
+    // os_trace_error per #20
+    os_trace("#AnalyticsKit logging screen with name");
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logScreen:screenName];
     }
@@ -70,6 +72,8 @@ static NSArray *_loggers = nil;
 
 +(void)logEvent:(NSString *)event {
     AKINFO(@"%@", event);
+    // os_trace_error per #20
+    os_trace("#AnalyticsKit logging event");
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logEvent:event];
     }
@@ -77,6 +81,8 @@ static NSArray *_loggers = nil;
 
 +(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {
     AKINFO(@"%@ withProperties: %@", event, dict);
+    // os_trace_error per #20
+    os_trace("#AnalyticsKit logging event with properties");
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logEvent:event withProperties:dict];
     }    
@@ -86,6 +92,8 @@ static NSArray *_loggers = nil;
     if (property == nil) property = @"nil";
     if (value == nil) value = @"nil";
     AKINFO(@"%@ withProperty: %@ andValue: %@", event, property, value);
+    // os_trace_error per #20
+    os_trace("#AnalyticsKit logging event with property and value");
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logEvent:event withProperty:property andValue:value];
     }
@@ -93,6 +101,8 @@ static NSArray *_loggers = nil;
 
 +(void)logEvent:(NSString *)eventName timed:(BOOL)timed{
     AKINFO(@"%@ timed: %@", eventName, timed ? @"YES" : @"NO");
+    // os_trace_error per #20
+    os_trace("#AnalyticsKit logging timed event");
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logEvent:eventName timed:timed];
     }
@@ -100,6 +110,8 @@ static NSArray *_loggers = nil;
 
 +(void)logEvent:(NSString *)eventName withProperties:(NSDictionary *)dict timed:(BOOL)timed{
     AKINFO(@"%@ withProperties: %@ timed: %@", eventName, dict, timed ? @"YES" : @"NO");
+    // os_trace_error per #20
+    os_trace("#AnalyticsKit logging timed event with properties");
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger logEvent:eventName withProperties:dict timed:timed];
     }
@@ -107,6 +119,8 @@ static NSArray *_loggers = nil;
 
 +(void)endTimedEvent:(NSString *)eventName withProperties:(NSDictionary *)dict{
     AKINFO(@"%@ withProperties: %@ ended", eventName, dict);
+    // os_trace_error per #20
+    os_trace("#AnalyticsKit ending timed event with properties");
     for (id<AnalyticsKitProvider> logger in _loggers) {
         [logger endTimedEvent:eventName withProperties:dict];
     }
@@ -114,7 +128,7 @@ static NSArray *_loggers = nil;
 
 +(void)logError:(NSString *)name message:(NSString *)message exception:(NSException *)exception {
     AKERROR(@"%@: %@", name, message);
-    
+
     // os_trace_error per #20
     // os_trace_fault may be a better fit.
     os_trace_error("#AnalyticsKit #Critical exception logged");
