@@ -31,11 +31,11 @@ If you would like to add support for a new provider or to update the code for an
 
 ## How to Use
 
-### Cocoapods
+### CocoaPods
 
-__***Please Note__ -- While we welcome contributions, Two Bit Labs does not officially support Cocoapods for AnalyticsKit. If you run into problems integrating AnalyticsKit using Cocoapods, please log a GitHub issue.
+__***Please Note__ -- While we welcome contributions, Two Bit Labs does not officially support CocoaPods for AnalyticsKit. If you run into problems integrating AnalyticsKit using CocoaPods, please log a GitHub issue.
 
-If your project uses Cocoapods, you can simply include `AnalyticsKit` for full provider support, or you can specify your provider using Cocoapods subspecs.
+If your project uses CocoaPods, you can simply include `AnalyticsKit` for full provider support, or you can specify your provider using CocoaPods subspecs.
 
 * AdjustIO - `pod 'AnalyticsKit/AdjustIO'`
 * Flurry - `pod 'AnalyticsKit/Flurry'`
@@ -45,7 +45,7 @@ If your project uses Cocoapods, you can simply include `AnalyticsKit` for full p
 * New Relic - `pod 'AnalyticsKit/NewRelic'`
 * TestFlight - `pod 'AnalyticsKit/TestFlight'`
 
-__***Please Note__ -- The Parse subspec has been removed, as it won't integrate correctly using Cocoapods.
+__***Please Note__ -- The Parse subspec has been removed, as it won't integrate correctly using CocoaPods.
 
 ### Installation
 1. Download the provider's SDK and add it to your project, or install via cocoapods.
