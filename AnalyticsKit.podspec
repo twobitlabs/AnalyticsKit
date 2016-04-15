@@ -27,6 +27,12 @@ Pod::Spec.new do |s|
   s.subspec 'Core' do |core|
     core.source_files  = 'AnalyticsKit.{h,m}', 'AnalyticsKitEvent.{h,m}', 'AnalyticsKitDebugProvider.{h,m}', 'AnalyticsKitUnitTestProvider.{h,m}', 'Categories/NSNumber+Buckets.{h,m}'
   end
+  
+  s.subspec 'Crashlytics' do |a|
+    a.source_files = 'Providers/Crashlytics/AnalyticsKitCrashlyticsProvider.{h,m}'
+    a.dependency 'Crashlytics'
+    a.dependency 'AnalyticsKit/Core'
+  end
 
   s.subspec 'AdjustIO' do |a|
     a.source_files = 'Providers/AdjustIO/AnalyticsKitAdjustIOProvider.{h,m}'
