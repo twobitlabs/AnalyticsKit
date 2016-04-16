@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   s.requires_arc = false
 
   s.subspec 'Core' do |core|
-    core.source_files  = 'AnalyticsKit.{h,m}', 'AnalyticsKitEvent.{h,m}', 'AnalyticsKitDebugProvider.{h,m}', 'AnalyticsKitUnitTestProvider.{h,m}', 'Categories/NSNumber+Buckets.{h,m}'
+    core.source_files  = 'AnalyticsKit.{h,m}', 'AnalyticsKitEvent.{h,m}', 'AnalyticsKitDebugProvider.{h,m}', 'AnalyticsKitUnitTestProvider.{h,m}', 'Categories/NSNumber+Buckets.{h,m}', 'AnalyticsKit/AnalyticsKit/AnalyticsKitTimedEventHelper.{h,m}'
   end
   
   s.subspec 'Crashlytics' do |a|
