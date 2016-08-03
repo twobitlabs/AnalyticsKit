@@ -8,7 +8,6 @@
 
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
-#import "AnalyticsKit.h"
 #import "AnalyticsKitAdjustIOProvider.h"
 #import "AnalyticsKitApsalarProvider.h"
 #import "AnalyticsKitCrashlyticsProvider.h"
@@ -19,6 +18,7 @@
 #import "AnalyticsKitMixpanelProvider.h"
 #import "AnalyticsKitParseProvider.h"
 #import "AnalyticsKitUnitTestProvider.h"
+#import "AnalyticsKit-Swift.h"
 
 @interface AnalyticsKitTests : XCTestCase
 

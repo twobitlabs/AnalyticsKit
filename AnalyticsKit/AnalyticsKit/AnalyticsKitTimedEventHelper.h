@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 Two Bit Labs. All rights reserved.
 //
 
-#import "AnalyticsKit.h"
 #import "AnalyticsKitEvent.h"
 
 @interface AnalyticsKitTimedEventHelper : NSObject

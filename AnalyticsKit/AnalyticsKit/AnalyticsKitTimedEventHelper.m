@@ -20,7 +20,7 @@ static NSMutableDictionary *events;
     [self startTimedEventWithName:name properties:nil forProvider:provider];
 }
 
-+(void)startTimedEventWithName:(NSString *)name properties:(NSDictionary *)properties forProvider:(id<AnalyticsKitProvider>)provider {
++(void)startTimedEventWithName:(NSString *)name properties:(NSDictionary *)properties forProvider:(id<AnalyticsKitProvider, NSObject>)provider {
     if (name != nil) {
         NSString *providerClass = NSStringFromClass([provider class]);
         NSMutableDictionary *providerDict = events[providerClass];
@@ -41,7 +41,7 @@ static NSMutableDictionary *events;
     }
 }
 
-+(AnalyticsKitEvent *)endTimedEventNamed:(NSString *)name forProvider:(id<AnalyticsKitProvider>)provider {
++(AnalyticsKitEvent *)endTimedEventNamed:(NSString *)name forProvider:(id<AnalyticsKitProvider, NSObject>)provider {
     AnalyticsKitEvent *event = nil;
     if (name != nil) {
         NSString *providerClass = NSStringFromClass([provider class]);
@@ -52,7 +52,7 @@ static NSMutableDictionary *events;
         }
         if (event != nil) {
             NSTimeInterval elapsedTime = [[NSDate date] timeIntervalSinceDate:event.startTime];
-            [event setProperty:@(elapsedTime) forKey:AnalyticsKitEventTimeSeconds];
+            [event setProperty:@(elapsedTime) forKey:@"AnalyticsKitEventTimeSeconds"];
         }
     }
     return event;

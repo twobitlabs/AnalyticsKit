@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AnalyticsKit.h"
 #import "AnalyticsKitEvent.h"
 
 @interface AnalyticsKitUnitTestProvider : NSObject<AnalyticsKitProvider>
