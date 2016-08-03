@@ -31,19 +31,25 @@ class AnalyticsKitDebugProvider: NSObject, AnalyticsKitProvider {
     }
 
     private func showAlert(message: String) {
-        dispatch_async(dispatch_get_main_queue()) {
-            // dismiss any already visible alert
-            if let alertController = self.alertController {
-                alertController.dismissViewControllerAnimated(false, completion: nil)
+        if NSThread.isMainThread() {
+            showAlertController(message)
+        } else {
+            dispatch_async(dispatch_get_main_queue()) {
+                self.showAlertController(message)
             }
-
-            let title = "AnalyticsKit Received Error"
-            let ok = "OK"
-
-            self.alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-            self.alertController!.addAction(UIAlertAction(title: ok, style: UIAlertActionStyle.Default, handler: nil))
-            self.present(self.alertController!)
         }
+    }
+
+    private func showAlertController(message: String) {
+        // dismiss any already visible alert
+        if let alertController = self.alertController {
+            alertController.dismissViewControllerAnimated(false, completion: nil)
+        }
+
+        let alertController = UIAlertController(title: "AnalyticsKit Received Error", message: message, preferredStyle: .Alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+        self.present(alertController)
+        self.alertController = alertController
     }
 
     private func present(alertController: UIAlertController) {
