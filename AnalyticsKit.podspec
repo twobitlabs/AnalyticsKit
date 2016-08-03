@@ -25,23 +25,23 @@ Pod::Spec.new do |s|
   s.requires_arc = false
 
   s.subspec 'Core' do |core|
-    core.source_files  = 'AnalyticsKit.{h,m}', 'AnalyticsKitEvent.{h,m}', 'AnalyticsKitDebugProvider.{h,m}', 'AnalyticsKitUnitTestProvider.{h,m}', 'Categories/NSNumber+Buckets.{h,m}', 'AnalyticsKit/AnalyticsKit/AnalyticsKitTimedEventHelper.{h,m}'
+    core.source_files  = 'AnalyticsKit.swift', 'AnalyticsKitEvent.{h,m}', 'AnalyticsKitDebugProvider.swift', 'AnalyticsKitUnitTestProvider.{h,m}', 'Categories/NSNumber+Buckets.{h,m}', 'AnalyticsKit/AnalyticsKit/AnalyticsKitTimedEventHelper.{h,m}'
   end
-  
+
   s.subspec 'Crashlytics' do |a|
-    a.source_files = 'Providers/Crashlytics/AnalyticsKitCrashlyticsProvider.{h,m}'
+    a.source_files = 'Providers/Crashlytics/AnalyticsKitCrashlyticsProvider.swift'
     a.dependency 'Crashlytics'
     a.dependency 'AnalyticsKit/Core'
   end
 
   s.subspec 'AdjustIO' do |a|
-    a.source_files = 'Providers/AdjustIO/AnalyticsKitAdjustIOProvider.{h,m}'
+    a.source_files = 'Providers/AdjustIO/AnalyticsKitAdjustIOProvider.swift'
     a.dependency 'Adjust', '~> 4.5'
     a.dependency 'AnalyticsKit/Core'
   end
 
   s.subspec 'Flurry' do |f|
-    f.source_files = 'Providers/Flurry/AnalyticsKitFlurryProvider.{h,m}'
+    f.source_files = 'Providers/Flurry/AnalyticsKitFlurryProvider.swift'
     f.dependency 'Flurry-iOS-SDK/FlurrySDK'
     f.dependency 'AnalyticsKit/Core'
   end
