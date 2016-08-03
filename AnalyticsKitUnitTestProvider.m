@@ -76,11 +76,11 @@
 
 -(void)logScreen:(NSString *)screenName{
     NSString *event = [@"Screen - " stringByAppendingString:screenName];
-    [self logEvent:event withProperties:nil];
+    [self.events addObject:[[AnalyticsKitEvent alloc] initEvent:event withProperties:nil]];
 }
 
 -(void)logEvent:(NSString *)event {
-    [self logEvent:event withProperties:nil];
+    [self.events addObject:[[AnalyticsKitEvent alloc] initEvent:event withProperties:nil]];
 }
 
 -(void)logEvent:(NSString *)event withProperty:(NSString *)key andValue:(NSString *)value {
@@ -92,7 +92,7 @@
 }
 
 -(void)logEvent:(NSString *)event timed:(BOOL)timed{
-    [self logEvent:event withProperties:nil];
+    [self.events addObject:[[AnalyticsKitEvent alloc] initEvent:event withProperties:nil]];
 }
 
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict timed:(BOOL)timed{

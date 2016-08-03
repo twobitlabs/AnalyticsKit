@@ -37,7 +37,7 @@
 }
 
 -(void)logEvent:(NSString *)event {
-    [self logEvent:event withProperties:nil timed:NO];
+    [[Mixpanel sharedInstance] track:event];
 }
 
 -(void)logEvent:(NSString *)event withProperties:(NSDictionary *)dict {
@@ -49,7 +49,11 @@
 }
 
 - (void)logEvent:(NSString *)eventName timed:(BOOL)timed {
-    [self logEvent:eventName withProperties:nil timed:timed];
+    if (timed) {
+        [[Mixpanel sharedInstance] timeEvent:eventName];
+    } else {
+        [[Mixpanel sharedInstance] track:eventName];
+    }
 }
 
 - (void)logEvent:(NSString *)eventName withProperties:(NSDictionary *)dict timed:(BOOL)timed {

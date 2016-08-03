@@ -7,7 +7,6 @@
 //
 
 #import "AnalyticsKitAppDelegate.h"
-#import "AnalyticsKitDebugProvider.h"
 
 @implementation AnalyticsKitAppDelegate
 

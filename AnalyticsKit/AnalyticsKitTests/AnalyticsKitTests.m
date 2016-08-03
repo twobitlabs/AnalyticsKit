@@ -8,12 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
-#import "AnalyticsKitAdjustIOProvider.h"
 #import "AnalyticsKitApsalarProvider.h"
-#import "AnalyticsKitCrashlyticsProvider.h"
-#import "AnalyticsKitDebugProvider.h"
-#import "AnalyticsKitFlurryProvider.h"
-#import "AnalyticsKitGoogleAnalyticsProvider.h"
 #import "AnalyticsKitLocalyticsProvider.h"
 #import "AnalyticsKitMixpanelProvider.h"
 #import "AnalyticsKitParseProvider.h"
@@ -28,11 +23,11 @@
 
 -(void)testExample {
     NSArray *providers = @[
-                           [[AnalyticsKitAdjustIOProvider alloc] initWithAppToken:nil productionEnvironmentEnabled:NO],
+                           [[AnalyticsKitAdjustIOProvider alloc] initWithAppToken:@"testkey" productionEnvironmentEnabled:NO],
                            [[AnalyticsKitApsalarProvider alloc] initWithAPIKey:nil andSecret:nil andLaunchOptions:nil],
                            [AnalyticsKitCrashlyticsProvider new],
                            [AnalyticsKitDebugProvider new],
-                           [[AnalyticsKitFlurryProvider alloc] initWithAPIKey:nil],
+                           [[AnalyticsKitFlurryProvider alloc] initWithAPIKey:@"testkey"],
                            // testing multiple google tracker instances
                            [[AnalyticsKitGoogleAnalyticsProvider alloc] initWithTrackingID:@"trackerId1"],
                            [[AnalyticsKitGoogleAnalyticsProvider alloc] initWithTrackingID:@"trackerId2"],

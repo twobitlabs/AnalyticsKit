@@ -12,29 +12,8 @@ import Foundation
     func logEvent(event: String, timed: Bool)
     func logEvent(event: String, withProperties dict: [String: AnyObject], timed: Bool)
     func endTimedEvent(event: String, withProperties dict: [String: AnyObject])
-    func logError(name: String, message: String, exception: NSException?)
-    func logError(name: String, message: String, error: NSError?)
-}
-
-func AKLog<T>(@autoclosure object: () -> T, _ file: String = #file, _ function: String = #function, _ line: Int = #line)
-{
-    #if DEBUG
-        let value = object()
-        let stringRepresentation: String
-
-        if let value = value as? CustomDebugStringConvertible {
-            stringRepresentation = value.debugDescription
-        } else if let value = value as? CustomStringConvertible {
-            stringRepresentation = value.description
-        }
-        let fileURL = NSURL(string: file)?.lastPathComponent ?? "Unknown file"
-        let queue = NSThread.isMainThread() ? "UI" : "BG"
-        let formatter = NSDateFormatter()
-        formatter.dateFormat = "HH:mm:ss:SSS"
-        let timestamp = formatter.stringFromDate(NSDate())
-
-        print("\(timestamp) \(queue) = \(fileURL) | \(function)[\(line)]: " + stringRepresentation)
-    #endif
+    func logError(name: String, message: String?, exception: NSException?)
+    func logError(name: String, message: String?, error: NSError?)
 }
 
 class AnalyticsKit: NSObject {
@@ -113,11 +92,11 @@ class AnalyticsKit: NSObject {
         channel(DefaultChannel).endTimedEvent(event, withProperties: properties)
     }
     
-    class func logError(name: String, message: String, exception: NSException) {
+    class func logError(name: String, message: String?, exception: NSException?) {
         channel(DefaultChannel).logError(name, message: message, exception: exception)
     }
     
-    class func logError(name: String, message: String, error: NSError) {
+    class func logError(name: String, message: String?, error: NSError?) {
         channel(DefaultChannel).logError(name, message: message, error: error)
     }
     
@@ -182,7 +161,7 @@ class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
     }
 
     func logEvent(event: String, withProperties properties: [String: AnyObject]) {
-        AKLog("\(event) withProperties: \(properties)")
+        AKLog("\(event) withProperties: \(properties.description)")
         for provider in loggers {
             provider.logEvent(event, withProperties: properties)
         }
@@ -209,17 +188,34 @@ class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func logError(name: String, message: String, exception: NSException?) {
-        AKLog("\(name) message: \(message) exception: \(exception ?? "nil")")
+    func logError(name: String, message: String?, exception: NSException?) {
+        AKLog("\(name) message: \(message ?? "nil") exception: \(exception ?? "nil")")
         for provider in loggers {
             provider.logError(name, message: message, exception: exception)
         }
     }
 
-    func logError(name: String, message: String, error: NSError?) {
-        AKLog("\(name) message: \(message) error: \(error ?? "nil")")
+    func logError(name: String, message: String?, error: NSError?) {
+        AKLog("\(name) message: \(message ?? "nil") error: \(error ?? "nil")")
         for provider in loggers {
             provider.logError(name, message: message, error: error)
         }
     }
+}
+
+func AKLog<T>(@autoclosure object: () -> T, _ file: String = #file, _ function: String = #function, _ line: Int = #line)
+{
+    #if DEBUG
+        let value = object()
+        let message: String
+        if let value = value as? CustomDebugStringConvertible {
+            message = value.debugDescription
+        } else if let value = value as? CustomStringConvertible {
+            message = value.description
+        } else {
+            message = ""
+        }
+        let fileURL = NSURL(string: file)?.lastPathComponent ?? "Unknown"
+        NSLog("\(fileURL) | \(function)[\(line)]: " + message)
+    #endif
 }
