@@ -23,7 +23,7 @@ class AnalyticsKit: NSObject {
     private static var channels = [String: AnalyticsKitChannel]()
 
     class func initializeLoggers(loggers: [AnalyticsKitProvider]) {
-        channel(DefaultChannel).loggers = loggers
+        channel(DefaultChannel).initializeLoggers(loggers)
     }
     
     class func loggers() -> [AnalyticsKitProvider] {
@@ -108,6 +108,10 @@ class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
 
     init(channelName: String, loggers: [AnalyticsKitProvider]) {
         self.channelName = channelName
+        self.loggers = loggers
+    }
+
+    func initializeLoggers(loggers: [AnalyticsKitProvider]) {
         self.loggers = loggers
     }
 
