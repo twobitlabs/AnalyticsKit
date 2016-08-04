@@ -61,8 +61,7 @@ Swift:
 Initialize AnalyticsKit in application:didFinishLaunchingWithOptions:
 
 ```swift
-let newRelic = AnalyticsKitNewRelicProvider(APIKey: "[YOUR KEY]")
-AnalyticsKit.initializeLoggers([newRelic])
+AnalyticsKit.initializeLoggers([AnalyticsKitFlurryProvider(withAPIKey: flurryKey)])
 ```
 
 Depending on which analytics providers you use you may need to include the following method calls in your app delegate (or just go ahead and include them to be safe):
@@ -73,7 +72,7 @@ AnalyticsKit.applicationDidEnterBackground()
 AnalyticsKit.applicationWillTerminate]()
 ```
 
-If you're using a legacy Objective-C `AnalyticsKit` analytics provider you will need to import that in your bridging header to make it available to Swift. You can find the name of the generated header name under Build Settings, Swift Compiler - Code Generation, Objective-C Bridging Header. Often named something like YourProject-Bridging-Header.h.
+If you're using a legacy Objective-C `AnalyticsKitProvider` you will need to import that in your bridging header to make it available to Swift. You can find the name of the generated header name under Build Settings, Swift Compiler - Code Generation, Objective-C Bridging Header. Often named something like YourProject-Bridging-Header.h.
 
 ```objc
 #import "AnalyticsKitNewRelicProvider.h"
@@ -90,8 +89,7 @@ Make AnalyticsKit Swift classes available to your Objective-C classes by importi
 Initialize AnalyticsKit in applicationDidFinishLaunchingWithOptions
 
 ```objc
-AnalyticsKitFlurryProvider *flurry = [[AnalyticsKitFlurryProvider alloc] initWithAPIKey:@"[YOUR KEY]"];
-[AnalyticsKit initializeLoggers:@[flurry]];
+[AnalyticsKit initializeLoggers:@[[[AnalyticsKitFlurryProvider alloc] initWithAPIKey:@"[YOUR KEY]"]]];
 ```
 
 To log an event, simply call the `logEvent:` method.
@@ -112,17 +110,7 @@ See AnalyticsKit.h for an exhaustive list of the logging methods available.
 
 ### Channels
 
-`AnalyticsKit` supports grouping analytics providers together into separate channels. If your primary provider is Flurry but you also want to log certain events to Google Analytics you can setup `AnalyticsKit` to log events to Flurry following the instructions above and then setup a separate channel for Google Analytics as follows:
-
-Objective-C:
-
-```objc
-// In didFinishLaunchingWithOptions you could configure a separate channel of loggers
-[[AnalyticsKit channel:@"google"] initializeLoggers:@[[[AnalyticsKitGoogleAnalyticsProvider alloc] initWithTrackingID:trackingId]]];
-
-// Then later in your code log an event to that channel only
-[[AnalyticsKit channel:@"google"] logEvent:@"some event"];
-```
+`AnalyticsKit` supports grouping analytics providers together into separate channels. If your primary providers is Flurry but you also want to log certain separate events to Google Analytics you can setup `AnalyticsKit` to log events following the instructions above and then setup a separate channel for Google Analytics as follows:
 
 Swift:
 
@@ -132,6 +120,16 @@ AnalyticsKit.channel("google").initializeLoggers([AnalyticsKitGoogleAnalyticsPro
 
 // Then later in your code log an event to that channel only
 AnalyticsKit.channel("google").logEvent("some event")
+```
+
+Objective-C:
+
+```objc
+// In didFinishLaunchingWithOptions you could configure a separate channel of loggers
+[[AnalyticsKit channel:@"google"] initializeLoggers:@[[[AnalyticsKitGoogleAnalyticsProvider alloc] initWithTrackingID:trackingId]]];
+
+// Then later in your code log an event to that channel only
+[[AnalyticsKit channel:@"google"] logEvent:@"some event"];
 ```
 
 ## Apple Watch Analytics
