@@ -35,6 +35,7 @@
                            [[AnalyticsKitLocalyticsProvider alloc] initWithAPIKey:@"03a5f224fe2408887ac32dd-68937c2c-fd90-11e4-b9d0-00eba64cb0ec"],
                            [[AnalyticsKitMixpanelProvider alloc] initWithAPIKey:nil],
                            [[AnalyticsKitParseProvider alloc] initWithApplicationId:@"x" clientKey:@"y"],
+                           [[AnalyticsKitMParticleProvider alloc] initWithKey:@"test-key" secret:@"test-secret" defaultEventType:MPEventTypeOther installationType:MPInstallationTypeAutodetect environment:MPEnvironmentAutoDetect proxyAppDelegate:NO],
                            [AnalyticsKitUnitTestProvider new]
                            ];
     [AnalyticsKit initializeProviders:providers];
@@ -43,7 +44,7 @@
     for (id provider in providers) {
         id mock = [OCMockObject partialMockForObject:provider];
         [mocks addObject:mock];
-        [[mock expect] logEvent:@"foo"];
+        [(id<AnalyticsKitProvider>)[mock expect] logEvent:@"foo"];
     }
     
     [AnalyticsKit logEvent:@"foo"];
