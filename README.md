@@ -3,7 +3,7 @@
 
 # AnalyticsKit
 
-The goal of `AnalyticsKit` is to provide a consistent API for analytics regardless of the provider. With `AnalyticsKit`, you just call one logging method and `AnalyticsKit` relays that logging message to each registered provider. AnalyticsKit works in both Swift and Objective-C projects
+The goal of `AnalyticsKit` is to provide a consistent API for analytics regardless of the provider. With `AnalyticsKit`, you just call one logging method and `AnalyticsKit` relays that logging message to each registered provider. AnalyticsKit works in both Swift and Objective-C projects.
 
 __***Please Note__ -- `AnalyticsKit` is being migrated from Objective-C to Swift. If you want the super stable Objective-C version get the [1.2.9 version](https://github.com/twobitlabs/AnalyticsKit/tree/1.2.9). If you're willing to deal with some Swift and Objective-C interop then grab the latest master branch. We love pull requests (and integrate them quickly) so if you find a provider that hasn't been migrated to Swift and are willing to port it go for it!
 
@@ -11,14 +11,15 @@ __***Please Note__ -- `AnalyticsKit` is being migrated from Objective-C to Swift
 
 * [AdjustIO](https://www.adjust.io/)
 * [Apsalar](http://apsalar.com/) (needs migration to Swift)
+* [Crashlytics](http://crashlytics.com)
 * [Flurry](http://www.flurry.com/)
 * [Google Analytics](https://www.google.com/analytics)
 * [Localytics](http://www.localytics.com/) (needs migration to Swift)
 * [Mixpanel](https://mixpanel.com/) (needs migration to Swift)
+* [mParticle](https://www.mparticle.com)
 * [Parse](http://parse.com/) (needs migration to Swift)
-* [Crashlytics](http://crashlytics.com)
-* Debug Provider - shows an AlertView whenever an error is logged
-* Unit Test Provider - allows you to inspect logged events
+* [Debug Provider](https://github.com/twobitlabs/AnalyticsKit/blob/master/AnalyticsKitDebugProvider.swift) - shows an AlertView whenever an error is logged
+* [Unit Test Provider](https://github.com/twobitlabs/AnalyticsKit/blob/master/AnalyticsKit/AnalyticsKit/AnalyticsKitUnitTestProvider.swift) - allows you to inspect logged events
 
 ## Unsupported Providers
 
