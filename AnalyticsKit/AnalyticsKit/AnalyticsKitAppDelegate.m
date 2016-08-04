@@ -7,13 +7,11 @@
 //
 
 #import "AnalyticsKitAppDelegate.h"
-#import "AnalyticsKit.h"
-#import "AnalyticsKitDebugProvider.h"
 
 @implementation AnalyticsKitAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [AnalyticsKit initializeLoggers:@[[AnalyticsKitDebugProvider new]]];
+    [AnalyticsKit initializeProviders:@[[AnalyticsKitDebugProvider new]]];
     [AnalyticsKit logEvent:@"App started"];
     return YES;
 }

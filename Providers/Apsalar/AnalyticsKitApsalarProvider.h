@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 Two Bit Labs. All rights reserved.
 //
 
-#import "AnalyticsKit.h"
-
 @interface AnalyticsKitApsalarProvider : NSObject <AnalyticsKitProvider>
 
 @property(retain)NSString *apiKey;

@@ -8,17 +8,11 @@
 
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
-#import "AnalyticsKit.h"
-#import "AnalyticsKitAdjustIOProvider.h"
 #import "AnalyticsKitApsalarProvider.h"
-#import "AnalyticsKitCrashlyticsProvider.h"
-#import "AnalyticsKitDebugProvider.h"
-#import "AnalyticsKitFlurryProvider.h"
-#import "AnalyticsKitGoogleAnalyticsProvider.h"
 #import "AnalyticsKitLocalyticsProvider.h"
 #import "AnalyticsKitMixpanelProvider.h"
 #import "AnalyticsKitParseProvider.h"
-#import "AnalyticsKitUnitTestProvider.h"
+#import "AnalyticsKit-Swift.h"
 
 @interface AnalyticsKitTests : XCTestCase
 
@@ -28,11 +22,11 @@
 
 -(void)testExample {
     NSArray *providers = @[
-                           [[AnalyticsKitAdjustIOProvider alloc] initWithAppToken:nil productionEnvironmentEnabled:NO],
+                           [[AnalyticsKitAdjustIOProvider alloc] initWithAppToken:@"testkey" productionEnvironmentEnabled:NO],
                            [[AnalyticsKitApsalarProvider alloc] initWithAPIKey:nil andSecret:nil andLaunchOptions:nil],
                            [AnalyticsKitCrashlyticsProvider new],
                            [AnalyticsKitDebugProvider new],
-                           [[AnalyticsKitFlurryProvider alloc] initWithAPIKey:nil],
+                           [[AnalyticsKitFlurryProvider alloc] initWithAPIKey:@"testkey"],
                            // testing multiple google tracker instances
                            [[AnalyticsKitGoogleAnalyticsProvider alloc] initWithTrackingID:@"trackerId1"],
                            [[AnalyticsKitGoogleAnalyticsProvider alloc] initWithTrackingID:@"trackerId2"],
@@ -43,7 +37,7 @@
                            [[AnalyticsKitParseProvider alloc] initWithApplicationId:@"x" clientKey:@"y"],
                            [AnalyticsKitUnitTestProvider new]
                            ];
-    [AnalyticsKit initializeLoggers:providers];
+    [AnalyticsKit initializeProviders:providers];
     
     NSMutableArray *mocks = [NSMutableArray array];
     for (id provider in providers) {

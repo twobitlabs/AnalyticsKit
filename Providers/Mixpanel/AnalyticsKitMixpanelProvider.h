@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 Collusion. All rights reserved.
 //
 
-#import "AnalyticsKit.h"
-
 @interface AnalyticsKitMixpanelProvider : NSObject<AnalyticsKitProvider>
 
 -(id<AnalyticsKitProvider>)initWithAPIKey:(NSString *)apiKey;
