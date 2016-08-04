@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Two Bit Labs. All rights reserved.
 //
 
-#import "AnalyticsKitEvent.h"
-
 @interface AnalyticsKitTimedEventHelper : NSObject
 
 +(void)startTimedEventWithName:(NSString *)name forProvider:(id<AnalyticsKitProvider>)provider;

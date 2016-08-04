@@ -31,7 +31,7 @@ static NSMutableDictionary *events;
         
         AnalyticsKitEvent *event = providerDict[name];
         if (event == nil) {
-            event = [[AnalyticsKitEvent alloc] initEvent:name];
+            event = [[AnalyticsKitEvent alloc] initWithEvent:name];
             providerDict[name] = event;
         }
         if (properties != nil) {

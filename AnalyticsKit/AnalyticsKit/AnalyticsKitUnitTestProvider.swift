@@ -80,11 +80,11 @@ class AnalyticsKitUnitTestProvider: NSObject, AnalyticsKitProvider {
 
     func logScreen(screenName: String) {
         let event: String = "Screen - ".stringByAppendingString(screenName)
-        self.events.append(AnalyticsKitEvent(event: event, withProperties: nil))
+        self.events.append(AnalyticsKitEvent(event: event))
     }
 
     func logEvent(event: String) {
-        self.events.append(AnalyticsKitEvent(event: event, withProperties: nil))
+        self.events.append(AnalyticsKitEvent(event: event))
     }
 
     func logEvent(event: String, withProperty key: String, andValue value: String) {
@@ -96,7 +96,7 @@ class AnalyticsKitUnitTestProvider: NSObject, AnalyticsKitProvider {
     }
 
     func logEvent(event: String, timed: Bool) {
-        self.events.append(AnalyticsKitEvent(event: event, withProperties: nil))
+        self.events.append(AnalyticsKitEvent(event: event))
     }
 
     func logEvent(event: String, withProperties properties: [String : AnyObject], timed: Bool) {

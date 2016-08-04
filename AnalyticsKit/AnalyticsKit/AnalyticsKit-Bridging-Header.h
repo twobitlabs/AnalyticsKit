@@ -11,6 +11,5 @@
 #import "GAIDictionaryBuilder.h"
 #import "GAIFields.h"
 #import <Crashlytics/Crashlytics.h>
-#import "AnalyticsKitEvent.h"
 
 #endif
