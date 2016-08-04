@@ -210,19 +210,8 @@ class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
     }
 }
 
-func AKLog<T>(@autoclosure object: () -> T, _ file: String = #file, _ function: String = #function, _ line: Int = #line)
-{
+private func AKLog(message: String, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
     #if DEBUG
-        let value = object()
-        let message: String
-        if let value = value as? CustomDebugStringConvertible {
-            message = value.debugDescription
-        } else if let value = value as? CustomStringConvertible {
-            message = value.description
-        } else {
-            message = ""
-        }
-        let fileURL = NSURL(string: file)?.lastPathComponent ?? "Unknown"
-        NSLog("\(fileURL) | \(function)[\(line)]: " + message)
+        NSLog("\(NSURL(string: file)?.lastPathComponent ?? "") \(function)[\(line)]: " + message)
     #endif
 }
