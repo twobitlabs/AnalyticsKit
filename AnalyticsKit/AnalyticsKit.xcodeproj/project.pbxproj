@@ -77,6 +77,7 @@
 		2E80B4811C526B3500F8AD7A /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E80B4801C526B3500F8AD7A /* Mixpanel.m */; };
 		2E80B4831C526EFC00F8AD7A /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E80B4821C526EFC00F8AD7A /* libicucore.tbd */; };
 		2EE8B81C1C52CAF300DC2534 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E80B4821C526EFC00F8AD7A /* libicucore.tbd */; };
+		8B0964DD1D53D25500F7762D /* AnalyticsKitUnitTestProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0964DC1D53D25400F7762D /* AnalyticsKitUnitTestProvider.swift */; };
 		8B3B60411D51597600B9A17D /* AnalyticsKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3B60401D51597600B9A17D /* AnalyticsKit.swift */; };
 		8BA2B7941D52A3A3008F5E60 /* AnalyticsKitDebugProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA2B7931D52A3A3008F5E60 /* AnalyticsKitDebugProvider.swift */; };
 		8BA2B7961D52A3B5008F5E60 /* AnalyticsKitAdjustIOProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA2B7951D52A3B5008F5E60 /* AnalyticsKitAdjustIOProvider.swift */; };
@@ -117,7 +118,6 @@
 		9C3799D7181838FD00488101 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9C3799D5181838FD00488101 /* InfoPlist.strings */; };
 		9C3799D9181838FD00488101 /* AnalyticsKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799D8181838FD00488101 /* AnalyticsKitTests.m */; };
 		9C379A0C18183A6B00488101 /* AnalyticsKitEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799E818183A6B00488101 /* AnalyticsKitEvent.m */; };
-		9C379A0D18183A6B00488101 /* AnalyticsKitUnitTestProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799EA18183A6B00488101 /* AnalyticsKitUnitTestProvider.m */; };
 		9C379A0E18183A6B00488101 /* NSNumber+Buckets.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799ED18183A6B00488101 /* NSNumber+Buckets.m */; };
 		9C5654E81BB3651900687A80 /* iOSa_3.5.0.version in Resources */ = {isa = PBXBuildFile; fileRef = 9C5654E41BB3651900687A80 /* iOSa_3.5.0.version */; };
 		9C5654E91BB3651900687A80 /* libLocalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C5654E51BB3651900687A80 /* libLocalytics.a */; };
@@ -258,6 +258,7 @@
 		2E80B47F1C526B3500F8AD7A /* Mixpanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mixpanel.h; sourceTree = "<group>"; };
 		2E80B4801C526B3500F8AD7A /* Mixpanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mixpanel.m; sourceTree = "<group>"; };
 		2E80B4821C526EFC00F8AD7A /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		8B0964DC1D53D25400F7762D /* AnalyticsKitUnitTestProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitUnitTestProvider.swift; sourceTree = "<group>"; };
 		8B3B603F1D51597500B9A17D /* AnalyticsKit-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AnalyticsKit-Bridging-Header.h"; sourceTree = "<group>"; };
 		8B3B60401D51597600B9A17D /* AnalyticsKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnalyticsKit.swift; path = ../../AnalyticsKit.swift; sourceTree = "<group>"; };
 		8B3B60421D51769D00B9A17D /* AnalyticsKitTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AnalyticsKitTests-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -319,8 +320,6 @@
 		9C3799D8181838FD00488101 /* AnalyticsKitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AnalyticsKitTests.m; sourceTree = "<group>"; };
 		9C3799E718183A6B00488101 /* AnalyticsKitEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyticsKitEvent.h; path = ../../AnalyticsKitEvent.h; sourceTree = "<group>"; };
 		9C3799E818183A6B00488101 /* AnalyticsKitEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyticsKitEvent.m; path = ../../AnalyticsKitEvent.m; sourceTree = "<group>"; };
-		9C3799E918183A6B00488101 /* AnalyticsKitUnitTestProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyticsKitUnitTestProvider.h; path = ../../AnalyticsKitUnitTestProvider.h; sourceTree = "<group>"; };
-		9C3799EA18183A6B00488101 /* AnalyticsKitUnitTestProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyticsKitUnitTestProvider.m; path = ../../AnalyticsKitUnitTestProvider.m; sourceTree = "<group>"; };
 		9C3799EC18183A6B00488101 /* NSNumber+Buckets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+Buckets.h"; sourceTree = "<group>"; };
 		9C3799ED18183A6B00488101 /* NSNumber+Buckets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+Buckets.m"; sourceTree = "<group>"; };
 		9C3799F318183A6B00488101 /* AnalyticsKitApsalarProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsKitApsalarProvider.h; sourceTree = "<group>"; };
@@ -679,8 +678,7 @@
 				8BA2B7931D52A3A3008F5E60 /* AnalyticsKitDebugProvider.swift */,
 				9C3799E718183A6B00488101 /* AnalyticsKitEvent.h */,
 				9C3799E818183A6B00488101 /* AnalyticsKitEvent.m */,
-				9C3799E918183A6B00488101 /* AnalyticsKitUnitTestProvider.h */,
-				9C3799EA18183A6B00488101 /* AnalyticsKitUnitTestProvider.m */,
+				8B0964DC1D53D25400F7762D /* AnalyticsKitUnitTestProvider.swift */,
 				9C3799EB18183A6B00488101 /* Categories */,
 				9C3799EE18183A6B00488101 /* Providers */,
 				9C3799BC181838FD00488101 /* AnalyticsKitAppDelegate.h */,
@@ -1003,10 +1001,10 @@
 				8B3B60411D51597600B9A17D /* AnalyticsKit.swift in Sources */,
 				9C3799BE181838FD00488101 /* AnalyticsKitAppDelegate.m in Sources */,
 				2E80B4661C526AE900F8AD7A /* MPSequenceGenerator.m in Sources */,
+				8B0964DD1D53D25500F7762D /* AnalyticsKitUnitTestProvider.swift in Sources */,
 				2E80B46F1C526AE900F8AD7A /* MPTweakStore.m in Sources */,
 				2E80B47E1C526AE900F8AD7A /* UIView+MPHelpers.m in Sources */,
 				9C0EF31918E0D1C500D19A2C /* AnalyticsKitParseProvider.m in Sources */,
-				9C379A0D18183A6B00488101 /* AnalyticsKitUnitTestProvider.m in Sources */,
 				9C3799BA181838FD00488101 /* main.m in Sources */,
 				2E80B4651C526AE900F8AD7A /* MPPropertyDescription.m in Sources */,
 				2E80B4511C526AE900F8AD7A /* MPCGPointToNSDictionaryValueTransformer.m in Sources */,

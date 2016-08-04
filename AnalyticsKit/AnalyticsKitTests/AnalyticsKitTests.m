@@ -12,7 +12,6 @@
 #import "AnalyticsKitLocalyticsProvider.h"
 #import "AnalyticsKitMixpanelProvider.h"
 #import "AnalyticsKitParseProvider.h"
-#import "AnalyticsKitUnitTestProvider.h"
 #import "AnalyticsKit-Swift.h"
 
 @interface AnalyticsKitTests : XCTestCase
@@ -38,7 +37,7 @@
                            [[AnalyticsKitParseProvider alloc] initWithApplicationId:@"x" clientKey:@"y"],
                            [AnalyticsKitUnitTestProvider new]
                            ];
-    [AnalyticsKit initializeLoggers:providers];
+    [AnalyticsKit initializeProviders:providers];
     
     NSMutableArray *mocks = [NSMutableArray array];
     for (id provider in providers) {
