@@ -22,18 +22,18 @@ class AnalyticsKit: NSObject {
 
     private static var channels = [String: AnalyticsKitChannel]()
 
-    class func initializeLoggers(loggers: [AnalyticsKitProvider]) {
-        channel(DefaultChannel).initializeLoggers(loggers)
+    class func initializeProviders(providers: [AnalyticsKitProvider]) {
+        channel(DefaultChannel).initializeProviders(providers)
     }
     
-    class func loggers() -> [AnalyticsKitProvider] {
-        return channel(DefaultChannel).loggers
+    class func providers() -> [AnalyticsKitProvider] {
+        return channel(DefaultChannel).providers
     }
 
     class func channel(channelName: String) -> AnalyticsKitChannel {
         guard let channel = channels[channelName] else {
             AKLog("Created \(channelName) channel")
-            let newChannel = AnalyticsKitChannel(channelName: channelName, loggers: [AnalyticsKitProvider]())
+            let newChannel = AnalyticsKitChannel(channelName: channelName, providers: [AnalyticsKitProvider]())
             channels[channelName] = newChannel
             return newChannel
         }
@@ -104,104 +104,104 @@ class AnalyticsKit: NSObject {
 
 class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
     let channelName: String
-    var loggers: [AnalyticsKitProvider]
+    var providers: [AnalyticsKitProvider]
 
-    init(channelName: String, loggers: [AnalyticsKitProvider]) {
+    init(channelName: String, providers: [AnalyticsKitProvider]) {
         self.channelName = channelName
-        self.loggers = loggers
+        self.providers = providers
     }
 
-    func initializeLoggers(loggers: [AnalyticsKitProvider]) {
-        self.loggers = loggers
+    func initializeProviders(providers: [AnalyticsKitProvider]) {
+        self.providers = providers
     }
 
     func applicationWillEnterForeground() {
         AKLog("")
-        for provider in loggers {
+        for provider in providers {
             provider.applicationWillEnterForeground()
         }
     }
 
     func applicationDidEnterBackground() {
         AKLog("")
-        for provider in loggers {
+        for provider in providers {
             provider.applicationDidEnterBackground()
         }
     }
 
     func applicationWillTerminate() {
         AKLog("")
-        for provider in loggers {
+        for provider in providers {
             provider.applicationWillTerminate()
         }
     }
 
     func uncaughtException(exception: NSException) {
         AKLog("\(exception.description)")
-        for provider in loggers {
+        for provider in providers {
             provider.uncaughtException(exception)
         }
     }
 
     func logScreen(screenName: String) {
         AKLog("\(screenName)")
-        for provider in loggers {
+        for provider in providers {
             provider.logScreen(screenName)
         }
     }
 
     func logEvent(event: String) {
         AKLog("\(event)")
-        for provider in loggers {
+        for provider in providers {
             provider.logEvent(event)
         }
     }
 
     func logEvent(event: String, withProperty property: String, andValue value: String) {
         AKLog("\(event) withProperty: \(property) andValue: \(value)")
-        for provider in loggers {
+        for provider in providers {
             provider.logEvent(event)
         }
     }
 
     func logEvent(event: String, withProperties properties: [String: AnyObject]) {
         AKLog("\(event) withProperties: \(properties.description)")
-        for provider in loggers {
+        for provider in providers {
             provider.logEvent(event, withProperties: properties)
         }
     }
 
     func logEvent(event: String, timed: Bool) {
         AKLog("\(event) timed: \(timed)")
-        for provider in loggers {
+        for provider in providers {
             provider.logEvent(event, timed: timed)
         }
     }
 
     func logEvent(event: String, withProperties properties: [String: AnyObject], timed: Bool) {
         AKLog("\(event) withProperties: \(properties) timed: \(timed)")
-        for provider in loggers {
+        for provider in providers {
             provider.logEvent(event, withProperties: properties, timed: timed)
         }
     }
 
     func endTimedEvent(event: String, withProperties properties: [String: AnyObject]) {
         AKLog("\(event) withProperties: \(properties)")
-        for provider in loggers {
+        for provider in providers {
             provider.endTimedEvent(event, withProperties: properties)
         }
     }
 
     func logError(name: String, message: String?, exception: NSException?) {
         AKLog("\(name) message: \(message ?? "nil") exception: \(exception ?? "nil")")
-        for provider in loggers {
+        for provider in providers {
             provider.logError(name, message: message, exception: exception)
         }
     }
 
     func logError(name: String, message: String?, error: NSError?) {
         AKLog("\(name) message: \(message ?? "nil") error: \(error ?? "nil")")
-        for provider in loggers {
+        for provider in providers {
             provider.logError(name, message: message, error: error)
         }
     }

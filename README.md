@@ -54,14 +54,14 @@ __***Please Note__ -- The Parse subspec has been removed, as it won't integrate 
 ### Installation
 1. Download the provider's SDK and add it to your project, or install via cocoapods.
 2. Add AnalyticsKit to your project either as a git submodule or copying the source into your project. In Xcode, only include AnalyticsKit.h/.m/.swift and any providers you plan to use.
-3. In your AppDelegate's applicationDidFinishLaunchingWithOptions: method, create an array with your provider instance(s) and call `initializeLoggers:`.
+3. In your AppDelegate's applicationDidFinishLaunchingWithOptions: method, create an array with your provider instance(s) and call `initializeProviders:`.
 
 Swift:
 
 Initialize AnalyticsKit in application:didFinishLaunchingWithOptions:
 
 ```swift
-AnalyticsKit.initializeLoggers([AnalyticsKitFlurryProvider(withAPIKey: flurryKey)])
+AnalyticsKit.initializeProviders([AnalyticsKitFlurryProvider(withAPIKey: flurryKey)])
 ```
 
 Depending on which analytics providers you use you may need to include the following method calls in your app delegate (or just go ahead and include them to be safe):
@@ -89,7 +89,7 @@ Make AnalyticsKit Swift classes available to your Objective-C classes by importi
 Initialize AnalyticsKit in applicationDidFinishLaunchingWithOptions
 
 ```objc
-[AnalyticsKit initializeLoggers:@[[[AnalyticsKitFlurryProvider alloc] initWithAPIKey:@"[YOUR KEY]"]]];
+[AnalyticsKit initializeProviders:@[[[AnalyticsKitFlurryProvider alloc] initWithAPIKey:@"[YOUR KEY]"]]];
 ```
 
 To log an event, simply call the `logEvent:` method.
@@ -115,8 +115,8 @@ See AnalyticsKit.h for an exhaustive list of the logging methods available.
 Swift:
 
 ```swift
-// In didFinishLaunchingWithOptions you could configure a separate channel of loggers
-AnalyticsKit.channel("google").initializeLoggers([AnalyticsKitGoogleAnalyticsProvider(withTrackingID: trackingId)])
+// In didFinishLaunchingWithOptions you could configure a separate channel of providers
+AnalyticsKit.channel("google").initializeProviders([AnalyticsKitGoogleAnalyticsProvider(withTrackingID: trackingId)])
 
 // Then later in your code log an event to that channel only
 AnalyticsKit.channel("google").logEvent("some event")
@@ -125,8 +125,8 @@ AnalyticsKit.channel("google").logEvent("some event")
 Objective-C:
 
 ```objc
-// In didFinishLaunchingWithOptions you could configure a separate channel of loggers
-[[AnalyticsKit channel:@"google"] initializeLoggers:@[[[AnalyticsKitGoogleAnalyticsProvider alloc] initWithTrackingID:trackingId]]];
+// In didFinishLaunchingWithOptions you could configure a separate channel of providers
+[[AnalyticsKit channel:@"google"] initializeProviders:@[[[AnalyticsKitGoogleAnalyticsProvider alloc] initWithTrackingID:trackingId]]];
 
 // Then later in your code log an event to that channel only
 [[AnalyticsKit channel:@"google"] logEvent:@"some event"];
@@ -151,7 +151,7 @@ Initialize AnalyticsKit in awakeWithContext
 
 ```objc
 AnalyticsKitWatchExtensionFlurryProvider *flurry = [AnalyticsKitWatchExtensionFlurryProvider new];
-[AnalyticsKit initializeLoggers:@[flurry]];
+[AnalyticsKit initializeProviders:@[flurry]];
 ```
 
 To log an event, simply call the `logEvent:` method.
@@ -172,8 +172,8 @@ Import AnalyticsKit and any providers in your bridging header:
 Initialize AnalyticsKit in awakeWithContext
 
 ```swift
-let flurryLogger = AnalyticsKitWatchExtensionFlurryProvider()
-AnalyticsKit.initializeLoggers([flurryLogger])
+let flurryProvider = AnalyticsKitWatchExtensionFlurryProvider()
+AnalyticsKit.initializeProviders([flurryProvider])
 ```
 
 To log an event, simply call the `logEvent` method.
