@@ -18,13 +18,13 @@ __***Please Note__ -- `AnalyticsKit` is being migrated from Objective-C to Swift
 * [Parse](http://parse.com/) (needs migration to Swift)
 * [Crashlytics](http://crashlytics.com)
 * Debug Provider - shows an AlertView whenever an error is logged
-* Unit Test Provider - allows you to inspect logged events (needs migration to Swift)
+* Unit Test Provider - allows you to inspect logged events
 
 ## Unsupported Providers
 
 The following providers are included but not supported. YMMV.
 
-* [New Relic](http://www.newrelic.com)
+* [New Relic](http://www.newrelic.com) (needs migration to Swift)
 
 	We've had a number of problems integrating the New Relic framework into the test app, so we can't verify that events are logged correctly.
 
