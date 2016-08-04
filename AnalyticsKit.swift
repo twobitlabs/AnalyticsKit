@@ -17,10 +17,9 @@ import Foundation
 }
 
 class AnalyticsKit: NSObject {
-    private static let DefaultChannel = "defaultChannel"
-    private let simulator = TARGET_IPHONE_SIMULATOR == 1
+    private static let DefaultChannel = "default"
 
-    private static var channels = [String: AnalyticsKitChannel]()
+    static var channels = [String: AnalyticsKitChannel]()
 
     class func initializeProviders(providers: [AnalyticsKitProvider]) {
         channel(DefaultChannel).initializeProviders(providers)
@@ -38,6 +37,10 @@ class AnalyticsKit: NSObject {
             return newChannel
         }
         return channel
+    }
+
+    class func defaultChannel() -> AnalyticsKitChannel {
+        return channel(DefaultChannel)
     }
     
     class func applicationWillEnterForeground() {
