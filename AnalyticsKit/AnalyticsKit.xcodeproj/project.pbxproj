@@ -79,13 +79,13 @@
 		2EE8B81C1C52CAF300DC2534 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E80B4821C526EFC00F8AD7A /* libicucore.tbd */; };
 		8B0964DD1D53D25500F7762D /* AnalyticsKitUnitTestProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0964DC1D53D25400F7762D /* AnalyticsKitUnitTestProvider.swift */; };
 		8B0964DF1D53DE8E00F7762D /* AnalyticsKitEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0964DE1D53DE8E00F7762D /* AnalyticsKitEvent.swift */; };
+		8B0964E11D53E13C00F7762D /* AnalyticsKitTimedEventHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0964E01D53E13C00F7762D /* AnalyticsKitTimedEventHelper.swift */; };
 		8B3B60411D51597600B9A17D /* AnalyticsKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3B60401D51597600B9A17D /* AnalyticsKit.swift */; };
 		8BA2B7941D52A3A3008F5E60 /* AnalyticsKitDebugProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA2B7931D52A3A3008F5E60 /* AnalyticsKitDebugProvider.swift */; };
 		8BA2B7961D52A3B5008F5E60 /* AnalyticsKitAdjustIOProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA2B7951D52A3B5008F5E60 /* AnalyticsKitAdjustIOProvider.swift */; };
 		8BA2B7981D52A3C6008F5E60 /* AnalyticsKitCrashlyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA2B7971D52A3C6008F5E60 /* AnalyticsKitCrashlyticsProvider.swift */; };
 		8BA2B79A1D52A3D8008F5E60 /* AnalyticsKitFlurryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA2B7991D52A3D8008F5E60 /* AnalyticsKitFlurryProvider.swift */; };
 		8BA2B79C1D52A3E5008F5E60 /* AnalyticsKitGoogleAnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA2B79B1D52A3E5008F5E60 /* AnalyticsKitGoogleAnalyticsProvider.swift */; };
-		9C0EF2F118DCFE9B00D19A2C /* AnalyticsKitTimedEventHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0EF2F018DCFE9B00D19A2C /* AnalyticsKitTimedEventHelper.m */; };
 		9C0EF30918E0C33700D19A2C /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF30118E0C33700D19A2C /* libOCMock.a */; };
 		9C0EF31318E0D19F00D19A2C /* AnalyticsKitApsalarProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799F418183A6B00488101 /* AnalyticsKitApsalarProvider.m */; };
 		9C0EF31718E0D1B800D19A2C /* AnalyticsKitMixpanelProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C379A0018183A6B00488101 /* AnalyticsKitMixpanelProvider.m */; };
@@ -260,6 +260,7 @@
 		2E80B4821C526EFC00F8AD7A /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		8B0964DC1D53D25400F7762D /* AnalyticsKitUnitTestProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitUnitTestProvider.swift; sourceTree = "<group>"; };
 		8B0964DE1D53DE8E00F7762D /* AnalyticsKitEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnalyticsKitEvent.swift; path = ../../AnalyticsKitEvent.swift; sourceTree = "<group>"; };
+		8B0964E01D53E13C00F7762D /* AnalyticsKitTimedEventHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitTimedEventHelper.swift; sourceTree = "<group>"; };
 		8B3B603F1D51597500B9A17D /* AnalyticsKit-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AnalyticsKit-Bridging-Header.h"; sourceTree = "<group>"; };
 		8B3B60401D51597600B9A17D /* AnalyticsKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnalyticsKit.swift; path = ../../AnalyticsKit.swift; sourceTree = "<group>"; };
 		8B3B60421D51769D00B9A17D /* AnalyticsKitTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AnalyticsKitTests-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -268,8 +269,6 @@
 		8BA2B7971D52A3C6008F5E60 /* AnalyticsKitCrashlyticsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnalyticsKitCrashlyticsProvider.swift; path = Crashlytics/AnalyticsKitCrashlyticsProvider.swift; sourceTree = "<group>"; };
 		8BA2B7991D52A3D8008F5E60 /* AnalyticsKitFlurryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitFlurryProvider.swift; sourceTree = "<group>"; };
 		8BA2B79B1D52A3E5008F5E60 /* AnalyticsKitGoogleAnalyticsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitGoogleAnalyticsProvider.swift; sourceTree = "<group>"; };
-		9C0EF2EF18DCFE9B00D19A2C /* AnalyticsKitTimedEventHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsKitTimedEventHelper.h; sourceTree = "<group>"; };
-		9C0EF2F018DCFE9B00D19A2C /* AnalyticsKitTimedEventHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsKitTimedEventHelper.m; sourceTree = "<group>"; };
 		9C0EF30118E0C33700D19A2C /* libOCMock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOCMock.a; path = OCMock/libOCMock.a; sourceTree = "<group>"; };
 		9C0EF30318E0C33700D19A2C /* NSNotificationCenter+OCMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+OCMAdditions.h"; sourceTree = "<group>"; };
 		9C0EF30418E0C33700D19A2C /* OCMArg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMArg.h; sourceTree = "<group>"; };
@@ -677,6 +676,7 @@
 				8BA2B7931D52A3A3008F5E60 /* AnalyticsKitDebugProvider.swift */,
 				8B0964DE1D53DE8E00F7762D /* AnalyticsKitEvent.swift */,
 				8B0964DC1D53D25400F7762D /* AnalyticsKitUnitTestProvider.swift */,
+				8B0964E01D53E13C00F7762D /* AnalyticsKitTimedEventHelper.swift */,
 				9C3799EB18183A6B00488101 /* Categories */,
 				9C3799EE18183A6B00488101 /* Providers */,
 				9C3799BC181838FD00488101 /* AnalyticsKitAppDelegate.h */,
@@ -685,8 +685,6 @@
 				9C3799C3181838FD00488101 /* AnalyticsKitViewController.m */,
 				9C3799C5181838FD00488101 /* Images.xcassets */,
 				9C3799B4181838FD00488101 /* Supporting Files */,
-				9C0EF2EF18DCFE9B00D19A2C /* AnalyticsKitTimedEventHelper.h */,
-				9C0EF2F018DCFE9B00D19A2C /* AnalyticsKitTimedEventHelper.m */,
 				8B3B603F1D51597500B9A17D /* AnalyticsKit-Bridging-Header.h */,
 			);
 			path = AnalyticsKit;
@@ -937,6 +935,7 @@
 				2E80B4621C526AE900F8AD7A /* MPObjectSerializerConfig.m in Sources */,
 				2E80B4691C526AE900F8AD7A /* MPSurveyNavigationController.m in Sources */,
 				2E80B4641C526AE900F8AD7A /* MPPassThroughValueTransformer.m in Sources */,
+				8B0964E11D53E13C00F7762D /* AnalyticsKitTimedEventHelper.swift in Sources */,
 				2E80B4441C526AE900F8AD7A /* MPABTestDesignerConnection.m in Sources */,
 				2E80B47C1C526AE900F8AD7A /* UIImage+MPAverageColor.m in Sources */,
 				2E80B4811C526B3500F8AD7A /* Mixpanel.m in Sources */,
@@ -987,7 +986,6 @@
 				2E80B44B1C526AE900F8AD7A /* MPABTestDesignerTweakResponseMessage.m in Sources */,
 				2E80B4501C526AE900F8AD7A /* MPCGColorRefToNSStringValueTransformer.m in Sources */,
 				2E80B4561C526AE900F8AD7A /* MPDesignerEventBindingResponseMesssage.m in Sources */,
-				9C0EF2F118DCFE9B00D19A2C /* AnalyticsKitTimedEventHelper.m in Sources */,
 				2E80B4571C526AE900F8AD7A /* MPDesignerTrackMessage.m in Sources */,
 				2E80B4461C526AE900F8AD7A /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
 				2E80B4761C526AE900F8AD7A /* MPUITableViewBinding.m in Sources */,
