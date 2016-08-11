@@ -49,6 +49,10 @@
     [Localytics tagScreen:screenName];
 }
 
+-(void)logScreen:(NSString *)screenName withProperties:(NSDictionary<NSString *,id> *)properties {
+    [self logScreen:screenName]; // no way to send properties with a screen
+}
+
 -(void)logEvent:(NSString *)event {
     [Localytics tagEvent:event];
 }

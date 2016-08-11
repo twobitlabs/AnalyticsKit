@@ -50,7 +50,11 @@
 #pragma mark Event Logging
 
 -(void)logScreen:(NSString *)screenName{
-    [Apsalar event:[@"Screen - " stringByAppendingString:screenName]];
+    [self logEvent:[@"Screen - " stringByAppendingString:screenName]];
+}
+
+-(void)logScreen:(NSString *)screenName withProperties:(NSDictionary<NSString *,id> *)properties {
+    [self logEvent:[@"Screen - " stringByAppendingString:screenName] withProperties:properties];
 }
 
 -(void)logEvent:(NSString *)value {

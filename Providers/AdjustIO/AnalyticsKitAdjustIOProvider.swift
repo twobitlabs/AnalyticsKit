@@ -20,6 +20,10 @@ class AnalyticsKitAdjustIOProvider: NSObject, AnalyticsKitProvider {
         logEvent("Screen - \(screenName)")
     }
 
+    func logScreen(screenName: String, withProperties properties: [String : AnyObject]) {
+        logEvent("Screen - \(screenName)", withProperties: properties)
+    }
+
     func logEvent(event: String) {
         Adjust.trackEvent(ADJEvent(eventToken: event))
     }

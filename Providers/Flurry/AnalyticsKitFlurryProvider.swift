@@ -23,6 +23,12 @@ class AnalyticsKitFlurryProvider: NSObject, AnalyticsKitProvider {
         }
     }
 
+    func logScreen(screenName: String, withProperties properties: [String : AnyObject]) {
+        runOnMainThread {
+            Flurry.logEvent("Screen - \(screenName)", withParameters: properties)
+        }
+    }
+
     func logEvent(event: String) {
         runOnMainThread { 
             Flurry.logEvent(event)

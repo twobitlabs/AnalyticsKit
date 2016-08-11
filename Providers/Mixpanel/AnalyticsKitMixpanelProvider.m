@@ -33,7 +33,11 @@
 }
 
 -(void)logScreen:(NSString *)screenName {
-    [[Mixpanel sharedInstance] track:[@"Screen - " stringByAppendingString:screenName]];
+    [self logEvent:[@"Screen - " stringByAppendingString:screenName]];
+}
+
+-(void)logScreen:(NSString *)screenName withProperties:(NSDictionary<NSString *,id> *)properties {
+    [self logEvent:[@"Screen - " stringByAppendingString:screenName] withProperties:properties];
 }
 
 -(void)logEvent:(NSString *)event {

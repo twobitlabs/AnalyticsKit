@@ -6,12 +6,13 @@ import Foundation
     func applicationWillTerminate()
     func uncaughtException(exception: NSException)
     func logScreen(screenName: String)
+    func logScreen(screenName: String, withProperties properties: [String: AnyObject])
     func logEvent(event: String)
     func logEvent(event: String, withProperty key: String, andValue value: String)
-    func logEvent(event: String, withProperties dict: [String: AnyObject])
+    func logEvent(event: String, withProperties properties: [String: AnyObject])
     func logEvent(event: String, timed: Bool)
-    func logEvent(event: String, withProperties dict: [String: AnyObject], timed: Bool)
-    func endTimedEvent(event: String, withProperties dict: [String: AnyObject])
+    func logEvent(event: String, withProperties properties: [String: AnyObject], timed: Bool)
+    func endTimedEvent(event: String, withProperties properties: [String: AnyObject])
     func logError(name: String, message: String?, exception: NSException?)
     func logError(name: String, message: String?, error: NSError?)
 }
@@ -70,7 +71,11 @@ class AnalyticsKit: NSObject {
     class func logScreen(screenName: String) {
         channel(DefaultChannel).logScreen(screenName)
     }
-    
+
+    class func logScreen(screenName: String, withProperties properties: [String: AnyObject]) {
+        channel(DefaultChannel).logScreen(screenName, withProperties: properties)
+    }
+
     class func logEvent(event: String) {
         channel(DefaultChannel).logEvent(event)
     }
@@ -150,6 +155,13 @@ class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
         AKLog("\(channelName) \(screenName)")
         for provider in providers {
             provider.logScreen(screenName)
+        }
+    }
+
+    func logScreen(screenName: String, withProperties properties: [String: AnyObject]) {
+        AKLog("\(channelName) \(screenName) withProperties: \(properties.description)")
+        for provider in providers {
+            provider.logScreen(screenName, withProperties: properties)
         }
     }
 

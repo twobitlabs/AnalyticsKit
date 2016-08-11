@@ -30,6 +30,10 @@ class AnalyticsKitGoogleAnalyticsProvider: NSObject, AnalyticsKitProvider {
         tracker.send(dict)
     }
 
+    func logScreen(screenName: String, withProperties properties: [String : AnyObject]) {
+
+    }
+
     func logEvent(event: String) {
         let dict = GAIDictionaryBuilder.createEventWithCategory(nil, action: event, label: nil, value: nil).build() as [NSObject: AnyObject]
         tracker.send(dict)

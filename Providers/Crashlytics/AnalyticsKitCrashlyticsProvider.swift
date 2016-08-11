@@ -11,6 +11,12 @@ class AnalyticsKitCrashlyticsProvider: NSObject, AnalyticsKitProvider {
     // Logging
     func logScreen(screenName: String) {
         clsLog("screen: \(screenName)")
+        Answers.logCustomEventWithName("Screen - \(screenName)", customAttributes: nil)
+    }
+
+    func logScreen(screenName: String, withProperties properties: [String : AnyObject]) {
+        clsLog("screen: \(screenName) properties: \(properties)")
+        Answers.logCustomEventWithName("Screen - \(screenName)", customAttributes: properties)
     }
 
     func logEvent(event: String) {

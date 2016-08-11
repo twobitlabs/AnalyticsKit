@@ -13,6 +13,7 @@ class AnalyticsKitDebugProvider: NSObject, AnalyticsKitProvider {
 
     // Logging
     func logScreen(screenName: String) { }
+    func logScreen(screenName: String, withProperties properties: [String : AnyObject]) { }
     func logEvent(event: String) { }
     func logEvent(event: String, withProperty key: String, andValue value: String) { }
     func logEvent(event: String, withProperties properties: [String: AnyObject]) { }

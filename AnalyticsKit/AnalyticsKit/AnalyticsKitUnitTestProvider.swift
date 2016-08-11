@@ -79,8 +79,11 @@ class AnalyticsKitUnitTestProvider: NSObject, AnalyticsKitProvider {
 
 
     func logScreen(screenName: String) {
-        let event: String = "Screen - ".stringByAppendingString(screenName)
-        self.events.append(AnalyticsKitEvent(event: event))
+        logEvent("Screen - \(screenName)")
+    }
+
+    func logScreen(screenName: String, withProperties properties: [String : AnyObject]) {
+        logEvent("Screen - \(screenName)", withProperties: properties)
     }
 
     func logEvent(event: String) {

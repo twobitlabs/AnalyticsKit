@@ -24,6 +24,10 @@ class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
         MParticle.sharedInstance().logScreen(screenName, eventInfo: nil)
     }
 
+    func logScreen(screenName: String, withProperties properties: [String : AnyObject]) {
+        MParticle.sharedInstance().logScreen(screenName, eventInfo: properties)
+    }
+
     func logEvent(event: String) {
         MParticle.sharedInstance().logEvent(event, eventType: defaultEventType, eventInfo: nil)
     }
