@@ -13,6 +13,10 @@ class AnalyticsKitWatchExtensionFlurryProvider: NSObject, AnalyticsKitProvider {
         FlurryWatch.logWatchEvent("Screen - \(screenName)")
     }
 
+    func logScreen(screenName: String, withProperties properties: [String : AnyObject]) {
+        FlurryWatch.logWatchEvent("Screen - \(screenName)", withParameters: properties)
+    }
+
     func logEvent(event: String) {
         FlurryWatch.logWatchEvent(event)
     }
