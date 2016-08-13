@@ -225,5 +225,9 @@ class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
 private func AKLog(message: String, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
     #if DEBUG
         NSLog("\(NSURL(string: file)?.lastPathComponent ?? "") \(function)[\(line)]: " + message)
+    #else
+        if message == "" {
+            // Workaround for swift compiler optimizer crash
+        }
     #endif
 }
