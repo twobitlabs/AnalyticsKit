@@ -42,7 +42,6 @@
 #import <CommonCrypto/CommonDigest.h>
 #import <Security/SecRandom.h>
 #import "MPLogger.h"
-#import "NSData+MPBase64.h"
 
 #if OS_OBJECT_USE_OBJC_RETAIN_RELEASE
 #define mp_dispatch_retain(x)
@@ -138,7 +137,7 @@ static NSData *newSHA1(const char *bytes, size_t length) {
 
 - (NSString *)stringBySHA1ThenBase64Encoding
 {
-    return [newSHA1(self.bytes, self.length) mp_base64EncodedString];
+    return [newSHA1(self.bytes, self.length) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
 }
 
 @end
@@ -148,7 +147,7 @@ static NSData *newSHA1(const char *bytes, size_t length) {
 
 - (NSString *)stringBySHA1ThenBase64Encoding
 {
-    return [newSHA1(self.UTF8String, self.length) mp_base64EncodedString];
+    return [newSHA1(self.UTF8String, self.length) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
 }
 
 @end
@@ -353,11 +352,11 @@ static __strong NSData *CRLFCRLF;
 
     _currentFrameData = [[NSMutableData alloc] init];
 
-    _consumers = [[NSMutableArray alloc] init];
+    _consumers = [NSMutableArray array];
 
     _consumerPool = [[MPIOConsumerPool alloc] init];
 
-    _scheduledRunloops = [[NSMutableSet alloc] init];
+    _scheduledRunloops = [NSMutableSet set];
 
     [self _initializeStreams];
 
@@ -447,8 +446,8 @@ static __strong NSData *CRLFCRLF;
         return NO;
     }
 
-    NSString *concattedString = [_secKey stringByAppendingString:MPWebSocketAppendToSecKeyString];
-    NSString *expectedAccept = [concattedString stringBySHA1ThenBase64Encoding];
+    NSString *concatenatedString = [_secKey stringByAppendingString:MPWebSocketAppendToSecKeyString];
+    NSString *expectedAccept = [concatenatedString stringBySHA1ThenBase64Encoding];
 
     return [acceptHeader isEqualToString:expectedAccept];
 }
@@ -458,13 +457,13 @@ static __strong NSData *CRLFCRLF;
     NSInteger responseCode = CFHTTPMessageGetResponseStatusCode(_receivedHTTPHeaders);
 
     if (responseCode >= 400) {
-        MixpanelError(@"Request failed with response code %d", responseCode);
+        MPLogError(@"Request failed with response code %d", responseCode);
         [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2132 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"received bad response code from server %ld", (long)responseCode]}]];
         return;
 
     }
 
-    if(![self _checkHandshake:_receivedHTTPHeaders]) {
+    if (![self _checkHandshake:_receivedHTTPHeaders]) {
         [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2133 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Invalid Sec-WebSocket-Accept response"]}]];
         return;
     }
@@ -504,7 +503,7 @@ static __strong NSData *CRLFCRLF;
         CFHTTPMessageAppendBytes(websocket->_receivedHTTPHeaders, (const UInt8 *)data.bytes, (CFIndex)data.length);
 
         if (CFHTTPMessageIsHeaderComplete(websocket->_receivedHTTPHeaders)) {
-            MixpanelDebug(@"Finished reading headers %@", CFBridgingRelease(CFHTTPMessageCopyAllHeaderFields(websocket->_receivedHTTPHeaders)));
+            MPLogDebug(@"Finished reading headers %@", CFBridgingRelease(CFHTTPMessageCopyAllHeaderFields(websocket->_receivedHTTPHeaders)));
             [websocket _HTTPHeadersDidFinish];
         } else {
             [websocket _readHTTPHeader];
@@ -514,16 +513,19 @@ static __strong NSData *CRLFCRLF;
 
 - (void)didConnect
 {
-    MixpanelDebug(@"Connected");
+    MPLogInfo(@"Connected");
     CFHTTPMessageRef request = CFHTTPMessageCreateRequest(NULL, CFSTR("GET"), (__bridge CFURLRef)_url, kCFHTTPVersion1_1);
 
     // Set host first so it defaults
     CFHTTPMessageSetHeaderFieldValue(request, CFSTR("Host"), (__bridge CFStringRef)(_url.port ? [NSString stringWithFormat:@"%@:%@", _url.host, _url.port] : _url.host));
 
     NSMutableData *keyBytes = [[NSMutableData alloc] initWithLength:16];
-    SecRandomCopyBytes(kSecRandomDefault, keyBytes.length, keyBytes.mutableBytes);
-    _secKey = [keyBytes mp_base64EncodedString];
-    assert([_secKey length] == 24);
+    int result = SecRandomCopyBytes(kSecRandomDefault, keyBytes.length, keyBytes.mutableBytes);
+    if (result != 0) {
+        MPLogError(@"Failed to generate random bytes with status: %d", result);
+    }
+    _secKey = [keyBytes base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    assert(_secKey.length == 24);
 
     CFHTTPMessageSetHeaderFieldValue(request, CFSTR("Upgrade"), CFSTR("websocket"));
     CFHTTPMessageSetHeaderFieldValue(request, CFSTR("Connection"), CFSTR("Upgrade"));
@@ -570,7 +572,7 @@ static __strong NSData *CRLFCRLF;
 
 
     if (_secure) {
-        NSMutableDictionary *SSLOptions = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary *SSLOptions = [NSMutableDictionary dictionary];
 
         [_outputStream setProperty:(__bridge id)kCFStreamSocketSecurityLevelNegotiatedSSL forKey:(__bridge id)kCFStreamPropertySocketSecurityLevel];
 
@@ -581,7 +583,7 @@ static __strong NSData *CRLFCRLF;
 
 #if DEBUG
         [SSLOptions setValue:@NO forKey:(__bridge id)kCFStreamSSLValidatesCertificateChain];
-        MixpanelDebug(@"SocketRocket: In debug mode.  Allowing connection to any root cert");
+        MPLogDebug(@"SocketRocket: In debug mode.  Allowing connection to any root cert");
 #endif
 
         [_outputStream setProperty:SSLOptions
@@ -636,7 +638,7 @@ static __strong NSData *CRLFCRLF;
 
         self.readyState = MPWebSocketStateClosing;
 
-        MixpanelDebug(@"Closing with code %d reason %@", code, reason);
+        MPLogDebug(@"Closing with code %d reason %@", code, reason);
 
         if (wasConnecting) {
             [self _disconnect];
@@ -662,7 +664,6 @@ static __strong NSData *CRLFCRLF;
                 payload = [payload subdataWithRange:NSMakeRange(0, usedLength + sizeof(uint16_t))];
             }
         }
-
 
         [self _sendFrameWithOpcode:MPOpCodeConnectionClose data:payload];
     });
@@ -692,7 +693,7 @@ static __strong NSData *CRLFCRLF;
 
             self.readyState = MPWebSocketStateClosed;
 
-            MixpanelError(@"Failing with error %@", error.localizedDescription);
+            MPLogError(@"Failing with error %@", error.localizedDescription);
 
             [self _disconnect];
             [self _scheduleCleanup];
@@ -705,7 +706,7 @@ static __strong NSData *CRLFCRLF;
     [self assertOnWorkQueue];
 
     if (_closeWhenFinishedWriting) {
-            return;
+        return;
     }
     [_outputBuffer appendData:data];
     [self _pumpWriting];
@@ -746,7 +747,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)_handleMessage:(id)message
 {
-    MixpanelDebug(@"Received message");
+    MPLogDebug(@"Received message");
     [self _performDelegateBlock:^{
         [self.delegate webSocket:self didReceiveMessage:message];
     }];
@@ -792,7 +793,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
     size_t dataSize = data.length;
     __block uint16_t closeCode = 0;
 
-    MixpanelDebug(@"Received close frame");
+    MPLogDebug(@"Received close frame");
 
     if (dataSize == 1) {
         // TODO handle error
@@ -829,7 +830,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
 - (void)_disconnect;
 {
     [self assertOnWorkQueue];
-    MixpanelDebug(@"Trying to disconnect");
+    MPLogDebug(@"Trying to disconnect");
     _closeWhenFinishedWriting = YES;
     [self _pumpWriting];
 }
@@ -1000,8 +1001,6 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
         header.masked = !!(MPMaskMask & headerBuffer[1]);
         header.payload_length = MPPayloadLenMask & headerBuffer[1];
 
-        headerBuffer = NULL;
-
         if (header.masked) {
             [websocket _closeWithProtocolError:@"Client must receive unmasked data"];
         }
@@ -1050,7 +1049,7 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
 - (void)_readFrameNew;
 {
     dispatch_async(_workQueue, ^{
-        [self->_currentFrameData setLength:0];
+        self->_currentFrameData.length = 0;
 
         self->_currentFrameOpcode = 0;
         self->_currentFrameCount = 0;
@@ -1192,7 +1191,7 @@ static const char CRLFCRLFBytes[] = {'\r', '\n', '\r', '\n'};
         size_t size = data.length;
         const unsigned char *buffer = data.bytes;
         for (size_t i = 0; i < size; i++ ) {
-            if (((const unsigned char *)buffer)[i] == ((const unsigned char *)bytes)[match_count]) {
+            if (buffer[i] == ((const unsigned char *)bytes)[match_count]) {
                 match_count += 1;
                 if (match_count == length) {
                     found_size = i + 1;
@@ -1294,7 +1293,6 @@ static const char CRLFCRLFBytes[] = {'\r', '\n', '\r', '\n'};
                         _currentStringScanPosition += (uint32_t)valid_utf8_size;
                     }
                 }
-
             }
 
             consumer.bytesNeeded -= foundSize;
@@ -1349,7 +1347,7 @@ static const size_t MPFrameHeaderOverhead = 32;
         [self closeWithCode:MPStatusCodeMessageTooBig reason:@"Message too big"];
         return;
     }
-    uint8_t *frame_buffer = (uint8_t *)[frame mutableBytes];
+    uint8_t *frame_buffer = (uint8_t *)frame.mutableBytes;
 
     // set fin
     frame_buffer[0] = MPFinMask | opcode;
@@ -1394,7 +1392,10 @@ static const size_t MPFrameHeaderOverhead = 32;
         }
     } else {
         uint8_t *mask_key = frame_buffer + frame_buffer_size;
-        SecRandomCopyBytes(kSecRandomDefault, sizeof(uint32_t), (uint8_t *)mask_key);
+        int result = SecRandomCopyBytes(kSecRandomDefault, sizeof(uint32_t), mask_key);
+        if (result != 0) {
+            MPLogError(@"Failed to generate random bytes with status: %d", result);
+        }
         frame_buffer_size += sizeof(uint32_t);
 
         // TODO: could probably optimize this with SIMD
@@ -1404,7 +1405,7 @@ static const size_t MPFrameHeaderOverhead = 32;
         }
     }
 
-    assert(frame_buffer_size <= [frame length]);
+    assert(frame_buffer_size <= frame.length);
     frame.length = frame_buffer_size;
 
     [self _writeData:frame];
@@ -1447,7 +1448,7 @@ static const size_t MPFrameHeaderOverhead = 32;
     dispatch_async(_workQueue, ^{
         switch (eventCode) {
             case NSStreamEventOpenCompleted: {
-                MessagingDebug(@"NSStreamEventOpenCompleted %@", aStream);
+                MPLogDebug(@"NSStreamEventOpenCompleted %@", aStream);
                 if (self.readyState >= MPWebSocketStateClosing) {
                     return;
                 }
@@ -1462,18 +1463,17 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
 
             case NSStreamEventErrorOccurred: {
-                MessagingDebug(@"NSStreamEventErrorOccurred %@ %@", aStream, [[aStream streamError] copy]);
+                MPLogError(@"NSStreamEventErrorOccurred %@ %@", aStream, [[aStream streamError] copy]);
                 /// TODO specify error better!
                 [self _failWithError:aStream.streamError];
                 self->_readBufferOffset = 0;
                 [self->_readBuffer setLength:0];
                 break;
-
             }
 
             case NSStreamEventEndEncountered: {
                 [self _pumpScanner];
-                MixpanelDebug(@"NSStreamEventEndEncountered %@", aStream);
+                MPLogDebug(@"NSStreamEventEndEncountered %@", aStream);
                 if (aStream.streamError) {
                     [self _failWithError:aStream.streamError];
                 } else {
@@ -1497,7 +1497,7 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
 
             case NSStreamEventHasBytesAvailable: {
-                MixpanelDebug(@"NSStreamEventHasBytesAvailable %@", aStream);
+                MPLogDebug(@"NSStreamEventHasBytesAvailable %@", aStream);
                 const int bufferSize = 2048;
                 uint8_t buffer[bufferSize];
 
@@ -1519,13 +1519,13 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
 
             case NSStreamEventHasSpaceAvailable: {
-                MixpanelDebug(@"NSStreamEventHasSpaceAvailable %@", aStream);
+                MPLogDebug(@"NSStreamEventHasSpaceAvailable %@", aStream);
                 [self _pumpWriting];
                 break;
             }
 
             default:
-                MixpanelDebug(@"(default)  %@", aStream);
+                MPLogDebug(@"(default) %@", aStream);
                 break;
         }
     });
@@ -1566,7 +1566,7 @@ static const size_t MPFrameHeaderOverhead = 32;
     self = [super init];
     if (self) {
         _poolSize = poolSize;
-        _bufferedConsumers = [[NSMutableArray alloc] initWithCapacity:poolSize];
+        _bufferedConsumers = [NSMutableArray arrayWithCapacity:poolSize];
     }
     return self;
 }
@@ -1580,7 +1580,7 @@ static const size_t MPFrameHeaderOverhead = 32;
 {
     MPIOConsumer *consumer = nil;
     if (_bufferedConsumers.count) {
-        consumer = [_bufferedConsumers lastObject];
+        consumer = _bufferedConsumers.lastObject;
         [_bufferedConsumers removeLastObject];
     } else {
         consumer = [[MPIOConsumer alloc] init];
@@ -1601,7 +1601,7 @@ static const size_t MPFrameHeaderOverhead = 32;
 @end
 
 
-@implementation  NSURLRequest (CertificateAdditions)
+@implementation  NSURLRequest (MPCertificateAdditions)
 
 - (NSArray *)mp_SSLPinnedCertificates;
 {
@@ -1610,7 +1610,7 @@ static const size_t MPFrameHeaderOverhead = 32;
 
 @end
 
-@implementation  NSMutableURLRequest (CertificateAdditions)
+@implementation  NSMutableURLRequest (MPCertificateAdditions)
 
 - (NSArray *)mp_SSLPinnedCertificates;
 {
@@ -1628,7 +1628,7 @@ static const size_t MPFrameHeaderOverhead = 32;
 
 - (NSString *)mp_origin;
 {
-    NSString *scheme = [self.scheme lowercaseString];
+    NSString *scheme = self.scheme.lowercaseString;
 
     if ([scheme isEqualToString:@"wss"]) {
         scheme = @"https";
@@ -1648,15 +1648,15 @@ static const size_t MPFrameHeaderOverhead = 32;
 #ifdef HAS_ICU
 
 static inline int32_t validate_dispatch_data_partial_string(NSData *data) {
-    const void * contents = [data bytes];
-    long size = (long)[data length];
+    const void * contents = data.bytes;
+    long size = (long)data.length;
 
     const uint8_t *str = (const uint8_t *)contents;
 
     UChar32 codepoint = 1;
     int32_t offset = 0;
     int32_t lastOffset = 0;
-    while(offset < size && codepoint > 0)  {
+    while (offset < size && codepoint > 0)  {
         lastOffset = offset;
         U8_NEXT(str, offset, size, codepoint);
     }
@@ -1682,7 +1682,7 @@ static inline int32_t validate_dispatch_data_partial_string(NSData *data) {
         }
     }
 
-    if (size != -1 && ![[NSString alloc] initWithBytesNoCopy:(char *)[data bytes] length:(NSUInteger)size encoding:NSUTF8StringEncoding freeWhenDone:NO]) {
+    if (size != -1 && ![[NSString alloc] initWithBytesNoCopy:(char *)data.bytes length:(NSUInteger)size encoding:NSUTF8StringEncoding freeWhenDone:NO]) {
         size = -1;
     }
 

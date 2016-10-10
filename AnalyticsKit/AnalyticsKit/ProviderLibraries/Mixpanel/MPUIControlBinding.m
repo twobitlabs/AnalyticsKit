@@ -35,23 +35,23 @@
 + (MPEventBinding *)bindingWithJSONObject:(NSDictionary *)object
 {
     NSString *path = object[@"path"];
-    if (![path isKindOfClass:[NSString class]] || [path length] < 1) {
+    if (![path isKindOfClass:[NSString class]] || path.length < 1) {
         NSLog(@"must supply a view path to bind by");
         return nil;
     }
 
     NSString *eventName = object[@"event_name"];
-    if (![eventName isKindOfClass:[NSString class]] || [eventName length] < 1 ) {
+    if (![eventName isKindOfClass:[NSString class]] || eventName.length < 1 ) {
         NSLog(@"binding requires an event name");
         return nil;
     }
 
-    if (!(object[@"control_event"] && ([object[@"control_event"] unsignedIntegerValue] & UIControlEventAllEvents))) {
+    if (!([object[@"control_event"] unsignedIntegerValue] & UIControlEventAllEvents)) {
         NSLog(@"must supply a valid UIControlEvents value for control_event");
         return nil;
     }
 
-    UIControlEvents verifyEvent = object[@"verify_event"] ? [object[@"verify_event"] unsignedIntegerValue] : 0;
+    UIControlEvents verifyEvent = [object[@"verify_event"] unsignedIntegerValue];
     return [[MPUIControlBinding alloc] initWithEventName:eventName
                                         onPath:path
                               withControlEvent:[object[@"control_event"] unsignedIntegerValue]
@@ -104,6 +104,10 @@
 
 - (void)execute
 {
+    if (!self.appliedTo) {
+        [self resetAppliedTo];
+    }
+    
     if (!self.running) {
         void (^executeBlock)(id, SEL) = ^(id view, SEL command) {
             NSArray *objects;
@@ -168,7 +172,7 @@
                               named:self.name];
 
         // remove target-action pairs
-        for (UIControl *control in [self.appliedTo allObjects]) {
+        for (UIControl *control in self.appliedTo.allObjects) {
             if (control && [control isKindOfClass:[UIControl class]]) {
                 [self stopOnView:control];
             }
@@ -209,7 +213,7 @@
 
 - (void)execute:(id)sender forEvent:(UIEvent *)event
 {
-    BOOL shouldTrack = NO;
+    BOOL shouldTrack;
     if (self.verifyEvent != 0 && self.verifyEvent != self.controlEvent) {
         shouldTrack = [self.verified containsObject:sender];
     } else {
@@ -236,6 +240,20 @@
         _verifyEvent = [[aDecoder decodeObjectForKey:@"verifyEvent"] unsignedIntegerValue];
     }
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if (other == self) {
+        return YES;
+    } else if (![other isKindOfClass:[MPUIControlBinding class]]) {
+        return NO;
+    } else {
+        return [super isEqual:other] && self.controlEvent == ((MPUIControlBinding *)other).controlEvent && self.verifyEvent == ((MPUIControlBinding *)other).verifyEvent;
+    }
+}
+
+- (NSUInteger)hash {
+    return [super hash] ^ self.controlEvent ^ self.verifyEvent;
 }
 
 @end

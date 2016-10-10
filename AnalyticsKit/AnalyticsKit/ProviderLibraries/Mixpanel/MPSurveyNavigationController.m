@@ -1,7 +1,3 @@
-#if ! __has_feature(objc_arc)
-#error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
-#endif
-
 #import <Availability.h>
 #import <QuartzCore/QuartzCore.h>
 #import "UIView+MPHelpers.h"
@@ -48,7 +44,7 @@
     self.highlightColor = [avgColor colorWithSaturationComponent:0.8f];
     self.questionControllers = [NSMutableArray array];
     self.answers = [NSMutableDictionary dictionary];
-    for (NSUInteger i = 0; i < [_survey.questions count]; i++) {
+    for (NSUInteger i = 0, n = _survey.questions.count; i < n; i++) {
         [_questionControllers addObject:[NSNull null]];
     }
     [self loadQuestion:0];
@@ -117,12 +113,10 @@
                      completion:nil];
 }
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
 }
-#endif
 
 - (UIStatusBarAnimation)preferredStatusBarUpdateAnimation
 {
@@ -131,18 +125,18 @@
 
 - (void)updatePageNumber:(NSUInteger)index
 {
-    _pageNumberLabel.text = [NSString stringWithFormat:@"%lu of %lu", (unsigned long)(index + 1), (unsigned long)[_survey.questions count]];
+    _pageNumberLabel.text = [NSString stringWithFormat:@"%lu of %lu", (unsigned long)(index + 1), (unsigned long)_survey.questions.count];
 }
 
 - (void)updateButtons:(NSUInteger)index
 {
     _previousButton.enabled = index > 0;
-    _nextButton.enabled = index < ([_survey.questions count] - 1);
+    _nextButton.enabled = index < _survey.questions.count - 1;
 }
 
 - (void)loadQuestion:(NSUInteger)index
 {
-    if (index < [_survey.questions count]) {
+    if (index < _survey.questions.count) {
         MPSurveyQuestionViewController *controller = _questionControllers[index];
         // replace the placeholder if necessary
         if ((NSNull *)controller == [NSNull null]) {
@@ -156,7 +150,7 @@
                 controller.view.translatesAutoresizingMaskIntoConstraints = NO; // we contrain with auto layout in constrainQuestionView:
                 _questionControllers[index] = controller;
             } else {
-                MixpanelError(@"no view controller for storyboard identifier: %@", storyboardIdentifier);
+                MPLogError(@"no view controller for storyboard identifier: %@", storyboardIdentifier);
             }
         }
     }
@@ -177,8 +171,7 @@
 
 - (void)showQuestionAtIndex:(NSUInteger)index animatingForward:(BOOL)forward
 {
-    if (index < [_survey.questions count]) {
-
+    if (index < _survey.questions.count) {
         UIViewController *fromController = _currentQuestionController;
 
         [self loadQuestion:index];
@@ -198,7 +191,6 @@
                                   duration:duration
                                    options:UIViewAnimationOptionCurveEaseIn
                                 animations:^{
-
                                     // position to view with auto layout
                                     [self constrainQuestionView:toController.view];
 
@@ -212,7 +204,6 @@
                                     CGFloat dropDistance = self.containerView.bounds.size.height / 4.0f;
 
                                     if (forward) {
-
                                         // from view
                                         anims = [NSMutableArray array];
                                         // slides left
@@ -253,9 +244,7 @@
                                         group.animations = anims;
                                         group.duration = duration;
                                         [toController.view.layer addAnimation:group forKey:nil];
-
                                     } else {
-
                                         // from view
                                         anims = [NSMutableArray array];
                                         // slides right and spins and drops offscreen
@@ -298,7 +287,6 @@
 
                                     // hack to hide animation flashing fromController.view at the end
                                     fromController.view.alpha = 0;
-
                                }
                                 completion:^(BOOL finished){
                                     [toController didMoveToParentViewController:self];
@@ -311,7 +299,7 @@
         [self loadQuestion:index - 1];
         [self loadQuestion:index + 1];
     } else {
-        MixpanelError(@"attempt to navigate to invalid question index");
+        MPLogError(@"attempt to navigate to invalid question index");
     }
 }
 
@@ -323,7 +311,7 @@
 - (IBAction)showNextQuestion
 {
     NSUInteger currentIndex = [self currentIndex];
-    if (currentIndex < ([_survey.questions count] - 1)) {
+    if (currentIndex < (_survey.questions.count - 1)) {
         [self showQuestionAtIndex:currentIndex + 1 animatingForward:YES];
     }
 }
@@ -340,7 +328,7 @@
 {
     __strong id<MPSurveyNavigationControllerDelegate> strongDelegate = _delegate;
     if (strongDelegate != nil) {
-        [strongDelegate surveyController:self wasDismissedWithAnswers:[_answers allValues]];
+        [strongDelegate surveyController:self wasDismissedWithAnswers:_answers.allValues];
     }
 }
 
@@ -355,7 +343,7 @@
 
     _answers[@(controller.question.ID)] = answer;
 
-    if ([self currentIndex] < ([_survey.questions count] - 1)) {
+    if ([self currentIndex] < (_survey.questions.count - 1)) {
         [self showNextQuestion];
     } else {
         [self dismiss];

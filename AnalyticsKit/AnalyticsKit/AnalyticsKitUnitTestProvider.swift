@@ -41,11 +41,11 @@ class AnalyticsKitUnitTestProvider: NSObject, AnalyticsKitProvider {
         self.events = [AnalyticsKitEvent]()
     }
 
-    func hasEventLoggedWithName(eventName: String) -> Bool {
+    func hasEventLoggedWithName(_ eventName: String) -> Bool {
         return firstEventLoggedWithName(eventName) != nil
     }
 
-    func firstEventLoggedWithName(eventName: String) -> AnalyticsKitEvent? {
+    func firstEventLoggedWithName(_ eventName: String) -> AnalyticsKitEvent? {
         var event: AnalyticsKitEvent?
         var matchingEvents: [AnalyticsKitEvent] = eventsLoggedWithName(eventName)
         if matchingEvents.count > 0 {
@@ -54,7 +54,7 @@ class AnalyticsKitUnitTestProvider: NSObject, AnalyticsKitProvider {
         return event
     }
 
-    func eventsLoggedWithName(eventName: String) -> [AnalyticsKitEvent] {
+    func eventsLoggedWithName(_ eventName: String) -> [AnalyticsKitEvent] {
         var matchingEvents: [AnalyticsKitEvent] = [AnalyticsKitEvent]()
         for event in events {
             if (eventName == event.name) {
@@ -74,46 +74,46 @@ class AnalyticsKitUnitTestProvider: NSObject, AnalyticsKitProvider {
     func applicationWillTerminate() {
     }
 
-    func uncaughtException(exception: NSException) {
+    func uncaughtException(_ exception: NSException) {
     }
 
 
-    func logScreen(screenName: String) {
+    func logScreen(_ screenName: String) {
         logEvent("Screen - \(screenName)")
     }
 
-    func logScreen(screenName: String, withProperties properties: [String : AnyObject]) {
+    func logScreen(_ screenName: String, withProperties properties: [String : AnyObject]) {
         logEvent("Screen - \(screenName)", withProperties: properties)
     }
 
-    func logEvent(event: String) {
+    func logEvent(_ event: String) {
         self.events.append(AnalyticsKitEvent(event: event))
     }
 
-    func logEvent(event: String, withProperty key: String, andValue value: String) {
-        self.logEvent(event, withProperties: [key: value])
+    func logEvent(_ event: String, withProperty key: String, andValue value: String) {
+        self.logEvent(event, withProperties: [key: value as AnyObject])
     }
 
-    func logEvent(event: String, withProperties properties: [String : AnyObject]) {
+    func logEvent(_ event: String, withProperties properties: [String : AnyObject]) {
         self.events.append(AnalyticsKitEvent(event: event, withProperties: properties))
     }
 
-    func logEvent(event: String, timed: Bool) {
+    func logEvent(_ event: String, timed: Bool) {
         self.events.append(AnalyticsKitEvent(event: event))
     }
 
-    func logEvent(event: String, withProperties properties: [String : AnyObject], timed: Bool) {
+    func logEvent(_ event: String, withProperties properties: [String : AnyObject], timed: Bool) {
         self.logEvent(event, withProperties: properties)
     }
 
 
-    func endTimedEvent(event: String, withProperties properties: [String : AnyObject]) {
+    func endTimedEvent(_ event: String, withProperties properties: [String : AnyObject]) {
     }
 
-    func logError(name: String, message: String?, exception: NSException?) {
+    func logError(_ name: String, message: String?, exception: NSException?) {
     }
 
-    func logError(name: String, message: String?, error: NSError?) {
+    func logError(_ name: String, message: String?, error: NSError?) {
     }
 
 }

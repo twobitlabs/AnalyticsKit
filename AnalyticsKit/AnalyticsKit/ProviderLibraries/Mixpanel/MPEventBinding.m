@@ -33,15 +33,15 @@
 + (Class)subclassFromString:(NSString *)bindingType
 {
     NSDictionary *classTypeMap = @{
-                                   [MPUIControlBinding typeName] : [MPUIControlBinding class],
-                                   [MPUITableViewBinding typeName] : [MPUITableViewBinding class]
+                                   [MPUIControlBinding typeName]: [MPUIControlBinding class],
+                                   [MPUITableViewBinding typeName]: [MPUITableViewBinding class]
                                    };
     return[classTypeMap valueForKey:bindingType] ?: [MPUIControlBinding class];
 }
 
 + (void)track:(NSString *)event properties:(NSDictionary *)properties
 {
-    NSMutableDictionary *bindingProperties = [[NSMutableDictionary alloc] initWithObjectsAndKeys: @YES, @"$from_binding", nil];
+    NSMutableDictionary *bindingProperties = [NSMutableDictionary dictionaryWithObjectsAndKeys: @YES, @"$from_binding", nil];
     [bindingProperties addEntriesFromDictionary:properties];
     [[Mixpanel sharedInstance] track:event properties:bindingProperties];
 }
@@ -106,6 +106,20 @@
     [aCoder encodeObject:_path.string forKey:@"path"];
     [aCoder encodeObject:_eventName forKey:@"eventName"];
     [aCoder encodeObject:NSStringFromClass(_swizzleClass) forKey:@"swizzleClass"];
+}
+
+- (BOOL)isEqual:(id)other {
+    if (other == self) {
+        return YES;
+    } else if (![other isKindOfClass:[MPEventBinding class]]) {
+        return NO;
+    } else {
+        return [self.eventName isEqual:((MPEventBinding *)other).eventName] && [self.path isEqual:((MPEventBinding *)other).path];
+    }
+}
+
+- (NSUInteger)hash {
+    return [self.eventName hash] ^ [self.path hash];
 }
 
 @end

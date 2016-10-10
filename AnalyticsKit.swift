@@ -4,25 +4,25 @@ import Foundation
     func applicationWillEnterForeground()
     func applicationDidEnterBackground()
     func applicationWillTerminate()
-    func uncaughtException(exception: NSException)
-    func logScreen(screenName: String)
-    func logScreen(screenName: String, withProperties properties: [String: AnyObject])
-    func logEvent(event: String)
-    func logEvent(event: String, withProperty key: String, andValue value: String)
-    func logEvent(event: String, withProperties properties: [String: AnyObject])
-    func logEvent(event: String, timed: Bool)
-    func logEvent(event: String, withProperties properties: [String: AnyObject], timed: Bool)
-    func endTimedEvent(event: String, withProperties properties: [String: AnyObject])
-    func logError(name: String, message: String?, exception: NSException?)
-    func logError(name: String, message: String?, error: NSError?)
+    func uncaughtException(_ exception: NSException)
+    func logScreen(_ screenName: String)
+    func logScreen(_ screenName: String, withProperties properties: [String: AnyObject])
+    func logEvent(_ event: String)
+    func logEvent(_ event: String, withProperty key: String, andValue value: String)
+    func logEvent(_ event: String, withProperties properties: [String: AnyObject])
+    func logEvent(_ event: String, timed: Bool)
+    func logEvent(_ event: String, withProperties properties: [String: AnyObject], timed: Bool)
+    func endTimedEvent(_ event: String, withProperties properties: [String: AnyObject])
+    func logError(_ name: String, message: String?, exception: NSException?)
+    func logError(_ name: String, message: String?, error: NSError?)
 }
 
 class AnalyticsKit: NSObject {
-    private static let DefaultChannel = "default"
+    fileprivate static let DefaultChannel = "default"
 
     static var channels = [String: AnalyticsKitChannel]()
 
-    class func initializeProviders(providers: [AnalyticsKitProvider]) {
+    class func initializeProviders(_ providers: [AnalyticsKitProvider]) {
         channel(DefaultChannel).initializeProviders(providers)
     }
     
@@ -30,7 +30,7 @@ class AnalyticsKit: NSObject {
         return channel(DefaultChannel).providers
     }
 
-    class func channel(channelName: String) -> AnalyticsKitChannel {
+    class func channel(_ channelName: String) -> AnalyticsKitChannel {
         guard let channel = channels[channelName] else {
             AKLog("Created \(channelName) channel")
             let newChannel = AnalyticsKitChannel(channelName: channelName, providers: [AnalyticsKitProvider]())
@@ -62,49 +62,49 @@ class AnalyticsKit: NSObject {
         }
     }
 
-    class func uncaughtException(exception: NSException) {
+    class func uncaughtException(_ exception: NSException) {
         for (_, channel) in channels {
             channel.uncaughtException(exception)
         }
     }
 
-    class func logScreen(screenName: String) {
+    class func logScreen(_ screenName: String) {
         channel(DefaultChannel).logScreen(screenName)
     }
 
-    class func logScreen(screenName: String, withProperties properties: [String: AnyObject]) {
+    class func logScreen(_ screenName: String, withProperties properties: [String: AnyObject]) {
         channel(DefaultChannel).logScreen(screenName, withProperties: properties)
     }
 
-    class func logEvent(event: String) {
+    class func logEvent(_ event: String) {
         channel(DefaultChannel).logEvent(event)
     }
     
-    class func logEvent(event: String, withProperty property: String, andValue value: String) {
+    class func logEvent(_ event: String, withProperty property: String, andValue value: String) {
         channel(DefaultChannel).logEvent(event, withProperty: property, andValue: value)
     }
     
-    class func logEvent(event: String, withProperties properties: [String: AnyObject]) {
+    class func logEvent(_ event: String, withProperties properties: [String: AnyObject]) {
         channel(DefaultChannel).logEvent(event, withProperties: properties)
     }
     
-    class func logEvent(event: String, timed: Bool) {
+    class func logEvent(_ event: String, timed: Bool) {
         channel(DefaultChannel).logEvent(event, timed: timed)
     }
     
-    class func logEvent(event: String, withProperties properties: [String: AnyObject], timed: Bool) {
+    class func logEvent(_ event: String, withProperties properties: [String: AnyObject], timed: Bool) {
         channel(DefaultChannel).logEvent(event, withProperties: properties, timed: timed)
     }
     
-    class func endTimedEvent(event: String, withProperties properties: [String: AnyObject]) {
+    class func endTimedEvent(_ event: String, withProperties properties: [String: AnyObject]) {
         channel(DefaultChannel).endTimedEvent(event, withProperties: properties)
     }
     
-    class func logError(name: String, message: String?, exception: NSException?) {
+    class func logError(_ name: String, message: String?, exception: NSException?) {
         channel(DefaultChannel).logError(name, message: message, exception: exception)
     }
     
-    class func logError(name: String, message: String?, error: NSError?) {
+    class func logError(_ name: String, message: String?, error: NSError?) {
         channel(DefaultChannel).logError(name, message: message, error: error)
     }
     
@@ -119,7 +119,7 @@ class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
         self.providers = providers
     }
 
-    func initializeProviders(providers: [AnalyticsKitProvider]) {
+    func initializeProviders(_ providers: [AnalyticsKitProvider]) {
         self.providers = providers
     }
 
@@ -144,85 +144,85 @@ class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func uncaughtException(exception: NSException) {
+    func uncaughtException(_ exception: NSException) {
         AKLog("\(channelName) \(exception.description)")
         for provider in providers {
             provider.uncaughtException(exception)
         }
     }
 
-    func logScreen(screenName: String) {
+    func logScreen(_ screenName: String) {
         AKLog("\(channelName) \(screenName)")
         for provider in providers {
             provider.logScreen(screenName)
         }
     }
 
-    func logScreen(screenName: String, withProperties properties: [String: AnyObject]) {
+    func logScreen(_ screenName: String, withProperties properties: [String: AnyObject]) {
         AKLog("\(channelName) \(screenName) withProperties: \(properties.description)")
         for provider in providers {
             provider.logScreen(screenName, withProperties: properties)
         }
     }
 
-    func logEvent(event: String) {
+    func logEvent(_ event: String) {
         AKLog("\(channelName) \(event)")
         for provider in providers {
             provider.logEvent(event)
         }
     }
 
-    func logEvent(event: String, withProperty property: String, andValue value: String) {
+    func logEvent(_ event: String, withProperty property: String, andValue value: String) {
         AKLog("\(channelName) \(event) withProperty: \(property) andValue: \(value)")
         for provider in providers {
             provider.logEvent(event)
         }
     }
 
-    func logEvent(event: String, withProperties properties: [String: AnyObject]) {
+    func logEvent(_ event: String, withProperties properties: [String: AnyObject]) {
         AKLog("\(channelName) \(event) withProperties: \(properties.description)")
         for provider in providers {
             provider.logEvent(event, withProperties: properties)
         }
     }
 
-    func logEvent(event: String, timed: Bool) {
+    func logEvent(_ event: String, timed: Bool) {
         AKLog("\(channelName) \(event) timed: \(timed)")
         for provider in providers {
             provider.logEvent(event, timed: timed)
         }
     }
 
-    func logEvent(event: String, withProperties properties: [String: AnyObject], timed: Bool) {
+    func logEvent(_ event: String, withProperties properties: [String: AnyObject], timed: Bool) {
         AKLog("\(channelName) \(event) withProperties: \(properties) timed: \(timed)")
         for provider in providers {
             provider.logEvent(event, withProperties: properties, timed: timed)
         }
     }
 
-    func endTimedEvent(event: String, withProperties properties: [String: AnyObject]) {
+    func endTimedEvent(_ event: String, withProperties properties: [String: AnyObject]) {
         AKLog("\(channelName) \(event) withProperties: \(properties)")
         for provider in providers {
             provider.endTimedEvent(event, withProperties: properties)
         }
     }
 
-    func logError(name: String, message: String?, exception: NSException?) {
-        AKLog("\(channelName) \(name) message: \(message ?? "nil") exception: \(exception ?? "nil")")
+    func logError(_ name: String, message: String?, exception: NSException?) {
+        AKLog("\(channelName) \(name) message: \(message ?? "nil") exception: \(exception?.description ?? "nil")")
         for provider in providers {
             provider.logError(name, message: message, exception: exception)
         }
     }
 
-    func logError(name: String, message: String?, error: NSError?) {
-        AKLog("\(channelName) \(name) message: \(message ?? "nil") error: \(error ?? "nil")")
+    func logError(_ name: String, message: String?, error: NSError?) {
+        AKLog("\(channelName) \(name) message: \(message ?? "nil") error: \(error?.description ?? "nil")")
         for provider in providers {
             provider.logError(name, message: message, error: error)
         }
     }
 }
 
-private func AKLog(message: String, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+private func AKLog(_ message: String, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
     #if DEBUG
         NSLog("\(NSURL(string: file)?.lastPathComponent ?? "") \(function)[\(line)]: " + message)
     #else

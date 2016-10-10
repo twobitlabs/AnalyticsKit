@@ -1,7 +1,3 @@
-#if ! __has_feature(objc_arc)
-#error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
-#endif
-
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
 #import <CommonCrypto/CommonDigest.h>
@@ -12,35 +8,15 @@
 
 @implementation UIView (MPHelpers)
 
-- (int)mp_fingerprintVersion
-{
+- (int)mp_fingerprintVersion {
     return MP_FINGERPRINT_VERSION;
 }
 
-- (UIImage *)mp_snapshotImage
-{
-    CGFloat offsetHeight = 0.0f;
-    
-    //Avoid the status bar on phones running iOS < 7
-    if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] == NSOrderedAscending &&
-        ![UIApplication sharedApplication].statusBarHidden) {
-        offsetHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
-    }
+- (UIImage *)mp_snapshotImage {
     CGSize size = self.layer.bounds.size;
-    size.height -= offsetHeight;
     UIGraphicsBeginImageContext(size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextTranslateCTM(context, 0.0f, -offsetHeight);
     
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-    if ([self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
-        [self drawViewHierarchyInRect:CGRectMake(0.0f, 0.0f, size.width, size.height) afterScreenUpdates:YES];
-    } else {
-        [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    }
-#else
-    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-#endif
+    [self drawViewHierarchyInRect:CGRectMake(0.0f, 0.0f, size.width, size.height) afterScreenUpdates:YES];
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -48,24 +24,21 @@
     return image;
 }
 
-- (UIImage *)mp_snapshotForBlur
-{
+- (UIImage *)mp_snapshotForBlur {
     UIImage *image = [self mp_snapshotImage];
     // hack, helps with colors when blurring
     NSData *imageData = UIImageJPEGRepresentation(image, 1); // convert to jpeg
     return [UIImage imageWithData:imageData];
 }
 
-// mp_targetActions
-- (NSArray *)mp_targetActions
-{
+- (NSArray *)mp_targetActions {
     NSMutableArray *targetActions = [NSMutableArray array];
     if ([self isKindOfClass:[UIControl class]]) {
         for (id target in [(UIControl *)(self) allTargets]) {
             UIControlEvents allEvents = UIControlEventAllTouchEvents | UIControlEventAllEditingEvents;
             for (NSUInteger e = 0; (allEvents >> e) > 0; e++) {
                 UIControlEvents event = allEvents & (0x01 << e);
-                if(event) {
+                if (event) {
                     NSArray *actions = [(UIControl *)(self) actionsForTarget:target forControlEvent:event];
                     NSArray *ignoreActions = @[@"preVerify:forEvent:", @"execute:forEvent:"];
                     for (NSString *action in actions) {
@@ -134,8 +107,8 @@
     UIImage *originalImage = nil;
     if ([self isKindOfClass:[UIButton class]]) {
         originalImage = [((UIButton *)self) imageForState:UIControlStateNormal];
-    } else if ([NSStringFromClass([self class]) isEqual:@"UITabBarButton"] && [self.subviews count] > 0 && [self.subviews[0] respondsToSelector:NSSelectorFromString(@"image")]) {
-        originalImage = (UIImage *)[self.subviews[0] performSelector:@selector(image)];
+    } else if ([NSStringFromClass([self.superview class]) isEqual:@"UITabBarButton"] && [self respondsToSelector:@selector(image)]) {
+        originalImage = (UIImage *)[self performSelector:@selector(image)];
     }
     
     if (originalImage) {
@@ -149,13 +122,13 @@
         CGContextDrawImage(context, CGRectMake(0,0,8,8), [originalImage CGImage]);
         CGColorSpaceRelease(space);
         CGContextRelease(context);
-        for(int i = 0; i < 32; i++) {
+        for (int i = 0; i < 32; i++) {
             int j = 2*i;
             int k = 2*i + 1;
             data4[i] = (((data32[j] & 0x80000000) >> 24) | ((data32[j] & 0x800000) >> 17) | ((data32[j] & 0x8000) >> 10) | ((data32[j] & 0x80) >> 3) |
                         ((data32[k] & 0x80000000) >> 28) | ((data32[k] & 0x800000) >> 21) | ((data32[k] & 0x8000) >> 14) | ((data32[k] & 0x80) >> 7));
         }
-        result = [[NSData dataWithBytes:data4 length:32] base64EncodedStringWithOptions:0];
+        result = [[NSData dataWithBytes:data4 length:32] base64EncodedStringWithOptions:(NSDataBase64EncodingOptions)0];
     }
     return result;
 }
@@ -163,7 +136,7 @@
 - (NSString *)mp_text
 {
     NSString *text = nil;
-    SEL titleSelector = NSSelectorFromString(@"title");
+    SEL titleSelector = @selector(title);
     if ([self isKindOfClass:[UILabel class]]) {
         text = ((UILabel *)self).text;
     } else if ([self isKindOfClass:[UIButton class]]) {
@@ -179,7 +152,7 @@
     return text;
 }
         
-static NSString* mp_encryptHelper(id input)
+static NSString *mp_encryptHelper(id input)
 {
     NSString *SALT = @"1l0v3c4a8s4n018cl3d93kxled3kcle3j19384jdo2dk3";
     NSMutableString *encryptedStuff = nil;
@@ -215,8 +188,8 @@ static NSString* mp_encryptHelper(id input)
 {
     NSArray *targetActions = [self mp_targetActions];
     NSMutableArray *encryptedActions = [NSMutableArray array];
-    for (NSUInteger i = 0 ; i < [targetActions count]; i++) {
-        [encryptedActions addObject:mp_encryptHelper(targetActions[i])];
+    for (id targetAction in targetActions) {
+        [encryptedActions addObject:mp_encryptHelper(targetAction)];
     }
     return encryptedActions;
 }

@@ -6,54 +6,54 @@ class AnalyticsKitCrashlyticsProvider: NSObject, AnalyticsKitProvider {
     func applicationWillEnterForeground() { }
     func applicationDidEnterBackground() { }
     func applicationWillTerminate() { }
-    func uncaughtException(exception: NSException) { }
+    func uncaughtException(_ exception: NSException) { }
 
     // Logging
-    func logScreen(screenName: String) {
+    func logScreen(_ screenName: String) {
         clsLog("screen: \(screenName)")
-        Answers.logCustomEventWithName("Screen - \(screenName)", customAttributes: nil)
+        Answers.logCustomEvent(withName: "Screen - \(screenName)", customAttributes: nil)
     }
 
-    func logScreen(screenName: String, withProperties properties: [String : AnyObject]) {
+    func logScreen(_ screenName: String, withProperties properties: [String : AnyObject]) {
         clsLog("screen: \(screenName) properties: \(properties)")
-        Answers.logCustomEventWithName("Screen - \(screenName)", customAttributes: properties)
+        Answers.logCustomEvent(withName: "Screen - \(screenName)", customAttributes: properties)
     }
 
-    func logEvent(event: String) {
+    func logEvent(_ event: String) {
         clsLog("event: \(event)")
-        Answers.logCustomEventWithName(event, customAttributes: nil)
+        Answers.logCustomEvent(withName: event, customAttributes: nil)
     }
 
-    func logEvent(event: String, withProperty key: String, andValue value: String) {
-        logEvent(event, withProperties: [key: value])
+    func logEvent(_ event: String, withProperty key: String, andValue value: String) {
+        logEvent(event, withProperties: [key: value as AnyObject])
     }
 
-    func logEvent(event: String, withProperties properties: [String: AnyObject]) {
+    func logEvent(_ event: String, withProperties properties: [String: AnyObject]) {
         clsLog("event: \(event) properties: \(properties)")
-        Answers.logCustomEventWithName(event, customAttributes: properties)
+        Answers.logCustomEvent(withName: event, customAttributes: properties)
     }
 
-    func logEvent(event: String, timed: Bool) {
-
-    }
-
-    func logEvent(event: String, withProperties dict: [String: AnyObject], timed: Bool) {
+    func logEvent(_ event: String, timed: Bool) {
 
     }
 
-    func endTimedEvent(event: String, withProperties dict: [String: AnyObject]) {
+    func logEvent(_ event: String, withProperties dict: [String: AnyObject], timed: Bool) {
 
     }
 
-    func logError(name: String, message: String?, exception: NSException?) {
-        clsLog("error: \(name) message: \(message ?? "nil") exception: \(exception ?? "nil")")
+    func endTimedEvent(_ event: String, withProperties dict: [String: AnyObject]) {
+
     }
 
-    func logError(name: String, message: String?, error: NSError?) {
-        clsLog("error: \(name) message: \(message ?? "nil") error: \(error ?? "nil")")
+    func logError(_ name: String, message: String?, exception: NSException?) {
+        clsLog("error: \(name) message: \(message ?? "nil") exception: \(exception?.description ?? "nil")")
     }
 
-    private func clsLog(message: String) {
+    func logError(_ name: String, message: String?, error: NSError?) {
+        clsLog("error: \(name) message: \(message ?? "nil") error: \(error?.description ?? "nil")")
+    }
+
+    fileprivate func clsLog(_ message: String) {
         CLSLogv(message, getVaList([]))
     }
 

@@ -11,79 +11,79 @@ class AnalyticsKitFlurryProvider: NSObject, AnalyticsKitProvider {
     func applicationDidEnterBackground() { }
     func applicationWillTerminate() { }
 
-    func uncaughtException(exception: NSException) {
-        let message = "Crash on iOS \(UIDevice.currentDevice().systemVersion)"
+    func uncaughtException(_ exception: NSException) {
+        let message = "Crash on iOS \(UIDevice.current.systemVersion)"
         Flurry.logError("Uncaught", message: message, exception: exception)
     }
 
     // Logging
-    func logScreen(screenName: String) {
+    func logScreen(_ screenName: String) {
         runOnMainThread {
             Flurry.logEvent("Screen - \(screenName)")
         }
     }
 
-    func logScreen(screenName: String, withProperties properties: [String : AnyObject]) {
+    func logScreen(_ screenName: String, withProperties properties: [String : AnyObject]) {
         runOnMainThread {
             Flurry.logEvent("Screen - \(screenName)", withParameters: properties)
         }
     }
 
-    func logEvent(event: String) {
+    func logEvent(_ event: String) {
         runOnMainThread { 
             Flurry.logEvent(event)
         }
     }
 
-    func logEvent(event: String, withProperty key: String, andValue value: String) {
+    func logEvent(_ event: String, withProperty key: String, andValue value: String) {
         runOnMainThread { 
             Flurry.logEvent(event, withParameters: [key: value])
         }
     }
 
-    func logEvent(event: String, withProperties properties: [String: AnyObject]) {
+    func logEvent(_ event: String, withProperties properties: [String: AnyObject]) {
         runOnMainThread {
             Flurry.logEvent(event, withParameters: properties)
         }
     }
 
-    func logEvent(event: String, timed: Bool) {
+    func logEvent(_ event: String, timed: Bool) {
         runOnMainThread {
             Flurry.logEvent(event, timed: timed)
         }
     }
 
-    func logEvent(event: String, withProperties properties: [String: AnyObject], timed: Bool) {
+    func logEvent(_ event: String, withProperties properties: [String: AnyObject], timed: Bool) {
         runOnMainThread {
             Flurry.logEvent(event, withParameters: properties, timed: timed)
         }
     }
 
-    func endTimedEvent(event: String, withProperties properties: [String: AnyObject]) {
+    func endTimedEvent(_ event: String, withProperties properties: [String: AnyObject]) {
         runOnMainThread {
             // non-nil parameters will update the parameters
             Flurry.endTimedEvent(event, withParameters: properties)
         }
     }
 
-    func logError(name: String, message: String?, exception: NSException?) {
+    func logError(_ name: String, message: String?, exception: NSException?) {
         runOnMainThread { 
             Flurry.logError(name, message: message, exception: exception)
         }
     }
 
-    func logError(name: String, message: String?, error: NSError?) {
+    func logError(_ name: String, message: String?, error: NSError?) {
         runOnMainThread {
             Flurry.logError(name, message: message, error: error)
         }
     }
 
-    private func runOnMainThread(block: () -> Void) {
+    fileprivate func runOnMainThread(_ block: @escaping () -> Void) {
         //Flurry requires calls to be made from main thread
-        if NSThread.isMainThread() {
+        if Thread.isMainThread {
             block()
         } else {
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 block()
             })
         }

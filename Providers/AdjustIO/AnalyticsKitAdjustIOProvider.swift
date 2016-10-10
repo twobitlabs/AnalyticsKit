@@ -13,54 +13,54 @@ class AnalyticsKitAdjustIOProvider: NSObject, AnalyticsKitProvider {
     func applicationWillEnterForeground() { }
     func applicationDidEnterBackground() { }
     func applicationWillTerminate() { }
-    func uncaughtException(exception: NSException) { }
+    func uncaughtException(_ exception: NSException) { }
 
     // Logging
-    func logScreen(screenName: String) {
+    func logScreen(_ screenName: String) {
         logEvent("Screen - \(screenName)")
     }
 
-    func logScreen(screenName: String, withProperties properties: [String : AnyObject]) {
+    func logScreen(_ screenName: String, withProperties properties: [String : AnyObject]) {
         logEvent("Screen - \(screenName)", withProperties: properties)
     }
 
-    func logEvent(event: String) {
+    func logEvent(_ event: String) {
         Adjust.trackEvent(ADJEvent(eventToken: event))
     }
 
-    func logEvent(event: String, withProperty key: String, andValue value: String) {
+    func logEvent(_ event: String, withProperty key: String, andValue value: String) {
         let event = ADJEvent(eventToken: event)
-        event.addPartnerParameter(key, value: value)
+        event?.addPartnerParameter(key, value: value)
         Adjust.trackEvent(event)
     }
 
-    func logEvent(event: String, withProperties properties: [String: AnyObject]) {
+    func logEvent(_ event: String, withProperties properties: [String: AnyObject]) {
         let event = ADJEvent(eventToken: event)
         for (key, value) in properties {
             if let value = value as? String {
-                event.addPartnerParameter(key, value: value)
+                event?.addPartnerParameter(key, value: value)
             }
         }
         Adjust.trackEvent(event)
     }
 
-    func logEvent(event: String, timed: Bool) {
+    func logEvent(_ event: String, timed: Bool) {
         
     }
 
-    func logEvent(event: String, withProperties properties: [String: AnyObject], timed: Bool) {
+    func logEvent(_ event: String, withProperties properties: [String: AnyObject], timed: Bool) {
 
     }
 
-    func endTimedEvent(event: String, withProperties dict: [String: AnyObject]) {
+    func endTimedEvent(_ event: String, withProperties dict: [String: AnyObject]) {
 
     }
 
-    func logError(name: String, message: String?, exception: NSException?) {
+    func logError(_ name: String, message: String?, exception: NSException?) {
 
     }
 
-    func logError(name: String, message: String?, error: NSError?) {
+    func logError(_ name: String, message: String?, error: NSError?) {
         
     }
 

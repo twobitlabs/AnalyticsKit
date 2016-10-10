@@ -4,7 +4,7 @@ class AnalyticsKitEvent: NSObject {
 
     var name: String
     var properties = [String: AnyObject]()
-    var startTime: NSDate?
+    var startTime: Date?
 
     init(event: String) {
         self.name = event
@@ -20,7 +20,7 @@ class AnalyticsKitEvent: NSObject {
         self.properties = [key: value]
     }
 
-    func setProperty(value: AnyObject, forKey key: String) {
+    func setProperty(_ value: AnyObject, forKey key: String) {
         properties[key] = value
     }
 

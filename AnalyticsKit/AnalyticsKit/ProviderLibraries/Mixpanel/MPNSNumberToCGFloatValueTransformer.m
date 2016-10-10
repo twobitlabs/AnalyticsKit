@@ -21,11 +21,11 @@
         NSNumber *number = (NSNumber *) value;
 
         // if the number is not a cgfloat, cast it to a cgfloat
-        if (strcmp([number objCType], (char *) @encode(CGFloat)) != 0) {
-            if (strcmp((char *) @encode(CGFloat), (char *) @encode(double)) == 0) {
-                value = @([number doubleValue]);
+        if (strcmp(number.objCType, @encode(CGFloat)) != 0) {
+            if (strcmp(@encode(CGFloat), @encode(double)) == 0) {
+                value = @(number.doubleValue);
             } else {
-                value = @([number floatValue]);
+                value = @(number.floatValue);
             }
         }
 

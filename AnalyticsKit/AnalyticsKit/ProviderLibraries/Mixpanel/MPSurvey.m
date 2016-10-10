@@ -1,7 +1,3 @@
-#if ! __has_feature(objc_arc)
-#error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
-#endif
-
 #import "MPLogger.h"
 #import "MPSurvey.h"
 #import "MPSurveyQuestion.h"
@@ -22,32 +18,32 @@
 + (MPSurvey *)surveyWithJSONObject:(NSDictionary *)object
 {
     if (object == nil) {
-        MixpanelError(@"survey json object should not be nil");
+        MPLogError(@"survey json object should not be nil");
         return nil;
     }
     NSNumber *ID = object[@"id"];
-    if (!([ID isKindOfClass:[NSNumber class]] && [ID integerValue] > 0)) {
-        MixpanelError(@"invalid survey id: %@", ID);
+    if (!([ID isKindOfClass:[NSNumber class]] && ID.integerValue > 0)) {
+        MPLogError(@"invalid survey id: %@", ID);
         return nil;
     }
     NSString *name = object[@"name"];
     if (![name isKindOfClass:[NSString class]]) {
-        MixpanelError(@"invalid survey name: %@", name);
+        MPLogError(@"invalid survey name: %@", name);
         return nil;
     }
     NSArray *collections = object[@"collections"];
-    if (!([collections isKindOfClass:[NSArray class]] && [collections count] > 0)) {
-        MixpanelError(@"invalid survey collections: %@", collections);
+    if (!([collections isKindOfClass:[NSArray class]] && collections.count > 0)) {
+        MPLogError(@"invalid survey collections: %@", collections);
         return nil;
     }
     NSDictionary *collection = collections[0];
     if (![collection isKindOfClass:[NSDictionary class]]) {
-        MixpanelError(@"invalid survey collection: %@", collection);
+        MPLogError(@"invalid survey collection: %@", collection);
         return nil;
     }
     NSNumber *collectionID = collection[@"id"];
-    if (!([collectionID isKindOfClass:[NSNumber class]] && [collectionID integerValue] > 0)) {
-        MixpanelError(@"invalid survey collection id: %@", collectionID);
+    if (!([collectionID isKindOfClass:[NSNumber class]] && collectionID.integerValue > 0)) {
+        MPLogError(@"invalid survey collection id: %@", collectionID);
         return nil;
     }
     NSMutableArray *questions = [NSMutableArray array];
@@ -57,23 +53,23 @@
             [questions addObject:q];
         }
     }
-    return [[MPSurvey alloc] initWithID:[ID unsignedIntegerValue]
-                                    name:name
-                            collectionID:[collectionID unsignedIntegerValue]
-                            andQuestions:[NSArray arrayWithArray:questions]];
+    return [[MPSurvey alloc] initWithID:ID.unsignedIntegerValue
+                                   name:name
+                           collectionID:collectionID.unsignedIntegerValue
+                           andQuestions:[NSArray arrayWithArray:questions]];
 }
 
 - (instancetype)initWithID:(NSUInteger)ID name:(NSString *)name collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions
 {
     if (self = [super init]) {
         BOOL valid = YES;
-        if (!(name && name.length > 0)) {
+        if (name.length == 0) {
             valid = NO;
-            MixpanelError(@"Invalid survey name %@", name);
+            MPLogError(@"Invalid survey name %@", name);
         }
-        if (!(questions && [questions count] > 0)) {
+        if (questions.count == 0) {
             valid = NO;
-            MixpanelError(@"Survey must have at least one question %@", questions);
+            MPLogError(@"Survey must have at least one question %@", questions);
         }
 
         if (valid) {
@@ -90,7 +86,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"%@, (ID:%lu, collection:%lu questions:%lu)", self.name, (unsigned long)self.ID, (unsigned long)self.collectionID, (unsigned long)[self.questions count]];
+    return [NSString stringWithFormat:@"%@, (ID:%lu, collection:%lu questions:%lu)", self.name, (unsigned long)self.ID, (unsigned long)self.collectionID, (unsigned long)self.questions.count];
 }
 
 

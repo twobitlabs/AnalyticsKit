@@ -19,25 +19,33 @@
 - (id)transformedValue:(id)value
 {
     if ([value isKindOfClass:[NSAttributedString class]]) {
-        NSAttributedString *attributedString = value;
+        NSMutableAttributedString *attributedString = [value mutableCopy];
+        [attributedString beginEditing];
+        __block BOOL safe = NO;
+        [attributedString enumerateAttribute:NSParagraphStyleAttributeName inRange:NSMakeRange(0, attributedString.length) options:0 usingBlock:^(id value, NSRange range, BOOL *stop) {
+            if (value) {
+                NSParagraphStyle *paragraphStyle = value;
+                if([paragraphStyle respondsToSelector:@selector(headIndent)]) {
+                    safe = YES;
+                }
+            }
+        }];
+        if (!safe) {
+            [attributedString removeAttribute:NSParagraphStyleAttributeName range:NSMakeRange(0, attributedString.length)];
+        }
+        [attributedString endEditing];
 
         NSError *error = nil;
-        NSData *data = nil;
-
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-        if ([attributedString respondsToSelector:@selector(dataFromRange:documentAttributes:error:)]) {
-            data = [attributedString dataFromRange:NSMakeRange(0, [attributedString length])
-                                documentAttributes:@{ NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType}
-                                             error:&error];
-        }
-#endif
+        NSData *data = [attributedString dataFromRange:NSMakeRange(0, attributedString.length)
+                                    documentAttributes:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType}
+                                                 error:&error];
         if (data) {
             return @{
-                    @"mime_type" : @"text/html",
-                    @"data" : [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]
+                    @"mime_type": @"text/html",
+                    @"data": [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]
             };
         } else {
-            MixpanelError(@"Failed to convert NSAttributedString to HTML: %@", error);
+            MPLogError(@"Failed to convert NSAttributedString to HTML: %@", error);
         }
     }
 
@@ -53,16 +61,13 @@
 
         if ([mimeType isEqualToString:@"text/html"] && dataString) {
             NSError *error = nil;
-            NSAttributedString *attributedString;
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
             NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
-            attributedString = [[NSAttributedString alloc] initWithData:data
-                                                                options:@{ NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType}
-                                                     documentAttributes:NULL
-                                                                  error:&error];
-#endif
+            NSAttributedString *attributedString = [[NSAttributedString alloc] initWithData:data
+                                                                                    options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType}
+                                                                         documentAttributes:NULL
+                                                                                      error:&error];
             if (attributedString == nil) {
-                MixpanelError(@"Failed to convert HTML to NSAttributed string: %@", error);
+                MPLogError(@"Failed to convert HTML to NSAttributed string: %@", error);
             }
 
             return attributedString;

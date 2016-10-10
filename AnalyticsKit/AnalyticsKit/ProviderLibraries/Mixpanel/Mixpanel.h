@@ -1,9 +1,18 @@
 #import <Foundation/Foundation.h>
-
 #import <UIKit/UIKit.h>
 
-@class    MixpanelPeople;
+#import "MixpanelPeople.h"
+
+#if TARGET_OS_TV
+    #define MIXPANEL_TVOS_EXTENSION 1
+#endif
+
+#define MIXPANEL_LIMITED_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION))
+
+@class    MixpanelPeople, MPSurvey;
 @protocol MixpanelDelegate;
+
+NS_ASSUME_NONNULL_BEGIN
 
 /*!
  @class
@@ -25,7 +34,7 @@
  [mixpanel track:@"Button Clicked"];
 
  // Set properties on a user in Mixpanel People
- [mixpanel.people identify:@"CURRENT USER DISTINCT ID"];
+ [mixpanel identify:@"CURRENT USER DISTINCT ID"];
  [mixpanel.people set:@"Plan" to:@"Premium"];
  </pre>
 
@@ -66,21 +75,13 @@
  @property
 
  @abstract
- Current user's name in Mixpanel Streams.
- */
-@property (atomic, copy) NSString *nameTag;
-
-/*!
- @property
-
- @abstract
  The base URL used for Mixpanel API requests.
 
  @discussion
  Useful if you need to proxy Mixpanel requests. Defaults to
  https://api.mixpanel.com.
  */
-@property (atomic, copy) NSString *serverURL;
+@property (nonatomic, copy) NSString *serverURL;
 
 /*!
  @property
@@ -116,7 +117,7 @@
  @discussion
  Defaults to YES.
  */
-@property (atomic) BOOL showNetworkActivityIndicator;
+@property (atomic) BOOL shouldManageNetworkActivityIndicator;
 
 /*!
  @property
@@ -146,6 +147,30 @@
  identified user.
  */
 @property (atomic) BOOL showSurveyOnActive;
+
+/*!
+ @property
+ 
+ @abstract
+ Determines whether a valid survey is available to show to the user.
+ 
+ @discussion
+ If we haven't fetched the surveys yet, this will return NO. Otherwise
+ it will return yes if there is at least one survey available.
+ */
+@property (atomic, readonly) BOOL isSurveyAvailable;
+
+/*!
+ @property
+ 
+ @abstract
+ Returns a list of available surveys. You can then call <code>showSurveyWithID:</code>
+ and pass in <code>survey.ID</code>
+ 
+ @discussion
+ If we haven't fetched the surveys yet, this will return nil.
+ */
+@property (atomic, readonly) NSArray<MPSurvey *> *availableSurveys;
 
 /*!
  @property
@@ -189,6 +214,54 @@
 
 /*!
  @property
+ 
+ @abstract
+ Controls whether to automatically send the client IP Address as part of 
+ event tracking. With an IP address, geo-location is possible down to neighborhoods
+ within a city, although the Mixpanel Dashboard will just show you city level location
+ specificity. For privacy reasons, you may be in a situation where you need to forego
+ effectively having access to such granular location information via the IP Address.
+ 
+ @discussion
+ Defaults to YES.
+ */
+@property (atomic) BOOL useIPAddressForGeoLocation;
+
+/*!
+ @property
+ 
+ @abstract
+ Controls whether to enable the visual test designer for A/B testing and codeless on mixpanel.com. 
+ You will be unable to edit A/B tests and codeless events with this disabled, however *previously*
+ created A/B tests and codeless events will still be delivered.
+ 
+ @discussion
+ Defaults to YES.
+ */
+@property (atomic) BOOL enableVisualABTestAndCodeless;
+
+/*!
+ @property
+ 
+ @abstract
+ Controls whether to enable the run time debug logging at all levels. Note that the
+ Mixpanel SDK uses Apple System Logging to forward log messages to `STDERR`, this also
+ means that mixpanel logs are segmented by log level. Settings this to `YES` will enable 
+ Mixpanel logging at the following levels:
+ 
+   * Error - Something has failed 
+   * Warning - Something is amiss and might fail if not corrected
+   * Info - The lowest priority that is normally logged, purely informational in nature
+   * Debug - Information useful only to developers, and normally not logged.
+ 
+ 
+ @discussion
+ Defaults to NO.
+ */
+@property (atomic) BOOL enableLogging;
+
+/*!
+ @property
 
  @abstract
  Determines the time, in seconds, that a mini notification will remain on
@@ -210,7 +283,7 @@
  UINavigationController that is showing when the notification is presented, the 
  UINavigationBar default color for the app or the UITabBar default color.
  */
-@property (atomic) UIColor* miniNotificationBackgroundColor;
+@property (atomic, strong, nullable) UIColor *miniNotificationBackgroundColor;
 
 /*!
  @property
@@ -269,7 +342,7 @@
  @param launchOptions   your application delegate's launchOptions
 
  */
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions;
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions;
 
 /*!
  @method
@@ -299,7 +372,7 @@
  @param launchOptions   optional app delegate launchOptions
  @param flushInterval   interval to run background flushing
  */
-- (instancetype)initWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval;
+- (instancetype)initWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval;
 
 /*!
  @method
@@ -384,7 +457,7 @@
  @param event           event name
  @param properties      properties dictionary
  */
-- (void)track:(NSString *)event properties:(NSDictionary *)properties;
+- (void)track:(NSString *)event properties:(nullable NSDictionary *)properties;
 
 
 /*!
@@ -455,7 +528,7 @@
  @param properties      properties dictionary
  @param defaultValue    overwrite existing properties that have this value
  */
-- (void)registerSuperPropertiesOnce:(NSDictionary *)properties defaultValue:(id)defaultValue;
+- (void)registerSuperPropertiesOnce:(NSDictionary *)properties defaultValue:(nullable id)defaultValue;
 
 /*!
  @method
@@ -569,7 +642,7 @@
  are called when an app is brought to the background and require a handler to
  be called when it finishes.
  */
-- (void)flushWithCompletion:(void (^)())handler;
+- (void)flushWithCompletion:(nullable void (^)())handler;
 
 /*!
  @method
@@ -618,9 +691,10 @@
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
 - (NSString *)libVersion;
++ (NSString *)libVersion;
 
 
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !MIXPANEL_LIMITED_SUPPORT
 #pragma mark - Mixpanel Surveys
 
 /*!
@@ -714,222 +788,18 @@
  Same as joinExperiments but will fire the given callback after all experiments
  have been loaded and applied.
  */
-- (void)joinExperimentsWithCallback:(void(^)())experimentsLoadedCallback;
+- (void)joinExperimentsWithCallback:(nullable void (^)())experimentsLoadedCallback;
 
 #endif
 
-@end
-
+#pragma mark - Deprecated
 /*!
- @class
- Mixpanel People API.
-
+ @property
+ 
  @abstract
- Access to the Mixpanel People API, available as a property on the main
- Mixpanel API.
-
- @discussion
- <b>You should not instantiate this object yourself.</b> An instance of it will
- be available as a property of the main Mixpanel object. Calls to Mixpanel
- People methods will look like this:
-
- <pre>
- [mixpanel.people increment:@"App Opens" by:1];
- </pre>
-
- Please note that the core <code>Mixpanel</code> and
- <code>MixpanelPeople</code> classes share the <code>identify:</code> method.
- The <code>Mixpanel</code> <code>identify:</code> affects the
- <code>distinct_id</code> property of events sent by <code>track:</code> and
- <code>track:properties:</code> and determines which Mixpanel People user
- record will be updated by <code>set:</code>, <code>increment:</code> and other
- <code>MixpanelPeople</code> methods.
-
- <b>If you are going to set your own distinct IDs for core Mixpanel event
- tracking, make sure to use the same distinct IDs when using Mixpanel
- People</b>.
+ Current user's name in Mixpanel Streams.
  */
-@interface MixpanelPeople : NSObject
-
-/*!
- @method
-
- @abstract
- Register the given device to receive push notifications.
-
- @discussion
- This will associate the device token with the current user in Mixpanel People,
- which will allow you to send push notifications to the user from the Mixpanel
- People web interface. You should call this method with the <code>NSData</code>
- token passed to
- <code>application:didRegisterForRemoteNotificationsWithDeviceToken:</code>.
-
- @param deviceToken     device token as returned <code>application:didRegisterForRemoteNotificationsWithDeviceToken:</code>
- */
-- (void)addPushDeviceToken:(NSData *)deviceToken;
-
-/*!
- @method
-
- @abstract
- Set properties on the current user in Mixpanel People.
-
- @discussion
- The properties will be set on the current user. The keys must be NSString
- objects and the values should be NSString, NSNumber, NSArray, NSDate, or
- NSNull objects. We use an NSAssert to enforce this type requirement. In
- release mode, the assert is stripped out and we will silently convert
- incorrect types to strings using [NSString stringWithFormat:@"%@", value]. You
- can override the default the current project token and distinct ID by
- including the special properties: $token and $distinct_id. If the existing
- user record on the server already has a value for a given property, the old
- value is overwritten. Other existing properties will not be affected.
-
- <pre>
- // applies to both Mixpanel Engagement track: AND Mixpanel People set: and
- // increment: calls
- [mixpanel identify:distinctId];
-
- // applies ONLY to Mixpanel People set: and increment: calls
- [mixpanel.people identify:distinctId];
- </pre>
-
- @param properties       properties dictionary
-
- */
-- (void)set:(NSDictionary *)properties;
-
-/*!
- @method
-
- @abstract
- Convenience method for setting a single property in Mixpanel People.
-
- @discussion
- Property keys must be <code>NSString</code> objects and values must be
- <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
- <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
- <code>NSURL</code> objects.
-
- @param property        property name
- @param object          property value
- */
-- (void)set:(NSString *)property to:(id)object;
-
-/*!
- @method
-
- @abstract
- Set properties on the current user in Mixpanel People, but don't overwrite if
- there is an existing value.
-
- @discussion
- This method is identical to <code>set:</code> except it will only set
- properties that are not already set. It is particularly useful for collecting
- data about the user's initial experience and source, as well as dates
- representing the first time something happened.
-
- @param properties       properties dictionary
-
- */
-- (void)setOnce:(NSDictionary *)properties;
-
-/*!
- @method
-
- @abstract
- Increment the given numeric properties by the given values.
-
- @discussion
- Property keys must be NSString names of numeric properties. A property is
- numeric if its current value is a number. If a property does not exist, it
- will be set to the increment amount. Property values must be NSNumber objects.
-
- @param properties      properties dictionary
- */
-- (void)increment:(NSDictionary *)properties;
-
-/*!
- @method
-
- @abstract
- Convenience method for incrementing a single numeric property by the specified
- amount.
-
- @param property        property name
- @param amount          amount to increment by
- */
-- (void)increment:(NSString *)property by:(NSNumber *)amount;
-
-/*!
- @method
-
- @abstract
- Append values to list properties.
-
- @discussion
- Property keys must be <code>NSString</code> objects and values must be
- <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
- <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
- <code>NSURL</code> objects.
-
- @param properties      mapping of list property names to values to append
- */
-- (void)append:(NSDictionary *)properties;
-
-/*!
- @method
-
- @abstract
- Union list properties.
-
- @discussion
- Property keys must be <code>NSArray</code> objects.
-
- @param properties      mapping of list property names to lists to union
- */
-- (void)union:(NSDictionary *)properties;
-
-/*!
- @method
-
- @abstract
- Track money spent by the current user for revenue analytics.
-
- @param amount          amount of revenue received
- */
-- (void)trackCharge:(NSNumber *)amount;
-
-/*!
- @method
-
- @abstract
- Track money spent by the current user for revenue analytics and associate
- properties with the charge.
-
- @discussion
- Charge properties allow you segment on types of revenue. For instance, you
- could record a product ID with each charge so that you could segment on it in
- revenue analytics to see which products are generating the most revenue.
- */
-- (void)trackCharge:(NSNumber *)amount withProperties:(NSDictionary *)properties;
-
-
-/*!
- @method
-
- @abstract
- Delete current user's revenue history.
- */
-- (void)clearCharges;
-
-/*!
- @method
-
- @abstract
- Delete current user's record from Mixpanel People.
- */
-- (void)deleteUser;
+@property (nullable, atomic, copy) NSString *nameTag __deprecated; // Deprecated in v3.0.1
 
 @end
 
@@ -945,9 +815,10 @@
  beyond simply calling stop: and start: before and after a particular block of
  your code.
  */
-@protocol MixpanelDelegate <NSObject>
-@optional
 
+@protocol MixpanelDelegate <NSObject>
+
+@optional
 /*!
  @method
 
@@ -962,3 +833,5 @@
 - (BOOL)mixpanelWillFlush:(Mixpanel *)mixpanel;
 
 @end
+
+NS_ASSUME_NONNULL_END
