@@ -10,7 +10,6 @@
 #import <OCMock/OCMock.h>
 #import "AnalyticsKitApsalarProvider.h"
 #import "AnalyticsKitLocalyticsProvider.h"
-#import "AnalyticsKitMixpanelProvider.h"
 #import "AnalyticsKitParseProvider.h"
 #import "AnalyticsKit-Swift.h"
 
@@ -33,7 +32,7 @@
                            // Localytics validates the key when you initialize it, so it can't be empty or fake
                            // This key is for the "AnalyticsKit iOS app"
                            [[AnalyticsKitLocalyticsProvider alloc] initWithAPIKey:@"03a5f224fe2408887ac32dd-68937c2c-fd90-11e4-b9d0-00eba64cb0ec"],
-                           [[AnalyticsKitMixpanelProvider alloc] initWithAPIKey:nil],
+                           [[AnalyticsKitMixpanelProvider alloc] initWithAPIKey:@"xyz123"],
                            [[AnalyticsKitParseProvider alloc] initWithApplicationId:@"x" clientKey:@"y"],
                            [[AnalyticsKitMParticleProvider alloc] initWithKey:@"test-key" secret:@"test-secret" defaultEventType:MPEventTypeOther installationType:MPInstallationTypeAutodetect environment:MPEnvironmentAutoDetect proxyAppDelegate:NO],
                            [AnalyticsKitUnitTestProvider new]

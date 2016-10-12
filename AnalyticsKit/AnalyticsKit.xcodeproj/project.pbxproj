@@ -195,13 +195,13 @@
 		8B3CDEDF1DAC3FEA0085F45D /* UIImage+MPImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B3CDE7F1DAC3FEA0085F45D /* UIImage+MPImageEffects.m */; };
 		8B3CDEE01DAC3FEA0085F45D /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B3CDE811DAC3FEA0085F45D /* UIView+MPHelpers.m */; };
 		8B3CDEE11DAC3FEA0085F45D /* UIViewController+AutomaticEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B3CDE831DAC3FEA0085F45D /* UIViewController+AutomaticEvents.m */; };
+		8B6DDF611DAEEFEF007DB912 /* AnalyticsKitMixpanelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6DDF601DAEEFEF007DB912 /* AnalyticsKitMixpanelProvider.swift */; };
 		8BA2B7941D52A3A3008F5E60 /* AnalyticsKitDebugProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA2B7931D52A3A3008F5E60 /* AnalyticsKitDebugProvider.swift */; };
 		8BA2B7961D52A3B5008F5E60 /* AnalyticsKitAdjustIOProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA2B7951D52A3B5008F5E60 /* AnalyticsKitAdjustIOProvider.swift */; };
 		8BA2B7981D52A3C6008F5E60 /* AnalyticsKitCrashlyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA2B7971D52A3C6008F5E60 /* AnalyticsKitCrashlyticsProvider.swift */; };
 		8BA2B79C1D52A3E5008F5E60 /* AnalyticsKitGoogleAnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA2B79B1D52A3E5008F5E60 /* AnalyticsKitGoogleAnalyticsProvider.swift */; };
 		9C0EF30918E0C33700D19A2C /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF30118E0C33700D19A2C /* libOCMock.a */; };
 		9C0EF31318E0D19F00D19A2C /* AnalyticsKitApsalarProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799F418183A6B00488101 /* AnalyticsKitApsalarProvider.m */; };
-		9C0EF31718E0D1B800D19A2C /* AnalyticsKitMixpanelProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C379A0018183A6B00488101 /* AnalyticsKitMixpanelProvider.m */; };
 		9C0EF31918E0D1C500D19A2C /* AnalyticsKitParseProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C379A0618183A6B00488101 /* AnalyticsKitParseProvider.m */; };
 		9C0EF36818E0EDB100D19A2C /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF36718E0EDB100D19A2C /* CoreTelephony.framework */; };
 		9C0EF36A18E0EDBC00D19A2C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0EF36918E0EDBC00D19A2C /* SystemConfiguration.framework */; };
@@ -606,6 +606,8 @@
 		8B3CDE821DAC3FEA0085F45D /* UIViewController+AutomaticEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+AutomaticEvents.h"; sourceTree = "<group>"; };
 		8B3CDE831DAC3FEA0085F45D /* UIViewController+AutomaticEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+AutomaticEvents.m"; sourceTree = "<group>"; };
 		8B3CDE841DAC3FEA0085F45D /* watchos.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = watchos.modulemap; sourceTree = "<group>"; };
+		8B6DDF601DAEEFEF007DB912 /* AnalyticsKitMixpanelProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitMixpanelProvider.swift; sourceTree = "<group>"; };
+		8B6DDF621DAEF0F3007DB912 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		8BA2B7931D52A3A3008F5E60 /* AnalyticsKitDebugProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnalyticsKitDebugProvider.swift; path = ../../AnalyticsKitDebugProvider.swift; sourceTree = "<group>"; };
 		8BA2B7951D52A3B5008F5E60 /* AnalyticsKitAdjustIOProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitAdjustIOProvider.swift; sourceTree = "<group>"; };
 		8BA2B7971D52A3C6008F5E60 /* AnalyticsKitCrashlyticsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnalyticsKitCrashlyticsProvider.swift; path = Crashlytics/AnalyticsKitCrashlyticsProvider.swift; sourceTree = "<group>"; };
@@ -664,8 +666,6 @@
 		9C3799ED18183A6B00488101 /* NSNumber+Buckets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+Buckets.m"; sourceTree = "<group>"; };
 		9C3799F318183A6B00488101 /* AnalyticsKitApsalarProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsKitApsalarProvider.h; sourceTree = "<group>"; };
 		9C3799F418183A6B00488101 /* AnalyticsKitApsalarProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsKitApsalarProvider.m; sourceTree = "<group>"; };
-		9C3799FF18183A6B00488101 /* AnalyticsKitMixpanelProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsKitMixpanelProvider.h; sourceTree = "<group>"; };
-		9C379A0018183A6B00488101 /* AnalyticsKitMixpanelProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsKitMixpanelProvider.m; sourceTree = "<group>"; };
 		9C379A0218183A6B00488101 /* AnalyticsKitNewRelicProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsKitNewRelicProvider.h; sourceTree = "<group>"; };
 		9C379A0318183A6B00488101 /* AnalyticsKitNewRelicProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsKitNewRelicProvider.m; sourceTree = "<group>"; };
 		9C379A0518183A6B00488101 /* AnalyticsKitParseProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsKitParseProvider.h; sourceTree = "<group>"; };
@@ -1365,6 +1365,7 @@
 		9C3799A1181838FD00488101 = {
 			isa = PBXGroup;
 			children = (
+				8B6DDF621DAEF0F3007DB912 /* README.md */,
 				9C3799B3181838FD00488101 /* AnalyticsKit */,
 				9C3799D2181838FD00488101 /* AnalyticsKitTests */,
 				9C3799AC181838FD00488101 /* Frameworks */,
@@ -1527,8 +1528,7 @@
 		9C3799FE18183A6B00488101 /* Mixpanel */ = {
 			isa = PBXGroup;
 			children = (
-				9C3799FF18183A6B00488101 /* AnalyticsKitMixpanelProvider.h */,
-				9C379A0018183A6B00488101 /* AnalyticsKitMixpanelProvider.m */,
+				8B6DDF601DAEEFEF007DB912 /* AnalyticsKitMixpanelProvider.swift */,
 			);
 			path = Mixpanel;
 			sourceTree = "<group>";
@@ -1684,6 +1684,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B6DDF611DAEEFEF007DB912 /* AnalyticsKitMixpanelProvider.swift in Sources */,
 				8B3CDEC81DAC3FEA0085F45D /* MPSurveyQuestion.m in Sources */,
 				8B0964E41D53E86500F7762D /* AnalyticsKitFlurryProvider.swift in Sources */,
 				8BA2B7941D52A3A3008F5E60 /* AnalyticsKitDebugProvider.swift in Sources */,
@@ -1753,7 +1754,6 @@
 				8B3CDED11DAC3FEA0085F45D /* MPUIControlBinding.m in Sources */,
 				8B0966DA1D53EBBC00F7762D /* MPSession.m in Sources */,
 				8B3CDECD1DAC3FEA0085F45D /* MPTweakInline.m in Sources */,
-				9C0EF31718E0D1B800D19A2C /* AnalyticsKitMixpanelProvider.m in Sources */,
 				8B0964DF1D53DE8E00F7762D /* AnalyticsKitEvent.swift in Sources */,
 				8B3CDEAC1DAC3FEA0085F45D /* MPCGRectToNSDictionaryValueTransformer.m in Sources */,
 				8B0967091D53EBBC00F7762D /* MPNetworkPerformance.m in Sources */,

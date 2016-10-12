@@ -7,6 +7,7 @@
 
 #import "mParticle.h"
 #import "Flurry.h"
+#import "Mixpanel.h"
 #import <Adjust/Adjust.h>
 #import "GAI.h"
 #import "GAIDictionaryBuilder.h"
