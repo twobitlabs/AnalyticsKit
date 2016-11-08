@@ -45,7 +45,8 @@ class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
         if timed {
             if MParticle.sharedInstance().event(withName: event) != nil {
                 endTimedEvent(event, withProperties: [String: AnyObject]())
-            } else if let event = MPEvent(name: event, type: defaultEventType) {
+            }
+            if let event = MPEvent(name: event, type: defaultEventType) {
                 MParticle.sharedInstance().beginTimedEvent(event)
             }
         } else {
