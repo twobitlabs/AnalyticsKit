@@ -30,7 +30,7 @@ class AnalyticsKitGoogleAnalyticsProvider: NSObject, AnalyticsKitProvider {
         tracker.send(dict)
     }
 
-    func logScreen(_ screenName: String, withProperties properties: [String : AnyObject]) {
+    func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
 
     }
 
@@ -44,14 +44,14 @@ class AnalyticsKitGoogleAnalyticsProvider: NSObject, AnalyticsKitProvider {
         tracker.send(dict)
     }
 
-    fileprivate func valueFromDictionary(_ dictionary: [String: AnyObject], forKey key: String) -> AnyObject? {
-        if let value = dictionary[key.lowercased()] ?? dictionary[key] as AnyObject? {
+    fileprivate func valueFromDictionary(_ dictionary: [String: Any], forKey key: String) -> Any? {
+        if let value = dictionary[key.lowercased()] ?? dictionary[key] as Any? {
             return value
         }
         return nil
     }
 
-    func logEvent(_ event: String, withProperties properties: [String: AnyObject]) {
+    func logEvent(_ event: String, withProperties properties: [String: Any]) {
         let category = valueFromDictionary(properties, forKey: self.category) as? String
         let label = valueFromDictionary(properties, forKey: self.label) as? String
         let value = valueFromDictionary(properties, forKey: self.value) as? NSNumber
@@ -64,11 +64,11 @@ class AnalyticsKitGoogleAnalyticsProvider: NSObject, AnalyticsKitProvider {
 
     }
 
-    func logEvent(_ event: String, withProperties dict: [String: AnyObject], timed: Bool) {
+    func logEvent(_ event: String, withProperties dict: [String: Any], timed: Bool) {
 
     }
 
-    func endTimedEvent(_ event: String, withProperties dict: [String: AnyObject]) {
+    func endTimedEvent(_ event: String, withProperties dict: [String: Any]) {
 
     }
 

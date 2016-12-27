@@ -6,13 +6,13 @@ import Foundation
     func applicationWillTerminate()
     func uncaughtException(_ exception: NSException)
     func logScreen(_ screenName: String)
-    func logScreen(_ screenName: String, withProperties properties: [String: AnyObject])
+    func logScreen(_ screenName: String, withProperties properties: [String: Any])
     func logEvent(_ event: String)
     func logEvent(_ event: String, withProperty key: String, andValue value: String)
-    func logEvent(_ event: String, withProperties properties: [String: AnyObject])
+    func logEvent(_ event: String, withProperties properties: [String: Any])
     func logEvent(_ event: String, timed: Bool)
-    func logEvent(_ event: String, withProperties properties: [String: AnyObject], timed: Bool)
-    func endTimedEvent(_ event: String, withProperties properties: [String: AnyObject])
+    func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool)
+    func endTimedEvent(_ event: String, withProperties properties: [String: Any])
     func logError(_ name: String, message: String?, exception: NSException?)
     func logError(_ name: String, message: String?, error: NSError?)
 }
@@ -72,7 +72,7 @@ class AnalyticsKit: NSObject {
         channel(DefaultChannel).logScreen(screenName)
     }
 
-    class func logScreen(_ screenName: String, withProperties properties: [String: AnyObject]) {
+    class func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
         channel(DefaultChannel).logScreen(screenName, withProperties: properties)
     }
 
@@ -84,7 +84,7 @@ class AnalyticsKit: NSObject {
         channel(DefaultChannel).logEvent(event, withProperty: property, andValue: value)
     }
     
-    class func logEvent(_ event: String, withProperties properties: [String: AnyObject]) {
+    class func logEvent(_ event: String, withProperties properties: [String: Any]) {
         channel(DefaultChannel).logEvent(event, withProperties: properties)
     }
     
@@ -92,11 +92,11 @@ class AnalyticsKit: NSObject {
         channel(DefaultChannel).logEvent(event, timed: timed)
     }
     
-    class func logEvent(_ event: String, withProperties properties: [String: AnyObject], timed: Bool) {
+    class func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool) {
         channel(DefaultChannel).logEvent(event, withProperties: properties, timed: timed)
     }
     
-    class func endTimedEvent(_ event: String, withProperties properties: [String: AnyObject]) {
+    class func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {
         channel(DefaultChannel).endTimedEvent(event, withProperties: properties)
     }
     
@@ -158,7 +158,7 @@ class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func logScreen(_ screenName: String, withProperties properties: [String: AnyObject]) {
+    func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
         AKLog("\(channelName) \(screenName) withProperties: \(properties.description)")
         for provider in providers {
             provider.logScreen(screenName, withProperties: properties)
@@ -179,7 +179,7 @@ class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func logEvent(_ event: String, withProperties properties: [String: AnyObject]) {
+    func logEvent(_ event: String, withProperties properties: [String: Any]) {
         AKLog("\(channelName) \(event) withProperties: \(properties.description)")
         for provider in providers {
             provider.logEvent(event, withProperties: properties)
@@ -193,14 +193,14 @@ class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func logEvent(_ event: String, withProperties properties: [String: AnyObject], timed: Bool) {
+    func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool) {
         AKLog("\(channelName) \(event) withProperties: \(properties) timed: \(timed)")
         for provider in providers {
             provider.logEvent(event, withProperties: properties, timed: timed)
         }
     }
 
-    func endTimedEvent(_ event: String, withProperties properties: [String: AnyObject]) {
+    func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {
         AKLog("\(channelName) \(event) withProperties: \(properties)")
         for provider in providers {
             provider.endTimedEvent(event, withProperties: properties)

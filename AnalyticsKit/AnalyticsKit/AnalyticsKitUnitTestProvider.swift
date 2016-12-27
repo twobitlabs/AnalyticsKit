@@ -82,7 +82,7 @@ class AnalyticsKitUnitTestProvider: NSObject, AnalyticsKitProvider {
         logEvent("Screen - \(screenName)")
     }
 
-    func logScreen(_ screenName: String, withProperties properties: [String : AnyObject]) {
+    func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
         logEvent("Screen - \(screenName)", withProperties: properties)
     }
 
@@ -91,10 +91,10 @@ class AnalyticsKitUnitTestProvider: NSObject, AnalyticsKitProvider {
     }
 
     func logEvent(_ event: String, withProperty key: String, andValue value: String) {
-        self.logEvent(event, withProperties: [key: value as AnyObject])
+        self.logEvent(event, withProperties: [key: value])
     }
 
-    func logEvent(_ event: String, withProperties properties: [String : AnyObject]) {
+    func logEvent(_ event: String, withProperties properties: [String: Any]) {
         self.events.append(AnalyticsKitEvent(event: event, withProperties: properties))
     }
 
@@ -102,12 +102,12 @@ class AnalyticsKitUnitTestProvider: NSObject, AnalyticsKitProvider {
         self.events.append(AnalyticsKitEvent(event: event))
     }
 
-    func logEvent(_ event: String, withProperties properties: [String : AnyObject], timed: Bool) {
+    func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool) {
         self.logEvent(event, withProperties: properties)
     }
 
 
-    func endTimedEvent(_ event: String, withProperties properties: [String : AnyObject]) {
+    func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {
     }
 
     func logError(_ name: String, message: String?, exception: NSException?) {

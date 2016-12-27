@@ -3,24 +3,24 @@ import Foundation
 class AnalyticsKitEvent: NSObject {
 
     var name: String
-    var properties = [String: AnyObject]()
+    var properties = [String: Any]()
     var startTime: Date?
 
     init(event: String) {
         self.name = event
     }
 
-    init(event: String, withProperties properties: [String : AnyObject]) {
+    init(event: String, withProperties properties: [String: Any]) {
         self.name = event
         self.properties = properties
     }
 
-    init(event: String, withKey key: String, andValue value: AnyObject) {
+    init(event: String, withKey key: String, andValue value: Any) {
         self.name = event
         self.properties = [key: value]
     }
 
-    func setProperty(_ value: AnyObject, forKey key: String) {
+    func setProperty(_ value: Any, forKey key: String) {
         properties[key] = value
     }
 

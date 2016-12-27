@@ -8,7 +8,7 @@ class AnalyticsKitTimedEventHelper: NSObject {
         self.startTimedEventWithName(name, properties: nil, forProvider: provider)
     }
 
-    class func startTimedEventWithName(_ name: String, properties: [String: AnyObject]?, forProvider provider: AnalyticsKitProvider) {
+    class func startTimedEventWithName(_ name: String, properties: [String: Any]?, forProvider provider: AnalyticsKitProvider) {
         let providerClass: String = NSStringFromClass(type(of: provider))
         var providerDict = events[providerClass]
         if providerDict == nil {
@@ -35,7 +35,7 @@ class AnalyticsKitTimedEventHelper: NSObject {
         }
         if let event = event, let startTime = event.startTime {
             let elapsedTime: TimeInterval = Date().timeIntervalSince(startTime as Date)
-            event.setProperty(elapsedTime as AnyObject, forKey: "AnalyticsKitEventTimeSeconds")
+            event.setProperty(elapsedTime, forKey: "AnalyticsKitEventTimeSeconds")
         }
         return event
     }

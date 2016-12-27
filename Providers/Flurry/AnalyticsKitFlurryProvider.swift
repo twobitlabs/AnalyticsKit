@@ -23,7 +23,7 @@ class AnalyticsKitFlurryProvider: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func logScreen(_ screenName: String, withProperties properties: [String : AnyObject]) {
+    func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
         runOnMainThread {
             Flurry.logEvent("Screen - \(screenName)", withParameters: properties)
         }
@@ -41,7 +41,7 @@ class AnalyticsKitFlurryProvider: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func logEvent(_ event: String, withProperties properties: [String: AnyObject]) {
+    func logEvent(_ event: String, withProperties properties: [String: Any]) {
         runOnMainThread {
             Flurry.logEvent(event, withParameters: properties)
         }
@@ -53,13 +53,13 @@ class AnalyticsKitFlurryProvider: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func logEvent(_ event: String, withProperties properties: [String: AnyObject], timed: Bool) {
+    func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool) {
         runOnMainThread {
             Flurry.logEvent(event, withParameters: properties, timed: timed)
         }
     }
 
-    func endTimedEvent(_ event: String, withProperties properties: [String: AnyObject]) {
+    func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {
         runOnMainThread {
             // non-nil parameters will update the parameters
             Flurry.endTimedEvent(event, withParameters: properties)

@@ -14,7 +14,7 @@ class AnalyticsKitCrashlyticsProvider: NSObject, AnalyticsKitProvider {
         Answers.logCustomEvent(withName: "Screen - \(screenName)", customAttributes: nil)
     }
 
-    func logScreen(_ screenName: String, withProperties properties: [String : AnyObject]) {
+    func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
         clsLog("screen: \(screenName) properties: \(properties)")
         Answers.logCustomEvent(withName: "Screen - \(screenName)", customAttributes: properties)
     }
@@ -25,10 +25,10 @@ class AnalyticsKitCrashlyticsProvider: NSObject, AnalyticsKitProvider {
     }
 
     func logEvent(_ event: String, withProperty key: String, andValue value: String) {
-        logEvent(event, withProperties: [key: value as AnyObject])
+        logEvent(event, withProperties: [key: value])
     }
 
-    func logEvent(_ event: String, withProperties properties: [String: AnyObject]) {
+    func logEvent(_ event: String, withProperties properties: [String: Any]) {
         clsLog("event: \(event) properties: \(properties)")
         Answers.logCustomEvent(withName: event, customAttributes: properties)
     }
@@ -37,11 +37,11 @@ class AnalyticsKitCrashlyticsProvider: NSObject, AnalyticsKitProvider {
 
     }
 
-    func logEvent(_ event: String, withProperties dict: [String: AnyObject], timed: Bool) {
+    func logEvent(_ event: String, withProperties dict: [String: Any], timed: Bool) {
 
     }
 
-    func endTimedEvent(_ event: String, withProperties dict: [String: AnyObject]) {
+    func endTimedEvent(_ event: String, withProperties dict: [String: Any]) {
 
     }
 

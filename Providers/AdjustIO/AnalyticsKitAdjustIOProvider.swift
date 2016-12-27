@@ -20,7 +20,7 @@ class AnalyticsKitAdjustIOProvider: NSObject, AnalyticsKitProvider {
         logEvent("Screen - \(screenName)")
     }
 
-    func logScreen(_ screenName: String, withProperties properties: [String : AnyObject]) {
+    func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
         logEvent("Screen - \(screenName)", withProperties: properties)
     }
 
@@ -34,7 +34,7 @@ class AnalyticsKitAdjustIOProvider: NSObject, AnalyticsKitProvider {
         Adjust.trackEvent(event)
     }
 
-    func logEvent(_ event: String, withProperties properties: [String: AnyObject]) {
+    func logEvent(_ event: String, withProperties properties: [String: Any]) {
         let event = ADJEvent(eventToken: event)
         for (key, value) in properties {
             if let value = value as? String {
@@ -48,11 +48,11 @@ class AnalyticsKitAdjustIOProvider: NSObject, AnalyticsKitProvider {
         
     }
 
-    func logEvent(_ event: String, withProperties properties: [String: AnyObject], timed: Bool) {
+    func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool) {
 
     }
 
-    func endTimedEvent(_ event: String, withProperties dict: [String: AnyObject]) {
+    func endTimedEvent(_ event: String, withProperties dict: [String: Any]) {
 
     }
 

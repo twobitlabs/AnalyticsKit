@@ -13,13 +13,13 @@ class AnalyticsKitDebugProvider: NSObject, AnalyticsKitProvider {
 
     // Logging
     func logScreen(_ screenName: String) { }
-    func logScreen(_ screenName: String, withProperties properties: [String : AnyObject]) { }
+    func logScreen(_ screenName: String, withProperties properties: [String: Any]) { }
     func logEvent(_ event: String) { }
     func logEvent(_ event: String, withProperty key: String, andValue value: String) { }
-    func logEvent(_ event: String, withProperties properties: [String: AnyObject]) { }
+    func logEvent(_ event: String, withProperties properties: [String: Any]) { }
     func logEvent(_ event: String, timed: Bool) { }
-    func logEvent(_ event: String, withProperties dict: [String: AnyObject], timed: Bool) { }
-    func endTimedEvent(_ event: String, withProperties dict: [String: AnyObject]) { }
+    func logEvent(_ event: String, withProperties dict: [String: Any], timed: Bool) { }
+    func endTimedEvent(_ event: String, withProperties dict: [String: Any]) { }
 
     func logError(_ name: String, message: String?, exception: NSException?) {
         let message = "\(name)\n\n\(message ?? "nil")\n\n\(exception?.description ?? "nil")"

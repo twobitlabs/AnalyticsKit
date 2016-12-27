@@ -24,7 +24,7 @@ class AnalyticsKitMixpanelProvider: NSObject, AnalyticsKitProvider {
         logEvent("Screen - \(screenName)")
     }
 
-    func logScreen(_ screenName: String, withProperties properties: [String : AnyObject]) {
+    func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
         logEvent("Screen - \(screenName)", withProperties: properties)
     }
 
@@ -33,10 +33,10 @@ class AnalyticsKitMixpanelProvider: NSObject, AnalyticsKitProvider {
     }
 
     func logEvent(_ event: String, withProperty key: String, andValue value: String) {
-        logEvent(event, withProperties: [key: value as AnyObject])
+        logEvent(event, withProperties: [key: value])
     }
 
-    func logEvent(_ event: String, withProperties properties: [String: AnyObject]) {
+    func logEvent(_ event: String, withProperties properties: [String: Any]) {
         Mixpanel.sharedInstance().track(event, properties: properties)
     }
 
@@ -48,7 +48,7 @@ class AnalyticsKitMixpanelProvider: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func logEvent(_ event: String, withProperties properties: [String: AnyObject], timed: Bool) {
+    func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool) {
         if timed {
             Mixpanel.sharedInstance().timeEvent(event)
         } else {
@@ -56,7 +56,7 @@ class AnalyticsKitMixpanelProvider: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func endTimedEvent(_ event: String, withProperties properties: [String: AnyObject]) {
+    func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {
         // Mixpanel documentation: timeEvent followed by a track with the same event name would record the duration
         Mixpanel.sharedInstance().track(event, properties: properties)
     }
