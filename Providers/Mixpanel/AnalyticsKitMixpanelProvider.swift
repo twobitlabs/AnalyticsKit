@@ -62,24 +62,30 @@ class AnalyticsKitMixpanelProvider: NSObject, AnalyticsKitProvider {
     }
 
     func logError(_ name: String, message: String?, exception: NSException?) {
-        Mixpanel.sharedInstance().track("Exceptions", properties: [
-            "name" : name,
-            "message" : message,
-            "ename" : exception?.name ?? "nil",
-            "reason" : exception?.reason ?? "nil",
-            "userInfo" : exception?.userInfo ?? "nil"
-        ] as [AnyHashable: Any])
+        var properties = [AnyHashable: Any]()
+        properties["name"] = name
+        properties["message"] = message
+        if let exception = exception {
+            properties["ename"] = exception.name
+            properties["reason"] = exception.reason
+            properties["userInfo"] = exception.userInfo
+        }
+
+        Mixpanel.sharedInstance().track("Exceptions", properties: properties)
     }
 
     func logError(_ name: String, message: String?, error: NSError?) {
-        Mixpanel.sharedInstance().track("Errors", properties: [
-            "name" : name,
-            "message" : message,
-            "description" : error?.localizedDescription ?? "nil",
-            "code" : "\(error?.code ?? 0)",
-            "domain" : error?.domain  ?? "nil",
-            "userInfo" : error?.userInfo.description  ?? "nil"
-        ] as [AnyHashable: Any])
+        var properties = [AnyHashable: Any]()
+        properties["name"] = name
+        properties["message"] = message
+        if let error = error {
+            properties["description"] = error.localizedDescription
+            properties["code"] = error.code
+            properties["domain"] = error.domain
+            properties["userInfo"] = error.userInfo.description
+        }
+
+        Mixpanel.sharedInstance().track("Errors", properties: properties)
     }
     
 }
