@@ -10,6 +10,7 @@
 		14DA91921B7D680E000F194D /* Adjust.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14DA91911B7D680E000F194D /* Adjust.framework */; };
 		2E80B4831C526EFC00F8AD7A /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E80B4821C526EFC00F8AD7A /* libicucore.tbd */; };
 		2EE8B81C1C52CAF300DC2534 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E80B4821C526EFC00F8AD7A /* libicucore.tbd */; };
+		3EB9DA5C1E14BA2D0054FF4A /* AnalyticsKitWatchExtensionFlurryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB9DA5B1E14BA2D0054FF4A /* AnalyticsKitWatchExtensionFlurryProvider.swift */; };
 		8B0964DD1D53D25500F7762D /* AnalyticsKitUnitTestProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0964DC1D53D25400F7762D /* AnalyticsKitUnitTestProvider.swift */; };
 		8B0964DF1D53DE8E00F7762D /* AnalyticsKitEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0964DE1D53DE8E00F7762D /* AnalyticsKitEvent.swift */; };
 		8B0964E11D53E13C00F7762D /* AnalyticsKitTimedEventHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0964E01D53E13C00F7762D /* AnalyticsKitTimedEventHelper.swift */; };
@@ -250,6 +251,7 @@
 /* Begin PBXFileReference section */
 		14DA91911B7D680E000F194D /* Adjust.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Adjust.framework; sourceTree = "<group>"; };
 		2E80B4821C526EFC00F8AD7A /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		3EB9DA5B1E14BA2D0054FF4A /* AnalyticsKitWatchExtensionFlurryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitWatchExtensionFlurryProvider.swift; sourceTree = "<group>"; };
 		8B0964DC1D53D25400F7762D /* AnalyticsKitUnitTestProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitUnitTestProvider.swift; sourceTree = "<group>"; };
 		8B0964DE1D53DE8E00F7762D /* AnalyticsKitEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnalyticsKitEvent.swift; path = ../../AnalyticsKitEvent.swift; sourceTree = "<group>"; };
 		8B0964E01D53E13C00F7762D /* AnalyticsKitTimedEventHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitTimedEventHelper.swift; sourceTree = "<group>"; };
@@ -1504,6 +1506,7 @@
 			isa = PBXGroup;
 			children = (
 				8BA2B7991D52A3D8008F5E60 /* AnalyticsKitFlurryProvider.swift */,
+				3EB9DA5B1E14BA2D0054FF4A /* AnalyticsKitWatchExtensionFlurryProvider.swift */,
 			);
 			path = Flurry;
 			sourceTree = "<group>";
@@ -1820,6 +1823,7 @@
 				8B3CDE9B1DAC3FEA0085F45D /* MPABTestDesignerChangeResponseMessage.m in Sources */,
 				9C379A0E18183A6B00488101 /* NSNumber+Buckets.m in Sources */,
 				8B0966D51D53EBBC00F7762D /* MPDataModelAbstract.m in Sources */,
+				3EB9DA5C1E14BA2D0054FF4A /* AnalyticsKitWatchExtensionFlurryProvider.swift in Sources */,
 				8B3CDED51DAC3FEA0085F45D /* MPUITableViewBinding.m in Sources */,
 				8B09671C1D53EBBC00F7762D /* MPZip.cpp in Sources */,
 				8B3B60411D51597600B9A17D /* AnalyticsKit.swift in Sources */,

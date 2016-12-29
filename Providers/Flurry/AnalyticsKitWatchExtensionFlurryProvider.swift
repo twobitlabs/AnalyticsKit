@@ -6,46 +6,46 @@ class AnalyticsKitWatchExtensionFlurryProvider: NSObject, AnalyticsKitProvider {
     func applicationWillEnterForeground() { }
     func applicationDidEnterBackground() { }
     func applicationWillTerminate() { }
-    func uncaughtException(exception: NSException) { }
+    func uncaughtException(_ exception: NSException) { }
 
     // Logging
-    func logScreen(screenName: String) {
+    func logScreen(_ screenName: String) {
         FlurryWatch.logWatchEvent("Screen - \(screenName)")
     }
 
-    func logScreen(screenName: String, withProperties properties: [String : AnyObject]) {
+    func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
         FlurryWatch.logWatchEvent("Screen - \(screenName)", withParameters: properties)
     }
 
-    func logEvent(event: String) {
+    func logEvent(_ event: String) {
         FlurryWatch.logWatchEvent(event)
     }
 
-    func logEvent(event: String, withProperty key: String, andValue value: String) {
+    func logEvent(_ event: String, withProperty key: String, andValue value: String) {
         FlurryWatch.logWatchEvent(event, withParameters: [value: key])
     }
 
-    func logEvent(event: String, withProperties properties: [String: AnyObject]) {
+    func logEvent(_ event: String, withProperties properties: [String: Any]) {
         FlurryWatch.logWatchEvent(event, withParameters: properties)
     }
 
-    func logEvent(event: String, timed: Bool) {
+    func logEvent(_ event: String, timed: Bool) {
 
     }
 
-    func logEvent(event: String, withProperties dict: [String: AnyObject], timed: Bool) {
+    func logEvent(_ event: String, withProperties dict: [String: Any], timed: Bool) {
 
     }
 
-    func endTimedEvent(event: String, withProperties dict: [String: AnyObject]) {
+    func endTimedEvent(_ event: String, withProperties dict: [String: Any]) {
 
     }
 
-    func logError(name: String, message: String?, exception: NSException?) {
+    func logError(_ name: String, message: String?, exception: NSException?) {
 
     }
 
-    func logError(name: String, message: String?, error: NSError?) {
+    func logError(_ name: String, message: String?, error: NSError?) {
 
     }
 
