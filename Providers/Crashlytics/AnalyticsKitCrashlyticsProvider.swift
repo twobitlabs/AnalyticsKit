@@ -49,8 +49,8 @@ class AnalyticsKitCrashlyticsProvider: NSObject, AnalyticsKitProvider {
         clsLog("error: \(name) message: \(message ?? "nil") exception: \(exception?.description ?? "nil")")
     }
 
-    func logError(_ name: String, message: String?, error: NSError?) {
-        clsLog("error: \(name) message: \(message ?? "nil") error: \(error?.description ?? "nil")")
+    func logError(_ name: String, message: String?, error: Error?) {
+        clsLog("error: \(name) message: \(message ?? "nil") error: \(error?.localizedDescription ?? "nil")")
     }
 
     fileprivate func clsLog(_ message: String) {

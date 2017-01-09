@@ -26,8 +26,8 @@ class AnalyticsKitDebugProvider: NSObject, AnalyticsKitProvider {
         showAlert(message)
     }
 
-    func logError(_ name: String, message: String?, error: NSError?) {
-        let message = "\(name)\n\n\(message ?? "nil")\n\n\(error?.description ?? "nil")"
+    func logError(_ name: String, message: String?, error: Error?) {
+        let message = "\(name)\n\n\(message ?? "nil")\n\n\(error?.localizedDescription ?? "nil")"
         showAlert(message)
     }
 

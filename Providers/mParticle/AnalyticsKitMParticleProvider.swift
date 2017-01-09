@@ -85,13 +85,13 @@ class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func logError(_ name: String, message: String?, error: NSError?) {
+    func logError(_ name: String, message: String?, error: Error?) {
         var eventInfo = [String: Any]()
         if let message = message {
             eventInfo["message"] = message
         }
         if let error = error {
-            eventInfo["error"] = error.description
+            eventInfo["error"] = error.localizedDescription
         }
         MParticle.sharedInstance().logError(name, eventInfo: eventInfo)
     }

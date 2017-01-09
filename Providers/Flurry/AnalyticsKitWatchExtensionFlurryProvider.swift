@@ -45,7 +45,7 @@ class AnalyticsKitWatchExtensionFlurryProvider: NSObject, AnalyticsKitProvider {
 
     }
 
-    func logError(_ name: String, message: String?, error: NSError?) {
+    func logError(_ name: String, message: String?, error: Error?) {
 
     }
 

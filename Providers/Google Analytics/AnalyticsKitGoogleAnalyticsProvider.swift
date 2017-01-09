@@ -73,13 +73,13 @@ class AnalyticsKitGoogleAnalyticsProvider: NSObject, AnalyticsKitProvider {
     }
 
     func logError(_ name: String, message: String?, exception: NSException?) {
-        // isFatal = NO, presume here, Exeption is not fatal.
+        // isFatal = NO, presume here, Exception is not fatal.
         let dict = GAIDictionaryBuilder.createException(withDescription: message ?? "nil", withFatal: 0).build() as [NSObject: AnyObject]
         tracker.send(dict)
     }
 
-    func logError(_ name: String, message: String?, error: NSError?) {
-        // isFatal = NO, presume here, Exeption is not fatal.
+    func logError(_ name: String, message: String?, error: Error?) {
+        // isFatal = NO, presume here, Exception is not fatal.
         let dict = GAIDictionaryBuilder.createException(withDescription: message ?? "nil", withFatal: 0).build() as [NSObject: AnyObject]
         tracker.send(dict)
     }

@@ -14,7 +14,7 @@ import Foundation
     func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool)
     func endTimedEvent(_ event: String, withProperties properties: [String: Any])
     func logError(_ name: String, message: String?, exception: NSException?)
-    func logError(_ name: String, message: String?, error: NSError?)
+    func logError(_ name: String, message: String?, error: Error?)
 }
 
 class AnalyticsKit: NSObject {
@@ -104,7 +104,7 @@ class AnalyticsKit: NSObject {
         channel(DefaultChannel).logError(name, message: message, exception: exception)
     }
     
-    class func logError(_ name: String, message: String?, error: NSError?) {
+    class func logError(_ name: String, message: String?, error: Error?) {
         channel(DefaultChannel).logError(name, message: message, error: error)
     }
     
@@ -214,8 +214,8 @@ class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func logError(_ name: String, message: String?, error: NSError?) {
-        AKLog("\(channelName) \(name) message: \(message ?? "nil") error: \(error?.description ?? "nil")")
+    func logError(_ name: String, message: String?, error: Error?) {
+        AKLog("\(channelName) \(name) message: \(message ?? "nil") error: \(error?.localizedDescription ?? "nil")")
         for provider in providers {
             provider.logError(name, message: message, error: error)
         }
@@ -224,7 +224,7 @@ class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
 
 private func AKLog(_ message: String, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
     #if DEBUG
-        print("\(NSURL(string: file)?.lastPathComponent ?? "") \(function)[\(line)]: \(message)")
+        print("\(URL(string: file)?.lastPathComponent ?? "") \(function)[\(line)]: \(message)")
     #else
         if message == "" {
             // Workaround for swift compiler optimizer crash
