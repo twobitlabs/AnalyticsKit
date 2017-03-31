@@ -31,25 +31,6 @@ If you would like to add support for a new provider or to update the code for an
 
 ## How to Use
 
-### CocoaPods
-
-__***Please Note__ -- Two Bit Labs does not officially support CocoaPods for AnalyticsKit. If you run into problems integrating AnalyticsKit using CocoaPods, please send a pull request with a fix. Due to challenges with Cocoapods we are not able to deploy the latest version to CocoaPods, if you would like the latest version you can point the pod to this repo eg.
-
-`pod 'AnalyticsKit', :git => 'https://github.com/twobitlabs/AnalyticsKit.git'`
-
-If your project uses CocoaPods, you can simply include `AnalyticsKit` for full provider support, or you can specify your provider using CocoaPods subspecs.
-
-* AdjustIO - `pod 'AnalyticsKit/AdjustIO'`
-* Crashlytics - `pod 'AnalyticsKit/Crashlytics'`
-* Flurry - `pod 'AnalyticsKit/Flurry'`
-* Google Analytics - `pod 'AnalyticsKit/GoogleAnalytics'`
-* Localytics - `pod 'AnalyticsKit/Localytics'`
-* Mixpanel - `pod 'AnalyticsKit/Mixpanel'`
-* New Relic - `pod 'AnalyticsKit/NewRelic'`
-* TestFlight - `pod 'AnalyticsKit/TestFlight'`
-
-__***Please Note__ -- The Parse subspec has been removed, as it won't integrate correctly using CocoaPods.
-
 ### Installation
 1. Download the provider's SDK and add it to your project, or install via cocoapods.
 2. Add AnalyticsKit to your project either as a git submodule or copying the source into your project. In Xcode, only include AnalyticsKit.h/.m/.swift and any providers you plan to use.
