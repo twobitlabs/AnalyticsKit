@@ -1,15 +1,19 @@
 #import <Foundation/Foundation.h>
+#if !TARGET_OS_OSX
 #import <UIKit/UIKit.h>
-
+#else
+#import <Cocoa/Cocoa.h>
+#endif
 #import "MixpanelPeople.h"
 
-#if TARGET_OS_TV
-    #define MIXPANEL_TVOS_EXTENSION 1
-#endif
+#define MIXPANEL_FLUSH_IMMEDIATELY (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCHOS))
+#define MIXPANEL_NO_REACHABILITY_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS) || defined(MIXPANEL_WATCHOS) || defined(MIXPANEL_MACOS))
+#define MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS) || defined(MIXPANEL_WATCHOS) || defined(MIXPANEL_MACOS))
+#define MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS) || defined(MIXPANEL_WATCHOS) || defined(MIXPANEL_MACOS))
+#define MIXPANEL_NO_APP_LIFECYCLE_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCHOS))
+#define MIXPANEL_NO_UIAPPLICATION_ACCESS (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCHOS) || defined(MIXPANEL_MACOS))
 
-#define MIXPANEL_LIMITED_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION))
-
-@class    MixpanelPeople, MPSurvey;
+@class    MixpanelPeople;
 @protocol MixpanelDelegate;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -64,12 +68,27 @@ NS_ASSUME_NONNULL_BEGIN
  The distinct ID of the current user.
 
  @discussion
- A distinct ID is a string that uniquely identifies one of your users.
- Typically, this is the user ID from your database. By default, we'll use a
- hash of the MAC address of the device. To change the current distinct ID,
- use the <code>identify:</code> method.
+ A distinct ID is a string that uniquely identifies one of your users. By default, 
+ we'll use the device's advertisingIdentifier UUIDString, if that is not available
+ we'll use the device's identifierForVendor UUIDString, and finally if that
+ is not available we will generate a new random UUIDString. To change the
+ current distinct ID, use the <code>identify:</code> method.
  */
 @property (atomic, readonly, copy) NSString *distinctId;
+
+/*!
+ @property
+ 
+ @abstract
+ The alias of the current user.
+ 
+ @discussion
+ An alias is another string that uniquely identifies one of your users. Typically, 
+ this is the user ID from your database. By using an alias you can link pre- and
+ post-sign up activity as well as cross-platform activity under one distinct ID.
+ To set the alias use the <code>createAlias:forDistinctID:</code> method.
+ */
+@property (atomic, readonly, copy) NSString *alias;
 
 /*!
  @property
@@ -118,59 +137,6 @@ NS_ASSUME_NONNULL_BEGIN
  Defaults to YES.
  */
 @property (atomic) BOOL shouldManageNetworkActivityIndicator;
-
-/*!
- @property
-
- @abstract
- Controls whether to automatically check for surveys for the
- currently identified user when the application becomes active.
-
- @discussion
- Defaults to YES. Will fire a network request on
- <code>applicationDidBecomeActive</code> to retrieve a list of valid surveys
- for the currently identified user.
- */
-@property (atomic) BOOL checkForSurveysOnActive;
-
-/*!
- @property
-
- @abstract
- Controls whether to automatically show a survey for the
- currently identified user when the application becomes active.
-
- @discussion
- Defaults to YES. This will only show a survey if
- <code>checkForSurveysOnActive</code> is also set to YES, and the
- survey check retrieves at least 1 valid survey for the currently
- identified user.
- */
-@property (atomic) BOOL showSurveyOnActive;
-
-/*!
- @property
- 
- @abstract
- Determines whether a valid survey is available to show to the user.
- 
- @discussion
- If we haven't fetched the surveys yet, this will return NO. Otherwise
- it will return yes if there is at least one survey available.
- */
-@property (atomic, readonly) BOOL isSurveyAvailable;
-
-/*!
- @property
- 
- @abstract
- Returns a list of available surveys. You can then call <code>showSurveyWithID:</code>
- and pass in <code>survey.ID</code>
- 
- @discussion
- If we haven't fetched the surveys yet, this will return nil.
- */
-@property (atomic, readonly) NSArray<MPSurvey *> *availableSurveys;
 
 /*!
  @property
@@ -274,19 +240,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  @property
- 
- @abstract
- If set, determines the background color of mini notifications.
-
- @discussion
- If this isn't set, we default to either the color of the UINavigationBar of the top 
- UINavigationController that is showing when the notification is presented, the 
- UINavigationBar default color for the app or the UITabBar default color.
- */
-@property (atomic, strong, nullable) UIColor *miniNotificationBackgroundColor;
-
-/*!
- @property
 
  @abstract
  The a MixpanelDelegate object that can be used to assert fine-grain control
@@ -304,14 +257,13 @@ NS_ASSUME_NONNULL_BEGIN
  @method
 
  @abstract
- Initializes and returns a singleton instance of the API.
+ Returns (and creates, if needed) a singleton instance of the API.
 
  @discussion
- If you are only going to send data to a single Mixpanel project from your app,
- as is the common case, then this is the easiest way to use the API. This
- method will set up a singleton instance of the <code>Mixpanel</code> class for
- you using the given project token. When you want to make calls to Mixpanel
- elsewhere in your code, you can use <code>sharedInstance</code>.
+ This method will return a singleton instance of the <code>Mixpanel</code> class for
+ you using the given project token. If an instance does not exist, this method will create
+ one using <code>initWithToken:launchOptions:andFlushInterval:</code>. If you only have one
+ instance in your project, you can use <code>sharedInstance</code> to retrieve it.
 
  <pre>
  [Mixpanel sharedInstance] track:@"Something Happened"]];
@@ -348,13 +300,16 @@ NS_ASSUME_NONNULL_BEGIN
  @method
 
  @abstract
- Returns the previously instantiated singleton instance of the API.
+ Returns a previously instantiated singleton instance of the API.
 
  @discussion
- The API must be initialized with <code>sharedInstanceWithToken:</code> before
- calling this class method.
+ The API must be initialized with <code>sharedInstanceWithToken:</code> or
+ <code>initWithToken:launchOptions:andFlushInterval</code> before calling this class method.
+ This method will return <code>nil</code> if there are no instances created. If there is more than 
+ one instace, it will return the first one that was created by using <code>sharedInstanceWithToken:</code> 
+ or <code>initWithToken:launchOptions:andFlushInterval:</code>.
  */
-+ (Mixpanel *)sharedInstance;
++ (nullable Mixpanel *)sharedInstance;
 
 /*!
  @method
@@ -363,10 +318,7 @@ NS_ASSUME_NONNULL_BEGIN
  Initializes an instance of the API with the given project token.
 
  @discussion
- Returns the a new API object. This allows you to create more than one instance
- of the API object, which is convenient if you'd like to send data to more than
- one Mixpanel project from a single app. If you only need to send data to one
- project, consider using <code>sharedInstanceWithToken:</code>.
+ Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.
 
  @param apiToken        your project token
  @param launchOptions   optional app delegate launchOptions
@@ -694,35 +646,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)libVersion;
 
 
-#if !MIXPANEL_LIMITED_SUPPORT
-#pragma mark - Mixpanel Surveys
-
-/*!
- @method
-
- @abstract
- Shows the survey with the given name.
-
- @discussion
- This method allows you to explicitly show a named survey at the time of your choosing.
-
- */
-- (void)showSurveyWithID:(NSUInteger)ID;
-
-/*!
- @method
-
- @abstract
- Show a survey if one is available.
-
- @discussion
- This method allows you to display the first available survey targeted to the currently
- identified user at the time of your choosing. You would typically pair this with
- setting <code>showSurveyOnActive = NO;</code> so that the survey won't show automatically.
-
- */
-- (void)showSurvey;
-
+#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 #pragma mark - Mixpanel Notifications
 
 /*!
@@ -790,7 +714,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)joinExperimentsWithCallback:(nullable void (^)())experimentsLoadedCallback;
 
-#endif
+#endif // MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 
 #pragma mark - Deprecated
 /*!

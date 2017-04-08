@@ -10,31 +10,29 @@
 
 @implementation MPResources
 
-+ (UIStoryboard *)notificationStoryboard {
-    NSString *storyboardName = @"MPNotification~ipad";
-    
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        BOOL isLandscape = UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation);
-        if (isLandscape) {
-            storyboardName = @"MPNotification~iphonelandscape";
-        } else {
-            storyboardName = @"MPNotification~iphoneportrait";
-        }
-    }
-    
-    return [MPResources storyboardWithName:storyboardName];
-}
-
-+ (UIStoryboard *)surveyStoryboard {
-    return [MPResources storyboardWithName:@"MPSurvey"];
-}
-
 + (UIStoryboard *)storyboardWithName:(NSString *)name {
     return [UIStoryboard storyboardWithName:name bundle:[MPResources frameworkBundle]];
 }
 
 + (NSBundle *)frameworkBundle {
     return [NSBundle bundleForClass:self.class];
+}
+
++ (NSString *)notificationXibName {
+    NSMutableString *xibFileName = [NSMutableString stringWithString:@"MPTakeoverNotificationViewController"];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        BOOL isLandscape = UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation);
+        if (isLandscape) {
+            [xibFileName appendString:@"~iphonelandscape"];
+        } else {
+            [xibFileName appendString:@"~iphoneportrait"];
+        }
+    } else {
+        [xibFileName appendString:@"~ipad"];
+    }
+    
+    return [xibFileName copy];
 }
 
 + (UIImage *)imageNamed:(NSString *)name {

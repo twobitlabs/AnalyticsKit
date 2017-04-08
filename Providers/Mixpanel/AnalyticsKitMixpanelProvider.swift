@@ -12,7 +12,7 @@ class AnalyticsKitMixpanelProvider: NSObject, AnalyticsKitProvider {
     func applicationWillTerminate() { }
 
     func uncaughtException(_ exception: NSException) {
-        Mixpanel.sharedInstance().track("Uncaught Exceptions", properties: [
+        Mixpanel.sharedInstance()?.track("Uncaught Exceptions", properties: [
             "ename" : exception.name,
             "reason" : exception.reason ?? "nil",
             "userInfo" : exception.userInfo ?? "nil"
@@ -29,7 +29,7 @@ class AnalyticsKitMixpanelProvider: NSObject, AnalyticsKitProvider {
     }
 
     func logEvent(_ event: String) {
-        Mixpanel.sharedInstance().track(event)
+        Mixpanel.sharedInstance()?.track(event)
     }
 
     func logEvent(_ event: String, withProperty key: String, andValue value: String) {
@@ -37,28 +37,28 @@ class AnalyticsKitMixpanelProvider: NSObject, AnalyticsKitProvider {
     }
 
     func logEvent(_ event: String, withProperties properties: [String: Any]) {
-        Mixpanel.sharedInstance().track(event, properties: properties)
+        Mixpanel.sharedInstance()?.track(event, properties: properties)
     }
 
     func logEvent(_ event: String, timed: Bool) {
         if timed {
-            Mixpanel.sharedInstance().timeEvent(event)
+            Mixpanel.sharedInstance()?.timeEvent(event)
         } else {
-            Mixpanel.sharedInstance().track(event)
+            Mixpanel.sharedInstance()?.track(event)
         }
     }
 
     func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool) {
         if timed {
-            Mixpanel.sharedInstance().timeEvent(event)
+            Mixpanel.sharedInstance()?.timeEvent(event)
         } else {
-            Mixpanel.sharedInstance().track(event, properties: properties)
+            Mixpanel.sharedInstance()?.track(event, properties: properties)
         }
     }
 
     func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {
         // Mixpanel documentation: timeEvent followed by a track with the same event name would record the duration
-        Mixpanel.sharedInstance().track(event, properties: properties)
+        Mixpanel.sharedInstance()?.track(event, properties: properties)
     }
 
     func logError(_ name: String, message: String?, exception: NSException?) {
@@ -71,7 +71,7 @@ class AnalyticsKitMixpanelProvider: NSObject, AnalyticsKitProvider {
             properties["userInfo"] = exception.userInfo
         }
 
-        Mixpanel.sharedInstance().track("Exceptions", properties: properties)
+        Mixpanel.sharedInstance()?.track("Exceptions", properties: properties)
     }
 
     func logError(_ name: String, message: String?, error: Error?) {
@@ -82,7 +82,7 @@ class AnalyticsKitMixpanelProvider: NSObject, AnalyticsKitProvider {
             properties["description"] = error.localizedDescription
         }
 
-        Mixpanel.sharedInstance().track("Errors", properties: properties)
+        Mixpanel.sharedInstance()?.track("Errors", properties: properties)
     }
     
 }

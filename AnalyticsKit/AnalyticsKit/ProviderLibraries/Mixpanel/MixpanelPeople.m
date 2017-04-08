@@ -12,6 +12,10 @@
 #import "MixpanelPrivate.h"
 #import "MPLogger.h"
 
+#if defined(MIXPANEL_WATCHOS)
+#import "MixpanelWatchProperties.h"
+#endif
+
 @implementation MixpanelPeople
 
 - (instancetype)initWithMixpanel:(Mixpanel *)mixpanel
@@ -30,9 +34,20 @@
     return [NSString stringWithFormat:@"<MixpanelPeople: %p %@>", (void *)self, (strongMixpanel ? strongMixpanel.apiToken : @"")];
 }
 
+- (NSString *)deviceSystemVersion {
+#if defined(MIXPANEL_WATCHOS)
+    return [MixpanelWatchProperties systemVersion];
+#elif defined(MIXPANEL_MACOS)
+    return [NSProcessInfo processInfo].operatingSystemVersionString;
+#else
+    return [UIDevice currentDevice].systemVersion;
+#endif
+}
+
 - (NSDictionary *)collectAutomaticPeopleProperties
 {
-    NSMutableDictionary *p = [NSMutableDictionary dictionaryWithDictionary:@{@"$ios_version": [UIDevice currentDevice].systemVersion,
+    NSMutableDictionary *p = [NSMutableDictionary dictionaryWithDictionary:@{
+                                                                             @"$ios_version": [self deviceSystemVersion],
                                                                              @"$ios_lib_version": [Mixpanel libVersion],
                                                                              }];
     NSDictionary *infoDictionary = [NSBundle mainBundle].infoDictionary;
@@ -47,10 +62,13 @@
     if (deviceModel) {
         p[@"$ios_device_model"] = deviceModel;
     }
+
+#if !defined(MIXPANEL_MACOS)
     NSString *ifa = [strongMixpanel IFA];
     if (ifa) {
         p[@"$ios_ifa"] = ifa;
     }
+#endif
     return [p copy];
 }
 
@@ -88,10 +106,12 @@
 
             if (self.distinctId) {
                 r[@"$distinct_id"] = self.distinctId;
-                MPLogInfo(@"%@ queueing people record: %@", self.mixpanel, r);
-                [strongMixpanel.peopleQueue addObject:r];
-                if (strongMixpanel.peopleQueue.count > 500) {
-                    [strongMixpanel.peopleQueue removeObjectAtIndex:0];
+                MPLogInfo(@"%@ queueing people record: %@", strongMixpanel, r);
+                @synchronized (strongMixpanel) {
+                    [strongMixpanel.peopleQueue addObject:r];
+                    if (strongMixpanel.peopleQueue.count > 500) {
+                        [strongMixpanel.peopleQueue removeObjectAtIndex:0];
+                    }
                 }
             } else {
                 MPLogInfo(@"%@ queueing unidentified people record: %@", self.mixpanel, r);
@@ -103,7 +123,7 @@
 
             [strongMixpanel archivePeople];
         });
-#if defined(MIXPANEL_APP_EXTENSION)
+#if MIXPANEL_FLUSH_IMMEDIATELY
         [strongMixpanel flush];
 #endif
     }

@@ -10,6 +10,7 @@
 
 @interface MPNetwork ()
 
+@property (nonatomic, weak) Mixpanel *mixpanel;
 @property (nonatomic, strong) NSURL *serverURL;
 
 @property (nonatomic) NSTimeInterval requestsDisabledUntilTime;
@@ -34,5 +35,6 @@
                            withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
                                   andBody:(NSString *)body;
 
++ (NSURLSession *)sharedURLSession;
 
 @end

@@ -372,7 +372,20 @@ static NSMapTable *originalCache;
         self.swizzleClass = swizzleClass;
 
         if (!swizzleSelector) {
-            swizzleSelector = NSSelectorFromString(@"didMoveToWindow");
+            BOOL shouldUseLayoutSubviews = NO;
+            NSArray *classesToUseLayoutSubviews = @[[UITableViewCell class], [UINavigationBar class]];
+            for (Class klass in classesToUseLayoutSubviews) {
+                if ([self.swizzleClass isSubclassOfClass:klass] ||
+                    [self.path pathContainsObjectOfClass:klass]) {
+                    shouldUseLayoutSubviews = YES;
+                    break;
+                }
+            }
+            if (shouldUseLayoutSubviews) {
+                swizzleSelector = NSSelectorFromString(@"layoutSubviews");
+            } else {
+                swizzleSelector = NSSelectorFromString(@"didMoveToWindow");
+            }
         }
         self.swizzleSelector = swizzleSelector;
 
@@ -396,6 +409,8 @@ static NSMapTable *originalCache;
         self.swizzle = [(NSNumber *)[aDecoder decodeObjectForKey:@"swizzle"] boolValue];
         self.swizzleClass = NSClassFromString([aDecoder decodeObjectForKey:@"swizzleClass"]);
         self.swizzleSelector = NSSelectorFromString([aDecoder decodeObjectForKey:@"swizzleSelector"]);
+
+        self.appliedTo = [NSHashTable hashTableWithOptions:(NSHashTableWeakMemory|NSHashTableObjectPointerPersonality)];
     }
     return self;
 }
@@ -463,15 +478,17 @@ static NSMapTable *originalCache;
                                 named:self.name];
     }
 
-    if (self.original) {
-        // Undo the changes with the original values specified in the action
-        [[self class] executeSelector:self.selector withArgs:self.original onObjects:self.appliedTo.allObjects];
-    } else if (self.cacheOriginal) {
-        // Or undo them from the local cache of original images
-        [self restoreCachedImage];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.original) {
+            // Undo the changes with the original values specified in the action
+            [[self class] executeSelector:self.selector withArgs:self.original onObjects:self.appliedTo.allObjects];
+        } else if (self.cacheOriginal) {
+            // Or undo them from the local cache of original images
+            [self restoreCachedImage];
+        }
 
-    [self.appliedTo removeAllObjects];
+        [self.appliedTo removeAllObjects];
+    });
 }
 
 - (void)cacheOriginalImage:(id)view
@@ -574,6 +591,10 @@ static NSMapTable *originalCache;
                     }
                 }
                 @try {
+                    // This check is done to avoid moving and resizing UI components that you are not allowed to change.
+                    if ([NSStringFromSelector(selector) isEqualToString:@"setFrame:"] && ![o isKindOfClass:[UINavigationBar class]]) {
+                        ((UIView *)o).translatesAutoresizingMaskIntoConstraints = YES;
+                    }
                     [invocation invokeWithTarget:o];
                 }
                 @catch (NSException *exception) {

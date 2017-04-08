@@ -10,9 +10,6 @@
 #import <asl.h>
 
 static bool gLoggingEnabled = NO;
-static inline void MPSetLoggingEnabled(BOOL enabled) {
-
-}
 
 #define __MP_MAKE_LOG_FUNCTION(LEVEL, NAME) \
 static inline void NAME(NSString *format, ...) { \
@@ -20,6 +17,7 @@ static inline void NAME(NSString *format, ...) { \
     va_list arg_list; \
     va_start(arg_list, format); \
     NSString *formattedString = [[NSString alloc] initWithFormat:format arguments:arg_list]; \
+    asl_add_log_file(NULL, STDERR_FILENO); \
     asl_log(NULL, NULL, (LEVEL), "%s", [formattedString UTF8String]); \
     va_end(arg_list); \
 }
