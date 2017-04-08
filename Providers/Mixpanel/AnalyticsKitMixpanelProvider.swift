@@ -74,15 +74,12 @@ class AnalyticsKitMixpanelProvider: NSObject, AnalyticsKitProvider {
         Mixpanel.sharedInstance().track("Exceptions", properties: properties)
     }
 
-    func logError(_ name: String, message: String?, error: NSError?) {
+    func logError(_ name: String, message: String?, error: Error?) {
         var properties = [AnyHashable: Any]()
         properties["name"] = name
         properties["message"] = message
         if let error = error {
             properties["description"] = error.localizedDescription
-            properties["code"] = error.code
-            properties["domain"] = error.domain
-            properties["userInfo"] = error.userInfo.description
         }
 
         Mixpanel.sharedInstance().track("Errors", properties: properties)

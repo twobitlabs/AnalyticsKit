@@ -113,7 +113,6 @@ class AnalyticsKitUnitTestProvider: NSObject, AnalyticsKitProvider {
     func logError(_ name: String, message: String?, exception: NSException?) {
     }
 
-    func logError(_ name: String, message: String?, error: NSError?) {
+    func logError(_ name: String, message: String?, error: Error?) {
     }
-
 }
