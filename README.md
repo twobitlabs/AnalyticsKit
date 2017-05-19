@@ -10,6 +10,7 @@ The goal of `AnalyticsKit` is to provide a consistent API for analytics regardle
 * [AdjustIO](https://www.adjust.io/)
 * [Apsalar](http://apsalar.com/) (needs migration to Swift)
 * [Crashlytics](http://crashlytics.com)
+* [Firebase Analytics](https://firebase.google.com/products/analytics/)
 * [Flurry](http://www.flurry.com/)
 * [Google Analytics](https://www.google.com/analytics)
 * [Localytics](http://www.localytics.com/) (needs migration to Swift)
