@@ -5,13 +5,11 @@
 #ifndef AnalyticsKit_Bridging_Header_h
 #define AnalyticsKit_Bridging_Header_h
 
-#import "mParticle.h"
-#import "Flurry.h"
-#import "Mixpanel.h"
-#import <Adjust/Adjust.h>
-#import "GAI.h"
-#import "GAIDictionaryBuilder.h"
-#import "GAIFields.h"
-#import <Crashlytics/Crashlytics.h>
+#import <NewRelicAgent/NewRelic.h>
+#import <GoogleAnalytics/GAI.h>
+#import <GoogleAnalytics/GAIDictionaryBuilder.h>
+#import <GoogleAnalytics/GAIFields.h>
+#import "Apsalar.h"
+#import <mParticle/mParticle.h>
 
 #endif

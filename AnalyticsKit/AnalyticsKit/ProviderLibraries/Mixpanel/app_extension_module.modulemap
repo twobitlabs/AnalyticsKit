@@ -1,5 +1,0 @@
-framework module MixpanelAppExtension {
-    umbrella header "Mixpanel.h"
-    export *
-    module * { export * }
-}

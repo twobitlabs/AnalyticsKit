@@ -2,46 +2,38 @@ import Foundation
 
 let AKMParticleEventType = "mParticleEventType"
 
-class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
+public class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
 
     let defaultEventType: MPEventType
 
-    init(withKey key: String, secret: String, defaultEventType: MPEventType = .other, installationType: MPInstallationType = .autodetect, environment: MPEnvironment = .autoDetect, proxyAppDelegate: Bool = false) {
+    @objc(initWithKey:secret:defaultEventType:installationType:environment:)
+    public init(key: String, secret: String, defaultEventType: MPEventType = .other, installationType: MPInstallationType = .autodetect, environment: MPEnvironment = .autoDetect) {
         self.defaultEventType = defaultEventType
-        MParticle.sharedInstance().start(withKey: key, secret: secret, installationType: installationType, environment: environment, proxyAppDelegate: proxyAppDelegate)
-    }
-
-    // Lifecycle
-    func applicationWillEnterForeground() { }
-    func applicationDidEnterBackground() { }
-    func applicationWillTerminate() { }
-
-    func uncaughtException(_ exception: NSException) {
+        MParticle.sharedInstance().start(withKey: key, secret: secret, installationType: installationType, environment: environment)
     }
 
     // Logging
-    func logScreen(_ screenName: String) {
+    public func logScreen(_ screenName: String) {
         MParticle.sharedInstance().logScreen(screenName, eventInfo: nil)
     }
 
-    func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
+    public func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
         MParticle.sharedInstance().logScreen(screenName, eventInfo: properties)
     }
 
-    func logEvent(_ event: String) {
+    public func logEvent(_ event: String) {
         MParticle.sharedInstance().logEvent(event, eventType: defaultEventType, eventInfo: nil)
     }
 
-    func logEvent(_ event: String, withProperty key: String, andValue value: String) {
-        let properties = [key: value]
-        MParticle.sharedInstance().logEvent(event, eventType: extractEventTypeFromProperties(properties as [String: Any]), eventInfo: properties)
-    }
-
-    func logEvent(_ event: String, withProperties properties: [String: Any]) {
+    public func logEvent(_ event: String, withProperties properties: [String: Any]) {
         MParticle.sharedInstance().logEvent(event, eventType: extractEventTypeFromProperties(properties), eventInfo: properties)
     }
 
-    func logEvent(_ event: String, timed: Bool) {
+    public func logEvent(_ event: String, withProperty key: String, andValue value: String) {
+        logEvent(event, withProperties: [key: value])
+    }
+
+    public func logEvent(_ event: String, timed: Bool) {
         if timed {
             if MParticle.sharedInstance().event(withName: event) != nil {
                 endTimedEvent(event, withProperties: [String: Any]())
@@ -54,7 +46,7 @@ class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool) {
+    public func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool) {
         if timed {
             if MParticle.sharedInstance().event(withName: event) != nil {
                 endTimedEvent(event, withProperties: properties)
@@ -67,7 +59,7 @@ class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {
+    public func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {
         if let event = MParticle.sharedInstance().event(withName: event) {
             if properties.count > 0 {
                 // Replace the parameters if parameters are passed
@@ -77,7 +69,7 @@ class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func logError(_ name: String, message: String?, exception: NSException?) {
+    public func logError(_ name: String, message: String?, exception: NSException?) {
         if let exception = exception {
             MParticle.sharedInstance().logException(exception)
         } else {
@@ -85,7 +77,7 @@ class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
         }
     }
 
-    func logError(_ name: String, message: String?, error: Error?) {
+    public func logError(_ name: String, message: String?, error: Error?) {
         var eventInfo = [String: Any]()
         if let message = message {
             eventInfo["message"] = message
@@ -102,5 +94,4 @@ class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
         }
         return defaultEventType
     }
-
 }

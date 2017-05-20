@@ -1,6 +1,6 @@
 import Foundation
 
-class AnalyticsKitGoogleAnalyticsProvider: NSObject, AnalyticsKitProvider {
+public class AnalyticsKitGoogleAnalyticsProvider: NSObject, AnalyticsKitProvider {
 
     // Constants used to parsed dictionnary to match Google Analytics tracker properties
     fileprivate let category = "Category"
@@ -9,39 +9,38 @@ class AnalyticsKitGoogleAnalyticsProvider: NSObject, AnalyticsKitProvider {
     fileprivate let value = "Value"
     fileprivate let tracker: GAITracker
 
-    init(withTrackingID trackingId: String) {
+    public init(withTrackingID trackingId: String) {
         tracker = GAI.sharedInstance().tracker(withTrackingId: trackingId)
     }
 
-    // Lifecycle
-    func applicationWillEnterForeground() { }
-    func applicationDidEnterBackground() { }
-    func applicationWillTerminate() { }
-
-    func uncaughtException(_ exception: NSException) {
+    public func uncaughtException(_ exception: NSException) {
         let dict = GAIDictionaryBuilder.createException(withDescription: exception.userInfo?.description ?? "nil", withFatal: 1).build() as [NSObject: AnyObject]
         tracker.send(dict)
     }
 
     // Logging
-    func logScreen(_ screenName: String) {
+    public func logScreen(_ screenName: String) {
         tracker.set(kGAIScreenName, value: screenName)
-        let dict = GAIDictionaryBuilder.createAppView().build() as [NSObject: AnyObject]
+        let dict = GAIDictionaryBuilder.createScreenView().build() as [NSObject: AnyObject]
         tracker.send(dict)
     }
 
-    func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
-
-    }
-
-    func logEvent(_ event: String) {
+    public func logEvent(_ event: String) {
         let dict = GAIDictionaryBuilder.createEvent(withCategory: nil, action: event, label: nil, value: nil).build() as [NSObject: AnyObject]
         tracker.send(dict)
     }
 
-    func logEvent(_ event: String, withProperty key: String, andValue value: String) {
+    public func logEvent(_ event: String, withProperty key: String, andValue value: String) {
         let dict = GAIDictionaryBuilder.createEvent(withCategory: key, action: event, label: value, value: nil).build() as [NSObject: AnyObject]
         tracker.send(dict)
+    }
+
+    public func logEvent(_ event: String, timed: Bool) {
+        logEvent(event)
+    }
+
+    public func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool) {
+        logEvent(event, withProperties: properties)
     }
 
     fileprivate func valueFromDictionary(_ dictionary: [String: Any], forKey key: String) -> Any? {
@@ -51,7 +50,7 @@ class AnalyticsKitGoogleAnalyticsProvider: NSObject, AnalyticsKitProvider {
         return nil
     }
 
-    func logEvent(_ event: String, withProperties properties: [String: Any]) {
+    public func logEvent(_ event: String, withProperties properties: [String: Any]) {
         let category = valueFromDictionary(properties, forKey: self.category) as? String
         let label = valueFromDictionary(properties, forKey: self.label) as? String
         let value = valueFromDictionary(properties, forKey: self.value) as? NSNumber
@@ -60,28 +59,15 @@ class AnalyticsKitGoogleAnalyticsProvider: NSObject, AnalyticsKitProvider {
         tracker.send(dict)
     }
 
-    func logEvent(_ event: String, timed: Bool) {
-
-    }
-
-    func logEvent(_ event: String, withProperties dict: [String: Any], timed: Bool) {
-
-    }
-
-    func endTimedEvent(_ event: String, withProperties dict: [String: Any]) {
-
-    }
-
-    func logError(_ name: String, message: String?, exception: NSException?) {
+    public func logError(_ name: String, message: String?, exception: NSException?) {
         // isFatal = NO, presume here, Exception is not fatal.
         let dict = GAIDictionaryBuilder.createException(withDescription: message ?? "nil", withFatal: 0).build() as [NSObject: AnyObject]
         tracker.send(dict)
     }
 
-    func logError(_ name: String, message: String?, error: Error?) {
+    public func logError(_ name: String, message: String?, error: Error?) {
         // isFatal = NO, presume here, Exception is not fatal.
         let dict = GAIDictionaryBuilder.createException(withDescription: message ?? "nil", withFatal: 0).build() as [NSObject: AnyObject]
         tracker.send(dict)
     }
-
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-class AnalyticsKitEvent: NSObject {
+public class AnalyticsKitEvent: NSObject {
 
     var name: String
     var properties = [String: Any]()

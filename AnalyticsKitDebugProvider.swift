@@ -1,32 +1,29 @@
 import Foundation
 import UIKit
 
-class AnalyticsKitDebugProvider: NSObject, AnalyticsKitProvider {
+public class AnalyticsKitDebugProvider: NSObject, AnalyticsKitProvider {
 
     fileprivate weak var alertController: UIAlertController?
 
-    // Lifecycle
-    func applicationWillEnterForeground() { }
-    func applicationDidEnterBackground() { }
-    func applicationWillTerminate() { }
-    func uncaughtException(_ exception: NSException) { }
-
     // Logging
-    func logScreen(_ screenName: String) { }
-    func logScreen(_ screenName: String, withProperties properties: [String: Any]) { }
-    func logEvent(_ event: String) { }
-    func logEvent(_ event: String, withProperty key: String, andValue value: String) { }
-    func logEvent(_ event: String, withProperties properties: [String: Any]) { }
-    func logEvent(_ event: String, timed: Bool) { }
-    func logEvent(_ event: String, withProperties dict: [String: Any], timed: Bool) { }
-    func endTimedEvent(_ event: String, withProperties dict: [String: Any]) { }
+    public func logEvent(_ event: String) { }
+    public func logEvent(_ event: String, withProperty key: String, andValue value: String) { }
+    public func logEvent(_ event: String, withProperties properties: [String: Any]) { }
 
-    func logError(_ name: String, message: String?, exception: NSException?) {
+    public func logEvent(_ event: String, timed: Bool) {
+        logEvent(event)
+    }
+
+    public func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool) {
+        logEvent(event, withProperties: properties)
+    }
+    
+    public func logError(_ name: String, message: String?, exception: NSException?) {
         let message = "\(name)\n\n\(message ?? "nil")\n\n\(exception?.description ?? "nil")"
         showAlert(message)
     }
 
-    func logError(_ name: String, message: String?, error: Error?) {
+    public func logError(_ name: String, message: String?, error: Error?) {
         let message = "\(name)\n\n\(message ?? "nil")\n\n\(error?.localizedDescription ?? "nil")"
         showAlert(message)
     }

@@ -1,40 +1,29 @@
 import Foundation
+import Adjust
 
-class AnalyticsKitAdjustIOProvider: NSObject, AnalyticsKitProvider {
+public class AnalyticsKitAdjustIOProvider: NSObject, AnalyticsKitProvider {
 
     //-(id<AnalyticsKitProvider>)initWithAppToken:(NSString *)appToken productionEnvironmentEnabled:(BOOL)
-    init(withAppToken appToken: String, productionEnvironmentEnabled enabled: Bool) {
+    public init(withAppToken appToken: String, productionEnvironmentEnabled enabled: Bool) {        
         let environment = enabled ? ADJEnvironmentProduction : ADJEnvironmentSandbox
         let config = ADJConfig(appToken: appToken, environment: environment)
         Adjust.appDidLaunch(config)
     }
 
-    // Lifecycle
-    func applicationWillEnterForeground() { }
-    func applicationDidEnterBackground() { }
-    func applicationWillTerminate() { }
-    func uncaughtException(_ exception: NSException) { }
-
     // Logging
-    func logScreen(_ screenName: String) {
+    public func logScreen(_ screenName: String) {
         logEvent("Screen - \(screenName)")
     }
 
-    func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
+    public func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
         logEvent("Screen - \(screenName)", withProperties: properties)
     }
 
-    func logEvent(_ event: String) {
+    public func logEvent(_ event: String) {
         Adjust.trackEvent(ADJEvent(eventToken: event))
     }
 
-    func logEvent(_ event: String, withProperty key: String, andValue value: String) {
-        let event = ADJEvent(eventToken: event)
-        event?.addPartnerParameter(key, value: value)
-        Adjust.trackEvent(event)
-    }
-
-    func logEvent(_ event: String, withProperties properties: [String: Any]) {
+    public func logEvent(_ event: String, withProperties properties: [String: Any]) {
         let event = ADJEvent(eventToken: event)
         for (key, value) in properties {
             if let value = value as? String {
@@ -44,24 +33,15 @@ class AnalyticsKitAdjustIOProvider: NSObject, AnalyticsKitProvider {
         Adjust.trackEvent(event)
     }
 
-    func logEvent(_ event: String, timed: Bool) {
-        
+    public func logEvent(_ event: String, withProperty key: String, andValue value: String) {
+        logEvent(event, withProperties: [key: value])
     }
 
-    func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool) {
-
+    public func logEvent(_ event: String, timed: Bool) {
+        logEvent(event, withProperties: [:], timed: timed)
     }
 
-    func endTimedEvent(_ event: String, withProperties dict: [String: Any]) {
-
+    public func logEvent(_ event: String, withProperties dict: [String: Any], timed: Bool) {
+        logEvent(event, withProperties: dict)
     }
-
-    func logError(_ name: String, message: String?, exception: NSException?) {
-
-    }
-
-    func logError(_ name: String, message: String?, error: Error?) {
-        
-    }
-
 }

@@ -1,0 +1,6 @@
+framework module Pods_AnalyticsKitTests {
+  umbrella header "Pods-AnalyticsKitTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

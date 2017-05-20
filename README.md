@@ -8,15 +8,15 @@ The goal of `AnalyticsKit` is to provide a consistent API for analytics regardle
 ## Supported Providers
 
 * [AdjustIO](https://www.adjust.io/)
-* [Apsalar](http://apsalar.com/) (needs migration to Swift)
+* [Apsalar](http://apsalar.com/)
 * [Crashlytics](http://crashlytics.com)
 * [Firebase Analytics](https://firebase.google.com/products/analytics/)
 * [Flurry](http://www.flurry.com/)
 * [Google Analytics](https://www.google.com/analytics)
-* [Localytics](http://www.localytics.com/) (needs migration to Swift)
+* [Localytics](http://www.localytics.com/)
 * [Mixpanel](https://mixpanel.com/)
 * [mParticle](https://www.mparticle.com)
-* [Parse](http://parse.com/) (needs migration to Swift)
+* [Parse](http://parse.com/)
 * [Debug Provider](https://github.com/twobitlabs/AnalyticsKit/blob/master/AnalyticsKitDebugProvider.swift) - shows an AlertView whenever an error is logged
 * [Unit Test Provider](https://github.com/twobitlabs/AnalyticsKit/blob/master/AnalyticsKit/AnalyticsKit/AnalyticsKitUnitTestProvider.swift) - allows you to inspect logged events
 
@@ -24,7 +24,7 @@ The goal of `AnalyticsKit` is to provide a consistent API for analytics regardle
 
 The following providers are included but not supported. YMMV.
 
-* [New Relic](http://www.newrelic.com) (needs migration to Swift)
+* [New Relic](http://www.newrelic.com)
 
 	We've had a number of problems integrating the New Relic framework into the test app, so we can't verify that events are logged correctly.
 
@@ -172,6 +172,7 @@ AnalyticsKit.logEvent("Launching Watch App");
  - [Sinnerschrader Mobile](https://github.com/sinnerschrader-mobile)
  - [Bradley David Bergeron](https://github.com/bdbergeron) - Parse
  - [Jeremy Medford](https://github.com/jeremymedford)
- - [Sean Woolfolk] (https://github.com/seanw4)
+ - [Sean Woolfolk](https://github.com/seanw4)
  - [François Benaiteau](https://github.com/netbe)
  - [Ying Quan Tan](https://github.com/brightredchilli)
+ - [Kaden Wilkinson](https://github.com/kdawgwilk)
