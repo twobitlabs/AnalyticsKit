@@ -37,6 +37,14 @@ If you would like to add support for a new provider or to update the code for an
 2. Add AnalyticsKit to your project either as a git submodule or copying the source into your project. In Xcode, only include AnalyticsKit.h/.m/.swift and any providers you plan to use.
 3. In your AppDelegate's applicationDidFinishLaunchingWithOptions: method, create an array with your provider instance(s) and call `initializeProviders:`.
 
+NOTE: If you are gettings an error similar to `target has transitive dependencies that include static binaries` when using Crashlytics/Intercom add the following to the bottom of your Podfile:
+```ruby
+pre_install do |installer|
+	# workaround for https://github.com/CocoaPods/CocoaPods/issues/3289
+    def installer.verify_no_static_framework_transitive_dependencies; end
+end
+```
+
 Swift:
 
 Initialize AnalyticsKit in application:didFinishLaunchingWithOptions:
