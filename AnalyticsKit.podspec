@@ -48,7 +48,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Localytics' do |l|
     l.source_files = 'Providers/Localytics/AnalyticsKitLocalyticsProvider.{h,m}'
-    l.dependency 'Localytics'
+    l.dependency 'Localytics-iOS-Client'
     l.dependency 'AnalyticsKit/Core'
   end
 
