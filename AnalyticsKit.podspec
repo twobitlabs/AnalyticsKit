@@ -31,20 +31,23 @@ Pod::Spec.new do |s|
   s.subspec 'Intercom' do |i|
     i.source_files = 'Providers/Intercom/AnalyticsKitIntercomProvider.swift'
     i.frameworks = 'Intercom'
+    i.dependency 'Intercom'
     i.dependency 'AnalyticsKit/Core'
     i.pod_target_xcconfig = {
-      'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/Intercom/Intercom',
-      'OTHER_LDFLAGS'          => '$(inherited) -undefined dynamic_lookup'
+      'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/Intercom/Intercom'
+      # 'OTHER_LDFLAGS'          => '$(inherited) -undefined dynamic_lookup'
     }
   end
 
   s.subspec 'Crashlytics' do |c|
     c.source_files = 'Providers/Crashlytics/AnalyticsKitCrashlyticsProvider.swift'
-    c.frameworks = 'Crashlytics'
+    c.frameworks = 'Crashlytics', 'Security', 'SystemConfiguration'
+    c.libraries = 'c++', 'z'
+    c.dependency 'Crashlytics'
     c.dependency 'AnalyticsKit/Core'
     c.pod_target_xcconfig = {
-      'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/Crashlytics/iOS',
-      'OTHER_LDFLAGS'          => '$(inherited) -undefined dynamic_lookup'
+      'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/Crashlytics/iOS'
+      # 'OTHER_LDFLAGS'          => '$(inherited) -undefined dynamic_lookup'
     }
   end
 
@@ -52,6 +55,11 @@ Pod::Spec.new do |s|
     f.source_files = 'Providers/Firebase/AnalyticsKitFirebaseProvider.swift'
     f.dependency 'Firebase'
     f.dependency 'AnalyticsKit/Core'
+  end
+
+  s.subspec 'Apsalar' do |a|
+    a.source_files = 'Providers/Apsalar/AnalyticsKitApsalarProvider.swift'
+    a.dependency 'AnalyticsKit/Core'
   end
 
   s.subspec 'AdjustIO' do |a|
