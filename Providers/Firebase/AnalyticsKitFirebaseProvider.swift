@@ -54,18 +54,18 @@ class AnalyticsKitFirebaseProvider: NSObject, AnalyticsKitProvider {
     }
 
     func logError(_ name: String, message: String?, exception: NSException?) {
-        logFbEvent("Exception", parameters: [
+        logFbEvent("Exception Logged", parameters: [
             "name": name,
-            "message": String(describing: message),
-            "exception": String(describing: exception)
+            "message": String(describing: message).truncateTo(100),
+            "exception": String(describing: exception).truncateTo(100)
         ])
     }
 
     func logError(_ name: String, message: String?, error: Error?) {
-        logFbEvent("Error", parameters: [
+        logFbEvent("Error Logged", parameters: [ // error is a reserved word in firebase so we can't call the event "Error"
             "name": name,
-            "message": String(describing: message),
-            "error": String(describing: error)
+            "message": String(describing: message).truncateTo(100),
+            "error": String(describing: error).truncateTo(100)
         ])
     }
 
