@@ -165,6 +165,7 @@ AnalyticsKit.logEvent("Launching Watch App");
 
 ## Contributors
  - [Two Bit Labs](http://twobitlabs.com/)
+ - [Up Next Shows and Movies App](https://upnext.me/)
  - [Todd Huss](https://github.com/thuss)
  - [Susan Detwiler](https://github.com/sherpachick)
  - [Christopher Pickslay](https://github.com/chrispix)
@@ -172,6 +173,6 @@ AnalyticsKit.logEvent("Launching Watch App");
  - [Sinnerschrader Mobile](https://github.com/sinnerschrader-mobile)
  - [Bradley David Bergeron](https://github.com/bdbergeron) - Parse
  - [Jeremy Medford](https://github.com/jeremymedford)
- - [Sean Woolfolk] (https://github.com/seanw4)
+ - [Sean Woolfolk](https://github.com/seanw4)
  - [François Benaiteau](https://github.com/netbe)
  - [Ying Quan Tan](https://github.com/brightredchilli)
