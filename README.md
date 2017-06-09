@@ -8,15 +8,15 @@ The goal of `AnalyticsKit` is to provide a consistent API for analytics regardle
 ## Supported Providers
 
 * [AdjustIO](https://www.adjust.io/)
-* [Apsalar](http://apsalar.com/) (needs migration to Swift)
+* [Apsalar](http://apsalar.com/)
 * [Crashlytics](http://crashlytics.com)
 * [Firebase Analytics](https://firebase.google.com/products/analytics/)
 * [Flurry](http://www.flurry.com/)
 * [Google Analytics](https://www.google.com/analytics)
-* [Localytics](http://www.localytics.com/) (needs migration to Swift)
+* [Localytics](http://www.localytics.com/)
 * [Mixpanel](https://mixpanel.com/)
 * [mParticle](https://www.mparticle.com)
-* [Parse](http://parse.com/) (needs migration to Swift)
+* [Parse](http://parse.com/)
 * [Debug Provider](https://github.com/twobitlabs/AnalyticsKit/blob/master/AnalyticsKitDebugProvider.swift) - shows an AlertView whenever an error is logged
 * [Unit Test Provider](https://github.com/twobitlabs/AnalyticsKit/blob/master/AnalyticsKit/AnalyticsKit/AnalyticsKitUnitTestProvider.swift) - allows you to inspect logged events
 
@@ -24,7 +24,7 @@ The goal of `AnalyticsKit` is to provide a consistent API for analytics regardle
 
 The following providers are included but not supported. YMMV.
 
-* [New Relic](http://www.newrelic.com) (needs migration to Swift)
+* [New Relic](http://www.newrelic.com)
 
 	We've had a number of problems integrating the New Relic framework into the test app, so we can't verify that events are logged correctly.
 
@@ -36,6 +36,14 @@ If you would like to add support for a new provider or to update the code for an
 1. Download the provider's SDK and add it to your project, or install via cocoapods.
 2. Add AnalyticsKit to your project either as a git submodule or copying the source into your project. In Xcode, only include AnalyticsKit.h/.m/.swift and any providers you plan to use.
 3. In your AppDelegate's applicationDidFinishLaunchingWithOptions: method, create an array with your provider instance(s) and call `initializeProviders:`.
+
+NOTE: If you are gettings an error similar to `target has transitive dependencies that include static binaries` when using Crashlytics/Intercom add the following to the bottom of your Podfile:
+```ruby
+pre_install do |installer|
+	# workaround for https://github.com/CocoaPods/CocoaPods/issues/3289
+    def installer.verify_no_static_framework_transitive_dependencies; end
+end
+```
 
 Swift:
 
@@ -176,3 +184,4 @@ AnalyticsKit.logEvent("Launching Watch App");
  - [Sean Woolfolk](https://github.com/seanw4)
  - [François Benaiteau](https://github.com/netbe)
  - [Ying Quan Tan](https://github.com/brightredchilli)
+ - [Kaden Wilkinson](https://github.com/kdawgwilk)

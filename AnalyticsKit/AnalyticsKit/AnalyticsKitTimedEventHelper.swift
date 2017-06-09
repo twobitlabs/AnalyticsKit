@@ -1,14 +1,14 @@
 import Foundation
 
-class AnalyticsKitTimedEventHelper: NSObject {
+public class AnalyticsKitTimedEventHelper: NSObject {
 
     static var events = [String: [String: AnalyticsKitEvent]]()
 
-    class func startTimedEventWithName(_ name: String, forProvider provider: AnalyticsKitProvider) {
+    public class func startTimedEventWithName(_ name: String, forProvider provider: AnalyticsKitProvider) {
         self.startTimedEventWithName(name, properties: nil, forProvider: provider)
     }
 
-    class func startTimedEventWithName(_ name: String, properties: [String: Any]?, forProvider provider: AnalyticsKitProvider) {
+    public class func startTimedEventWithName(_ name: String, properties: [String: Any]?, forProvider provider: AnalyticsKitProvider) {
         let providerClass: String = NSStringFromClass(type(of: provider))
         var providerDict = events[providerClass]
         if providerDict == nil {
@@ -26,7 +26,7 @@ class AnalyticsKitTimedEventHelper: NSObject {
         event!.startTime = Date()
     }
 
-    class func endTimedEventNamed(_ name: String, forProvider provider: AnalyticsKitProvider) -> AnalyticsKitEvent? {
+    public class func endTimedEventNamed(_ name: String, forProvider provider: AnalyticsKitProvider) -> AnalyticsKitEvent? {
         var event: AnalyticsKitEvent? = nil
         let providerClass: String = NSStringFromClass(type(of: provider))
         if var providerDict = events[providerClass] {

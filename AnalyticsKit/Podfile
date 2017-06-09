@@ -1,0 +1,28 @@
+# Uncomment the next line to define a global platform for your project
+
+target 'AnalyticsKit' do
+  platform :ios, '8.4'
+  use_frameworks!
+
+  # Pods for AnalyticsKit
+
+  pod 'Mixpanel'
+  pod 'Adjust'
+  pod 'Localytics'
+  pod 'GoogleAnalytics'
+  pod 'Parse'
+  pod 'mParticle'
+  # pod 'Apsalar'
+  pod 'NewRelicAgent'
+  pod 'Flurry-iOS-SDK'
+  pod 'Crashlytics'
+  pod 'Intercom'
+
+  target 'AnalyticsKitTests' do
+    inherit! :search_paths
+    # Pods for testing
+
+    pod 'OCMock'
+  end
+
+end
