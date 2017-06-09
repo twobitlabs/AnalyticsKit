@@ -9,7 +9,7 @@ install:
     - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
 
 script:
-    - set -o pipefail && xcodebuild build test -workspace AnalyticsKit/AnalyticsKit.xcworkspace -scheme AnalyticsKit -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3' | xcpretty
+    - set -o pipefail && xcodebuild build test -workspace AnalyticsKit/AnalyticsKit.xcworkspace -scheme AnalyticsKit -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' | xcpretty
     # Can't use xctool until this is fixed: https://github.com/travis-ci/travis-ci/issues/3986
     #- xctool -project AnalyticsKit/AnalyticsKit.xcodeproj -scheme AnalyticsKit -sdk iphonesimulator
     #- xctool test -project AnalyticsKit/AnalyticsKit.xcodeproj -scheme AnalyticsKit -sdk iphonesimulator
