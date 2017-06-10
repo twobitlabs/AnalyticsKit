@@ -2,6 +2,13 @@ import Foundation
 import UIKit
 
 public class AnalyticsKitDebugProvider: NSObject, AnalyticsKitProvider {
+    public func applicationWillEnterForeground() {}
+    public func applicationDidEnterBackground() {}
+    public func applicationWillTerminate() {}
+    public func uncaughtException(_ exception: NSException) {}
+    public func logScreen(_ screenName: String) {}
+    public func logScreen(_ screenName: String, withProperties properties: [String: Any]) {}
+    public func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {}
 
     fileprivate weak var alertController: UIAlertController?
 

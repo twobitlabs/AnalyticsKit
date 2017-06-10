@@ -6,6 +6,10 @@ public class AnalyticsKitCrashlyticsProvider: NSObject, AnalyticsKitProvider {
         CLSLogv(message, getVaList([]))
     }
 
+    public func applicationWillEnterForeground() {}
+    public func applicationDidEnterBackground() {}
+    public func applicationWillTerminate() {}
+
     // MARK: - Log Screens
 
     public func logScreen(_ screenName: String) {

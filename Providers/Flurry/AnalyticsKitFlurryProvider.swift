@@ -12,6 +12,10 @@ public class AnalyticsKitFlurryProvider: NSObject, AnalyticsKitProvider {
         Flurry.logError("Uncaught", message: message, exception: exception)
     }
 
+    public func applicationWillEnterForeground() {}
+    public func applicationDidEnterBackground() {}
+    public func applicationWillTerminate() {}
+
     // Logging
     public func logScreen(_ screenName: String) {
         runOnMainThread {

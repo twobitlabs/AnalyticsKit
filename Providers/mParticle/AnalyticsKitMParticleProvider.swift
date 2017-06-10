@@ -12,6 +12,11 @@ public class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
         MParticle.sharedInstance().start(withKey: key, secret: secret, installationType: installationType, environment: environment)
     }
 
+    public func applicationWillEnterForeground() {}
+    public func applicationDidEnterBackground() {}
+    public func applicationWillTerminate() {}
+    public func uncaughtException(_ exception: NSException) {}
+
     // Logging
     public func logScreen(_ screenName: String) {
         MParticle.sharedInstance().logScreen(screenName, eventInfo: nil)

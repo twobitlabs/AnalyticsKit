@@ -3,6 +3,11 @@ import Intercom
 
 public class AnalyticsKitIntercomProvider: NSObject, AnalyticsKitProvider {
 
+    public func applicationWillEnterForeground() {}
+    public func applicationDidEnterBackground() {}
+    public func applicationWillTerminate() {}
+    public func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {}
+
     // MARK: - Log Screens
 
     public func logScreen(_ screenName: String) {

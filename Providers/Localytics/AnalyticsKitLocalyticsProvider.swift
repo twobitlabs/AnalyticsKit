@@ -38,6 +38,8 @@ public class AnalyticsKitLocalyticsProvider: NSObject, AnalyticsKitProvider {
         logScreen(screenName)
     }
 
+    public func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {}
+
     public func logEvent(_ event: String) {
         Localytics.tagEvent(event)
     }

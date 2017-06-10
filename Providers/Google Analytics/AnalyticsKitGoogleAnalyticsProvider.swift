@@ -19,9 +19,21 @@ public class AnalyticsKitGoogleAnalyticsProvider: NSObject, AnalyticsKitProvider
     }
 
     // Logging
+    public func applicationWillEnterForeground() {}
+    public func applicationDidEnterBackground() {}
+    public func applicationWillTerminate() {}
+    public func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {}
+
     public func logScreen(_ screenName: String) {
         tracker.set(kGAIScreenName, value: screenName)
         let dict = GAIDictionaryBuilder.createScreenView().build() as [NSObject: AnyObject]
+        tracker.send(dict)
+    }
+
+    public func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
+        tracker.set(kGAIScreenName, value: screenName)
+        guard var dict: [AnyHashable: Any] = GAIDictionaryBuilder.createScreenView().build() as? [AnyHashable: Any] else { return }
+        properties.forEach({ (key, value) in dict[key] = value })
         tracker.send(dict)
     }
 

@@ -27,16 +27,45 @@
                            [AnalyticsKitUnitTestProvider new]
                            ];
     [AnalyticsKit initializeProviders:providers];
-    
+
+    NSException *exception = [[NSException alloc] initWithName:@"blech" reason:nil userInfo:nil];
+    NSError *error = [[NSError alloc] initWithDomain:@"blah" code:1 userInfo:nil];
+
     NSMutableArray *mocks = [NSMutableArray array];
     for (id provider in providers) {
         id mock = [OCMockObject partialMockForObject:provider];
         [mocks addObject:mock];
+        [(id<AnalyticsKitProvider>)[mock expect] applicationWillEnterForeground];
+        [(id<AnalyticsKitProvider>)[mock expect] applicationDidEnterBackground];
+        [(id<AnalyticsKitProvider>)[mock expect] applicationWillTerminate];
+        [(id<AnalyticsKitProvider>)[mock expect] uncaughtException:exception];
         [(id<AnalyticsKitProvider>)[mock expect] logEvent:@"foo"];
+        [(id<AnalyticsKitProvider>)[mock expect] logEvent:@"foo with property" withProperty:@"bar" andValue:@"baz"];
+        [(id<AnalyticsKitProvider>)[mock expect] logEvent:@"foo with properties" withProperties:@{@"bag":@"bagz"}];
+        [(id<AnalyticsKitProvider>)[mock expect] logEvent:@"foo timed" timed:YES];
+        [(id<AnalyticsKitProvider>)[mock expect] logEvent:@"foo timed with properties" withProperties:@{@"bee":@"beez"} timed:YES];
+        [(id<AnalyticsKitProvider>)[mock expect] endTimedEvent:@"foo timed done" withProperties:@{@"1":@"2"}];
+        [(id<AnalyticsKitProvider>)[mock expect] logScreen:@"foo screen"];
+        [(id<AnalyticsKitProvider>)[mock expect] logScreen:@"foo screen with properties" withProperties:@{@"prop":@"value"}];
+        [(id<AnalyticsKitProvider>)[mock expect] logError:@"exception" message:@"exception mess" exception:[OCMArg any]];
+        [(id<AnalyticsKitProvider>)[mock expect] logError:@"error" message:@"error mess" error:error];
     }
-    
+
     [AnalyticsKit logEvent:@"foo"];
-    
+    [AnalyticsKit logEvent:@"foo with property" withProperty:@"bar" andValue:@"baz"];
+    [AnalyticsKit logEvent:@"foo with properties" withProperties:@{@"bag":@"bagz"}];
+    [AnalyticsKit logEvent:@"foo timed" timed:YES];
+    [AnalyticsKit logEvent:@"foo timed with properties" withProperties:@{@"bee":@"beez"} timed:YES];
+    [AnalyticsKit logScreen:@"foo screen"];
+    [AnalyticsKit logScreen:@"foo screen with properties" withProperties:@{@"prop":@"value"}];
+    [AnalyticsKit applicationWillEnterForeground];
+    [AnalyticsKit applicationDidEnterBackground];
+    [AnalyticsKit applicationWillTerminate];
+    [AnalyticsKit uncaughtException:exception];
+    [AnalyticsKit endTimedEvent:@"foo timed done" withProperties:@{@"1":@"2"}];
+    [AnalyticsKit logError:@"exception" message:@"exception mess" exception:exception];
+    [AnalyticsKit logError:@"error" message:@"error mess" error:error];
+
     for (id mock in mocks) {
         [mock verify];
     }

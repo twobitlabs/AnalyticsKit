@@ -6,6 +6,11 @@ public class AnalyticsKitParseProvider: NSObject, AnalyticsKitProvider {
         Parse.setApplicationId(applicationId, clientKey: clientKey)
     }
 
+    public func applicationWillEnterForeground() {}
+    public func applicationDidEnterBackground() {}
+    public func applicationWillTerminate() {}
+    public func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {}
+
     public func uncaughtException(_ exception: NSException) {
         PFAnalytics.trackEvent("Uncaught Exception", dimensions: [
             "version": UIDevice.current.systemVersion,

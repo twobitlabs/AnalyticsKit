@@ -1,20 +1,20 @@
 import Foundation
 
 @objc public protocol AnalyticsKitProvider {
-    @objc optional func applicationWillEnterForeground()
-    @objc optional func applicationDidEnterBackground()
-    @objc optional func applicationWillTerminate()
-    @objc optional func uncaughtException(_ exception: NSException)
-    @objc optional func logScreen(_ screenName: String)
-    @objc optional func logScreen(_ screenName: String, withProperties properties: [String: Any])
+    func applicationWillEnterForeground()
+    func applicationDidEnterBackground()
+    func applicationWillTerminate()
+    func uncaughtException(_ exception: NSException)
+    func logScreen(_ screenName: String)
+    func logScreen(_ screenName: String, withProperties properties: [String: Any])
     func logEvent(_ event: String)
     func logEvent(_ event: String, withProperty key: String, andValue value: String)
     func logEvent(_ event: String, withProperties properties: [String: Any])
     func logEvent(_ event: String, timed: Bool)
     func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool)
-    @objc optional func endTimedEvent(_ event: String, withProperties properties: [String: Any])
-    @objc optional func logError(_ name: String, message: String?, exception: NSException?)
-    @objc optional func logError(_ name: String, message: String?, error: Error?)
+    func endTimedEvent(_ event: String, withProperties properties: [String: Any])
+    func logError(_ name: String, message: String?, exception: NSException?)
+    func logError(_ name: String, message: String?, error: Error?)
 }
 
 public class AnalyticsKit: NSObject {
@@ -125,42 +125,42 @@ public class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
     public func applicationWillEnterForeground() {
         AKLog("\(channelName)")
         for provider in providers {
-            provider.applicationWillEnterForeground?()
+            provider.applicationWillEnterForeground()
         }
     }
 
     public func applicationDidEnterBackground() {
         AKLog("\(channelName)")
         for provider in providers {
-            provider.applicationDidEnterBackground?()
+            provider.applicationDidEnterBackground()
         }
     }
 
     public func applicationWillTerminate() {
         AKLog("\(channelName)")
         for provider in providers {
-            provider.applicationWillTerminate?()
+            provider.applicationWillTerminate()
         }
     }
 
     public func uncaughtException(_ exception: NSException) {
         AKLog("\(channelName) \(exception.description)")
         for provider in providers {
-            provider.uncaughtException?(exception)
+            provider.uncaughtException(exception)
         }
     }
 
     public func logScreen(_ screenName: String) {
         AKLog("\(channelName) \(screenName)")
         for provider in providers {
-            provider.logScreen?(screenName)
+            provider.logScreen(screenName)
         }
     }
 
     public func logScreen(_ screenName: String, withProperties properties: [String: Any]) {
         AKLog("\(channelName) \(screenName) withProperties: \(properties.description)")
         for provider in providers {
-            provider.logScreen?(screenName, withProperties: properties)
+            provider.logScreen(screenName, withProperties: properties)
         }
     }
 
@@ -174,7 +174,7 @@ public class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
     public func logEvent(_ event: String, withProperty property: String, andValue value: String) {
         AKLog("\(channelName) \(event) withProperty: \(property) andValue: \(value)")
         for provider in providers {
-            provider.logEvent(event)
+            provider.logEvent(event, withProperty: property, andValue: value)
         }
     }
 
@@ -202,21 +202,21 @@ public class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
     public func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {
         AKLog("\(channelName) \(event) withProperties: \(properties)")
         for provider in providers {
-            provider.endTimedEvent?(event, withProperties: properties)
+            provider.endTimedEvent(event, withProperties: properties)
         }
     }
 
     public func logError(_ name: String, message: String?, exception: NSException?) {
         AKLog("\(channelName) \(name) message: \(message ?? "nil") exception: \(exception?.description ?? "nil")")
         for provider in providers {
-            provider.logError?(name, message: message, exception: exception)
+            provider.logError(name, message: message, exception: exception)
         }
     }
 
     public func logError(_ name: String, message: String?, error: Error?) {
         AKLog("\(channelName) \(name) message: \(message ?? "nil") error: \(error?.localizedDescription ?? "nil")")
         for provider in providers {
-            provider.logError?(name, message: message, error: error)
+            provider.logError(name, message: message, error: error)
         }
     }
 }

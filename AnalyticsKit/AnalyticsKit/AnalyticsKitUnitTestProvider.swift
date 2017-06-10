@@ -60,6 +60,14 @@ public class AnalyticsKitUnitTestProvider: NSObject, AnalyticsKitProvider {
         return matchingEvents
     }
 
+    public func applicationWillEnterForeground() {}
+    public func applicationDidEnterBackground() {}
+    public func applicationWillTerminate() {}
+    public func uncaughtException(_ exception: NSException) {}
+    public func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {}
+    public func logError(_ name: String, message: String?, exception: NSException?) {}
+    public func logError(_ name: String, message: String?, error: Error?) {}
+
     public func logScreen(_ screenName: String) {
         logEvent("Screen - \(screenName)")
     }

@@ -39,6 +39,8 @@ public class AnalyticsKitApsalarProvider: NSObject, AnalyticsKitProvider {
 
     // MARK: - Event Logging
 
+    public func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {}
+
     public func logEvent(_ event: String) {
         Apsalar.event(event)
     }

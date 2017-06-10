@@ -16,6 +16,11 @@ public class AnalyticsKitMixpanelProvider: NSObject, AnalyticsKitProvider {
     }
 
     // Logging
+
+    public func applicationWillEnterForeground() {}
+    public func applicationDidEnterBackground() {}
+    public func applicationWillTerminate() {}
+
     public func logScreen(_ screenName: String) {
         logEvent("Screen - \(screenName)")
     }
