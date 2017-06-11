@@ -739,9 +739,6 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/AnalyticsKit",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/NewRelic",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Parse",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Crashlytics",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Adjust",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AnalyticsKit/AnalyticsKit-Prefix.pch";
@@ -757,11 +754,7 @@
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/ApSalar\"",
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics\"",
-					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Flurry\"",
-					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/GoogleAnalytics\"",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Flurry",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/GoogleAnalytics",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/ApSalar",
 				);
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=100";
@@ -787,9 +780,6 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/AnalyticsKit",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/NewRelic",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Parse",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Crashlytics",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Adjust",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AnalyticsKit/AnalyticsKit-Prefix.pch";
@@ -805,11 +795,7 @@
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/ApSalar\"",
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics\"",
-					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Flurry\"",
-					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/GoogleAnalytics\"",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Flurry",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/GoogleAnalytics",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/ApSalar",
 				);
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=100";
@@ -829,13 +815,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 699723NDVT;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)/AnalyticsKitTests",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/NewRelic",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Crashlytics",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Adjust",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AnalyticsKit/AnalyticsKit-Prefix.pch";
@@ -852,10 +835,7 @@
 				INFOPLIST_FILE = "AnalyticsKitTests/AnalyticsKitTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/AnalyticsKitTests/OCMock",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.twobitlabs.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -894,10 +874,7 @@
 				INFOPLIST_FILE = "AnalyticsKitTests/AnalyticsKitTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/AnalyticsKitTests/OCMock",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.twobitlabs.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
