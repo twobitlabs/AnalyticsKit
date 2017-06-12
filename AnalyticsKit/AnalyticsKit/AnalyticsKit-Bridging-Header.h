@@ -10,6 +10,5 @@
 #import <GoogleAnalytics/GAIDictionaryBuilder.h>
 #import <GoogleAnalytics/GAIFields.h>
 #import "Apsalar.h"
-#import <mParticle/mParticle.h>
 
 #endif

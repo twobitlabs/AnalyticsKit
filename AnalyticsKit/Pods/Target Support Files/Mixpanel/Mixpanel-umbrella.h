@@ -10,8 +10,9 @@
 #endif
 #endif
 
-#import "AutomaticEventsConstants.h"
-#import "Mixpanel+AutomaticEvents.h"
+#import "AutomaticEvents.h"
+#import "AutomaticTracksConstants.h"
+#import "Mixpanel+AutomaticTracks.h"
 #import "Mixpanel.h"
 #import "MixpanelExceptionHandler.h"
 #import "MixpanelPeople.h"
@@ -64,13 +65,13 @@
 #import "MPVariant.h"
 #import "MPWebSocket.h"
 #import "NSInvocation+MPHelpers.h"
-#import "NSNotificationCenter+AutomaticEvents.h"
-#import "UIApplication+AutomaticEvents.h"
+#import "NSNotificationCenter+AutomaticTracks.h"
+#import "UIApplication+AutomaticTracks.h"
 #import "UIColor+MPColor.h"
 #import "UIImage+MPAverageColor.h"
 #import "UIImage+MPImageEffects.h"
 #import "UIView+MPHelpers.h"
-#import "UIViewController+AutomaticEvents.h"
+#import "UIViewController+AutomaticTracks.h"
 #import "_MPTweakBindObserver.h"
 
 FOUNDATION_EXPORT double MixpanelVersionNumber;

@@ -100,7 +100,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'mParticle' do |n|
     n.source_files = 'Providers/mParticle/AnalyticsKitMParticleProvider.swift'
-    n.dependency 'mParticle'
+    n.dependency 'mParticle-Apple-SDK', '~> 6'
     n.dependency 'AnalyticsKit/Core'
   end
 

@@ -10,6 +10,7 @@
 #import "MPNetworkPrivate.h"
 #import "MPLogger.h"
 #import "Mixpanel.h"
+#import "MixpanelPrivate.h"
 #if !TARGET_OS_OSX
 #import <UIKit/UIKit.h>
 #endif
@@ -45,7 +46,32 @@ static const NSUInteger kBatchSize = 50;
 
 #pragma mark - Flush
 - (void)flushEventQueue:(NSMutableArray *)events {
+    NSMutableArray *automaticEventsQueue;
+    @synchronized (self.mixpanel) {
+        automaticEventsQueue = [self orderAutomaticEvents:events];
+    }
     [self flushQueue:events endpoint:MPNetworkEndpointTrack];
+    @synchronized (self.mixpanel) {
+        if (automaticEventsQueue) {
+            [events addObjectsFromArray:automaticEventsQueue];
+        }
+    }
+}
+
+- (NSMutableArray *)orderAutomaticEvents:(NSMutableArray *)events {
+    if (!self.mixpanel.automaticEventsEnabled || !self.mixpanel.automaticEventsEnabled.boolValue) {
+        NSMutableArray *discardedItems = [NSMutableArray array];
+        for (NSDictionary *e in events) {
+            if ([e[@"event"] hasPrefix:@"$ae_"]) {
+                [discardedItems addObject:e];
+            }
+        }
+        [events removeObjectsInArray:discardedItems];
+        if (!self.mixpanel.automaticEventsEnabled) {
+            return discardedItems;
+        }
+    }
+    return nil;
 }
 
 - (void)flushPeopleQueue:(NSMutableArray *)people {
@@ -311,7 +337,9 @@ static const NSUInteger kBatchSize = 50;
 - (void)updateNetworkActivityIndicator:(BOOL)enabled {
 #if !MIXPANEL_NO_NETWORK_ACTIVITY_INDICATOR
     if (self.shouldManageNetworkActivityIndicator) {
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = enabled;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = enabled;
+        });
     }
 #endif
 }

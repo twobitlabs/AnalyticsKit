@@ -238,6 +238,30 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (atomic) CGFloat miniNotificationPresentationTime;
 
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
+/*!
+ @property
+
+ @abstract
+ The minimum session duration (ms) that is tracked in automatic events.
+
+ @discussion
+ The default value is 10000 (10 seconds).
+ */
+@property (atomic) UInt64 minimumSessionDuration;
+
+/*!
+ @property
+
+ @abstract
+ The maximum session duration (ms) that is tracked in automatic events.
+
+ @discussion
+ The default value is UINT64_MAX (no maximum session duration).
+ */
+@property (atomic) UInt64 maximumSessionDuration;
+#endif
+
 /*!
  @property
 
@@ -548,6 +572,16 @@ NS_ASSUME_NONNULL_BEGIN
 
  */
 - (void)timeEvent:(NSString *)event;
+
+/*!
+ @method
+
+ @abstract
+ Retrieves the time elapsed for the named event since <code>timeEvent:</code> was called.
+
+ @param event   the name of the event to be tracked that was passed to <code>timeEvent:</code>
+ */
+- (double)eventElapsedTime:(NSString *)event;
 
 /*!
  @method

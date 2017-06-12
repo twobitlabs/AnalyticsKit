@@ -6,28 +6,30 @@ PODS:
   - Crashlytics (3.8.4):
     - Fabric (~> 1.6.3)
   - Fabric (1.6.11)
-  - Flurry-iOS-SDK (8.0.2):
-    - Flurry-iOS-SDK/FlurrySDK (= 8.0.2)
-  - Flurry-iOS-SDK/FlurrySDK (8.0.2)
+  - Flurry-iOS-SDK (8.1.0):
+    - Flurry-iOS-SDK/FlurrySDK (= 8.1.0)
+  - Flurry-iOS-SDK/FlurrySDK (8.1.0)
   - GoogleAnalytics (3.17.0)
-  - Intercom (3.2.2)
+  - Intercom (3.2.5)
   - Localytics (4.3.2)
-  - Mixpanel (3.1.4)
-  - mParticle (4.5.5)
+  - Mixpanel (3.1.6)
+  - mParticle-Apple-SDK (6.14.0):
+    - mParticle-Apple-SDK/mParticle (= 6.14.0)
+  - mParticle-Apple-SDK/mParticle (6.14.0)
   - NewRelicAgent (5.13.0)
   - OCMock (3.4)
   - Parse (1.14.4):
     - Bolts/Tasks (~> 1.8)
 
 DEPENDENCIES:
-  - Adjust
+  - Adjust (~> 4.5)
   - Crashlytics
   - Flurry-iOS-SDK
   - GoogleAnalytics
   - Intercom
   - Localytics
-  - Mixpanel
-  - mParticle
+  - Mixpanel (~> 3.1.4)
+  - mParticle-Apple-SDK (~> 6)
   - NewRelicAgent
   - OCMock
   - Parse
@@ -37,16 +39,16 @@ SPEC CHECKSUMS:
   Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
   Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
   Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
-  Flurry-iOS-SDK: 6d47c244428d2cab3f25c97bdba9b2f4d4a5935f
+  Flurry-iOS-SDK: 51065be4436f3e21fc8d3d7bb0b7d6869df6333d
   GoogleAnalytics: f42cc53a87a51fe94334821868d9c8481ff47a7b
-  Intercom: 10124a7bb91a1abbd622dc347dd87aa13297b1f7
+  Intercom: 09f72b37baccfc71733a63b896c9438d5ac0ec3d
   Localytics: f5583d6fdcc63f532fcc8b6a6f99dfd35dd0b378
-  Mixpanel: 4b8e81c1d887d31bf72692a5f94d3e50019fce01
-  mParticle: a3d2043c115c58d10fe31593e7adfac367093c31
+  Mixpanel: 55b7f2314316808e314876e0e2c36e81345e2b6b
+  mParticle-Apple-SDK: 8eaaa07a21799c67d3cccd07f6a688676e5281cc
   NewRelicAgent: 2679737d3601fcac3a11bf69a8968302d9fee497
   OCMock: 35ae71d6a8fcc1b59434d561d1520b9dd4f15765
   Parse: b0aa91d2c435e53d4a9af26e741e014c9b35c42e
 
-PODFILE CHECKSUM: 5d7d4de230fc52b7cabc45a903838daafab8c8eb
+PODFILE CHECKSUM: 8d3dc91838e082a181a75e2f1db42b798e478be2
 
 COCOAPODS: 1.2.1

@@ -20,7 +20,7 @@
 #import <IOKit/IOKitLib.h>
 #endif
 
-#define VERSION @"3.1.4"
+#define VERSION @"3.1.6"
 
 @implementation Mixpanel
 
@@ -72,6 +72,7 @@ static NSString *defaultProjectToken;
         dispatch_once(&onceToken, ^{
             instances = [NSMutableDictionary dictionary];
             defaultProjectToken = apiToken;
+            loggingLockObject = [[NSObject alloc] init];
         });
     }
 
@@ -87,8 +88,10 @@ static NSString *defaultProjectToken;
         MPLogWarning(@"%@ empty api token", self);
     }
     if (self = [self init:apiToken]) {
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
         // Install uncaught exception handlers first
         [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
+#endif
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
         self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
 #endif
@@ -126,9 +129,13 @@ static NSString *defaultProjectToken;
         
         self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL] mixpanel:self];
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
-
         [self setUpListeners];
         [self unarchive];
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
+        self.automaticEvents = [[AutomaticEvents alloc] init];
+        self.automaticEvents.delegate = self;
+        [self.automaticEvents initializeEvents:self.people];
+#endif
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
         [self executeCachedVariants];
         [self executeCachedEventBindings];
@@ -193,6 +200,24 @@ static NSString *defaultProjectToken;
 - (void)setUseIPAddressForGeoLocation:(BOOL)useIPAddressForGeoLocation {
     self.network.useIPAddressForGeoLocation = useIPAddressForGeoLocation;
 }
+
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
+- (UInt64)minimumSessionDuration {
+    return self.automaticEvents.minimumSessionDuration;
+}
+
+- (void)setMinimumSessionDuration:(UInt64)minimumSessionDuration {
+    self.automaticEvents.minimumSessionDuration = minimumSessionDuration;
+}
+
+- (UInt64)maximumSessionDuration {
+    return self.automaticEvents.maximumSessionDuration;
+}
+
+- (void)setMaximumSessionDuration:(UInt64)maximumSessionDuration {
+    self.automaticEvents.maximumSessionDuration = maximumSessionDuration;
+}
+#endif
 
 #pragma mark - Tracking
 + (void)assertPropertyTypes:(NSDictionary *)properties
@@ -340,8 +365,8 @@ static NSString *defaultProjectToken;
     
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
     // Safety check
-    BOOL isAutomaticEvent = [event isEqualToString:kAutomaticEventName];
-    if (isAutomaticEvent && !self.isValidationEnabled) return;
+    BOOL isAutomaticTrack = [event isEqualToString:kAutomaticTrackName];
+    if (isAutomaticTrack && !self.isValidationEnabled) return;
 #endif
     
     properties = [properties copy];
@@ -368,8 +393,8 @@ static NSString *defaultProjectToken;
         
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
         if (self.validationEnabled) {
-            if (self.validationMode == AutomaticEventModeCount) {
-                if (isAutomaticEvent) {
+            if (self.validationMode == AutomaticTrackModeCount) {
+                if (isAutomaticTrack) {
                     self.validationEventCount++;
                 } else {
                     if (self.validationEventCount > 0) {
@@ -491,6 +516,15 @@ static NSString *defaultProjectToken;
     dispatch_async(self.serialQueue, ^{
         self.timedEvents[event] = startTime;
     });
+}
+
+- (double)eventElapsedTime:(NSString *)event {
+    NSNumber *startTime = self.timedEvents[event];
+    if (!startTime) {
+        return 0;
+    } else {
+        return [[NSDate date] timeIntervalSince1970] - [startTime doubleValue];
+    }
 }
 
 - (void)clearTimedEvents
@@ -696,6 +730,7 @@ static NSString *defaultProjectToken;
     [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
     [p setValue:self.shownNotifications forKey:@"shownNotifications"];
     [p setValue:self.timedEvents forKey:@"timedEvents"];
+    [p setValue:self.automaticEventsEnabled forKey:@"automaticEvents"];
     MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
     if (![self archiveObject:p withFilePath:filePath]) {
         MPLogError(@"%@ unable to archive properties data", self);
@@ -808,6 +843,7 @@ static NSString *defaultProjectToken;
         self.variants = properties[@"variants"] ?: [NSSet set];
         self.eventBindings = properties[@"event_bindings"] ?: [NSSet set];
         self.timedEvents = properties[@"timedEvents"] ?: [NSMutableDictionary dictionary];
+        self.automaticEventsEnabled = properties[@"automaticEvents"];
     }
 }
 
@@ -1260,18 +1296,22 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 #pragma mark - Logging
 - (void)setEnableLogging:(BOOL)enableLogging {
-    gLoggingEnabled = enableLogging;
+    @synchronized (loggingLockObject) {
+        gLoggingEnabled = enableLogging;
 
-    if (gLoggingEnabled) {
-        asl_add_log_file(NULL, STDERR_FILENO);
-        asl_set_filter(NULL, ASL_FILTER_MASK_UPTO(ASL_LEVEL_DEBUG));
-    } else {
-        asl_remove_log_file(NULL, STDERR_FILENO);
+        if (gLoggingEnabled) {
+            asl_add_log_file(NULL, STDERR_FILENO);
+            asl_set_filter(NULL, ASL_FILTER_MASK_UPTO(ASL_LEVEL_DEBUG));
+        } else {
+            asl_remove_log_file(NULL, STDERR_FILENO);
+        }
     }
 }
 
 - (BOOL)enableLogging {
-    return gLoggingEnabled;
+    @synchronized (loggingLockObject) {
+        return gLoggingEnabled;
+    }
 }
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
@@ -1360,7 +1400,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                         NSString *method = validationConfig[@"method"];
                         if (method && [method isKindOfClass:NSString.class]) {
                             if ([method isEqualToString:@"count"]) {
-                                self.validationMode = AutomaticEventModeCount;
+                                self.validationMode = AutomaticTrackModeCount;
                             }
                         }
                     }
@@ -1397,6 +1437,14 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                     }
                 } else {
                     MPLogError(@"%@ variants check response format error: %@", self, object);
+                }
+
+                id rawAutomaticEvents = object[@"automatic_events"];
+                if ([rawAutomaticEvents isKindOfClass:[NSNumber class]]) {
+                    if (!self.automaticEventsEnabled || [self.automaticEventsEnabled boolValue] != [rawAutomaticEvents boolValue]) {
+                        self.automaticEventsEnabled = rawAutomaticEvents;
+                        [self archiveProperties];
+                    }
                 }
 
                 // Variants that are already running (may or may not have been marked as finished).

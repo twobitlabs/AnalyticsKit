@@ -95,6 +95,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${PODS_ROOT}/Localytics/Localytics-iOS-4.3.2/Localytics.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Mixpanel/Mixpanel.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Parse/Parse.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/mParticle-Apple-SDK/mParticle_Apple_SDK.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/Adjust/Adjust.framework"
@@ -103,6 +104,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${PODS_ROOT}/Localytics/Localytics-iOS-4.3.2/Localytics.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Mixpanel/Mixpanel.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Parse/Parse.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/mParticle-Apple-SDK/mParticle_Apple_SDK.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait

@@ -1,4 +1,5 @@
 import Foundation
+import mParticle_Apple_SDK
 
 let AKMParticleEventType = "mParticleEventType"
 
@@ -6,10 +7,10 @@ public class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
 
     let defaultEventType: MPEventType
 
-    @objc(initWithKey:secret:defaultEventType:installationType:environment:)
-    public init(key: String, secret: String, defaultEventType: MPEventType = .other, installationType: MPInstallationType = .autodetect, environment: MPEnvironment = .autoDetect) {
+    @objc(initWithKey:secret:defaultEventType:installationType:environment:proxyAppDelegate:)
+    public init(key: String, secret: String, defaultEventType: MPEventType = .other, installationType: MPInstallationType = .autodetect, environment: MPEnvironment = .autoDetect, proxyAppDelegate: Bool = false) {
         self.defaultEventType = defaultEventType
-        MParticle.sharedInstance().start(withKey: key, secret: secret, installationType: installationType, environment: environment)
+        MParticle.sharedInstance().start(withKey: key, secret: secret, installationType: installationType, environment: environment, proxyAppDelegate: proxyAppDelegate)
     }
 
     public func applicationWillEnterForeground() {}

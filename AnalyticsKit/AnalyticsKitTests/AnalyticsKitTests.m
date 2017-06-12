@@ -23,7 +23,7 @@
                            [[AnalyticsKitLocalyticsProvider alloc] initWithAPIKey:@"03a5f224fe2408887ac32dd-68937c2c-fd90-11e4-b9d0-00eba64cb0ec"],
                            [[AnalyticsKitMixpanelProvider alloc] initWithAPIKey:@"xyz123"],
                            [[AnalyticsKitParseProvider alloc] initWithApplicationId:@"x" clientKey:@"y"],
-                           [[AnalyticsKitMParticleProvider alloc] initWithKey:@"test-key" secret:@"test-secret" defaultEventType:MPEventTypeOther installationType:MPInstallationTypeAutodetect environment:MPEnvironmentAutoDetect],
+                           [[AnalyticsKitMParticleProvider alloc] initWithKey:@"test-key" secret:@"test-secret" defaultEventType:MPEventTypeOther installationType:MPInstallationTypeAutodetect environment:MPEnvironmentAutoDetect proxyAppDelegate:false],
                            [AnalyticsKitUnitTestProvider new]
                            ];
     [AnalyticsKit initializeProviders:providers];
