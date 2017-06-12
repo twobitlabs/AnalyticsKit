@@ -757,7 +757,7 @@
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/ApSalar",
 				);
-				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=100";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=100 -D COCOAPODS";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.twobitlabs.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "AnalyticsKit/AnalyticsKit-Bridging-Header.h";
@@ -798,7 +798,7 @@
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/ApSalar",
 				);
-				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=100";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=100 -D COCOAPODS";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.twobitlabs.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "AnalyticsKit/AnalyticsKit-Bridging-Header.h";

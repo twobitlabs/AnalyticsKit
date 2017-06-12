@@ -1,5 +1,7 @@
 import Foundation
+#if COCOAPODS
 import Adjust
+#endif
 
 public class AnalyticsKitAdjustIOProvider: NSObject, AnalyticsKitProvider {
 
