@@ -185,3 +185,4 @@ AnalyticsKit.logEvent("Launching Watch App");
  - [François Benaiteau](https://github.com/netbe)
  - [Ying Quan Tan](https://github.com/brightredchilli)
  - [Kaden Wilkinson](https://github.com/kdawgwilk)
+ - [Jim Boyd](https://github.com/jjamminjim)
