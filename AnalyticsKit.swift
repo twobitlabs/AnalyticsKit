@@ -113,12 +113,12 @@ public class AnalyticsKitChannel: NSObject, AnalyticsKitProvider {
     let channelName: String
     var providers: [AnalyticsKitProvider]
 
-    init(channelName: String, providers: [AnalyticsKitProvider]) {
+    public init(channelName: String, providers: [AnalyticsKitProvider]) {
         self.channelName = channelName
         self.providers = providers
     }
 
-    func initializeProviders(_ providers: [AnalyticsKitProvider]) {
+    public func initializeProviders(_ providers: [AnalyticsKitProvider]) {
         self.providers = providers
     }
 
