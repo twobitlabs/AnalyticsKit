@@ -28,28 +28,28 @@ Pod::Spec.new do |s|
     core.source_files  = 'AnalyticsKit.swift', 'AnalyticsKitEvent.swift', 'AnalyticsKitDebugProvider.swift', 'AnalyticsKitUnitTestProvider.swift', 'AnalyticsKit/AnalyticsKit/AnalyticsKitTimedEventHelper.swift'
   end
 
-  s.subspec 'Intercom' do |i|
-    i.source_files = 'Providers/Intercom/AnalyticsKitIntercomProvider.swift'
-    i.frameworks = 'Intercom'
-    i.dependency 'Intercom'
-    i.dependency 'AnalyticsKit/Core'
-    i.pod_target_xcconfig = {
-      'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/Intercom/Intercom'
-      # 'OTHER_LDFLAGS'          => '$(inherited) -undefined dynamic_lookup'
-    }
-  end
-
-  s.subspec 'Crashlytics' do |c|
-    c.source_files = 'Providers/Crashlytics/AnalyticsKitCrashlyticsProvider.swift'
-    c.frameworks = 'Crashlytics', 'Security', 'SystemConfiguration'
-    c.libraries = 'c++', 'z'
-    c.dependency 'Crashlytics'
-    c.dependency 'AnalyticsKit/Core'
-    c.pod_target_xcconfig = {
-      'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/Crashlytics/iOS'
-      # 'OTHER_LDFLAGS'          => '$(inherited) -undefined dynamic_lookup'
-    }
-  end
+  # s.subspec 'Intercom' do |i|
+  #   i.source_files = 'Providers/Intercom/AnalyticsKitIntercomProvider.swift'
+  #   i.frameworks = 'Intercom'
+  #   i.dependency 'Intercom'
+  #   i.dependency 'AnalyticsKit/Core'
+  #   i.pod_target_xcconfig = {
+  #     'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/Intercom/Intercom'
+  #     # 'OTHER_LDFLAGS'          => '$(inherited) -undefined dynamic_lookup'
+  #   }
+  # end
+  #
+  # s.subspec 'Crashlytics' do |c|
+  #   c.source_files = 'Providers/Crashlytics/AnalyticsKitCrashlyticsProvider.swift'
+  #   c.frameworks = 'Crashlytics', 'Security', 'SystemConfiguration'
+  #   c.libraries = 'c++', 'z'
+  #   c.dependency 'Crashlytics'
+  #   c.dependency 'AnalyticsKit/Core'
+  #   c.pod_target_xcconfig = {
+  #     'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/Crashlytics/iOS'
+  #     # 'OTHER_LDFLAGS'          => '$(inherited) -undefined dynamic_lookup'
+  #   }
+  # end
 
   s.subspec 'Firebase' do |f|
     f.source_files = 'Providers/Firebase/AnalyticsKitFirebaseProvider.swift'
@@ -80,11 +80,11 @@ Pod::Spec.new do |s|
     l.dependency 'AnalyticsKit/Core'
   end
 
-  s.subspec 'GoogleAnalytics' do |g|
-    g.source_files = 'Providers/Google Analytics/AnalyticsKitGoogleAnalyticsProvider.swift'
-    g.dependency 'GoogleAnalytics'
-    g.dependency 'AnalyticsKit/Core'
-  end
+  # s.subspec 'GoogleAnalytics' do |g|
+  #   g.source_files = 'Providers/Google Analytics/AnalyticsKitGoogleAnalyticsProvider.swift'
+  #   g.dependency 'GoogleAnalytics'
+  #   g.dependency 'AnalyticsKit/Core'
+  # end
 
   s.subspec 'Mixpanel' do |m|
     m.source_files = 'Providers/Mixpanel/AnalyticsKitMixpanelProvider.swift'
@@ -92,11 +92,11 @@ Pod::Spec.new do |s|
     m.dependency 'AnalyticsKit/Core'
   end
 
-  s.subspec 'NewRelic' do |n|
-    n.source_files = 'Providers/New Relic/AnalyticsKitNewRelicProvider.swift'
-    n.dependency 'NewRelicAgent'
-    n.dependency 'AnalyticsKit/Core'
-  end
+  # s.subspec 'NewRelic' do |n|
+  #   n.source_files = 'Providers/New Relic/AnalyticsKitNewRelicProvider.swift'
+  #   n.dependency 'NewRelicAgent'
+  #   n.dependency 'AnalyticsKit/Core'
+  # end
 
   s.subspec 'mParticle' do |n|
     n.source_files = 'Providers/mParticle/AnalyticsKitMParticleProvider.swift'
