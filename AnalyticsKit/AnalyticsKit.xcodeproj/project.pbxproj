@@ -48,6 +48,7 @@
 		9C3799CF181838FD00488101 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3799B1181838FD00488101 /* UIKit.framework */; };
 		9C3799D7181838FD00488101 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9C3799D5181838FD00488101 /* InfoPlist.strings */; };
 		9C3799D9181838FD00488101 /* AnalyticsKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3799D8181838FD00488101 /* AnalyticsKitTests.m */; };
+		E7F9CCA11F7CFB9100C71B46 /* AnalyticsKitMicrosftMobileCenterProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F9CCA01F7CFB9100C71B46 /* AnalyticsKitMicrosftMobileCenterProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,6 +114,7 @@
 		ACDB2B2A0B1ACE41D2ABA939 /* Pods-AnalyticsKitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalyticsKitTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AnalyticsKitTests/Pods-AnalyticsKitTests.release.xcconfig"; sourceTree = "<group>"; };
 		B1FCCFAD6F37D68A4CE8386A /* Pods-AnalyticsKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalyticsKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AnalyticsKit/Pods-AnalyticsKit.debug.xcconfig"; sourceTree = "<group>"; };
 		CAC72BDCB2679B3279429F0D /* Pods-AnalyticsKitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalyticsKitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AnalyticsKitTests/Pods-AnalyticsKitTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E7F9CCA01F7CFB9100C71B46 /* AnalyticsKitMicrosftMobileCenterProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitMicrosftMobileCenterProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -287,6 +289,7 @@
 				9C3799F518183A6B00488101 /* Flurry */,
 				9C3799F818183A6B00488101 /* Google Analytics */,
 				9C3799FB18183A6B00488101 /* Localytics */,
+				E7F9CC9F1F7CFB9100C71B46 /* Microsoft Mobile Center */,
 				9C3799FE18183A6B00488101 /* Mixpanel */,
 				8B0967281D53ECAF00F7762D /* mParticle */,
 				9C379A0118183A6B00488101 /* New Relic */,
@@ -367,6 +370,14 @@
 				8BA2B7971D52A3C6008F5E60 /* AnalyticsKitCrashlyticsProvider.swift */,
 			);
 			name = Crashlytics;
+			sourceTree = "<group>";
+		};
+		E7F9CC9F1F7CFB9100C71B46 /* Microsoft Mobile Center */ = {
+			isa = PBXGroup;
+			children = (
+				E7F9CCA01F7CFB9100C71B46 /* AnalyticsKitMicrosftMobileCenterProvider.swift */,
+			);
+			path = "Microsoft Mobile Center";
 			sourceTree = "<group>";
 		};
 		EDD541DB125BE2B5576F16FF /* Pods */ = {
@@ -507,13 +518,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AnalyticsKitTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		742236731FA5C16F5B937683 /* [CP] Embed Pods Frameworks */ = {
@@ -522,9 +536,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-AnalyticsKitTests/Pods-AnalyticsKitTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/OCMock/OCMock.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OCMock.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -537,9 +554,24 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-AnalyticsKit/Pods-AnalyticsKit-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Adjust/Adjust.framework",
+				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
+				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK/Flurry_iOS_SDK.framework",
+				"${PODS_ROOT}/Localytics/Localytics-iOS-4.3.2/Localytics.framework",
+				"${BUILT_PRODUCTS_DIR}/Mixpanel/Mixpanel.framework",
+				"${BUILT_PRODUCTS_DIR}/Parse/Parse.framework",
+				"${BUILT_PRODUCTS_DIR}/mParticle-Apple-SDK/mParticle_Apple_SDK.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Adjust.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flurry_iOS_SDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Localytics.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mixpanel.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Parse.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/mParticle_Apple_SDK.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -552,13 +584,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AnalyticsKit-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CCFE90F37DF7DFD7EB03966B /* [CP] Copy Pods Resources */ = {
@@ -567,9 +602,13 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-AnalyticsKit/Pods-AnalyticsKit-resources.sh",
+				"${PODS_ROOT}/Intercom/Intercom/Intercom.framework/Versions/A/Resources/Intercom.bundle",
+				"${PODS_ROOT}/Intercom/Intercom/Intercom.framework/Versions/A/Resources/IntercomTranslations.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -593,6 +632,7 @@
 				6E73BDF71ECF919700657CDE /* AnalyticsKitApsalarProvider.swift in Sources */,
 				8BA2B79C1D52A3E5008F5E60 /* AnalyticsKitGoogleAnalyticsProvider.swift in Sources */,
 				6E73BDF91ECF968000657CDE /* AnalyticsKitViewController.swift in Sources */,
+				E7F9CCA11F7CFB9100C71B46 /* AnalyticsKitMicrosftMobileCenterProvider.swift in Sources */,
 				6E73BDF11ECF833000657CDE /* AnalyticsKitLocalyticsProvider.swift in Sources */,
 				8BA2B7981D52A3C6008F5E60 /* AnalyticsKitCrashlyticsProvider.swift in Sources */,
 				8BA2B7961D52A3B5008F5E60 /* AnalyticsKitAdjustIOProvider.swift in Sources */,
