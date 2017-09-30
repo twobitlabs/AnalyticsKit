@@ -47,8 +47,10 @@
         [(id<AnalyticsKitProvider>)[mock expect] endTimedEvent:@"foo timed done" withProperties:@{@"1":@"2"}];
         [(id<AnalyticsKitProvider>)[mock expect] logScreen:@"foo screen"];
         [(id<AnalyticsKitProvider>)[mock expect] logScreen:@"foo screen with properties" withProperties:@{@"prop":@"value"}];
-        [(id<AnalyticsKitProvider>)[mock expect] logError:@"exception" message:@"exception mess" exception:[OCMArg any]];
-        [(id<AnalyticsKitProvider>)[mock expect] logError:@"error" message:@"error mess" error:error];
+        [(id<AnalyticsKitProvider>)[mock expect] logError:@"exception" message:@"exception mess" properties:nil exception:[OCMArg any]];
+        [(id<AnalyticsKitProvider>)[mock expect] logError:@"error" message:@"error mess" properties:nil error:error];
+        [(id<AnalyticsKitProvider>)[mock expect] logError:@"exception" message:@"exception mess" properties:@{@"prop":@"value"} exception:[OCMArg any]];
+        [(id<AnalyticsKitProvider>)[mock expect] logError:@"error" message:@"error mess" properties:@{@"prop":@"value"} error:error];
     }
 
     [AnalyticsKit logEvent:@"foo"];
@@ -63,8 +65,10 @@
     [AnalyticsKit applicationWillTerminate];
     [AnalyticsKit uncaughtException:exception];
     [AnalyticsKit endTimedEvent:@"foo timed done" withProperties:@{@"1":@"2"}];
-    [AnalyticsKit logError:@"exception" message:@"exception mess" exception:exception];
-    [AnalyticsKit logError:@"error" message:@"error mess" error:error];
+    [AnalyticsKit logError:@"exception" message:@"exception mess" properties:nil exception:exception];
+    [AnalyticsKit logError:@"error" message:@"error mess" properties:nil error:error];
+    [AnalyticsKit logError:@"exception" message:@"exception mess" properties:@{@"prop":@"value"} exception:exception];
+    [AnalyticsKit logError:@"error" message:@"error mess" properties:@{@"prop":@"value"} error:error];
 
     for (id mock in mocks) {
         [mock verify];

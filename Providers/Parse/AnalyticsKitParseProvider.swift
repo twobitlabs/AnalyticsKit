@@ -47,17 +47,27 @@ public class AnalyticsKitParseProvider: NSObject, AnalyticsKitProvider {
         logEvent(event, withProperties: dict)
     }
 
-    public func logError(_ name: String, message: String?, exception: NSException?) {
-        PFAnalytics.trackEvent(name, dimensions: [
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, exception: NSException?) {
+        var dimensions: [String: String] = [
             "message": message ?? "nil",
             "exception": exception?.name.rawValue ?? "nil",
-        ])
+        ]
+        if let properties = properties {
+            let stringsDict = Dictionary(uniqueKeysWithValues: properties.map { ($0, "\($1)") } )
+            dimensions.merge(stringsDict) { (current, _) in current }
+        }
+        PFAnalytics.trackEvent(name, dimensions: dimensions)
     }
 
-    public func logError(_ name: String, message: String?, error: Error?) {
-        PFAnalytics.trackEvent(name, dimensions: [
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, error: Error?) {
+        var dimensions: [String: String] = [
             "message": message ?? "nil",
             "error": error?.localizedDescription ?? "nil",
-        ])
+        ]
+        if let properties = properties {
+            let stringsDict = Dictionary(uniqueKeysWithValues: properties.map { ($0, "\($1)") } )
+            dimensions.merge(stringsDict) { (current, _) in current }
+        }
+        PFAnalytics.trackEvent(name, dimensions: dimensions)
     }
 }

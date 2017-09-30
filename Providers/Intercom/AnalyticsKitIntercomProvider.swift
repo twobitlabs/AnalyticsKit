@@ -42,24 +42,32 @@ public class AnalyticsKitIntercomProvider: NSObject, AnalyticsKitProvider {
 
     // MARK: - Log Errors
 
-    public func logError(_ name: String, message: String?, exception: NSException?) {
-        logEvent("Exceptions", withProperties: [
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, exception: NSException?) {
+        var loggedProperties: [String: Any] = [
             "name": name,
             "message": message ?? "nil",
             "ename": exception?.name.rawValue ?? "nil",
             "reason": exception?.reason ?? "nil",
-        ])
+        ]
+        if let properties = properties {
+            loggedProperties.merge(properties) { (current, _) in current }
+        }
+        logEvent("Exceptions", withProperties: loggedProperties)
     }
 
-    public func logError(_ name: String, message: String?, error: Error?) {
-        logEvent("Errors", withProperties: [
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, error: Error?) {
+        var loggedProperties: [String: Any] = [
             "name": name,
             "message": message ?? "nil",
             "description": error?.localizedDescription ?? "nil",
-        ])
+        ]
+        if let properties = properties {
+            loggedProperties.merge(properties) { (current, _) in current }
+        }
+        logEvent("Errors", withProperties: loggedProperties)
     }
 
     public func uncaughtException(_ exception: NSException) {
-        logError("Uncaught Exception", message: "Crash on iOS \(UIDevice.current.systemVersion)", exception: exception)
+        logError("Uncaught Exception", message: "Crash on iOS \(UIDevice.current.systemVersion)", properties: nil, exception: exception)
     }
 }

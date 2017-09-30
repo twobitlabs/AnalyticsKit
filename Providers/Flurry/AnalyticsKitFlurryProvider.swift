@@ -65,13 +65,13 @@ public class AnalyticsKitFlurryProvider: NSObject, AnalyticsKitProvider {
         }
     }
 
-    public func logError(_ name: String, message: String?, exception: NSException?) {
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, exception: NSException?) {
         runOnMainThread { 
             Flurry.logError(name, message: message, exception: exception)
         }
     }
 
-    public func logError(_ name: String, message: String?, error: Error?) {
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, error: Error?) {
         runOnMainThread {
             Flurry.logError(name, message: message, error: error)
         }

@@ -63,25 +63,32 @@ public class AnalyticsKitApsalarProvider: NSObject, AnalyticsKitProvider {
 
     // MARK: - Error Logging
 
-    public func logError(_ name: String, message: String?, exception: NSException?) {
-        let args: [String: String] = [
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, exception: NSException?) {
+        var args: [String: Any] = [
             "name": name,
             "message": message ?? "nil",
             "ename": exception?.name.rawValue ?? "nil",
             "reason": exception?.reason ?? "nil",
         ]
+        if let properties = properties {
+            args.merge(properties) { (current, _) in current }
+        }
         Apsalar.event("Exceptions", withArgs: args)
     }
 
-    public func logError(_ name: String, message: String?, error: Error?) {
-        Apsalar.event("Errors", withArgs: [
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, error: Error?) {
+        var args: [String: Any] = [
             "name": name,
             "message": message ?? "nil",
             "description": error?.localizedDescription ?? "nil",
-        ])
+        ]
+        if let properties = properties {
+            args.merge(properties) { (current, _) in current }
+        }
+        Apsalar.event("Errors", withArgs: args)
     }
 
     public func uncaughtException(_ exception: NSException) {
-        logError("Uncaught Exception", message: "Crash on iOS \(UIDevice.current.systemVersion)", exception: exception)
+        logError("Uncaught Exception", message: "Crash on iOS \(UIDevice.current.systemVersion)", properties: nil, exception: exception)
     }
 }

@@ -28,7 +28,7 @@ public class AnalyticsKitNewRelicProvider: NSObject, AnalyticsKitProvider {
     public func logScreen(_ screenName: String) {}
     public func logScreen(_ screenName: String, withProperties properties: [String: Any]) {}
     public func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {}
-    public func logError(_ name: String, message: String?, exception: NSException?) {}
-    public func logError(_ name: String, message: String?, error: Error?) {}
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, exception: NSException?) {}
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, error: Error?) {}
 
 }

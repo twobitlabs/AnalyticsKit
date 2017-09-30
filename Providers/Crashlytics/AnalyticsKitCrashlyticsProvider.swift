@@ -61,15 +61,24 @@ public class AnalyticsKitCrashlyticsProvider: NSObject, AnalyticsKitProvider {
 
     // MARK: - Log Errors
 
-    public func logError(_ name: String, message: String?, exception: NSException?) {
-        clsLog("error: \(name) message: \(message ?? "nil") exception name: \(exception?.name.rawValue ?? "nil") reason: \(exception?.reason ?? "nil")")
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, exception: NSException?) {
+        clsLog("error: \(name) message: \(message ?? "nil") properties: \(propertiesString(for: properties) ?? "nil") exception name: \(exception?.name.rawValue ?? "nil") reason: \(exception?.reason ?? "nil")")
     }
 
-    public func logError(_ name: String, message: String?, error: Error?) {
-        clsLog("error: \(name) message: \(message ?? "nil") error: \(error?.localizedDescription ?? "nil")")
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, error: Error?) {
+        clsLog("error: \(name) message: \(message ?? "nil") properties: \(propertiesString(for: properties) ?? "nil") error: \(error?.localizedDescription ?? "nil")")
     }
 
     public func uncaughtException(_ exception: NSException) {
         clsLog("uncaught exception: \(exception.name.rawValue) reason: \(exception.reason ?? "nil")")
+    }
+
+    private func propertiesString(for properties: [String: Any]?) -> String? {
+        guard let properties = properties else { return nil }
+        var stringArray = [String]()
+        for (key, value) in properties {
+            stringArray.append("\(key): \(value)")
+        }
+        return "[" + stringArray.joined(separator: ", ") + "]"
     }
 }

@@ -25,14 +25,23 @@ public class AnalyticsKitDebugProvider: NSObject, AnalyticsKitProvider {
         logEvent(event, withProperties: properties)
     }
     
-    public func logError(_ name: String, message: String?, exception: NSException?) {
-        let message = "\(name)\n\n\(message ?? "nil")\n\n\(exception?.description ?? "nil")"
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, exception: NSException?) {
+        let message = "\(name)\n\n\(message ?? "nil")\n\n\(propertiesString(for: properties) ?? "nil")\n\n\(exception?.description ?? "nil")"
         showAlert(message)
     }
 
-    public func logError(_ name: String, message: String?, error: Error?) {
-        let message = "\(name)\n\n\(message ?? "nil")\n\n\(error?.localizedDescription ?? "nil")"
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, error: Error?) {
+        let message = "\(name)\n\n\(message ?? "nil")\n\n\(propertiesString(for: properties) ?? "nil")\n\n\(error?.localizedDescription ?? "nil")"
         showAlert(message)
+    }
+
+    private func propertiesString(for properties: [String: Any]?) -> String? {
+        guard let properties = properties else { return nil }
+        var stringArray = [String]()
+        for (key, value) in properties {
+            stringArray.append("\(key): \(value)")
+        }
+        return stringArray.joined(separator: "\n")
     }
 
     fileprivate func showAlert(_ message: String) {

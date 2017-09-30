@@ -65,8 +65,8 @@ public class AnalyticsKitUnitTestProvider: NSObject, AnalyticsKitProvider {
     public func applicationWillTerminate() {}
     public func uncaughtException(_ exception: NSException) {}
     public func endTimedEvent(_ event: String, withProperties properties: [String: Any]) {}
-    public func logError(_ name: String, message: String?, exception: NSException?) {}
-    public func logError(_ name: String, message: String?, error: Error?) {}
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, exception: NSException?) {}
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, error: Error?) {}
 
     public func logScreen(_ screenName: String) {
         logEvent("Screen - \(screenName)")

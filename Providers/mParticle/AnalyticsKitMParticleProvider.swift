@@ -75,21 +75,24 @@ public class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
         }
     }
 
-    public func logError(_ name: String, message: String?, exception: NSException?) {
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, exception: NSException?) {
         if let exception = exception {
             MParticle.sharedInstance().logException(exception)
         } else {
-            logError(name, message: message, error: nil)
+            logError(name, message: message, properties: properties, error: nil)
         }
     }
 
-    public func logError(_ name: String, message: String?, error: Error?) {
+    public func logError(_ name: String, message: String?, properties: [String: Any]?, error: Error?) {
         var eventInfo = [String: Any]()
         if let message = message {
             eventInfo["message"] = message
         }
         if let error = error {
             eventInfo["error"] = error.localizedDescription
+        }
+        if let properties = properties {
+            eventInfo.merge(properties) { (current, _) in current }
         }
         MParticle.sharedInstance().logError(name, eventInfo: eventInfo)
     }
