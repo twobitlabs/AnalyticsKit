@@ -750,7 +750,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/AnalyticsKit",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/NewRelic",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AnalyticsKit/AnalyticsKit-Prefix.pch";
@@ -765,8 +764,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/ApSalar\"",
-					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics\"",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/ApSalar",
 				);
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=100 -D COCOAPODS";
@@ -792,7 +789,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/AnalyticsKit",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/NewRelic",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AnalyticsKit/AnalyticsKit-Prefix.pch";
@@ -807,8 +803,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/ApSalar\"",
-					"\"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics\"",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Localytics",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/ApSalar",
 				);
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=100 -D COCOAPODS";
@@ -832,7 +826,6 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)/AnalyticsKitTests",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/NewRelic",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AnalyticsKit/AnalyticsKit-Prefix.pch";
@@ -874,9 +867,6 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)/AnalyticsKitTests",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/NewRelic",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Crashlytics",
-					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Adjust",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AnalyticsKit/AnalyticsKit-Prefix.pch";
