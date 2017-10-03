@@ -3,6 +3,7 @@ import Flurry_iOS_SDK
 
 public class AnalyticsKitFlurryProvider: NSObject, AnalyticsKitProvider {
 
+    @objc(initWithAPIKey:)
     public init(withAPIKey apiKey: String) {
         Flurry.startSession(apiKey)
     }

@@ -2,6 +2,8 @@ import Foundation
 import Parse
 
 public class AnalyticsKitParseProvider: NSObject, AnalyticsKitProvider {
+
+    @objc(initWithApplicationId:clientKey:)
     init(applicationId: String, clientKey: String) {
         Parse.setApplicationId(applicationId, clientKey: clientKey)
     }

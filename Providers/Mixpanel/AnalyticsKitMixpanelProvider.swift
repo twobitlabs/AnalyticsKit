@@ -3,6 +3,7 @@ import Mixpanel
 
 public class AnalyticsKitMixpanelProvider: NSObject, AnalyticsKitProvider {
 
+    @objc(initWithAPIKey:)
     public init(withAPIKey apiKey: String) {
         Mixpanel.sharedInstance(withToken: apiKey)
     }

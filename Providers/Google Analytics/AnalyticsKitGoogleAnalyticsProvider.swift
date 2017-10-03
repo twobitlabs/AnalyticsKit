@@ -9,6 +9,7 @@ public class AnalyticsKitGoogleAnalyticsProvider: NSObject, AnalyticsKitProvider
     fileprivate let value = "Value"
     fileprivate let tracker: GAITracker
 
+    @objc(initWithTrackingID:)
     public init(withTrackingID trackingId: String) {
         tracker = GAI.sharedInstance().tracker(withTrackingId: trackingId)
     }

@@ -5,7 +5,7 @@ import Adjust
 
 public class AnalyticsKitAdjustIOProvider: NSObject, AnalyticsKitProvider {
 
-    //-(id<AnalyticsKitProvider>)initWithAppToken:(NSString *)appToken productionEnvironmentEnabled:(BOOL)
+    @objc(initWithAppToken:productionEnvironmentEnabled:)
     public init(withAppToken appToken: String, productionEnvironmentEnabled enabled: Bool) {        
         let environment = enabled ? ADJEnvironmentProduction : ADJEnvironmentSandbox
         let config = ADJConfig(appToken: appToken, environment: environment)
