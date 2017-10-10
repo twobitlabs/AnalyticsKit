@@ -102,11 +102,11 @@ public class AnalyticsKit: NSObject {
         channel(DefaultChannel).endTimedEvent(event, withProperties: properties)
     }
     
-    public class func logError(_ name: String, message: String?, properties: [String: Any]?, exception: NSException?) {
+    public class func logError(_ name: String, message: String?, properties: [String: Any]? = nil, exception: NSException?) {
         channel(DefaultChannel).logError(name, message: message, properties: properties, exception: exception)
     }
     
-    public class func logError(_ name: String, message: String?, properties: [String: Any]?, error: Error?) {
+    public class func logError(_ name: String, message: String?, properties: [String: Any]? = nil, error: Error?) {
         channel(DefaultChannel).logError(name, message: message, properties: properties, error: error)
     }
 }
