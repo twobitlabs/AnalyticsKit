@@ -53,20 +53,31 @@ class AnalyticsKitFirebaseProvider: NSObject, AnalyticsKitProvider {
         // Firebase doesn't support timed events
     }
 
-    func logError(_ name: String, message: String?, exception: NSException?) {
-        logFbEvent("Exception Logged", parameters: [
+    func logError(_ name: String, message: String?, properties: [String : Any]?, exception: NSException?) {
+        var loggedProperties: [String: Any] = [
             "name": name,
             "message": String(describing: message).truncateTo(100),
             "exception": String(describing: exception).truncateTo(100)
-        ])
+        ]
+        if let properties = properties {
+            loggedProperties.merge(properties) { (current, _) in current }
+        }
+
+        logFbEvent("Exception Logged", parameters: loggedProperties)
     }
 
-    func logError(_ name: String, message: String?, error: Error?) {
-        logFbEvent("Error Logged", parameters: [ // error is a reserved word in firebase so we can't call the event "Error"
+    func logError(_ name: String, message: String?, properties: [String : Any]?, error: Error?) {
+        var loggedProperties: [String: Any] = [
             "name": name,
             "message": String(describing: message).truncateTo(100),
             "error": String(describing: error).truncateTo(100)
-        ])
+        ]
+        if let properties = properties {
+            loggedProperties.merge(properties) { (current, _) in current }
+        }
+        
+        // error is a reserved word in firebase so we can't call the event "Error"
+        logFbEvent("Error Logged", parameters: loggedProperties)
     }
 
     fileprivate func logFbEvent(_ event: String, parameters: [String: Any]?) {
