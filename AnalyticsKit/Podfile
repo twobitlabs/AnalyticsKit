@@ -17,6 +17,7 @@ target 'AnalyticsKit' do
   pod 'Flurry-iOS-SDK'
   pod 'Crashlytics'
   pod 'Intercom'
+  pod 'MobileCenter'
 
   target 'AnalyticsKitTests' do
     inherit! :search_paths

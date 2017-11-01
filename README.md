@@ -17,6 +17,7 @@ The goal of `AnalyticsKit` is to provide a consistent API for analytics regardle
 * [Mixpanel](https://mixpanel.com/)
 * [mParticle](https://www.mparticle.com)
 * [Parse](http://parse.com/)
+* [Mobile Center](https://docs.microsoft.com/en-us/mobile-center/)
 * [Debug Provider](https://github.com/twobitlabs/AnalyticsKit/blob/master/AnalyticsKitDebugProvider.swift) - shows an AlertView whenever an error is logged
 * [Unit Test Provider](https://github.com/twobitlabs/AnalyticsKit/blob/master/AnalyticsKit/AnalyticsKit/AnalyticsKitUnitTestProvider.swift) - allows you to inspect logged events
 
