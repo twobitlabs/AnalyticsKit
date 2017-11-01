@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "AnalyticsKit"
-  s.version      = "2.1.1"
+  s.version      = "2.1.2"
 
   s.summary      = "Analytics framework for iOS"
 
@@ -108,6 +108,12 @@ Pod::Spec.new do |s|
     p.source_files = 'Providers/Parse/AnalyticsKitParseProvider.swift'
     p.dependency 'Parse'
     p.dependency 'AnalyticsKit/Core'
+  end
+
+  s.subspec 'MobileCenter' do |r|
+    r.source_files = 'Providers/Microsoft Mobile Center/AnalyticsKitMicrosftMobileCenterProvider.swift'
+    r.dependency 'MobileCenter'
+    r.dependency 'AnalyticsKit/Core'
   end
 
 end
