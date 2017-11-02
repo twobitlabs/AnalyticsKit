@@ -6,6 +6,7 @@ import Foundation
 #endif
 public class AnalyticsKitMicrosoftMobileCenterProvider: NSObject, AnalyticsKitProvider {
 
+    @objc(initWithTrackingID:)
     public init(withTrackingID trackingId: String) {
         MSMobileCenter.start(trackingId, withServices:[
             MSAnalytics.self,
