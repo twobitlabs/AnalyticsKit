@@ -187,3 +187,4 @@ AnalyticsKit.logEvent("Launching Watch App");
  - [Ying Quan Tan](https://github.com/brightredchilli)
  - [Kaden Wilkinson](https://github.com/kdawgwilk)
  - [Jim Boyd](https://github.com/jjamminjim)
+ - [Miralem Cebic](https://github.com/RabbitMC)
