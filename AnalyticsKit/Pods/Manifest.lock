@@ -13,6 +13,14 @@ PODS:
   - Intercom (3.2.5)
   - Localytics (4.3.2)
   - Mixpanel (3.1.6)
+  - MobileCenter (0.14.0):
+    - MobileCenter/Analytics (= 0.14.0)
+    - MobileCenter/Crashes (= 0.14.0)
+  - MobileCenter/Analytics (0.14.0):
+    - MobileCenter/Core
+  - MobileCenter/Core (0.14.0)
+  - MobileCenter/Crashes (0.14.0):
+    - MobileCenter/Core
   - mParticle-Apple-SDK (6.14.0):
     - mParticle-Apple-SDK/mParticle (= 6.14.0)
   - mParticle-Apple-SDK/mParticle (6.14.0)
@@ -29,6 +37,7 @@ DEPENDENCIES:
   - Intercom
   - Localytics
   - Mixpanel (~> 3.1.4)
+  - MobileCenter
   - mParticle-Apple-SDK (~> 6)
   - NewRelicAgent
   - OCMock
@@ -44,11 +53,12 @@ SPEC CHECKSUMS:
   Intercom: 09f72b37baccfc71733a63b896c9438d5ac0ec3d
   Localytics: f5583d6fdcc63f532fcc8b6a6f99dfd35dd0b378
   Mixpanel: 55b7f2314316808e314876e0e2c36e81345e2b6b
+  MobileCenter: 7d0fd10e2c5cee70d02e280211fe5ff919da6ab8
   mParticle-Apple-SDK: 8eaaa07a21799c67d3cccd07f6a688676e5281cc
   NewRelicAgent: 2679737d3601fcac3a11bf69a8968302d9fee497
   OCMock: 35ae71d6a8fcc1b59434d561d1520b9dd4f15765
   Parse: b0aa91d2c435e53d4a9af26e741e014c9b35c42e
 
-PODFILE CHECKSUM: 8d3dc91838e082a181a75e2f1db42b798e478be2
+PODFILE CHECKSUM: f48f490b1d6ae8ba0a80af35928be129233cec67
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.3.1
