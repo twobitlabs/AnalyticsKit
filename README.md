@@ -42,7 +42,7 @@ NOTE: If you are gettings an error similar to `target has transitive dependencie
 ```ruby
 pre_install do |installer|
 	# workaround for https://github.com/CocoaPods/CocoaPods/issues/3289
-    def installer.verify_no_static_framework_transitive_dependencies; end
+	Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
 end
 ```
 
