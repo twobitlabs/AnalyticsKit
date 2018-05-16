@@ -1,34 +1,9 @@
-//
-//  MParticleUserNotification.m
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #import "MParticleUserNotification.h"
 
 NSString *const kMPUserNotificationApsKey = @"aps";
 NSString *const kMPUserNotificationAlertKey = @"alert";
 NSString *const kMPUserNotificationBodyKey = @"body";
 NSString *const kMPUserNotificationContentAvailableKey = @"content-available";
-NSString *const kMPUserNotificationCommandKey = @"m_cmd";
-NSString *const kMPUserNotificationCampaignIdKey = @"m_cid";
-NSString *const kMPUserNotificationContentIdKey = @"m_cntid";
-NSString *const kMPUserNotificationExpirationKey = @"m_expy";
-NSString *const kMPUserNotificationLocalDeliveryTimeKey = @"m_ldt";
-NSString *const kMPUserNotificationDeferredApsKey = @"m_aps";
-NSString *const kMPUserNotificationUniqueIdKey = @"m_uid";
 NSString *const kMPUserNotificationCategoryKey = @"category";
 
 #if TARGET_OS_IOS == 1
@@ -47,47 +22,13 @@ NSString *const kMPUserNotificationCategoryKey = @"category";
         return nil;
     }
     
-    _hasBeenUsedInDirectOpen = NO;
-    _hasBeenUsedInInfluencedOpen = NO;
-    _campaignId = notificationDictionary[kMPUserNotificationCampaignIdKey];
-    _contentId = notificationDictionary[kMPUserNotificationContentIdKey];
     _runningMode = runningMode;
-    _uniqueIdentifier = notificationDictionary[kMPUserNotificationUniqueIdKey];
     _shouldPersist = YES;
     
-    if (notificationDictionary[kMPUserNotificationCommandKey]) {
-        _command = [notificationDictionary[kMPUserNotificationCommandKey] integerValue];
-        
-        if (_command > MPUserNotificationCommandConfigRefresh) {
-            _command = MPUserNotificationCommandDoNothing;
-        }
-    } else {
-        _command = MPUserNotificationCommandAlertUser;
-    }
-    
-    NSString *localDeliveryDate = notificationDictionary[kMPUserNotificationLocalDeliveryTimeKey];
-    
     if (mode == MPUserNotificationModeAutoDetect) {
-        if (_command == MPUserNotificationCommandAlertUserLocalTime || (_contentId && !localDeliveryDate)) {
-            _mode = MPUserNotificationModeLocal;
-        } else {
-            _mode = MPUserNotificationModeRemote;
-        }
+        _mode = MPUserNotificationModeRemote;
     } else {
         _mode = mode;
-    }
-    
-    if (_command == MPUserNotificationCommandAlertUserLocalTime) {
-        if (!localDeliveryDate) {
-            return nil;
-        }
-        
-        NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        NSTimeZone *timeZone = [calendar timeZone];
-        _localAlertDate = [MPDateFormatter dateFromStringRFC3339:localDeliveryDate];
-        _localAlertDate = [NSDate dateWithTimeInterval:([timeZone secondsFromGMT] * -1) sinceDate:_localAlertDate];
-        
-        _deferredPayload = notificationDictionary[kMPUserNotificationDeferredApsKey];
     }
 
     _behavior = behavior;
@@ -100,6 +41,8 @@ NSString *const kMPUserNotificationCategoryKey = @"category";
         _type = kMPPushMessageAction;
         
         if (_categoryIdentifier) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
             UIUserNotificationSettings *userNotificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
             
             if (userNotificationSettings) {
@@ -116,6 +59,7 @@ NSString *const kMPUserNotificationCategoryKey = @"category";
                     }
                 }
             }
+#pragma clang diagnostic pop
         }
     } else {
         _actionIdentifier = nil;
@@ -124,21 +68,11 @@ NSString *const kMPUserNotificationCategoryKey = @"category";
         _receiptTime = [NSDate date];
     }
     
-    if (notificationDictionary[kMPUserNotificationExpirationKey]) {
-        _campaignExpiration = [notificationDictionary[kMPUserNotificationExpirationKey] doubleValue] / 1000.0;
-    } else {
-        _campaignExpiration = 0.0;
-    }
-    
     return self;
 }
 
 - (NSString *)description {
     NSMutableString *description = [[NSMutableString alloc] initWithFormat:@"User Notification\n Receipt Time: %@\n State: %@\n Type Id: %@\n", self.receiptTime, self.state, self.type];
-    
-    if (self.uniqueIdentifier) {
-        [description appendFormat:@" Unique identifier: %@\n", self.uniqueIdentifier];
-    }
     
     if (self.redactedUserNotificationString) {
         [description appendFormat:@" Redacted notification: %@\n", self.redactedUserNotificationString];
@@ -152,18 +86,6 @@ NSString *const kMPUserNotificationCategoryKey = @"category";
         [description appendFormat:@" Action identifier: %@\n Action title: %@\n", self.actionIdentifier, self.actionTitle];
     }
     
-    if (self.campaignId) {
-        [description appendFormat:@" Campaign Id: %@\n", self.campaignId];
-    }
-    
-    if (self.contentId) {
-        [description appendFormat:@" Content Id: %@\n", self.contentId];
-    }
-    
-    if (self.campaignExpiration > 0.0) {
-        [description appendFormat:@" Campaign expiration: %@\n", [NSDate dateWithTimeIntervalSince1970:self.campaignExpiration]];
-    }
-    
     if (self.behavior > 0) {
         [description appendFormat:@" Behavior: %d\n", (int)self.behavior];
     }
@@ -171,9 +93,6 @@ NSString *const kMPUserNotificationCategoryKey = @"category";
     if (_userNotificationId > 0) {
         [description appendFormat:@" Notification Id: %d\n", (int)_userNotificationId];
     }
-    
-    [description appendFormat:@" Has been used in direct open: %@\n", _hasBeenUsedInDirectOpen ? @"YES" : @"NO"];
-    [description appendFormat:@" Has been used in influenced open: %@", _hasBeenUsedInInfluencedOpen ? @"YES" : @"NO"];
     
     return description;
 }
@@ -189,29 +108,13 @@ NSString *const kMPUserNotificationCategoryKey = @"category";
         }
     }
     
-    if (_uniqueIdentifier && object.uniqueIdentifier) {
-        isEqual = [_uniqueIdentifier isEqualToNumber:object.uniqueIdentifier];
+    if (_redactedUserNotificationString && object.redactedUserNotificationString) {
+        NSData *redactedUserData1 = [_redactedUserNotificationString dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *redactedUserDictionary1 = [NSJSONSerialization JSONObjectWithData:redactedUserData1 options:0 error:nil];
+        NSData *redactedUserData2 = [object.redactedUserNotificationString dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *redactedUserDictionary2 = [NSJSONSerialization JSONObjectWithData:redactedUserData2 options:0 error:nil];
         
-        if (isEqual) {
-            return YES;
-        }
-    } else {
-        if (_redactedUserNotificationString && object.redactedUserNotificationString) {
-            NSData *redactedUserData1 = [_redactedUserNotificationString dataUsingEncoding:NSUTF8StringEncoding];
-            NSDictionary *redactedUserDictionary1 = [NSJSONSerialization JSONObjectWithData:redactedUserData1 options:0 error:nil];
-            NSData *redactedUserData2 = [object.redactedUserNotificationString dataUsingEncoding:NSUTF8StringEncoding];
-            NSDictionary *redactedUserDictionary2 = [NSJSONSerialization JSONObjectWithData:redactedUserData2 options:0 error:nil];
-            
-            isEqual = [redactedUserDictionary1 isEqualToDictionary:redactedUserDictionary2];
-        }
-
-        if (isEqual) {
-            if (_contentId && object.contentId) {
-                isEqual = [_contentId isEqualToNumber:object.contentId];
-            } else if (_contentId || object.contentId) {
-                isEqual = NO;
-            }
-        }
+        isEqual = [redactedUserDictionary1 isEqualToDictionary:redactedUserDictionary2];
     }
     
     return isEqual;
@@ -247,10 +150,8 @@ NSString *const kMPUserNotificationCategoryKey = @"category";
         return redactedNotificationString;
     }
     
-    NSString *payloadKey = _mode == MPUserNotificationModeRemote || !notificationDictionary[kMPUserNotificationCommandKey] ? kMPUserNotificationApsKey : kMPUserNotificationDeferredApsKey;
-    
     NSMutableDictionary *mPushNotificationDictionary = [notificationDictionary mutableCopy];
-    NSDictionary *apsDictionary = mPushNotificationDictionary[payloadKey];
+    NSDictionary *apsDictionary = mPushNotificationDictionary[kMPUserNotificationApsKey];
     
     if (![apsDictionary isKindOfClass:[NSDictionary class]]) {
         return nil;
@@ -265,7 +166,7 @@ NSString *const kMPUserNotificationCategoryKey = @"category";
         return redactedNotificationString;
     }
     
-    [mPushNotificationDictionary removeObjectForKey:payloadKey];
+    [mPushNotificationDictionary removeObjectForKey:kMPUserNotificationApsKey];
     NSMutableDictionary *mAPSDictionary = [[NSMutableDictionary alloc] initWithCapacity:apsDictionary.count];
     NSEnumerator *apsEnumerator = [apsDictionary keyEnumerator];
     NSString *apsKey;
@@ -298,14 +199,7 @@ NSString *const kMPUserNotificationCategoryKey = @"category";
         }
     }
     
-    mPushNotificationDictionary[payloadKey] = mAPSDictionary;
-
-    NSArray *keysToRemove = @[kMPUserNotificationCommandKey, kMPUserNotificationExpirationKey, kMPUserNotificationLocalDeliveryTimeKey, kMPUserNotificationDeferredApsKey];
-    for (NSString *key in keysToRemove) {
-        if (mPushNotificationDictionary[key]) {
-            [mPushNotificationDictionary removeObjectForKey:key];
-        }
-    }
+    mPushNotificationDictionary[kMPUserNotificationApsKey] = mAPSDictionary;
     
     redactedNotificationString = dictionaryToString(mPushNotificationDictionary);
     
@@ -339,40 +233,12 @@ NSString *const kMPUserNotificationCategoryKey = @"category";
         [coder encodeObject:_actionTitle forKey:@"actionTitle"];
     }
     
-    if (_campaignId) {
-        [coder encodeObject:_campaignId forKey:@"campaignId"];
-    }
-    
-    if (_contentId) {
-        [coder encodeObject:_contentId forKey:@"contentId"];
-    }
-    
     if (_localAlertDate) {
         [coder encodeObject:_localAlertDate forKey:@"localAlertDate"];
     }
     
     if (_deferredPayload) {
         [coder encodeObject:_deferredPayload forKey:@"deferredPayload"];
-    }
-    
-    if (_campaignExpiration > 0) {
-        [coder encodeDouble:_campaignExpiration forKey:@"campaignExpiration"];
-    }
-    
-    if (_command != MPUserNotificationCommandDoNothing) {
-        [coder encodeInteger:_command forKey:@"command"];
-    }
-    
-    if (_hasBeenUsedInDirectOpen) {
-        [coder encodeBool:_hasBeenUsedInDirectOpen forKey:@"hasBeenUsedInDirectOpen"];
-    }
-    
-    if (_hasBeenUsedInInfluencedOpen) {
-        [coder encodeBool:_hasBeenUsedInInfluencedOpen forKey:@"hasBeenUsedInInfluencedOpen"];
-    }
-    
-    if (_uniqueIdentifier) {
-        [coder encodeObject:_uniqueIdentifier forKey:@"uniqueIdentifier"];
     }
 }
 
@@ -412,16 +278,6 @@ NSString *const kMPUserNotificationCategoryKey = @"category";
         _actionTitle = (NSString *)object;
     }
     
-    object = [coder decodeObjectForKey:@"campaignId"];
-    if (object) {
-        _campaignId = (NSNumber *)object;
-    }
-    
-    object = [coder decodeObjectForKey:@"contentId"];
-    if (object) {
-        _contentId = (NSNumber *)object;
-    }
-    
     object = [coder decodeObjectForKey:@"localAlertDate"];
     if (object) {
         _localAlertDate = (NSDate *)object;
@@ -430,31 +286,6 @@ NSString *const kMPUserNotificationCategoryKey = @"category";
     object = [coder decodeObjectForKey:@"deferredPayload"];
     if (object) {
         _deferredPayload = (NSDictionary *)object;
-    }
-    
-    object = [coder decodeObjectForKey:@"uniqueIdentifier"];
-    if (object) {
-        _uniqueIdentifier = (NSNumber *)object;
-    }
-    
-    NSTimeInterval expiration = [coder decodeDoubleForKey:@"campaignExpiration"];
-    if (expiration > 0) {
-        _campaignExpiration = expiration;
-    }
-    
-    NSUInteger command = [coder decodeIntegerForKey:@"command"];
-    if (command != MPUserNotificationCommandDoNothing) {
-        _command = command;
-    }
-    
-    BOOL flag = [coder decodeBoolForKey:@"hasBeenUsedInDirectOpen"];
-    if (flag) {
-        _hasBeenUsedInDirectOpen = flag;
-    }
-    
-    flag = [coder decodeBoolForKey:@"hasBeenUsedInInfluencedOpen"];
-    if (flag) {
-        _hasBeenUsedInInfluencedOpen = flag;
     }
     
     return self;

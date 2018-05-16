@@ -3,5 +3,6 @@
 AnalyticsKit/Build
 AnalyticsKit/AnalyticsKit.xcodeproj/project.xcworkspace
 xcuserdata
+xcshareddata
 *.xcuserdatad
 

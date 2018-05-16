@@ -1,33 +1,17 @@
-//
-//  MPDevice.m
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #import "MPDevice.h"
 #import <UIKit/UIKit.h>
 #import <sys/sysctl.h>
 #import <mach/machine.h>
 #import "MPStateMachine.h"
-#import "NSUserDefaults+mParticle.h"
+#import "MPIUserDefaults.h"
 #import <objc/runtime.h>
 #import <mach-o/ldsyms.h>
 #import <dlfcn.h>
 #import <mach-o/arch.h>
 #import <mach-o/dyld.h>
 #import "MPIConstants.h"
+#import "MParticle.h"
+#import "MPBackendController.h"
 
 #if !defined(MP_NO_IDFA)
     #import "AdSupport/ASIdentifierManager.h"
@@ -84,6 +68,11 @@ int main(int argc, char *argv[]);
 
 @end
 
+@interface MParticle ()
+
+@property (nonatomic, strong, nonnull) MPBackendController *backendController;
+
+@end
 
 @implementation MPDevice
 
@@ -121,10 +110,6 @@ int main(int argc, char *argv[]);
 
 #pragma mark Accessors
 - (NSString *)advertiserId {
-    if (_advertiserId) {
-        return _advertiserId;
-    }
-    
     Class MPIdentifierManager = NSClassFromString(@"ASIdentifierManager");
     if (MPIdentifierManager) {
 #pragma clang diagnostic push
@@ -141,6 +126,12 @@ int main(int argc, char *argv[]);
         if (advertisingTrackingEnabled || alwaysTryToCollectIDFA) {
             selector = NSSelectorFromString(@"advertisingIdentifier");
             _advertiserId = [[adIdentityManager performSelector:selector] UUIDString];
+            MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
+            NSString *previousIDFA = userDefaults[kMPDeviceAdvertiserIdKey];
+            userDefaults[kMPDeviceAdvertiserIdKey] = _advertiserId;
+            if (previousIDFA && ![previousIDFA isEqualToString:_advertiserId]) {
+                [[MParticle sharedInstance].backendController.networkCommunication modifyDeviceID:@"ios_idfa" value:_advertiserId oldValue:previousIDFA];
+            }
         }
 #pragma clang diagnostic pop
 #pragma clang diagnostic pop
@@ -224,7 +215,7 @@ int main(int argc, char *argv[]);
         return _deviceIdentifier;
     }
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     _deviceIdentifier = userDefaults[kMPDeviceIdentifierKey];
     if (!_deviceIdentifier) {
         _deviceIdentifier = [[NSUUID UUID] UUIDString];
@@ -316,7 +307,7 @@ int main(int argc, char *argv[]);
     }
     
     _vendorId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     
     if (_vendorId && ![_vendorId isEqualToString:kMPDeviceInvalidVendorId]) {
         userDefaults[kMPDeviceAppVendorIdKey] = _vendorId;
@@ -497,7 +488,7 @@ int main(int argc, char *argv[]);
     }
     
     NSNumber *limitAdTracking = self.limitAdTracking;
-    if (limitAdTracking) {
+    if (limitAdTracking != nil) {
         deviceDictionary[kMPDeviceLimitAdTrackingKey] = limitAdTracking;
     }
 
@@ -527,7 +518,10 @@ int main(int argc, char *argv[]);
         }
     }
     
-    NSData *pushNotificationToken = [MPNotificationController deviceToken];
+    NSData *pushNotificationToken;
+#if !defined(MPARTICLE_APP_EXTENSIONS)
+    pushNotificationToken = [MPNotificationController deviceToken];
+#endif
     if (pushNotificationToken) {
         deviceDictionary[kMPDeviceTokenKey] = [NSString stringWithFormat:@"%@", pushNotificationToken];
     }

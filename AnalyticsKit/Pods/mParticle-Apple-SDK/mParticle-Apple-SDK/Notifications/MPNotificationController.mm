@@ -1,32 +1,22 @@
-//
-//  MPNotificationController.mm
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #import "MPNotificationController.h"
 #import "MPIConstants.h"
 #import "MPPersistenceController.h"
-#import "NSUserDefaults+mParticle.h"
+#import "MPIUserDefaults.h"
 #include "MPHasher.h"
+#import "MParticle.h"
+#import "MPBackendController.h"
 
 @interface MPNotificationController() {
     BOOL appJustFinishedLaunching;
     BOOL backgrounded;
     BOOL notificationLaunchedApp;
 }
+
+@end
+
+@interface MParticle ()
+
+@property (nonatomic, strong, nonnull) MPBackendController *backendController;
 
 @end
 
@@ -38,7 +28,6 @@ static int64_t launchNotificationHash = 0;
 @implementation MPNotificationController
 
 #if TARGET_OS_IOS == 1
-@synthesize influencedOpenTimer = _influencedOpenTimer;
 
 - (instancetype)initWithDelegate:(id<MPNotificationControllerDelegate>)delegate {
     self = [super init];
@@ -48,7 +37,6 @@ static int64_t launchNotificationHash = 0;
     
     _delegate = delegate;
     _initialRedactedUserNotificationString = nil;
-    _influencedOpenTimer = 0.0;
     appJustFinishedLaunching = YES;
     backgrounded = YES;
     notificationLaunchedApp = NO;
@@ -103,7 +91,13 @@ static int64_t launchNotificationHash = 0;
         return NO;
     }
     
-    UIUserNotificationSettings *userNotificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    UIUserNotificationSettings *userNotificationSettings = nil;
+    if ([NSThread isMainThread]) {
+        userNotificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+    }
+
     if (!userNotificationSettings) {
         return NO;
     }
@@ -123,44 +117,7 @@ static int64_t launchNotificationHash = 0;
     }
     
     return bringsToForeground;
-}
-
-- (void)verifyIfInfluencedOpen {
-    NSTimeInterval referenceDate = [[[NSDate date] dateByAddingTimeInterval:(-self.influencedOpenTimer)] timeIntervalSince1970];
-    NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
-    
-    MPPersistenceController *persistence = [MPPersistenceController sharedInstance];
-    NSArray<MParticleUserNotification *> *displayedLocalUserNotifications = [persistence fetchDisplayedLocalUserNotificationsSince:referenceDate];
-    NSArray<MParticleUserNotification *> *displayedUserNotifications = [persistence fetchDisplayedRemoteUserNotificationsSince:referenceDate];
-    
-    if (displayedUserNotifications) {
-        if (displayedLocalUserNotifications) {
-            displayedUserNotifications = [displayedUserNotifications arrayByAddingObjectsFromArray:displayedLocalUserNotifications];
-        }
-    } else {
-        displayedUserNotifications = displayedLocalUserNotifications;
-    }
-    
-    if (!displayedUserNotifications) {
-        return;
-    }
-    
-    NSMutableArray *influencedUserNotifications = [[NSMutableArray alloc] initWithCapacity:displayedUserNotifications.count];
-    MParticleUserNotification *userNotification;
-    
-    for (userNotification in displayedUserNotifications) {
-        if (!userNotification.hasBeenUsedInDirectOpen && !userNotification.hasBeenUsedInInfluencedOpen && userNotification.campaignExpiration >= now) {
-            userNotification.hasBeenUsedInInfluencedOpen = YES;
-            userNotification.behavior = MPUserNotificationBehaviorReceived | MPUserNotificationBehaviorInfluencedOpen;
-            [influencedUserNotifications addObject:userNotification];
-        }
-    }
-    
-    if (influencedUserNotifications.count > 0) {
-        for (userNotification in influencedUserNotifications) {
-            [self.delegate receivedUserNotification:userNotification];
-        }
-    }
+#pragma clang diagnostic pop
 }
 
 - (MParticleUserNotification *)userNotificationWithDictionary:(NSDictionary *)notificationDictionary actionIdentifier:(NSString *)actionIdentifier state:(NSString *)state userNotificationMode:(MPUserNotificationMode)userNotificationMode runningMode:(MPUserNotificationRunningMode)runningMode {
@@ -176,16 +133,6 @@ static int64_t launchNotificationHash = 0;
         notificationLaunchedApp = NO;
         
         behavior |= MPUserNotificationBehaviorRead;
-        
-        if ([self actionIdentifierBringsAppToTheForegound:actionIdentifier notificationDictionary:notificationDictionary]) {
-            behavior |= MPUserNotificationBehaviorDirectOpen;
-        }
-    } else if (!notificationLaunchedApp && !actionIdentifier) {
-        MPUserNotificationCommand command = static_cast<MPUserNotificationCommand>([notificationDictionary[kMPUserNotificationCommandKey] integerValue]);
-        
-        if (command != MPUserNotificationCommandAlertUserLocalTime) {
-            behavior |= MPUserNotificationBehaviorDisplayed;
-        }
     }
     
     MParticleUserNotification *userNotification = [[MParticleUserNotification alloc] initWithDictionary:notificationDictionary
@@ -204,7 +151,10 @@ static int64_t launchNotificationHash = 0;
     
     NSDictionary *userInfo = [notification userInfo];
     NSDictionary *launchRemoteNotificationDictionary = userInfo[UIApplicationLaunchOptionsRemoteNotificationKey];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     UILocalNotification *launchLocalNotification = userInfo[UIApplicationLaunchOptionsLocalNotificationKey];
+#pragma clang diagnostic pop
     NSDictionary *launchLocalNotificationDictionary = nil;
     MParticleUserNotification *userNotification = nil;
     
@@ -243,7 +193,6 @@ static int64_t launchNotificationHash = 0;
         }
     } else {
         notificationLaunchedApp = NO;
-        [self verifyIfInfluencedOpen];
     }
     
     if (userNotification && shouldDelegateReceivedRemoteNotification) {
@@ -286,7 +235,6 @@ static int64_t launchNotificationHash = 0;
         return;
     }
     
-    [self verifyIfInfluencedOpen];
 }
 
 - (void)handleLocalNotificationReceived:(NSNotification *)notification {
@@ -294,7 +242,6 @@ static int64_t launchNotificationHash = 0;
     NSDictionary *notificationDictionary = userInfo[kMPUserNotificationDictionaryKey];
     NSString *actionIdentifier = userInfo[kMPUserNotificationActionKey];
     
-    NSArray<MParticleUserNotification *> *displayedUserNotifications = [[MPPersistenceController sharedInstance] fetchDisplayedLocalUserNotifications];
 
     MParticleUserNotification *userNotification = [self userNotificationWithDictionary:notificationDictionary
                                                                       actionIdentifier:actionIdentifier
@@ -302,55 +249,14 @@ static int64_t launchNotificationHash = 0;
                                                                   userNotificationMode:MPUserNotificationModeLocal
                                                                            runningMode:static_cast<MPUserNotificationRunningMode>([userInfo[kMPUserNotificationRunningModeKey] integerValue])];
     
-    MParticleUserNotification *displayedUserNotification = nil;
-    NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
-    BOOL existingUserNotification = NO;
-    
-    for (displayedUserNotification in displayedUserNotifications) {
-        existingUserNotification = [userNotification isEqual:displayedUserNotification];
-        
-        if (existingUserNotification) {
-            displayedUserNotification.command = MPUserNotificationCommandAlertUser;
-            
-            if (displayedUserNotification.campaignExpiration >= now) {
-                if (actionIdentifier) {
-                    displayedUserNotification.actionIdentifier = actionIdentifier;
-                    displayedUserNotification.actionTitle = userNotification.actionTitle;
-                    displayedUserNotification.type = kMPPushMessageAction;
-                }
-                
-                if (!displayedUserNotification.hasBeenUsedInInfluencedOpen && !displayedUserNotification.hasBeenUsedInDirectOpen) {
-                    displayedUserNotification.behavior = MPUserNotificationBehaviorReceived | MPUserNotificationBehaviorRead;
-                    
-                    if (!actionIdentifier || [self actionIdentifierBringsAppToTheForegound:actionIdentifier notificationDictionary:notificationDictionary]) {
-                        displayedUserNotification.behavior |= MPUserNotificationBehaviorDirectOpen;
-                        displayedUserNotification.hasBeenUsedInDirectOpen = YES;
-                    } else if (displayedUserNotification.hasBeenUsedInInfluencedOpen && displayedUserNotification.type == kMPPushMessageAction) {
-                        displayedUserNotification.behavior = MPUserNotificationBehaviorReceived | MPUserNotificationBehaviorRead;
-                        displayedUserNotification.shouldPersist = NO;
-                    }
-                }
-            }
-            
-            break;
-        }
-    }
-    
-    if (existingUserNotification) {
-        if (displayedUserNotification.campaignExpiration >= now) {
-            [self.delegate receivedUserNotification:displayedUserNotification];
-        }
-    } else {
-        [self.delegate receivedUserNotification:userNotification];
-    }
+    [self.delegate receivedUserNotification:userNotification];
+
 }
 
 - (void)handleRemoteNotificationReceived:(NSNotification *)notification {
     NSDictionary *userInfo = [notification userInfo];
     NSDictionary *notificationDictionary = userInfo[kMPUserNotificationDictionaryKey];
     NSString *actionIdentifier = userInfo[kMPUserNotificationActionKey];
-    
-    NSArray<MParticleUserNotification *> *displayedUserNotifications = [[MPPersistenceController sharedInstance] fetchDisplayedRemoteUserNotifications];
 
     MParticleUserNotification *userNotification = [self userNotificationWithDictionary:notificationDictionary
                                                                       actionIdentifier:actionIdentifier
@@ -358,119 +264,13 @@ static int64_t launchNotificationHash = 0;
                                                                   userNotificationMode:MPUserNotificationModeRemote
                                                                            runningMode:static_cast<MPUserNotificationRunningMode>([userInfo[kMPUserNotificationRunningModeKey] integerValue])];
     
-    MParticleUserNotification *displayedUserNotification = nil;
-    NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
-    BOOL existingUserNotification = NO;
-    
-    for (displayedUserNotification in displayedUserNotifications) {
-        existingUserNotification = [userNotification isEqual:displayedUserNotification];
-
-        if (existingUserNotification) {
-            if (displayedUserNotification.campaignExpiration >= now) {
-                if (actionIdentifier) {
-                    displayedUserNotification.actionIdentifier = actionIdentifier;
-                    displayedUserNotification.actionTitle = userNotification.actionTitle;
-                    displayedUserNotification.type = kMPPushMessageAction;
-                }
-                
-                if (!displayedUserNotification.hasBeenUsedInInfluencedOpen && !displayedUserNotification.hasBeenUsedInDirectOpen) {
-                    displayedUserNotification.behavior = MPUserNotificationBehaviorReceived | MPUserNotificationBehaviorRead;
-                    
-                    if (!actionIdentifier || [self actionIdentifierBringsAppToTheForegound:actionIdentifier notificationDictionary:notificationDictionary]) {
-                        displayedUserNotification.behavior |= MPUserNotificationBehaviorDirectOpen;
-                        displayedUserNotification.hasBeenUsedInDirectOpen = YES;
-                    }
-                } else if (displayedUserNotification.hasBeenUsedInInfluencedOpen && displayedUserNotification.type == kMPPushMessageAction) {
-                    displayedUserNotification.behavior = MPUserNotificationBehaviorReceived | MPUserNotificationBehaviorRead;
-                    displayedUserNotification.shouldPersist = NO;
-                }
-            }
-            
-            break;
-        }
-    }
-    
-    if (existingUserNotification) {
-        if (!displayedUserNotification.hasBeenUsedInInfluencedOpen && !displayedUserNotification.hasBeenUsedInDirectOpen && displayedUserNotification.campaignExpiration >= now) {
-            [self.delegate receivedUserNotification:displayedUserNotification];
-        }
-    } else {
-        [self.delegate receivedUserNotification:userNotification];
-    }
-}
-
-#pragma mark Public accessors
-- (NSTimeInterval)influencedOpenTimer {
-    if (_influencedOpenTimer > 0.0) {
-        return _influencedOpenTimer;
-    }
-    
-    NSNumber *influencedOpenNumber = nil;
-#ifndef MP_UNIT_TESTING
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    influencedOpenNumber = userDefaults[kMPInfluencedOpenTimerKey];
-#endif
-    
-    if (influencedOpenNumber) {
-        _influencedOpenTimer = [influencedOpenNumber doubleValue];
-    } else {
-        _influencedOpenTimer = 1800;
-    }
-    
-    return _influencedOpenTimer;
-}
-
-- (void)setInfluencedOpenTimer:(NSTimeInterval)influencedOpenTimer {
-    void (^persistInfluencedOpenTimer)(NSNumber *) = ^(NSNumber *infOpenTimer) {
-#ifndef MP_UNIT_TESTING
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            
-            if (!infOpenTimer) {
-                [userDefaults removeMPObjectForKey:kMPInfluencedOpenTimerKey];
-                [userDefaults synchronize];
-            } else {
-                NSNumber *udInfOpenTimer = userDefaults[kMPInfluencedOpenTimerKey];
-                if (!udInfOpenTimer || ![udInfOpenTimer isEqualToNumber:infOpenTimer]) {
-                    userDefaults[kMPInfluencedOpenTimerKey] = infOpenTimer;
-                    [userDefaults synchronize];
-                }
-            }
-        });
-#endif
-    };
-    
-    influencedOpenTimer *= 60.0; // Transforms from minutes to seconds
-    
-    if (influencedOpenTimer == 0.0) {
-        _influencedOpenTimer = 0.0;
-        
-        persistInfluencedOpenTimer(nil);
-    } else if (_influencedOpenTimer != influencedOpenTimer) {
-        [self willChangeValueForKey:@"influencedOpenTimer"];
-        _influencedOpenTimer = influencedOpenTimer;
-        [self didChangeValueForKey:@"influencedOpenTimer"];
-        
-        persistInfluencedOpenTimer(@(influencedOpenTimer));
-    }
-}
-
-- (BOOL)registeredForSilentNotifications {
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0) {
-        return NO;
-    }
-    
-    return [[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
+    [self.delegate receivedUserNotification:userNotification];
 }
 
 #pragma mark Public static methods
 + (NSData *)deviceToken {
-    if (deviceToken) {
-        return deviceToken;
-    }
-    
 #ifndef MP_UNIT_TESTING
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     deviceToken = userDefaults[kMPDeviceTokenKey];
 #else
     deviceToken = [@"<000000000000000000000000000000>" dataUsingEncoding:NSUTF8StringEncoding];
@@ -479,10 +279,13 @@ static int64_t launchNotificationHash = 0;
     return deviceToken;
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 + (NSDictionary *)dictionaryFromLocalNotification:(UILocalNotification *)notification {
+#pragma clang diagnostic pop
     NSDictionary *userInfo = [notification userInfo];
     
-    if (!userInfo || !userInfo[kMPUserNotificationCampaignIdKey] || !userInfo[kMPUserNotificationContentIdKey]) {
+    if (!userInfo) {
         return nil;
     }
     
@@ -503,14 +306,8 @@ static int64_t launchNotificationHash = 0;
         apsDictionary[kMPUserNotificationCategoryKey] = notification.category;
     }
     
-    NSMutableDictionary *notificationDictionary = [@{kMPUserNotificationApsKey:apsDictionary,
-                                                     kMPUserNotificationCampaignIdKey:userInfo[kMPUserNotificationCampaignIdKey],
-                                                     kMPUserNotificationContentIdKey:userInfo[kMPUserNotificationContentIdKey]}
+    NSMutableDictionary *notificationDictionary = [@{kMPUserNotificationApsKey:apsDictionary}
                                                    mutableCopy];
-    
-    if (userInfo[kMPUserNotificationUniqueIdKey]) {
-        notificationDictionary[kMPUserNotificationUniqueIdKey] = userInfo[kMPUserNotificationUniqueIdKey];
-    }
     
     return (NSDictionary *)notificationDictionary;
 }
@@ -527,20 +324,28 @@ static int64_t launchNotificationHash = 0;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         NSMutableDictionary *deviceTokenDictionary = [[NSMutableDictionary alloc] initWithCapacity:2];
+        NSString *newTokenString = nil;
+        NSString *oldTokenString = nil;
         if (newDeviceToken) {
             deviceTokenDictionary[kMPRemoteNotificationDeviceTokenKey] = newDeviceToken;
+            newTokenString = [[NSString alloc] initWithData:newDeviceToken encoding:NSUTF8StringEncoding];
         }
         
         if (oldDeviceToken) {
             deviceTokenDictionary[kMPRemoteNotificationOldDeviceTokenKey] = oldDeviceToken;
+            oldTokenString = [[NSString alloc] initWithData:oldDeviceToken encoding:NSUTF8StringEncoding];
         }
 
         [[NSNotificationCenter defaultCenter] postNotificationName:kMPRemoteNotificationDeviceTokenNotification
                                                             object:nil
                                                           userInfo:deviceTokenDictionary];
         
+        if (oldTokenString && newTokenString) {
+         [[MParticle sharedInstance].backendController.networkCommunication modifyDeviceID:@"push_token" value:newTokenString oldValue:oldTokenString];
+        }
+        
 #ifndef MP_UNIT_TESTING
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
         userDefaults[kMPDeviceTokenKey] = deviceToken;
         [userDefaults synchronize];
 #endif
@@ -560,79 +365,6 @@ static int64_t launchNotificationHash = 0;
                                                                            runningMode:MPUserNotificationRunningModeForeground];
     
     return userNotification;
-}
-
-- (void)registerForSilentNotifications {
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0) {
-        return;
-    }
-    
-    NSDictionary *bundleInfoDictionary = [[NSBundle mainBundle] infoDictionary];
-    NSArray *backgroundModes = bundleInfoDictionary[@"UIBackgroundModes"];
-    if ([backgroundModes containsObject:@"remote-notification"]) {
-#if !TARGET_IPHONE_SIMULATOR
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
-#endif
-    }
-}
-
-- (void)scheduleNotification:(MParticleUserNotification *)userNotification {
-    if (!userNotification || userNotification.mode != MPUserNotificationModeLocal || [userNotification.localAlertDate compare:[NSDate date]] != NSOrderedDescending) {
-        return;
-    }
-    
-    UIApplication *app = [UIApplication sharedApplication];
-    
-    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-    localNotification.fireDate = userNotification.localAlertDate;
-    localNotification.timeZone = [NSTimeZone defaultTimeZone];
-    
-    NSMutableDictionary *userInfo = [@{kMPUserNotificationCampaignIdKey:userNotification.campaignId,
-                                       kMPUserNotificationContentIdKey:userNotification.contentId}
-                                     mutableCopy];
-    
-    if (userNotification.uniqueIdentifier) {
-        userInfo[kMPUserNotificationUniqueIdKey] = userNotification.uniqueIdentifier;
-    }
-    
-    localNotification.userInfo = userInfo;
-
-    NSDictionary *apsDictionary = userNotification.deferredPayload[kMPUserNotificationApsKey];
-    
-    id alert = apsDictionary[kMPUserNotificationAlertKey];
-    NSString *alertBody = nil;
-    if ([alert isKindOfClass:[NSDictionary class]]) {
-        alertBody = [(NSDictionary *)alert objectForKey:kMPUserNotificationBodyKey];
-    } else if ([alert isKindOfClass:[NSString class]]) {
-        alertBody = (NSString *)alert;
-    }
-    
-    if (alertBody) {
-        localNotification.alertBody = alertBody;
-    }
-    
-    if (apsDictionary[@"badge"]) {
-        localNotification.applicationIconBadgeNumber = [apsDictionary[@"badge"] intValue];
-    }
-    
-    if (apsDictionary[@"sound"]) {
-        localNotification.soundName = apsDictionary[@"sound"];
-    }
-    
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
-        UIUserNotificationSettings *notificationSettings = [app currentUserNotificationSettings];
-        if (notificationSettings.types == UIUserNotificationTypeNone) {
-            return;
-        }
-
-        NSString *category = apsDictionary[kMPUserNotificationCategoryKey];
-        
-        if (category) {
-            localNotification.category = category;
-        }
-    }
-    
-    [app scheduleLocalNotification:localNotification];
 }
 #endif
 

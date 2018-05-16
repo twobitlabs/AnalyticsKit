@@ -1,21 +1,3 @@
-//
-//  MPExceptionHandler.m
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #import "MPExceptionHandler.h"
 #import "MPMessage.h"
 #import "MPIConstants.h"
@@ -30,7 +12,7 @@
 #import <dlfcn.h>
 #import <libkern/OSAtomic.h>
 #import "MPCurrentState.h"
-#import "NSUserDefaults+mParticle.h"
+#import "MPIUserDefaults.h"
 #import "MPMessageBuilder.h"
 #import <UIKit/UIKit.h>
 #import "MPPersistenceController.h"
@@ -49,9 +31,9 @@ static BOOL handlingExceptions;
 
 void SignalHandler(int signal);
 //void BeginUncaughtExceptionLogging();
-void EndUncaughtExceptionLogging();
+void EndUncaughtExceptionLogging(void);
 void handleException(NSException *exception);
-static bool debuggerRunning();
+static bool debuggerRunning(void);
 
 typedef struct Binaryimage {
     struct Binaryimage *previous;
@@ -65,7 +47,10 @@ typedef struct BinaryImageList {
     BinaryImage *tailBinaryImage;
     BinaryImage *free;
     int32_t referenceCount;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     OSSpinLock write_lock;
+#pragma clang diagnostic pop
 } BinaryImageList;
 
 //
@@ -130,7 +115,7 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
     NSArray<MPSession *> *sessions = [[MPPersistenceController sharedInstance] fetchPossibleSessionsFromCrash];
     
     for (MPSession *session in sessions) {
-        if (![session.sessionNumber isEqualToNumber:_session.sessionNumber]) {
+        if (![session isEqual:_session]) {
             crashSession = session;
             break;
         }
@@ -181,10 +166,13 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
 }
 
 - (NSString *)topmostContext {
+#if !defined(MPARTICLE_APP_EXTENSIONS)
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     id topmostContext = [self topViewControllerForController:rootViewController];
     NSString *topmostContextName = [[topmostContext class] description];
     return topmostContextName;
+#endif
+    return @"extension_context";
 }
 
 - (NSDictionary *)loadArchivedCrashInfo {
@@ -304,9 +292,6 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
         [messageInfo addEntriesFromDictionary:archivedCrashInfo];
         
         MPSession *crashSession = [self crashSession];
-        if (crashSession) {
-            messageInfo[kMPSessionNumberKey] = crashSession.sessionNumber;
-        }
         
         MPPersistenceController *persistence = [MPPersistenceController sharedInstance];
         NSArray<MPBreadcrumb *> *fetchedbreadcrumbs = [persistence fetchBreadcrumbs];
@@ -639,6 +624,8 @@ static void appendImageList(BinaryImageList *list, uintptr_t header, const char 
     new->header = header;
     new->name = strdup(name);
     
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     // Update the image record and issue a memory barrier to ensure a consistent view.
     OSMemoryBarrier();
     
@@ -664,6 +651,7 @@ static void appendImageList(BinaryImageList *list, uintptr_t header, const char 
             list->tailBinaryImage = new;
         }
     } OSSpinLockUnlock(&list->write_lock);
+#pragma clang diagnostic pop
 }
 
 /**
@@ -676,12 +664,15 @@ static void appendImageList(BinaryImageList *list, uintptr_t header, const char 
  */
 static void flagReadingImageList(BinaryImageList *list, bool enable) {
     if (enable) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         // Increment and issue a barrier. Once issued, no items will be deallocated while a reference is held
         OSAtomicIncrement32Barrier(&list->referenceCount);
     } else {
         // Increment and issue a barrier. Once issued, items may again be deallocated
         OSAtomicDecrement32Barrier(&list->referenceCount);
     }
+#pragma clang diagnostic pop
 }
 
 /**

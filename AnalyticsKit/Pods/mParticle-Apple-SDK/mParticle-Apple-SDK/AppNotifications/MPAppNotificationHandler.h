@@ -1,21 +1,3 @@
-//
-//  MPAppNotificationHandler.h
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
@@ -36,7 +18,10 @@
 
 - (void)didFailToRegisterForRemoteNotificationsWithError:(nullable NSError *)error;
 - (void)didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 - (void)didRegisterUserNotificationSettings:(nonnull UIUserNotificationSettings *)notificationSettings;
+#pragma clang diagnostic pop
 - (void)handleActionWithIdentifier:(nullable NSString *)identifier forRemoteNotification:(nullable NSDictionary *)userInfo;
 - (void)handleActionWithIdentifier:(nullable NSString *)identifier forRemoteNotification:(nullable NSDictionary *)userInfo withResponseInfo:(nullable NSDictionary *)responseInfo;
 - (void)receivedUserNotification:(nonnull NSDictionary *)userInfo actionIdentifier:(nullable NSString *)actionIdentifier userNotificationMode:(MPUserNotificationMode)userNotificationMode;
@@ -44,8 +29,8 @@
 #endif
 
 #if TARGET_OS_IOS == 1 && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
-- (void)userNotificationCenter:(nonnull UNUserNotificationCenter *)center willPresentNotification:(nonnull UNNotification *)notification;
-- (void)userNotificationCenter:(nonnull UNUserNotificationCenter *)center didReceiveNotificationResponse:(nonnull UNNotificationResponse *)response;
+- (void)userNotificationCenter:(nonnull UNUserNotificationCenter *)center willPresentNotification:(nonnull UNNotification *)notification NS_AVAILABLE_IOS(10.0);
+- (void)userNotificationCenter:(nonnull UNUserNotificationCenter *)center didReceiveNotificationResponse:(nonnull UNNotificationResponse *)response NS_AVAILABLE_IOS(10.0);
 #endif
 
 + (nonnull instancetype)sharedInstance;

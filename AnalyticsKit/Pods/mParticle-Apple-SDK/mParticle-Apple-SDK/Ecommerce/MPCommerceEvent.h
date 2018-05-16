@@ -1,21 +1,3 @@
-//
-//  MPCommerceEvent.h
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #import <Foundation/Foundation.h>
 
 @class MPProduct;
@@ -130,7 +112,7 @@ typedef NS_ENUM(NSUInteger, MPCommerceEventAction) {
 @property (nonatomic, unsafe_unretained) NSInteger checkoutStep;
 
 /**
- Flag indicating whether a refund in non-interactive. The default value is false/NO.
+ Flag indicating whether a refund is non-interactive. The default value is false/NO.
  */
 @property (nonatomic, unsafe_unretained) BOOL nonInteractive;
 
@@ -177,7 +159,7 @@ typedef NS_ENUM(NSUInteger, MPCommerceEventAction) {
 - (void)addProduct:(nonnull MPProduct *)product;
 
 /**
- Removes a product to the list of products to have <i>action</i> applied to.
+ Removes a product from the list of products to have <i>action</i> applied to.
  
  @param product An instance of MPProduct
  */
@@ -217,12 +199,6 @@ typedef NS_ENUM(NSUInteger, MPCommerceEventAction) {
  @returns An array with all keys in the custom attributes dictionary
  */
 - (nullable NSArray *)allKeys;
-
-/**
- Number of entries in the custom attributes dictionary
- @returns The number of entries in the dictionary
- */
-- (NSUInteger)count;
 
 - (nullable id)objectForKeyedSubscript:(nonnull NSString *const)key;
 - (void)setObject:(nonnull id)obj forKeyedSubscript:(nonnull NSString *)key;

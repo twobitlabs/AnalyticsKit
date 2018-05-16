@@ -423,7 +423,6 @@
 				9C3799C8181838FD00488101 /* Frameworks */,
 				9C3799C9181838FD00488101 /* Resources */,
 				742236731FA5C16F5B937683 /* [CP] Embed Pods Frameworks */,
-				07FA51BDCED5D5A026CAB096 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -497,21 +496,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		07FA51BDCED5D5A026CAB096 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AnalyticsKitTests/Pods-AnalyticsKitTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		339CFFFA9A43CC38910E7DFC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -558,7 +542,7 @@
 				"${BUILT_PRODUCTS_DIR}/Adjust/Adjust.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK/Flurry_iOS_SDK.framework",
-				"${PODS_ROOT}/Localytics/Localytics-iOS-4.3.2/Localytics.framework",
+				"${PODS_ROOT}/Localytics/Localytics-iOS-5.1.0/Localytics.framework",
 				"${BUILT_PRODUCTS_DIR}/Mixpanel/Mixpanel.framework",
 				"${BUILT_PRODUCTS_DIR}/Parse/Parse.framework",
 				"${BUILT_PRODUCTS_DIR}/mParticle-Apple-SDK/mParticle_Apple_SDK.framework",
@@ -608,7 +592,8 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Intercom.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/IntercomTranslations.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

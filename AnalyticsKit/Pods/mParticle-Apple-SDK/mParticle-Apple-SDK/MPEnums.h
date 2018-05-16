@@ -1,21 +1,3 @@
-//
-//  MPEnums.h
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #ifndef mParticle_MPEnums_h
 #define mParticle_MPEnums_h
 
@@ -121,7 +103,7 @@ typedef NS_ENUM(NSUInteger, MPSurveyProvider) {
 typedef NS_ENUM(NSUInteger, MPUserIdentity) {
     /** User identity other */
     MPUserIdentityOther = 0,
-    /** User identity customer id. This is an id issue by your own system */
+    /** User identity customer id. This is an id issued by your own system */
     MPUserIdentityCustomerId,
     /** User identity Facebook */
     MPUserIdentityFacebook,
@@ -138,7 +120,13 @@ typedef NS_ENUM(NSUInteger, MPUserIdentity) {
     /** User identity Alias */
     MPUserIdentityAlias,
     /** User identity Facebook Custom Audience Third Party Id, or User App Id */
-    MPUserIdentityFacebookCustomAudienceId
+    MPUserIdentityFacebookCustomAudienceId,
+    /** User identity other 2 */
+    MPUserIdentityOther2,
+    /** User identity other 3 */
+    MPUserIdentityOther3,
+    /** User identity other 4 */
+    MPUserIdentityOther4
 };
 
 /// Kit Instance Codes
@@ -179,6 +167,8 @@ typedef NS_ENUM(NSUInteger, MPKitInstance) {
     MPKitInstanceApptentive = 97,
     /** Kit code for Leanplum */
     MPKitInstanceLeanplum = 98,
+    /** Kit code for Carnival */
+    MPKitInstanceCarnival = 99,
     /** Kit code for Primer */
     MPKitInstancePrimer = 100,
     /** Kit code for Apptimize */
@@ -192,7 +182,13 @@ typedef NS_ENUM(NSUInteger, MPKitInstance) {
     /** Kit code for Iterable */
     MPKitInstanceIterable = 1003,
     /** Kit code for Button */
-    MPKitInstanceButton = 1022
+    MPKitInstanceButton = 1022,
+    /** Kit code for Singular */
+    MPKitInstanceSingular = 119,
+    /** Kit code for Adobe */
+    MPKitInstanceAdobe = 124,
+    /** Kit code for Instabot */
+    MPKitInstanceInstabot = 123
 };
 
 /// Log Levels
@@ -229,7 +225,7 @@ typedef NS_ENUM(NSUInteger, MPMessageType) {
     MPMessageTypeFirstRun = 7,
     /** Message type code for attributions */
     MPMessageTypePreAttribution = 8,
-    /** Message type code for when an app successfuly registers to receive push notifications */
+    /** Message type code for when an app successfully registers to receive push notifications */
     MPMessageTypePushRegistration = 9,
     /** Message type code for when an app transitions to/from background */
     MPMessageTypeAppStateTransition = 10,
@@ -249,6 +245,34 @@ typedef NS_ENUM(NSUInteger, MPMessageType) {
     MPMessageTypeUserAttributeChange = 17,
     /** Message type code for a user identity change */
     MPMessageTypeUserIdentityChange = 18
+};
+
+typedef NS_ENUM(NSUInteger, MPConnectivityErrorCode) {
+    /** Client side error: Unknown error. */
+    MPConnectivityErrorCodeUnknown = 0,
+    /** The device is not online. Please make sure you've initialized the mParticle SDK and that your device has an active network connection. */
+    MPConnectivityErrorCodeNoConnection = 1,
+    /** Client side error: SSL connection failed to be established due to invalid server certificate. mParticle performs SSL pinning - you cannot use a proxy to read traffic. */
+    MPConnectivityErrorCodeSSLCertificate = 2,
+};
+
+typedef NS_ENUM(NSUInteger, MPIdentityErrorResponseCode) {
+    /** Client side error: Unknown error. */
+    MPIdentityErrorResponseCodeUnknown = 0,
+    /** Client side error: There is a current Identity API request in progress. Please wait until it has completed and retry your request. */
+    MPIdentityErrorResponseCodeRequestInProgress = 1,
+    /** Client side error: Request timed-out while attempting to call the server. Request should be retried when device connectivity has been reestablished. */
+    MPIdentityErrorResponseCodeClientSideTimeout = 2,
+    /** Client side error: Device has no network connection. Request should be retried when device connectivity has been reestablished. */
+    MPIdentityErrorResponseCodeClientNoConnection = 3,
+    /** Client side error: SSL connection failed to be established due to invalid server certificate. mParticle performs SSL pinning - you cannot use a proxy to read traffic. */
+    MPIdentityErrorResponseCodeSSLError = 3,
+    /** HTTP Error 401: Unauthorized. Ensure that you've initialized the mParticle SDK with a valid workspace key and secret. */
+    MPIdentityErrorResponseCodeUnauthorized = 401,
+    /** HTTP Error 504: Identity request should be retried */
+    MPIdentityErrorResponseCodeTimeout = 504,
+    /** HTTP Error 429: Identity request should be retried */
+    MPIdentityErrorResponseCodeRetry = 429
 };
 
 /** Posted immediately after a new session has begun.
@@ -339,11 +363,22 @@ extern NSString * _Nonnull const mParticleEmbeddedSDKDidBecomeInactiveNotificati
 extern NSString * _Nonnull const mParticleKitInstanceKey;
 extern NSString * _Nonnull const mParticleEmbeddedSDKInstanceKey;
 
+extern NSString * _Nonnull const mParticleIdentityStateChangeListenerNotification;
+extern NSString * _Nonnull const mParticleUserKey;
+extern NSString * _Nonnull const mParticleIdentityErrorDomain;
+extern NSString * _Nonnull const mParticleIdentityErrorKey;
+
 /**
  Constant used to express gender.
  */
 extern NSString * _Nonnull const mParticleGenderMale;
 extern NSString * _Nonnull const mParticleGenderFemale;
 extern NSString * _Nonnull const mParticleGenderNotAvailable;
+
+/**
+ Kit API error domain and key
+ */
+extern NSString * _Nonnull const MPKitAPIErrorDomain;
+extern NSString * _Nonnull const MPKitAPIErrorKey;
 
 #endif

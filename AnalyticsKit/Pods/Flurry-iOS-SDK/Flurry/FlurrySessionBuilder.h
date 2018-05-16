@@ -6,6 +6,10 @@
 //  Copyright © 2016 Flurry Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+#import "FlurryConsent.h"
+
+
 /*!
  *  @brief Enum for setting up log output level.
  *  @since 4.2.0
@@ -95,6 +99,22 @@ typedef enum {
  */
 - (FlurrySessionBuilder*) withShowErrorInLog:(BOOL) value;
 
+
+/*!
+ *  @brief Registers the consent information with the SDK. Consent information is used to determine if the gdpr laws are applicable
+ *  @since 8.5.0
+ *
+ *  Use this method to pass the consent information to the SDK
+ *
+ *  @note This method must be called prior to invoking #startSession:
+ *
+ *  @param consent  The consent information.
+ *                  @see (FlurryConsent#initWithGDPRScope:andConsentStrings:)
+ */
+
+- (FlurrySessionBuilder*) withConsent:(FlurryConsent*)consent;
+
+
 #if !TARGET_OS_WATCH
 /*!
  *  @brief Enables implicit recording of Apple Store transactions.
@@ -110,7 +130,7 @@ typedef enum {
 
 /*!
  *  @brief Enables opting out of background sessions being counted towards total sessions.
- *  @since 8.0.1-rc.1
+ *  @since 8.1.0-rc.1
  *
  *  @note This method must be called prior to invoking #startSession:.
  *
@@ -120,6 +140,9 @@ typedef enum {
  */
 
 - (FlurrySessionBuilder*) withIncludeBackgroundSessionsInMetrics:(BOOL) value;
+
+
+
 #endif
 
 #if TARGET_OS_TV
