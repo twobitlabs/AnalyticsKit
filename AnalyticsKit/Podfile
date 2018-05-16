@@ -11,7 +11,7 @@ target 'AnalyticsKit' do
   pod 'Localytics'
   pod 'GoogleAnalytics'
   pod 'Parse'
-  pod 'mParticle-Apple-SDK', '~> 6'
+  pod 'mParticle-Apple-SDK', '~> 7'
   # pod 'Apsalar'
   pod 'NewRelicAgent'
   pod 'Flurry-iOS-SDK'

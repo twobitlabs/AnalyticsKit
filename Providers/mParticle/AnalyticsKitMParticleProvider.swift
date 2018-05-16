@@ -7,10 +7,20 @@ public class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
 
     let defaultEventType: MPEventType
 
+    @objc(initWithOptions:defaultEventType:)
+    public init(options: MParticleOptions, defaultEventType: MPEventType = .other) {
+        self.defaultEventType = defaultEventType
+        MParticle.sharedInstance().start(with: options)
+    }
+
     @objc(initWithKey:secret:defaultEventType:installationType:environment:proxyAppDelegate:)
     public init(key: String, secret: String, defaultEventType: MPEventType = .other, installationType: MPInstallationType = .autodetect, environment: MPEnvironment = .autoDetect, proxyAppDelegate: Bool = false) {
         self.defaultEventType = defaultEventType
-        MParticle.sharedInstance().start(withKey: key, secret: secret, installationType: installationType, environment: environment, proxyAppDelegate: proxyAppDelegate)
+        let options = MParticleOptions(key: key, secret: secret)
+        options.installType = installationType
+        options.environment = environment
+        options.proxyAppDelegate = proxyAppDelegate
+        MParticle.sharedInstance().start(with: options)
     }
 
     public func applicationWillEnterForeground() {}

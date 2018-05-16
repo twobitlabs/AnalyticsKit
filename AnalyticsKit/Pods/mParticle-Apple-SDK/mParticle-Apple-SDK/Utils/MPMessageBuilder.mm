@@ -1,26 +1,7 @@
-//
-//  MPMessageBuilder.m
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #import "MPMessageBuilder.h"
 #import "MPSession.h"
 #import "MPMessage.h"
 #import "MPStateMachine.h"
-#import "MPStandaloneMessage.h"
 #import "MPDateFormatter.h"
 #import <UIKit/UIKit.h>
 #import "MPEnums.h"
@@ -33,6 +14,7 @@
 #import "MPLocationManager.h"
 #import "MPUserAttributeChange.h"
 #import "MPUserIdentityChange.h"
+#import "MPPersistenceController.h"
 
 NSString *const launchInfoStringFormat = @"%@%@%@=%@";
 NSString *const kMPHorizontalAccuracyKey = @"acc";
@@ -73,8 +55,21 @@ NSString *const kMPUserIdentityOldValueKey = @"oi";
             messageDictionary[kMPSessionIdKey] = _session.uuid;
             messageDictionary[kMPSessionStartTimestamp] = MPMilliseconds(_session.startTime);
             
-            if (messageType == MPMessageTypeBreadcrumb) {
-                messageDictionary[kMPSessionNumberKey] = _session.sessionNumber;
+            if (messageType == MPMessageTypeSessionEnd) {
+                NSArray *userIds = [_session.sessionUserIds componentsSeparatedByString:@","];
+                
+                NSMutableArray *userIdNumbers = [NSMutableArray array];
+                [userIds enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    NSNumber *userId = @(obj.longLongValue);
+                    if (userId && ![userId isEqual:@0]) {
+                        [userIdNumbers addObject:userId];
+                    }
+                    
+                }];
+                
+                if (userIdNumbers) {
+                    messageDictionary[kMPSessionUserIdsKey] = userIdNumbers;
+                }
             }
         }
     }
@@ -82,8 +77,12 @@ NSString *const kMPUserIdentityOldValueKey = @"oi";
     NSString *presentedViewControllerDescription = nil;
     NSNumber *mainThreadFlag;
     if ([NSThread isMainThread]) {
+#if !defined(MPARTICLE_APP_EXTENSIONS)
         UIViewController *presentedViewController = [UIApplication sharedApplication].keyWindow.rootViewController.presentedViewController;
         presentedViewControllerDescription = presentedViewController ? [[presentedViewController class] description] : nil;
+#else
+        presentedViewControllerDescription = @"extension_message";
+#endif
         mainThreadFlag = @YES;
     } else {
         presentedViewControllerDescription = @"off_thread";
@@ -172,10 +171,18 @@ NSString *const kMPUserIdentityOldValueKey = @"oi";
     return self;
 }
 
+
 #pragma mark Public class methods
 + (MPMessageBuilder *)newBuilderWithMessageType:(MPMessageType)messageType session:(MPSession *)session commerceEvent:(MPCommerceEvent *)commerceEvent {
     MPMessageBuilder *messageBuilder = [[MPMessageBuilder alloc] initWithMessageType:messageType session:session commerceEvent:commerceEvent];
     [messageBuilder withCurrentState];
+    return messageBuilder;
+}
+
++ (nonnull MPMessageBuilder *)newBuilderWithMessageType:(MPMessageType)messageType session:(nonnull MPSession *)session userIdentityChange:(nonnull MPUserIdentityChange *)userIdentityChange {
+    MPMessageBuilder *messageBuilder = [[MPMessageBuilder alloc] initWithMessageType:messageType session:session];
+    [messageBuilder withUserIdentityChange:userIdentityChange];
+    
     return messageBuilder;
 }
 
@@ -188,13 +195,6 @@ NSString *const kMPUserIdentityOldValueKey = @"oi";
 + (nonnull MPMessageBuilder *)newBuilderWithMessageType:(MPMessageType)messageType session:(nonnull MPSession *)session userAttributeChange:(nonnull MPUserAttributeChange *)userAttributeChange {
     MPMessageBuilder *messageBuilder = [[MPMessageBuilder alloc] initWithMessageType:messageType session:session];
     [messageBuilder withUserAttributeChange:userAttributeChange];
-    
-    return messageBuilder;
-}
-
-+ (nonnull MPMessageBuilder *)newBuilderWithMessageType:(MPMessageType)messageType session:(nonnull MPSession *)session userIdentityChange:(nonnull MPUserIdentityChange *)userIdentityChange {
-    MPMessageBuilder *messageBuilder = [[MPMessageBuilder alloc] initWithMessageType:messageType session:session];
-    [messageBuilder withUserIdentityChange:userIdentityChange];
     
     return messageBuilder;
 }
@@ -247,26 +247,21 @@ NSString *const kMPUserIdentityOldValueKey = @"oi";
     return self;
 }
 
-- (MPDataModelAbstract *)build {
-    MPDataModelAbstract *message = nil;
+- (MPMessage *)build {
+    MPMessage *message = nil;
     
     messageDictionary[kMPMessageTypeKey] = _messageType;
     messageDictionary[kMPMessageIdKey] = uuid ? uuid : [[NSUUID UUID] UUIDString];
+    
+    NSNumber *userId = _session ? _session.userId : [MPPersistenceController mpId];
 
-    if (_session) {
-        message = [[MPMessage alloc] initWithSession:_session
-                                         messageType:_messageType
-                                         messageInfo:messageDictionary
-                                        uploadStatus:MPUploadStatusBatch
-                                                UUID:messageDictionary[kMPMessageIdKey]
-                                           timestamp:_timestamp];
-    } else {
-        message = [[MPStandaloneMessage alloc] initWithMessageType:_messageType
-                                                       messageInfo:messageDictionary
-                                                      uploadStatus:MPUploadStatusBatch
-                                                              UUID:messageDictionary[kMPMessageIdKey]
-                                                         timestamp:_timestamp];
-    }
+    message = [[MPMessage alloc] initWithSession:_session
+                                     messageType:_messageType
+                                     messageInfo:messageDictionary
+                                    uploadStatus:MPUploadStatusBatch
+                                            UUID:messageDictionary[kMPMessageIdKey]
+                                       timestamp:_timestamp
+                                          userId:userId];
     
     return message;
 }

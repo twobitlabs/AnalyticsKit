@@ -1,22 +1,3 @@
-//
-//  mParticle.h
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
-#import "MPBags.h"
 #import "MPCart.h"
 #import "MPCommerce.h"
 #import "MPCommerceEvent.h"
@@ -35,9 +16,12 @@
 #import "MPPromotion.h"
 #import "MPTransactionAttributes.h"
 #import "MPTransactionAttributes+Dictionary.h"
-#import "MPUserSegments.h"
 #import "NSArray+MPCaseInsensitive.h"
 #import "NSDictionary+MPCaseInsensitive.h"
+#import "MPIdentityApi.h"
+#import "MPKitAPI.h"
+#import "MPConsentState.h"
+#import "MPGDPRConsent.h"
 #import <UIKit/UIKit.h>
 
 #if TARGET_OS_IOS == 1
@@ -50,6 +34,34 @@
 #endif
 
 NS_ASSUME_NONNULL_BEGIN
+
+@interface MPAttributionResult : NSObject
+
+@property (nonatomic) NSDictionary *linkInfo;
+@property (nonatomic, readonly) NSNumber *kitCode;
+@property (nonatomic, readonly) NSString *kitName;
+
+@end
+
+@interface MParticleOptions : NSObject
+
++ (MParticleOptions*)optionsWithKey:(NSString *)apiKey secret:(NSString *)secret;
+@property (nonatomic, strong, readwrite) NSString *apiKey;
+@property (nonatomic, strong, readwrite) NSString *apiSecret;
+@property (nonatomic, strong, readwrite) NSString *sharedGroupID;
+@property (nonatomic, unsafe_unretained, readwrite) MPInstallationType installType;
+@property (nonatomic, strong, readwrite) MPIdentityApiRequest *identifyRequest;
+@property (nonatomic, unsafe_unretained, readwrite) MPEnvironment environment;
+@property (nonatomic, unsafe_unretained, readwrite) BOOL proxyAppDelegate;
+@property (nonatomic, unsafe_unretained, readwrite) BOOL automaticSessionTracking;
+@property (atomic, strong, nullable) NSString *customUserAgent;
+@property (atomic, unsafe_unretained, readwrite) BOOL collectUserAgent;
+@property (atomic, unsafe_unretained, readwrite) BOOL startKitsAsync;
+@property (atomic, unsafe_unretained, readwrite) MPILogLevel logLevel;
+@property (atomic, unsafe_unretained, readwrite) NSTimeInterval uploadInterval;
+@property (nonatomic, copy) void (^onIdentifyComplete)(MPIdentityApiResult *_Nullable apiResult, NSError *_Nullable error);
+@property (nonatomic, copy) void (^onAttributionComplete)(MPAttributionResult *_Nullable attributionResult, NSError *_Nullable error);
+@end
 
 /**
  This is the main class of the mParticle SDK. It interfaces your app with the mParticle API
@@ -70,19 +82,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MParticle : NSObject
 
 #pragma mark Properties
-/**
- This property is an instance of MPBag, which used to describe a product bag to hold the state of products in the hands of a user. Please note a difference
- when compared with a shopping cart. A product bag is intendend to represent product samples shipped for trial by a user, which
- later may return the samples or add one or more to a shopping cart with the intent of purchasing them.
- 
- Bags, and products added to them are persisted throughout the lifetime of the application. It is up to you to remove products from
- a bag, and remove bags according to their respective life-cycles in your app.
- 
- You should not try to create independent instance of this class, instead you should use this property to perform all product bags operations.
- 
- @see MPBags
- */
-@property (nonatomic, strong, readonly) MPBags *bags;
 
 /**
  This property is an instance of MPCommerce. It is used to execute transactional operations on the shopping cart.
@@ -90,6 +89,13 @@ NS_ASSUME_NONNULL_BEGIN
  @see MPCart
  */
 @property (nonatomic, strong, readonly) MPCommerce *commerce;
+
+/**
+ This property is an instance of MPIdentityApi. It allows tracking login, logout, and identity changes.
+ @see MPIdentityApi
+ @see MParticleUser
+ */
+@property (nonatomic, strong, readonly) MPIdentityApi *identity;
 
 /**
  Forwards setting/resetting the debug mode for third party kits.
@@ -111,7 +117,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The environment property returns the running SDK environment: Development or Production.
  @see MPEnvironment
- @see startWithKey:secret:installationType:environment:proxyAppDelegate:
+ @see startWithOptions:
  */
 @property (nonatomic, unsafe_unretained, readonly) MPEnvironment environment;
 
@@ -130,12 +136,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, unsafe_unretained) MPILogLevel logLevel;
 
 /**
- Flag indicating whether network performance is being measured.
- @see beginMeasuringNetworkPerformance
- */
-@property (nonatomic, unsafe_unretained, readonly) BOOL measuringNetworkPerformance;
-
-/**
  Gets/Sets the opt-in/opt-out status for the application. Set it to YES to opt-out of event tracking. Set it to NO to opt-in of event tracking.
  The default value is NO (opt-in of event tracking)
  */
@@ -144,14 +144,33 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  A flag indicating whether the mParticle Apple SDK has proxied the App Delegate and is handling
  application notifications automatically.
- @see startWithKey:secret:installationType:environment:proxyAppDelegate:
+ @see startWithOptions:
  */
 @property (nonatomic, unsafe_unretained, readonly) BOOL proxiedAppDelegate;
 
-#if TARGET_OS_IOS == 1
 /**
+ A flag indicating whether the mParticle Apple SDK is using
+ automated Session tracking.
+ @see MParticleOptions
+ */
+@property (nonatomic, unsafe_unretained, readonly) BOOL automaticSessionTracking;
+
+/**
+ Gets/Sets the user agent to a custom value.
+ */
+@property (atomic, strong, nullable) NSString *customUserAgent;
+
+/**
+ Determines whether the mParticle Apple SDK will instantiate a UIWebView in order to collect the browser user agent.
+ This value is required by attribution providers for fingerprint identification, when device IDs are not available.
+ If you disable this flag, consider populating the user agent via the customUserAgent property above if you are using
+ an attribution provider (such as Kochava or Tune) via mParticle. Defaults to YES
+ */
+@property (atomic, unsafe_unretained, readwrite) BOOL collectUserAgent;
+ 
+ #if TARGET_OS_IOS == 1
+ /**
  Gets/Sets the push notification token for the application.
- @see registerForPushNotificationWithTypes:
  */
 @property (nonatomic, strong, nullable) NSData *pushNotificationToken;
 #endif
@@ -164,7 +183,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Unique identifier for this app running on this device. This unique identifier is synchronized with the mParticle servers.
- @retuns A string containing the unique identifier or nil, if communication with the server could not yet be established.
+ @returns A string containing the unique identifier or nil, if communication with the server could not yet be established.
  */
 @property (nonatomic, strong, readonly, nullable) NSString *uniqueIdentifier;
 
@@ -176,11 +195,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, unsafe_unretained, readwrite) NSTimeInterval uploadInterval;
 
-/**
- Gets all user attributes.
- @returns A dictionary containing the collection of user attributes.
- */
-@property (nonatomic, strong, nullable, readonly) NSDictionary<NSString *, id> *userAttributes;
+
 
 /**
  mParticle Apple SDK version
@@ -196,61 +211,22 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)sharedInstance;
 
 /**
- Starts the API with the api_key and api_secret saved in MParticleConfig.plist.  If you
- use startAPI instead of startAPIWithKey:secret: your API key and secret must
- be added to these parameters in the MParticleConfig.plist.
- @see startWithKey:secret:installationType:environment:proxyAppDelegate:
+ *
  */
 - (void)start;
 
 /**
- Starts the API with your API key and a secret.
- It is required that you use either this method or startAPI to authorize the API before
- using the other API methods.  The apiKey and secret that are passed in to this method
+ Starts the SDK with your API key and secret and installation type.
+ It is required that you use either this method or `start` to authorize the SDK before
+ using the other API methods. The apiKey and secret that are passed in to this method
  will override the api_key and api_secret parameters of the (optional) MParticleConfig.plist.
- @param apiKey The API key for your account
- @param secret The API secret for your account
- @see startWithKey:secret:installationType:environment:proxyAppDelegate:
+ @param options SDK startup options
  */
-- (void)startWithKey:(NSString *)apiKey secret:(NSString *)secret;
-
-/**
- Starts the API with your API key and a secret and installation type.
- It is required that you use either this method or startAPI to authorize the API before
- using the other API methods.  The apiKey and secret that are passed in to this method
- will override the api_key and api_secret parameters of the (optional) MParticleConfig.plist.
- @param apiKey The API key for your account
- @param secret The API secret for your account
- @param installationType You can tell the mParticle SDK if this is a new install, an upgrade, or let the SDK detect it automatically.
- @param environment The environment property defining the running SDK environment: Development or Production. You can set it to a specific value, or let the
-        SDK auto-detect the environment for you. Once the app is deployed to the App Store, setting this parameter will have no effect, since the SDK will set
-        the environment to production.
- @see MPInstallationType
- @see MPEnvironment
- @see startWithKey:secret:installationType:environment:proxyAppDelegate:
- */
-- (void)startWithKey:(NSString *)apiKey secret:(NSString *)secret installationType:(MPInstallationType)installationType environment:(MPEnvironment)environment;
-
-/**
- Starts the API with your API key and a secret and installation type.
- It is required that you use either this method or startAPI to authorize the API before
- using the other API methods.  The apiKey and secret that are passed in to this method
- will override the api_key and api_secret parameters of the (optional) MParticleConfig.plist.
- @param apiKey The API key for your account
- @param secret The API secret for your account
- @param installationType You can tell the mParticle SDK if this is a new install, an upgrade, or let the SDK detect it automatically.
- @param environment The environment property defining the running SDK environment: Development or Production. You can set it to a specific value, or let the
-        SDK auto-detect the environment for you. Once the app is deployed to the App Store, setting this parameter will have no effect, since the SDK will set
-        the environment to production.
- @param proxyAppDelegate Flag indicating whether the mParticle SDK should handle logging remote notifications, app launches, and actions automatically. If you set to NO, 
-        your app is responsible for calling required methods. Default is YES
- @see MPInstallationType
- @see MPEnvironment
- */
-- (void)startWithKey:(NSString *)apiKey secret:(NSString *)secret installationType:(MPInstallationType)installationType environment:(MPEnvironment)environment proxyAppDelegate:(BOOL)proxyAppDelegate;
+- (void)startWithOptions:(MParticleOptions *)options;
 
 #pragma mark - Application notifications
 #if TARGET_OS_IOS == 1
+#if !defined(MPARTICLE_APP_EXTENSIONS)
 /**
  Informs the mParticle SDK a local notification has been received. This method should be called only if proxiedAppDelegate is disabled.
  @param notification A local notification received by the app
@@ -259,7 +235,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 - (void)didReceiveLocalNotification:(UILocalNotification *)notification;
-#pragma clang pop
+#pragma clang diagnostic pop
 
 /**
  Informs the mParticle SDK a remote notification has been received. This method should be called only if proxiedAppDelegate is disabled.
@@ -292,7 +268,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 - (void)handleActionWithIdentifier:(nullable NSString *)identifier forLocalNotification:(nullable UILocalNotification *)notification;
-#pragma clang pop
+#pragma clang diagnostic pop
 
 /**
  Informs the mParticle SDK the app has been activated because the user selected a custom action from the alert panel of a remote notification.
@@ -302,6 +278,7 @@ NS_ASSUME_NONNULL_BEGIN
  @see proxiedAppDelegate
  */
 - (void)handleActionWithIdentifier:(nullable NSString *)identifier forRemoteNotification:(nullable NSDictionary *)userInfo;
+#endif
 #endif
 
 /**
@@ -344,7 +321,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Begins timing an event. There can be many timed events going on at the same time, the only requirement is that each
  concurrent timed event must have a unique event name. After beginning a timed event you don't have to keep a reference
- to the event instance being timed, you can use the eventWithName: method to retrive it later when ending the timed event.
+ to the event instance being timed, you can use the eventWithName: method to retrieve it later when ending the timed event.
  @param event An instance of MPEvent
  @see MPEvent
  */
@@ -352,7 +329,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Ends timing an event and logs its data to the mParticle SDK. If you didn't keep a reference to the event
- being timed, you can use the eventWithName: method to retrive it.
+ being timed, you can use the eventWithName: method to retrieve it.
  @param event An instance of MPEvent
  @see beginTimedEvent:
  */
@@ -360,7 +337,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  When working with timed events you don't need to keep a reference to the event being timed. You can use this method
- to retrive the event being timed passing the event name as parameter. If an instance of MPEvent, with a matching
+ to retrieve the event being timed passing the event name as parameter. If an instance of MPEvent, with a matching
  event name cannot be found, this method will return nil.
  @param eventName A string with the event name associated with the event being timed
  @returns An instance of MPEvent, if one could be found, or nil.
@@ -369,7 +346,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable MPEvent *)eventWithName:(NSString *)eventName;
 
 /**
- Logs an event. This is one of the most fundamental method of the SDK. Developers define all the characteristics
+ Logs an event. This is one of the most fundamental methods of the SDK. You can define all the characteristics
  of an event (name, type, attributes, etc) in an instance of MPEvent and pass that instance to this method to
  log its data to the mParticle SDK.
  @param event An instance of MPEvent
@@ -390,7 +367,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)logEvent:(NSString *)eventName eventType:(MPEventType)eventType eventInfo:(nullable NSDictionary<NSString *, id> *)eventInfo;
 
 /**
- Logs a screen event. Developers define all the characteristics of a screen event (name, attributes, etc) in an
+ Logs a screen event. You can define all the characteristics of a screen event (name, attributes, etc) in an
  instance of MPEvent and pass that instance to this method to log its data to the mParticle SDK.
  @param event An instance of MPEvent
  @see MPEvent
@@ -408,12 +385,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)logScreen:(NSString *)screenName eventInfo:(nullable NSDictionary<NSString *, id> *)eventInfo;
 
-#pragma mark - Deep linking
+#pragma mark - Attribution
 /**
- Checks for deferred deep link information.
- @param completionHandler A block to be called when deep link checking is finished.
+ Convenience method for getting the most recently retrieved attribution info for all kits.
+ @returns A dictionary containing the most recent attribution info that was retrieved by each kit
+ @see MPKitInstance
  */
-- (void)checkForDeferredDeepLinkWithCompletionHandler:(void(^)(NSDictionary * _Nullable linkInfo, NSError * _Nullable error))completionHandler;
+- (nullable NSDictionary<NSNumber *, MPAttributionResult *> *)attributionInfo;
 
 #pragma mark - Error, Exception, and Crash Handling
 /**
@@ -456,14 +434,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Logs an exception.
- @param exception The exception which occured
+ @param exception The exception which occurred
  @see logException:topmostContext:
  */
 - (void)logException:(NSException *)exception;
 
 /**
  Logs an exception and a context.
- @param exception The exception which occured
+ @param exception The exception which occurred
  @param topmostContext The topmost context of the app, typically the topmost view controller
  */
 - (void)logException:(NSException *)exception topmostContext:(nullable id)topmostContext;
@@ -506,6 +484,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (MPKitExecStatus *)clearIntegrationAttributesForKit:(NSNumber *)kitCode;
 
 #pragma mark - Kits
+/**
+ Allows you to schedule code to run after all kits have been initialized. If kits have already been initialized,
+ your block will be invoked immediately. If not, your block will be copied and the copy will be invoked once
+ kit initialization is finished.
+ @param block A block to be invoked once kits are initialized
+ */
+- (void)onKitsInitialized:(void(^)(void))block;
+
 /**
  Returns whether a kit is active or not. You can retrieve if a kit has been already initialized and
  can be used.
@@ -586,22 +572,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Network Performance
 /**
- Begins measuring and reporting network performance.
- */
-- (void)beginMeasuringNetworkPerformance;
-
-/**
- Ends measuring and reporting network performance.
- */
-- (void)endMeasuringNetworkPerformance;
-
-/**
- Excludes a URL from network performance measurement. You can call this method multiple times, passing a URL at a time.
- @param url A URL to be removed from measurements
- */
-- (void)excludeURLFromNetworkPerformanceMeasuring:(NSURL *)url;
-
-/**
  Allows you to log a network performance measurement independently from the mParticle SDK measurement. 
  @param urlString The absolute URL being measured
  @param httpMethod The method used in the network communication (e.g. GET, POST, etc)
@@ -612,27 +582,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)logNetworkPerformance:(NSString *)urlString httpMethod:(NSString *)httpMethod startTime:(NSTimeInterval)startTime duration:(NSTimeInterval)duration bytesSent:(NSUInteger)bytesSent bytesReceived:(NSUInteger)bytesReceived;
 
-/**
- By default mParticle SDK will remove the query part of all URLs. Use this method to add an exception to the default
- behavior and include the query compoment of any URL containing queryString. You can call this method multiple times, passing a query string at a time.
- @param queryString A string with the query component to be included and reported in network performance measurement.
- */
-- (void)preserveQueryMeasuringNetworkPerformance:(NSString *)queryString;
-
-/**
- Resets all network performance measurement filters and URL exclusions.
- */
-- (void)resetNetworkPerformanceExclusionsAndFilters;
-
 #pragma mark - Session management
 /**
  Increments the value of a session attribute by the provided amount. If the key does not
  exist among the current session attributes, this method will add the key to the session attributes
  and set the value to the provided amount. If the key already exists and the existing value is not
- a number, the operation will abort and the returned value will be nil.
+ a number, the operation will abort.
+ 
+ Note: this method has been changed to be async, return value will always be @0.
+ 
  @param key The attribute key
  @param value The increment amount
- @returns The new value amount or nil, in case of failure
+ @returns The static value @0
  */
 - (nullable NSNumber *)incrementSessionAttribute:(NSString *)key byValue:(NSNumber *)value;
 
@@ -659,59 +620,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (nullable NSString *)surveyURL:(MPSurveyProvider)surveyProvider;
 
-#pragma mark - User Identity
-/**
- Increments the value of a user attribute by the provided amount. If the key does not
- exist among the current user attributes, this method will add the key to the user attributes
- and set the value to the provided amount. If the key already exists and the existing value is not
- a number, the operation will abort and the returned value will be nil.
- @param key The attribute key
- @param value The increment amount
- @returns The new value amount or nil, in case of failure
- */
-- (nullable NSNumber *)incrementUserAttribute:(NSString *)key byValue:(NSNumber *)value;
-
-/**
- Logs a user out.
- */
-- (void)logout;
-
-/**
- Sets a single user attribute. The property will be combined with any existing attributes.
- There is a 100 count limit to user attributes. Passing in an empty string value (@"") for an
- existing key will remove the user attribute.
- @param key The user attribute key
- @param value The user attribute value
- */
-- (void)setUserAttribute:(NSString *)key value:(nullable id)value;
-
-/**
- Sets a list of user attributes associated with a key.
- Passing nil to values for an existing key will remove the user attribute.
- @param key The user attribute list key
- @param values An array of user attributes
- */
-- (void)setUserAttribute:(NSString *)key values:(nullable NSArray<NSString *> *)values;
-
-/**
- Sets User/Customer Identity
- @param identityString A string representing the user identity
- @param identityType The user identity type
- */
-- (void)setUserIdentity:(nullable NSString *)identityString identityType:(MPUserIdentity)identityType;
-
-/**
- Sets a single user tag or attribute.  The property will be combined with any existing attributes.
- There is a 100 count limit to user attributes.
- @param tag The user tag/attribute
- */
-- (void)setUserTag:(NSString *)tag;
-
-/**
- Removes a single user attribute.
- @param key The user attribute key
- */
-- (void)removeUserAttribute:(NSString *)key;
 
 #pragma mark - User Notifications
 #if TARGET_OS_IOS == 1 && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
@@ -720,26 +628,16 @@ NS_ASSUME_NONNULL_BEGIN
  @param center The notification center that received the notification
  @param notification The notification that is about to be delivered
  */
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification;
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification NS_AVAILABLE_IOS(10.0);
 
 /**
  Informs the mParticle SDK that the user has interacted with a given notification
  @param center The notification center that received the notification
  @param response The user’s response to the notification
  */
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response;
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response NS_AVAILABLE_IOS(10.0);
 #endif
 
-#pragma mark - User Segments
-/**
- Retrieves user segments from mParticle's servers and returns the result as an array of MPUserSegments objects.
- If the method takes longer than timeout seconds to return, the local cached segments will be returned instead,
- and the newly retrieved segments will update the local cache once the results arrive.
- @param timeout The maximum number of seconds to wait for a response from mParticle's servers. This value can be fractional, like 0.1 (100 milliseconds)
- @param endpointId The endpoint id
- @param completionHandler A block to be called when the results are available. The user segments array is passed to this block
- */
-- (void)userSegments:(NSTimeInterval)timeout endpointId:(NSString *)endpointId completionHandler:(MPUserSegmentsHandler)completionHandler;
 
 #pragma mark - Web Views
 #if TARGET_OS_IOS == 1

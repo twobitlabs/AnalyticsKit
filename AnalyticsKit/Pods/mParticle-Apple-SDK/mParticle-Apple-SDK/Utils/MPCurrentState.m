@@ -1,21 +1,3 @@
-//
-//  MPCurrentState.m
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #import "MPCurrentState.h"
 #import <mach/mach.h>
 #import "MPStateMachine.h"
@@ -42,7 +24,25 @@ NSString *const kMPStateGPSKey = @"gps";
 NSString *const kMPStateTotalDiskSpaceKey = @"tds";
 NSString *const kMPStateFreeDiskSpaceKey = @"fds";
 
+@interface MPCurrentState () {
+#if TARGET_OS_IOS == 1
+    NSNumber *_statusBarOrientation;
+#endif
+}
+@end
+
 @implementation MPCurrentState
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+#if TARGET_OS_IOS == 1
+        _statusBarOrientation = @(UIInterfaceOrientationPortrait);
+#endif
+    }
+    return self;
+}
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"%@", [self dictionaryRepresentation]];
@@ -189,7 +189,13 @@ NSString *const kMPStateFreeDiskSpaceKey = @"fds";
 }
 
 - (NSNumber *)statusBarOrientation {
-    return @([[UIApplication sharedApplication] statusBarOrientation]);
+#if !defined(MPARTICLE_APP_EXTENSIONS)
+    if ([NSThread isMainThread]) {
+        _statusBarOrientation = @([[UIApplication sharedApplication] statusBarOrientation]);
+    }
+#endif
+    
+    return _statusBarOrientation;
 }
 #endif
 

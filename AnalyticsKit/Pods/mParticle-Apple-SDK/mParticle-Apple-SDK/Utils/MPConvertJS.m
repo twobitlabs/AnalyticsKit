@@ -1,27 +1,11 @@
-//
-//  MPConvertJS.m
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #import "MPConvertJS.h"
 #import "MPCommerceEvent.h"
 #import "MPCommerceEvent+Dictionary.h"
 #import "MPProduct.h"
 #import "MPPromotion.h"
 #import "MPTransactionAttributes.h"
+#import "mParticle.h"
+#import "MPILogger.h"
 
 typedef NS_ENUM(NSUInteger, MPJSCommerceEventAction) {
     MPJSCommerceEventActionAddToCart = 0,
@@ -36,11 +20,28 @@ typedef NS_ENUM(NSUInteger, MPJSCommerceEventAction) {
     MPJSCommerceEventActionRemoveFromWishlist
 };
 
+typedef NS_ENUM(NSUInteger, MPJSIdentityType) {
+    MPJSIdentityTypeOther = 0,
+    MPJSIdentityTypeCustomerId,
+    MPJSIdentityTypeFacebook,
+    MPJSIdentityTypeTwitter,
+    MPJSIdentityTypeGoogle,
+    MPJSIdentityTypeMicrosoft,
+    MPJSIdentityTypeYahoo,
+    MPJSIdentityTypeEmail,
+    MPJSIdentityTypeAlias,
+    MPJSIdentityTypeFacebookCustomAudienceId,
+    MPJSIdentityTypeOther2,
+    MPJSIdentityTypeOther3,
+    MPJSIdentityTypeOther4
+};
+
 @implementation MPConvertJS
 
 + (MPCommerceEventAction)MPCommerceEventAction:(NSNumber *)json {
-    int actionInt = [json intValue];
     MPCommerceEventAction action;
+    
+    int actionInt = [json intValue];
     switch (actionInt) {
         case MPJSCommerceEventActionAddToCart:
             action = MPCommerceEventActionAddToCart;
@@ -84,7 +85,7 @@ typedef NS_ENUM(NSUInteger, MPJSCommerceEventAction) {
 
         default:
             action = MPCommerceEventActionAddToCart;
-            NSAssert(NO, @"Invalid commerce event action");
+            MPILogError(@"Invalid commerce event action received from webview: %@", @(action));
             break;
     }
     return action;
@@ -98,7 +99,7 @@ typedef NS_ENUM(NSUInteger, MPJSCommerceEventAction) {
 
     MPCommerceEvent *commerceEvent = nil;
     if (!isValid) {
-        NSAssert(NO, @"Invalid commerce event");
+        MPILogError(@"Invalid commerce event dictionary received from webview: %@", json);
         return commerceEvent;
     }
 
@@ -166,7 +167,7 @@ typedef NS_ENUM(NSUInteger, MPJSCommerceEventAction) {
 }
 
 + (MPTransactionAttributes *)MPTransactionAttributes:(NSDictionary *)json {
-    MPTransactionAttributes *transactionAttributes;
+    MPTransactionAttributes *transactionAttributes = [[MPTransactionAttributes alloc] init];
     transactionAttributes.affiliation = json[@"Affiliation"];
     transactionAttributes.couponCode = json[@"CouponCode"];
     transactionAttributes.shipping = json[@"ShippingAmount"];
@@ -194,6 +195,121 @@ typedef NS_ENUM(NSUInteger, MPJSCommerceEventAction) {
         [product setObject:value forKeyedSubscript:key];
     }
     return product;
+}
+
++ (BOOL)MPUserIdentity:(NSNumber *)json identity:(MPUserIdentity *)identity {
+    MPUserIdentity localIdentity;
+    
+    if (json == nil) {
+        return NO;
+    }
+    
+    int identityInt = [json intValue];
+    switch (identityInt) {
+        case MPJSIdentityTypeCustomerId:
+            localIdentity = MPUserIdentityCustomerId;
+            break;
+            
+        case MPJSIdentityTypeFacebook:
+            localIdentity = MPUserIdentityFacebook;
+            break;
+            
+        case MPJSIdentityTypeTwitter:
+            localIdentity = MPUserIdentityTwitter;
+            break;
+            
+        case MPJSIdentityTypeGoogle:
+            localIdentity = MPUserIdentityGoogle;
+            break;
+            
+        case MPJSIdentityTypeMicrosoft:
+            localIdentity = MPUserIdentityMicrosoft;
+            break;
+            
+        case MPJSIdentityTypeYahoo:
+            localIdentity = MPUserIdentityYahoo;
+            break;
+            
+        case MPJSIdentityTypeEmail:
+            localIdentity = MPUserIdentityEmail;
+            break;
+            
+        case MPJSIdentityTypeAlias:
+            localIdentity = MPUserIdentityAlias;
+            break;
+            
+        case MPJSIdentityTypeFacebookCustomAudienceId:
+            localIdentity = MPUserIdentityFacebookCustomAudienceId;
+            break;
+            
+        case MPJSIdentityTypeOther:
+            localIdentity = MPUserIdentityOther;
+            break;
+            
+        case MPJSIdentityTypeOther2:
+            localIdentity = MPUserIdentityOther2;
+            break;
+            
+        case MPJSIdentityTypeOther3:
+            localIdentity = MPUserIdentityOther3;
+            break;
+            
+        case MPJSIdentityTypeOther4:
+            localIdentity = MPUserIdentityOther4;
+            break;
+            
+        default:
+            return NO;
+            break;
+    }
+    
+    *identity = localIdentity;
+    return YES;
+}
+
++ (MPIdentityApiRequest *)MPIdentityApiRequest:(NSDictionary *)json {
+    MPIdentityApiRequest *request = [MPIdentityApiRequest requestWithEmptyUser];
+    
+    NSArray *userIdentities = json[@"UserIdentities"];
+    
+    if (userIdentities.count) {
+        
+        __block BOOL allSuccess = YES;
+        
+        [userIdentities enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull identityDictionary, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            NSString *identity = identityDictionary[@"Identity"];
+            
+            NSNumber *identityTypeNumber = identityDictionary[@"Type"];
+            MPUserIdentity identityType;
+        
+            BOOL success = [MPConvertJS MPUserIdentity:identityTypeNumber identity:&identityType];
+            
+            if (!success) {
+                allSuccess = NO;
+                *stop = YES;
+                return;
+            }
+            
+            [request setUserIdentity:identity identityType:identityType];
+        }];
+        
+        if (!allSuccess) {
+            return nil;
+        }
+    }
+    
+    NSString *identity = json[@"Identity"];
+    NSNumber *identityTypeNumber = json[@"Type"];
+    MPUserIdentity identityType;
+        
+    BOOL success = [MPConvertJS MPUserIdentity:identityTypeNumber identity:&identityType];
+        
+    if (success) {
+        [request setUserIdentity:identity identityType:identityType];
+    }
+    
+    return request;
 }
 
 @end

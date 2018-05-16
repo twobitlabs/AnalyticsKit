@@ -1,38 +1,20 @@
-//
-//  MPUpload.m
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #import "MPUpload.h"
 #import "MPSession.h"
 #import "MPIConstants.h"
 
 @implementation MPUpload
 
-- (instancetype)initWithSession:(MPSession *)session uploadDictionary:(NSDictionary *)uploadDictionary {
+- (instancetype)initWithSessionId:(NSNumber *)sessionId uploadDictionary:(NSDictionary *)uploadDictionary {    
     NSData *uploadData = [NSJSONSerialization dataWithJSONObject:uploadDictionary options:0 error:nil];
     
-    return [self initWithSessionId:session.sessionId
+    return [self initWithSessionId:sessionId
                           uploadId:0
                               UUID:uploadDictionary[kMPMessageIdKey]
                         uploadData:uploadData
                          timestamp:[uploadDictionary[kMPTimestampKey] doubleValue]];
 }
 
-- (instancetype)initWithSessionId:(int64_t)sessionId uploadId:(int64_t)uploadId UUID:(NSString *)uuid uploadData:(NSData *)uploadData timestamp:(NSTimeInterval)timestamp {
+- (instancetype)initWithSessionId:(NSNumber *)sessionId uploadId:(int64_t)uploadId UUID:(NSString *)uuid uploadData:(NSData *)uploadData timestamp:(NSTimeInterval)timestamp {
     self = [super init];
     if (self) {
         _sessionId = sessionId;
@@ -55,8 +37,8 @@
     if (MPIsNull(object) || ![object isKindOfClass:[MPUpload class]]) {
         return NO;
     }
-    
-    BOOL isEqual = _sessionId == object.sessionId &&
+    BOOL sessionIdsEqual = (_sessionId == nil && object.sessionId == nil) || [_sessionId isEqual:object.sessionId];
+    BOOL isEqual = sessionIdsEqual &&
                    _uploadId == object.uploadId &&
                    _timestamp == object.timestamp &&
                    [_uploadData isEqualToData:object.uploadData];
@@ -66,7 +48,7 @@
 
 #pragma mark NSCopying
 - (id)copyWithZone:(NSZone *)zone {
-    MPUpload *copyObject = [[MPUpload alloc] initWithSessionId:_sessionId
+    MPUpload *copyObject = [[MPUpload alloc] initWithSessionId:[_sessionId copy]
                                                       uploadId:_uploadId
                                                           UUID:[_uuid copy]
                                                     uploadData:[_uploadData copy]

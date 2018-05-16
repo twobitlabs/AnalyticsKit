@@ -1,21 +1,3 @@
-//
-//  MPConnector.m
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #import "MPConnector.h"
 #import <dispatch/dispatch.h>
 #import "MPIConstants.h"
@@ -26,6 +8,21 @@
 
 static NSArray *mpStoredCertificates = nil;
 static NSArray *mpFiddlerCertificates = nil;
+
+@implementation MPConnectorResponse
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _data = nil;
+        _error = nil;
+        _downloadTime = 0;
+        _httpResponse = nil;
+    }
+    return self;
+}
+
+@end
 
 @interface MPConnector() <NSURLSessionDelegate, NSURLSessionTaskDelegate> {
     NSMutableData *receivedData;
@@ -148,9 +145,8 @@ static NSArray *mpFiddlerCertificates = nil;
                 NSURLCredential *urlCredential = [NSURLCredential credentialForTrust:trustRef];
                 completionHandler(NSURLSessionAuthChallengeUseCredential, urlCredential);
             } else {
-                if (_active) {
-                    _active = NO;
-                    [self cleariVars];
+                if (self->_active) {
+                    self->_active = NO;
                 }
                 
                 completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
@@ -210,11 +206,7 @@ static NSArray *mpFiddlerCertificates = nil;
                 }
             }
         }
-        
-#ifdef SERVER_ECHO
-        NSLog(@"\nResponse: %@\nData: %@", httpURLResponse, [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
-#endif
-        
+    
         if (self.completionHandler != nil && self.completionHandler != NULL) {
             @try {
                 self.completionHandler(receivedData, nil, downloadTime, httpURLResponse);
@@ -245,54 +237,88 @@ static NSArray *mpFiddlerCertificates = nil;
 }
 
 #pragma mark Public methods
-- (void)asyncGetDataFromURL:(NSURL *)url completionHandler:(void (^)(NSData *data, NSError *error, NSTimeInterval downloadTime, NSHTTPURLResponse *httpResponse))completionHandler {
+- (nonnull MPConnectorResponse *)responseFromGetRequestToURL:(nonnull NSURL *)url {
+    MPConnectorResponse *response = [[MPConnectorResponse alloc] init];
 #if !defined(MP_UNIT_TESTING)
     if ([MPStateMachine sharedInstance].networkStatus == MParticleNetworkStatusNotReachable) {
-        NSError *error = [NSError errorWithDomain:@"MPConnector" code:1 userInfo:nil];
-        completionHandler(nil, error, 0, nil);
-        return;
+        response.error = [NSError errorWithDomain:@"MPConnector" code:MPConnectivityErrorCodeNoConnection userInfo:nil];
+        return response;
     }
 #endif
     
-    NSMutableURLRequest *asyncURLRequest = [[MPURLRequestBuilder newBuilderWithURL:url message:nil httpMethod:kMPHTTPMethodGet] build];
+    NSMutableURLRequest *urlRequest = [[MPURLRequestBuilder newBuilderWithURL:url message:nil httpMethod:kMPHTTPMethodGet] build];
     
-    if (asyncURLRequest) {
+    if (urlRequest) {
         _active = YES;
         requestStartTime = [NSDate date];
-        self.completionHandler = completionHandler;
-        self.dataTask = [self.urlSession dataTaskWithRequest:asyncURLRequest];
+        dispatch_semaphore_t requestSemaphore = dispatch_semaphore_create(0);
+        __block NSData *completionData = nil;
+        __block NSError *completionError = nil;
+        __block NSTimeInterval completionDownloadTime = 0;
+        __block NSHTTPURLResponse *completionHttpResponse = nil;
+        self.completionHandler = ^(NSData *data, NSError *error, NSTimeInterval downloadTime, NSHTTPURLResponse *httpResponse) {
+            completionData = data;
+            completionError = error;
+            completionDownloadTime = downloadTime;
+            completionHttpResponse = httpResponse;
+            dispatch_semaphore_signal(requestSemaphore);
+        };
+        
+        self.dataTask = [self.urlSession dataTaskWithRequest:urlRequest];
         [_dataTask resume];
+        dispatch_semaphore_wait(requestSemaphore, DISPATCH_TIME_FOREVER);
+        response.data = completionData;
+        response.error = completionError;
+        response.downloadTime = completionDownloadTime;
+        response.httpResponse = completionHttpResponse;
     } else {
         _active = NO;
-        NSError *error = [NSError errorWithDomain:@"MPConnector" code:1 userInfo:nil];
-        completionHandler(nil, error, 0, nil);
+        response.error = [NSError errorWithDomain:@"MPConnector" code:1 userInfo:nil];
     }
+    
+    return response;
 }
 
-- (void)asyncPostDataFromURL:(NSURL *)url message:(NSString *)message serializedParams:(NSData *)serializedParams completionHandler:(void (^)(NSData *data, NSError *error, NSTimeInterval downloadTime, NSHTTPURLResponse *httpResponse))completionHandler {
+- (nonnull MPConnectorResponse *)responseFromPostRequestToURL:(nonnull NSURL *)url message:(nullable NSString *)message serializedParams:(nullable NSData *)serializedParams {
+    MPConnectorResponse *response = [[MPConnectorResponse alloc] init];
 #if !defined(MP_UNIT_TESTING)
     if ([MPStateMachine sharedInstance].networkStatus == MParticleNetworkStatusNotReachable) {
-        NSError *error = [NSError errorWithDomain:@"MPConnector" code:1 userInfo:nil];
-        completionHandler(nil, error, 0, nil);
-        return;
+        response.error = [NSError errorWithDomain:@"MPConnector" code:MPConnectivityErrorCodeNoConnection userInfo:nil];
+        return response;
     }
 #endif
     
-    NSMutableURLRequest *asyncURLRequest = [[[MPURLRequestBuilder newBuilderWithURL:url message:message httpMethod:kMPHTTPMethodPost]
+    NSMutableURLRequest *urlRequest = [[[MPURLRequestBuilder newBuilderWithURL:url message:message httpMethod:kMPHTTPMethodPost]
                                              withPostData:serializedParams]
                                             build];
     
-    if (asyncURLRequest) {
+    if (urlRequest) {
         _active = YES;
         requestStartTime = [NSDate date];
-        self.completionHandler = completionHandler;
-        self.dataTask = [self.urlSession uploadTaskWithRequest:asyncURLRequest fromData:serializedParams];
+        dispatch_semaphore_t requestSemaphore = dispatch_semaphore_create(0);
+        __block NSData *completionData = nil;
+        __block NSError *completionError = nil;
+        __block NSTimeInterval completionDownloadTime = 0;
+        __block NSHTTPURLResponse *completionHttpResponse = nil;
+        self.completionHandler = ^(NSData *data, NSError *error, NSTimeInterval downloadTime, NSHTTPURLResponse *httpResponse) {
+            completionData = data;
+            completionError = error;
+            completionDownloadTime = downloadTime;
+            completionHttpResponse = httpResponse;
+            dispatch_semaphore_signal(requestSemaphore);
+        };
+        self.dataTask = [self.urlSession uploadTaskWithRequest:urlRequest fromData:serializedParams];
         [_dataTask resume];
+        dispatch_semaphore_wait(requestSemaphore, DISPATCH_TIME_FOREVER);
+        response.data = completionData;
+        response.error = completionError;
+        response.downloadTime = completionDownloadTime;
+        response.httpResponse = completionHttpResponse;
     } else {
         _active = NO;
-        NSError *error = [NSError errorWithDomain:@"MPConnector" code:1 userInfo:nil];
-        completionHandler(nil, error, 0, nil);
+        response.error = [NSError errorWithDomain:@"MPConnector" code:1 userInfo:nil];
     }
+    return response;
 }
 
 - (void)cancelRequest {

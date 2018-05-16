@@ -1,21 +1,3 @@
-//
-//  MPCart.m
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #import "MPCart.h"
 #import "MPProduct.h"
 #import "MPProduct+Dictionary.h"
@@ -29,6 +11,8 @@
 
 @property (nonatomic, strong, readonly, nullable) NSString *cartFile;
 @property (nonatomic, strong, nullable) NSMutableArray<MPProduct *> *productsList;
+@property (nonatomic, strong, readonly, nullable) NSNumber *mpid;
+@property (nonatomic) BOOL cartInitialized;
 
 @end
 
@@ -37,7 +21,20 @@
 
 @synthesize cartFile = _cartFile;
 
+- (instancetype)initWithUserId:(NSNumber *)userId {
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
+    _mpid = userId;
+    _productsList = nil;
+    _cartInitialized = NO;
+    
+    return self;
+}
+
 #pragma mark Private accessors
+
 - (NSString *)cartFile {
     if (_cartFile) {
         return _cartFile;
@@ -50,7 +47,8 @@
         [fileManager createDirectoryAtPath:stateMachineDirectoryPath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
-    _cartFile = [stateMachineDirectoryPath stringByAppendingPathComponent:@"MPCart.cart"];
+    NSString *cartPath = [NSString stringWithFormat:@"%@::%@", _mpid, @"MPCart.cart"];
+    _cartFile = [stateMachineDirectoryPath stringByAppendingPathComponent:cartPath];
     return _cartFile;
 }
 
@@ -59,11 +57,41 @@
         return _productsList;
     }
     
+    if (!_cartInitialized) {
+        _cartInitialized = YES;
+        MPCart *persistedCart = [self retrieveCart];
+        if (persistedCart && persistedCart.productsList.count > 0) {
+            _productsList = persistedCart.productsList;
+            return _productsList;
+        }
+    }
+    
     _productsList = [[NSMutableArray alloc] init];
     return _productsList;
 }
 
 #pragma mark Private methods
+- (void)migrate {
+    NSString *stateMachineDirectoryPath = STATE_MACHINE_DIRECTORY_PATH;
+    NSString *oldCartFile = [stateMachineDirectoryPath stringByAppendingPathComponent:@"MPCart.cart"];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:self.cartFile]) {
+        MPCart *cart = nil;
+        @try {
+            cart = (MPCart *)[NSKeyedUnarchiver unarchiveObjectWithFile:oldCartFile];
+        } @catch(NSException *ex) { }
+        
+        if (!cart) {
+            MPILogError(@"Unable to migrate cart.");
+        } else if (cart.productsList) {
+            _productsList = cart.productsList;
+            [self persistCart];
+        }
+
+    }
+}
+
 - (void)persistCart {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
@@ -167,30 +195,39 @@
     }
 }
 
-#pragma mark Class methods
-+ (instancetype)sharedInstance {
-    static MPCart *sharedInstance = nil;
-    static dispatch_once_t cartPredicate;
-    
-    dispatch_once(&cartPredicate, ^{
-        sharedInstance = [[MPCart alloc] init];
-        
-        MPCart *persistedCart = [sharedInstance retrieveCart];
-        if (persistedCart && persistedCart.productsList.count > 0) {
-            sharedInstance.productsList = persistedCart.productsList;
+- (BOOL)validateProduct:(MPProduct *)product {
+    BOOL valid = !MPIsNull(product) && [product isKindOfClass:[MPProduct class]];
+    return valid;
+}
+
+- (BOOL)validateProducts:(NSArray<MPProduct *> *)products {
+    __block BOOL allValidProducts = YES;
+    [products enumerateObjectsUsingBlock:^(MPProduct * _Nonnull product, NSUInteger idx, BOOL * _Nonnull stop) {
+        BOOL thisProductValid = [self validateProduct:product];
+        if (!thisProductValid) {
+            allValidProducts = NO;
+            *stop = YES;
         }
-    });
-    
-    return sharedInstance;
+    }];
+    return allValidProducts;
 }
 
 #pragma mark Public methods
 - (void)addProduct:(MPProduct *)product {
-    BOOL validProduct = !MPIsNull(product) && [product isKindOfClass:[MPProduct class]];
+    BOOL validProduct = [self validateProduct:product];
     NSAssert(validProduct, @"The 'product' variable is not valid.");
     
     if (validProduct) {
         [self addProducts:@[product] logEvent:YES updateProductList:NO];
+    }
+}
+
+- (void)addAllProducts:(NSArray<MPProduct *> *)products shouldLogEvents:(BOOL)shouldLogEvents {
+    BOOL validProducts = [self validateProducts:products];
+    NSAssert(validProducts, @"The 'products' array is not valid");
+    
+    if (validProducts) {
+        [self addProducts:products logEvent:shouldLogEvents updateProductList:NO];
     }
 }
 

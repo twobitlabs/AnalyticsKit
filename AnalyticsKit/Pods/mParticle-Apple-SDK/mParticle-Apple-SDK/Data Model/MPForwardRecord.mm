@@ -1,21 +1,3 @@
-//
-//  MPForwardRecord.mm
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #import "MPForwardRecord.h"
 #import "MPIConstants.h"
 #import "MPILogger.h"
@@ -27,6 +9,7 @@
 #import "MPCommerceEvent+Dictionary.h"
 #import "MPEventProjection.h"
 #import "MPKitExecStatus.h"
+#import "MPPersistenceController.h"
 
 NSString *const kMPFRModuleId = @"mid";
 NSString *const kMPFRProjections = @"proj";
@@ -37,13 +20,14 @@ NSString *const kMPFROptOutState = @"s";
 
 @implementation MPForwardRecord
 
-- (instancetype)initWithId:(int64_t)forwardRecordId data:(NSData *)data {
+- (instancetype)initWithId:(int64_t)forwardRecordId data:(NSData *)data mpid:(NSNumber *)mpid {
     self = [super init];
     if (!self) {
         return nil;
     }
     
     _forwardRecordId = forwardRecordId;
+    _mpid = mpid;
     
     if (!MPIsNull(data)) {
         NSError *error = nil;
@@ -95,6 +79,7 @@ NSString *const kMPFROptOutState = @"s";
     }
     
     _forwardRecordId = 0;
+    _mpid = [MPPersistenceController mpId];
     _dataDictionary = [[NSMutableDictionary alloc] init];
     _dataDictionary[kMPFRModuleId] = execStatus.kitCode;
     _dataDictionary[kMPTimestampKey] = MPCurrentEpochInMilliseconds;
@@ -148,10 +133,21 @@ NSString *const kMPFROptOutState = @"s";
     return self;
 }
 
+- (NSNumber *)timestamp {
+    return _dataDictionary[kMPTimestampKey];
+}
+
+- (void)setTimestamp:(NSNumber *)timestamp {
+    if (timestamp != nil) {
+        _dataDictionary[kMPTimestampKey] = timestamp;
+    }
+}
+
 - (NSString *)description {
     NSMutableString *description = [[NSMutableString alloc] initWithString:@"MPForwardRecord {\n"];
     [description appendFormat:@"  forwardRecordId: %llu\n", _forwardRecordId];
     [description appendFormat:@"  dataDictionary: %@\n", _dataDictionary];
+    [description appendFormat:@"  mpid: %@\n", _mpid];
     [description appendString:@"}"];
     
     return description;
@@ -168,6 +164,10 @@ NSString *const kMPFROptOutState = @"s";
     
     if (isEqual && _forwardRecordId > 0 && objectForwardRecord.forwardRecordId > 0) {
         isEqual = _forwardRecordId == objectForwardRecord.forwardRecordId;
+    }
+    
+    if (isEqual) {
+        isEqual = [_mpid isEqual:objectForwardRecord.mpid];
     }
     
     return isEqual;

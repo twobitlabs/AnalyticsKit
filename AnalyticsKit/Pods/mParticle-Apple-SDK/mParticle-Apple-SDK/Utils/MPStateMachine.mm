@@ -1,23 +1,5 @@
-//
-//  MPStateMachine.m
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #import "MPStateMachine.h"
-#import "NSUserDefaults+mParticle.h"
+#import "MPIUserDefaults.h"
 #import "MPIConstants.h"
 #import "MPApplication.h"
 #import "MPCustomModule.h"
@@ -29,7 +11,6 @@
 #import "MPILogger.h"
 #import "MPConsumerInfo.h"
 #import "MPPersistenceController.h"
-#import "MPBags.h"
 #include "MessageTypeName.h"
 #import "MPLocationManager.h"
 #import "MPKitContainer.h"
@@ -46,10 +27,14 @@ NSString *const kMinUploadDateKey = @"MinUploadDate";
 static MPEnvironment runningEnvironment = MPEnvironmentAutoDetect;
 static BOOL runningInBackground = NO;
 
+@interface MParticle ()
++ (dispatch_queue_t)messageQueue;
+@end
+
 @interface MPStateMachine() {
-    BOOL lastestSDKWarningShown;
     BOOL optOutSet;
     BOOL alwaysTryToCollectIDFASet;
+    dispatch_queue_t messageQueue;
 }
 
 @property (nonatomic, unsafe_unretained) MParticleNetworkStatus networkStatus;
@@ -75,6 +60,7 @@ static BOOL runningInBackground = NO;
 @synthesize storedSDKVersion = _storedSDKVersion;
 @synthesize triggerEventTypes = _triggerEventTypes;
 @synthesize triggerMessageTypes = _triggerMessageTypes;
+@synthesize automaticSessionTracking = _automaticSessionTracking;
 
 #if TARGET_OS_IOS == 1
 @synthesize location = _location;
@@ -83,6 +69,7 @@ static BOOL runningInBackground = NO;
 - (instancetype)init {
     self = [super init];
     if (self) {
+        messageQueue = [MParticle messageQueue];
         optOutSet = NO;
         _exceptionHandlingMode = kMPRemoteConfigExceptionHandlingModeAppDefined;
         _networkPerformanceMeasuringMode = kMPRemoteConfigAppDefined;
@@ -90,13 +77,11 @@ static BOOL runningInBackground = NO;
         _startTime = [NSDate dateWithTimeIntervalSinceNow:-1];
         _backgrounded = NO;
         _consoleLogging = MPConsoleLoggingAutoDetect;
-        lastestSDKWarningShown = NO;
         _dataRamped = NO;
         _installationType = MPInstallationTypeAutodetect;
         _launchDate = [NSDate date];
         _launchOptions = nil;
-        _logLevel = [MPStateMachine environment] == MPEnvironmentProduction ? MPILogLevelNone : MPILogLevelWarning;
-        _shouldUploadSessionHistory = YES;
+        _logLevel = MPILogLevelNone;
         _searchAttribution = [[MPSearchAdsAttribution alloc] init];
         
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -191,7 +176,7 @@ static BOOL runningInBackground = NO;
         return _storedSDKVersion;
     }
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     _storedSDKVersion = userDefaults[@"storedSDKVersion"];
     
     return _storedSDKVersion;
@@ -201,24 +186,16 @@ static BOOL runningInBackground = NO;
     if (self.storedSDKVersion && storedSDKVersion && [_storedSDKVersion isEqualToString:storedSDKVersion]) {
         return;
     }
-    
-    NSString *storedSDKMajorVersion = [_storedSDKVersion substringWithRange:NSMakeRange(0, 1)];
-    NSString *newSDKMajorVersion = [storedSDKVersion substringWithRange:NSMakeRange(0, 1)];
-    if (newSDKMajorVersion && ![storedSDKMajorVersion isEqualToString:newSDKMajorVersion]) {
-        [[MPKitContainer sharedInstance] removeAllKitConfigurations];
-    }
 
     _storedSDKVersion = storedSDKVersion;
 
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
 
     if (MPIsNull(_storedSDKVersion)) {
         [userDefaults removeMPObjectForKey:@"storedSDKVersion"];
     } else {
         userDefaults[@"storedSDKVersion"] = _storedSDKVersion;
     }
-    
-    [userDefaults removeMPObjectForKey:kMPHTTPETagHeaderKey];
 }
 
 #pragma mark Private methods
@@ -279,7 +256,6 @@ static BOOL runningInBackground = NO;
 #pragma mark Notification handlers
 - (void)handleApplicationDidEnterBackground:(NSNotification *)notification {
     [MPApplication updateLastUseDate:_launchDate];
-    [MPApplication updateStoredVersionAndBuildNumbers];
     _backgrounded = YES;
 
     __weak MPStateMachine *weakSelf = self;
@@ -300,7 +276,6 @@ static BOOL runningInBackground = NO;
 
 - (void)handleApplicationWillTerminate:(NSNotification *)notification {
     [MPApplication updateLastUseDate:_launchDate];
-    [MPApplication updateStoredVersionAndBuildNumbers];
 }
 
 - (void)handleMemoryWarningNotification:(NSNotification *)notification {
@@ -339,10 +314,6 @@ static BOOL runningInBackground = NO;
 }
 
 + (void)setEnvironment:(MPEnvironment)environment {
-    if ([MPStateMachine getEnvironment] == MPEnvironmentProduction && environment == MPEnvironmentDevelopment) {
-        MPILogError(@"Please be aware you are forcing the SDK running environment into development; be sure to undo this before submitting to the App Store.");
-    }
-
     runningEnvironment = environment;
 }
 
@@ -376,15 +347,6 @@ static BOOL runningInBackground = NO;
 }
 
 #pragma mark Public accessors
-- (MPBags *)bags {
-    if (_bags) {
-        return _bags;
-    }
-    
-    _bags = [[MPBags alloc] init];
-    return _bags;
-}
-
 - (MPConsoleLogging)consoleLogging {
     if (_consoleLogging != MPConsoleLoggingAutoDetect) {
         return _consoleLogging;
@@ -414,7 +376,7 @@ static BOOL runningInBackground = NO;
     }
     
     MPPersistenceController *persistence = [MPPersistenceController sharedInstance];
-    _consumerInfo = [persistence fetchConsumerInfo];
+    _consumerInfo = [persistence fetchConsumerInfoForUserId:[MPPersistenceController mpId]];
     
     if (!_consumerInfo) {
         _consumerInfo = [[MPConsumerInfo alloc] init];
@@ -425,15 +387,10 @@ static BOOL runningInBackground = NO;
 }
 
 - (void)setLogLevel:(MPILogLevel)logLevel {
-    if ([MPStateMachine environment] == MPEnvironmentProduction) {
-        _logLevel = MPILogLevelNone;
+    _logLevel = logLevel;
+    
+    if (logLevel == MPILogLevelNone) {
         _consoleLogging = MPConsoleLoggingSuppress;
-    } else {
-        _logLevel = logLevel;
-        
-        if (logLevel == MPILogLevelNone) {
-            _consoleLogging = MPConsoleLoggingSuppress;
-        }
     }
 }
 
@@ -466,13 +423,13 @@ static BOOL runningInBackground = NO;
 }
 
 - (NSNumber *)firstSeenInstallation {
-    if (_firstSeenInstallation) {
+    if (_firstSeenInstallation != nil) {
         return _firstSeenInstallation;
     }
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     NSNumber *firstSeenInstallation = userDefaults[kMPAppFirstSeenInstallationKey];
-    if (firstSeenInstallation) {
+    if (firstSeenInstallation != nil) {
         _firstSeenInstallation = firstSeenInstallation;
     } else {
         [self willChangeValueForKey:@"firstSeenInstallation"];
@@ -480,7 +437,7 @@ static BOOL runningInBackground = NO;
         [self didChangeValueForKey:@"firstSeenInstallation"];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            userDefaults[kMPAppFirstSeenInstallationKey] = _firstSeenInstallation;
+            userDefaults[kMPAppFirstSeenInstallationKey] = self->_firstSeenInstallation;
             [userDefaults synchronize];
         });
     }
@@ -489,19 +446,19 @@ static BOOL runningInBackground = NO;
 }
 
 - (void)setFirstSeenInstallation:(NSNumber *)firstSeenInstallation {
-    if (_firstSeenInstallation) {
+    if (_firstSeenInstallation != nil) {
         return;
     }
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     NSNumber *fsi = userDefaults[kMPAppFirstSeenInstallationKey];
-    if (!fsi) {
+    if (fsi == nil) {
         [self willChangeValueForKey:@"firstSeenInstallation"];
         _firstSeenInstallation = firstSeenInstallation;
         [self didChangeValueForKey:@"firstSeenInstallation"];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            userDefaults[kMPAppFirstSeenInstallationKey] = _firstSeenInstallation;
+            userDefaults[kMPAppFirstSeenInstallationKey] = self->_firstSeenInstallation;
             [userDefaults synchronize];
         });
     }
@@ -538,29 +495,6 @@ static BOOL runningInBackground = NO;
     self.firstSeenInstallation = installationType != MPInstallationTypeKnownUpgrade ? @YES : @NO;
 }
 
-- (void)setLatestSDKVersion:(NSString *)latestSDKVersion {
-    if (MPIsNull(latestSDKVersion)) {
-        return;
-    }
-    
-    if (!_latestSDKVersion || ![_latestSDKVersion isEqualToString:latestSDKVersion]) {
-        [self willChangeValueForKey:@"latestSDKVersion"];
-        _latestSDKVersion = latestSDKVersion;
-        [self didChangeValueForKey:@"latestSDKVersion"];
-    }
-    
-    if (!lastestSDKWarningShown && ([MPStateMachine environment] == MPEnvironmentDevelopment) && latestSDKVersion && [latestSDKVersion compare:kMParticleSDKVersion] == NSOrderedDescending) {
-        NSLog(@"****");
-        NSLog(@"*");
-        NSLog(@"* Version %@ of the mParticle SDK is available.", latestSDKVersion);
-        NSLog(@"* You are running version %@.", kMParticleSDKVersion);
-        NSLog(@"*");
-        NSLog(@"****");
-        
-        lastestSDKWarningShown = YES;
-    }
-}
-
 #if TARGET_OS_IOS == 1
 - (CLLocation *)location {
     if ([MPLocationManager trackingLocation]) {
@@ -588,7 +522,7 @@ static BOOL runningInBackground = NO;
         return _locationTrackingMode;
     }
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     NSString *locationTrackingMode = userDefaults[kMPRemoteConfigLocationModeKey];
     
     [self willChangeValueForKey:@"locationTrackingMode"];
@@ -613,7 +547,7 @@ static BOOL runningInBackground = NO;
     _locationTrackingMode = locationTrackingMode;
     [self didChangeValueForKey:@"locationTrackingMode"];
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     userDefaults[kMPRemoteConfigLocationModeKey] = _locationTrackingMode;
     dispatch_async(dispatch_get_main_queue(), ^{
         [userDefaults synchronize];
@@ -627,7 +561,7 @@ static BOOL runningInBackground = NO;
     
     [self willChangeValueForKey:@"minUploadDate"];
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     NSDate *minUploadDate = userDefaults[kMinUploadDateKey];
     if (minUploadDate) {
         if ([minUploadDate compare:[NSDate date]] == NSOrderedDescending) {
@@ -647,7 +581,7 @@ static BOOL runningInBackground = NO;
 - (void)setMinUploadDate:(NSDate *)minUploadDate {
     _minUploadDate = minUploadDate;
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     if ([minUploadDate compare:[NSDate date]] == NSOrderedDescending) {
         userDefaults[kMinUploadDateKey] = minUploadDate;
     } else if (userDefaults[kMinUploadDateKey]) {
@@ -656,17 +590,13 @@ static BOOL runningInBackground = NO;
 }
 
 - (BOOL)optOut {
-    if (optOutSet) {
-        return _optOut;
-    }
-    
     [self willChangeValueForKey:@"optOut"];
     
     optOutSet = YES;
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     NSNumber *optOutNumber = userDefaults[kMPOptOutStatus];
-    if (optOutNumber) {
+    if (optOutNumber != nil) {
         _optOut = [optOutNumber boolValue];
     } else {
         _optOut = NO;
@@ -685,7 +615,7 @@ static BOOL runningInBackground = NO;
     _optOut = optOut;
     optOutSet = YES;
 
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     userDefaults[kMPOptOutStatus] = @(_optOut);
     dispatch_async(dispatch_get_main_queue(), ^{
         [userDefaults synchronize];
@@ -701,10 +631,10 @@ static BOOL runningInBackground = NO;
     
     alwaysTryToCollectIDFASet = YES;
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     NSNumber *alwaysTryToCollectIDFANumber = userDefaults[kMPAlwaysTryToCollectIDFA];
     
-    if (alwaysTryToCollectIDFANumber) {
+    if (alwaysTryToCollectIDFANumber != nil) {
         _alwaysTryToCollectIDFA = [alwaysTryToCollectIDFANumber boolValue];
     }
     else {
@@ -724,7 +654,7 @@ static BOOL runningInBackground = NO;
     _alwaysTryToCollectIDFA = alwaysTryToCollectIDFA;
     alwaysTryToCollectIDFASet = YES;
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     userDefaults[kMPAlwaysTryToCollectIDFA] = @(alwaysTryToCollectIDFA);
     dispatch_async(dispatch_get_main_queue(), ^{
         [userDefaults synchronize];
@@ -738,7 +668,7 @@ static BOOL runningInBackground = NO;
     
     [self willChangeValueForKey:@"pushNotificationMode"];
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     NSString *pushNotificationMode = userDefaults[kMPRemoteConfigPushNotificationModeKey];
     if (pushNotificationMode) {
         _pushNotificationMode = pushNotificationMode;
@@ -760,7 +690,7 @@ static BOOL runningInBackground = NO;
     _pushNotificationMode = pushNotificationMode;
     [self didChangeValueForKey:@"pushNotificationMode"];
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     userDefaults[kMPRemoteConfigPushNotificationModeKey] = _pushNotificationMode;
     dispatch_async(dispatch_get_main_queue(), ^{
         [userDefaults synchronize];
@@ -816,13 +746,17 @@ static BOOL runningInBackground = NO;
         return;
     }
     
-    MPDevice *device = [[MPDevice alloc] init];
-    NSData *rampData = [device.deviceIdentifier dataUsingEncoding:NSUTF8StringEncoding];
+    BOOL dataRamped = YES;
+    if (rampPercentage.integerValue != 0) {
+        MPDevice *device = [[MPDevice alloc] init];
+        NSData *rampData = [device.deviceIdentifier dataUsingEncoding:NSUTF8StringEncoding];
+        
+        uint64_t rampHash = mParticle::Hasher::hashFNV1a((const char *)[rampData bytes], (int)[rampData length]);
+        NSUInteger modRampHash = rampHash % 100;
+        
+        dataRamped = modRampHash > [rampPercentage integerValue];
+    }
     
-    uint64_t rampHash = mParticle::Hasher::hashFNV1a((const char *)[rampData bytes], (int)[rampData length]);
-    NSUInteger modRampHash = rampHash % 100;
-    
-    BOOL dataRamped = modRampHash > [rampPercentage integerValue];
     if (_dataRamped != dataRamped) {
         [self willChangeValueForKey:@"dataRamped"];
         _dataRamped = dataRamped;

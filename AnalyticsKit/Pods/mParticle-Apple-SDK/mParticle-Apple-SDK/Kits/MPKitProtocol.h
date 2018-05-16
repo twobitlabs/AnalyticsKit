@@ -1,21 +1,3 @@
-//
-//  MPKitProtocol.h
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #ifndef mParticle_Apple_SDK_MPKitProtocol_h
 #define mParticle_Apple_SDK_MPKitProtocol_h
 
@@ -31,6 +13,9 @@
 @class MPEvent;
 @class MPKitExecStatus;
 @class MPUserSegments;
+@class MPKitAPI;
+@class FilteredMParticleUser;
+@class FilteredMPIdentityApiRequest;
 
 #if TARGET_OS_IOS == 1 && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
     @class UNUserNotificationCenter;
@@ -43,7 +28,7 @@
 #pragma mark - Required methods
 @property (nonatomic, unsafe_unretained, readonly) BOOL started;
 
-- (nonnull instancetype)initWithConfiguration:(nonnull NSDictionary *)configuration startImmediately:(BOOL)startImmediately;
+- (nonnull MPKitExecStatus *)didFinishLaunchingWithConfiguration:(nonnull NSDictionary *)configuration;
 
 + (nonnull NSNumber *)kitCode;
 
@@ -53,13 +38,13 @@
 @property (nonatomic, strong, nonnull) NSDictionary *configuration;
 @property (nonatomic, strong, nullable) NSDictionary *launchOptions;
 @property (nonatomic, strong, nullable, readonly) id providerKitInstance;
+@property (nonatomic, strong, nullable) MPKitAPI *kitApi;
 
 #pragma mark Kit lifecycle
 - (void)start;
 - (void)deinit;
 
 #pragma mark Application
-- (nonnull MPKitExecStatus *)checkForDeferredDeepLinkWithCompletionHandler:(void(^ _Nonnull)(NSDictionary * _Nullable linkInfo, NSError * _Nullable error))completionHandler;
 - (nonnull MPKitExecStatus *)continueUserActivity:(nonnull NSUserActivity *)userActivity restorationHandler:(void(^ _Nonnull)(NSArray * _Nullable restorableObjects))restorationHandler;
 - (nonnull MPKitExecStatus *)didUpdateUserActivity:(nonnull NSUserActivity *)userActivity;
 - (nonnull MPKitExecStatus *)didBecomeActive;
@@ -75,7 +60,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 - (nonnull MPKitExecStatus *)didRegisterUserNotificationSettings:(nonnull UIUserNotificationSettings *)notificationSettings;
-#pragma clang pop
+#pragma clang diagnostic pop
 #endif
 
 #pragma mark User Notifications
@@ -96,15 +81,22 @@
 - (nonnull MPKitExecStatus *)endSession;
 
 #pragma mark User attributes and identities
-@property (nonatomic, strong, nullable) NSDictionary<NSString *, id> *userAttributes;
-@property (nonatomic, strong, nullable) NSArray<NSDictionary<NSString *, id> *> *userIdentities;
-
 - (nonnull MPKitExecStatus *)incrementUserAttribute:(nonnull NSString *)key byValue:(nonnull NSNumber *)value;
 - (nonnull MPKitExecStatus *)removeUserAttribute:(nonnull NSString *)key;
-- (nonnull MPKitExecStatus *)setUserAttribute:(nonnull NSString *)key value:(nullable NSString *)value;
-- (nonnull MPKitExecStatus *)setUserAttribute:(nonnull NSString *)key values:(nullable NSArray<NSString *> *)values;
+- (nonnull MPKitExecStatus *)setUserAttribute:(nonnull NSString *)key value:(nonnull id)value;
+- (nonnull MPKitExecStatus *)setUserAttribute:(nonnull NSString *)key values:(nonnull NSArray *)values;
 - (nonnull MPKitExecStatus *)setUserIdentity:(nullable NSString *)identityString identityType:(MPUserIdentity)identityType;
 - (nonnull MPKitExecStatus *)setUserTag:(nonnull NSString *)tag;
+
+- (nonnull MPKitExecStatus *)onIncrementUserAttribute:(nonnull FilteredMParticleUser *)user;
+- (nonnull MPKitExecStatus *)onRemoveUserAttribute:(nonnull FilteredMParticleUser *)user;
+- (nonnull MPKitExecStatus *)onSetUserAttribute:(nonnull FilteredMParticleUser *)user;
+- (nonnull MPKitExecStatus *)onSetUserTag:(nonnull FilteredMParticleUser *)user;
+
+- (nonnull MPKitExecStatus *)onIdentifyComplete:(nonnull FilteredMParticleUser *)user request:(nonnull FilteredMPIdentityApiRequest *)request;
+- (nonnull MPKitExecStatus *)onLoginComplete:(nonnull FilteredMParticleUser *)user request:(nonnull FilteredMPIdentityApiRequest *)request;
+- (nonnull MPKitExecStatus *)onLogoutComplete:(nonnull FilteredMParticleUser *)user request:(nonnull FilteredMPIdentityApiRequest *)request;
+- (nonnull MPKitExecStatus *)onModifyComplete:(nonnull FilteredMParticleUser *)user request:(nonnull FilteredMPIdentityApiRequest *)request;
 
 #pragma mark e-Commerce
 - (nonnull MPKitExecStatus *)logCommerceEvent:(nonnull MPCommerceEvent *)commerceEvent;
@@ -131,7 +123,7 @@
 - (nonnull MPKitExecStatus *)setKitAttribute:(nonnull NSString *)key value:(nullable id)value;
 - (nonnull MPKitExecStatus *)setOptOut:(BOOL)optOut;
 - (nullable NSString *)surveyURLWithUserAttributes:(nonnull NSDictionary *)userAttributes;
-
+- (BOOL) shouldDelayMParticleUpload;
 @end
 
 #endif

@@ -1,21 +1,3 @@
-//
-//  MPStateMachine.h
-//
-//  Copyright 2016 mParticle, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-
 #import "MPIConstants.h"
 #import "MPEnums.h"
 #import "MPLaunchInfo.h"
@@ -24,7 +6,6 @@
 @class MPSession;
 @class MPNotificationController;
 @class MPConsumerInfo;
-@class MPBags;
 @class MPLocationManager;
 @class MPCustomModule;
 @class MPSearchAdsAttribution;
@@ -41,13 +22,11 @@ typedef NS_ENUM(NSUInteger, MPConsoleLogging) {
 @interface MPStateMachine : NSObject
 
 @property (nonatomic, strong, nonnull) NSString *apiKey __attribute__((const));
-@property (nonatomic, strong, nonnull) MPBags *bags;
 @property (nonatomic, strong, nonnull) MPConsumerInfo *consumerInfo;
 @property (nonatomic, weak, nullable) MPSession *currentSession;
 @property (nonatomic, strong, nullable) NSArray<MPCustomModule *> *customModules;
 @property (nonatomic, strong, nullable) NSString *exceptionHandlingMode;
 @property (nonatomic, strong, nullable) NSString *locationTrackingMode;
-@property (nonatomic, strong, nullable) NSString *latestSDKVersion;
 @property (nonatomic, strong, nullable) NSDictionary *launchOptions;
 #if TARGET_OS_IOS == 1
 @property (nonatomic, strong, nullable) CLLocation *location;
@@ -73,8 +52,8 @@ typedef NS_ENUM(NSUInteger, MPConsoleLogging) {
 @property (nonatomic, unsafe_unretained, readonly) BOOL dataRamped;
 @property (nonatomic, unsafe_unretained) BOOL optOut;
 @property (nonatomic, unsafe_unretained) BOOL alwaysTryToCollectIDFA;
-@property (nonatomic, unsafe_unretained) BOOL shouldUploadSessionHistory;
 @property (nonatomic, strong, nonnull) MPSearchAdsAttribution *searchAttribution;
+@property (nonatomic, assign) BOOL automaticSessionTracking;
 
 + (nonnull instancetype)sharedInstance;
 + (MPEnvironment)environment;

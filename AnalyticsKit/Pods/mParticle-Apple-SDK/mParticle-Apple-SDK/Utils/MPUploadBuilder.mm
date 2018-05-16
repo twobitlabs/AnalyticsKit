@@ -1,11 +1,3 @@
-//
-//  MPUploadBuilder.mm
-//  mParticle
-//
-//  Created by Dalmo Cirne on 5/7/15.
-//  Copyright (c) 2015 mParticle. All rights reserved.
-//
-
 #import "MPUploadBuilder.h"
 #include <vector>
 #import "MPMessage.h"
@@ -13,18 +5,16 @@
 #import "MPUpload.h"
 #import "MPStateMachine.h"
 #import "MPIConstants.h"
-#import "NSUserDefaults+mParticle.h"
+#import "MPIUserDefaults.h"
 #import "MPPersistenceController.h"
 #import "MPCustomModule.h"
-#import "MPStandaloneUpload.h"
 #import "MPConsumerInfo.h"
 #import "MPApplication.h"
 #import "MPDevice.h"
-#import "MPBags.h"
-#import "MPBags+Internal.h"
 #import "MPForwardRecord.h"
-#import "MPDataModelAbstract.h"
 #import "MPIntegrationAttributes.h"
+#import "MPConsentState.h"
+#import "MPConsentSerialization.h"
 
 using namespace std;
 
@@ -36,7 +26,7 @@ using namespace std;
 
 @implementation MPUploadBuilder
 
-- (instancetype)initWithSession:(MPSession *)session messages:(nonnull NSArray<__kindof MPDataModelAbstract *> *)messages sessionTimeout:(NSTimeInterval)sessionTimeout uploadInterval:(NSTimeInterval)uploadInterval {
+- (nonnull instancetype)initWithMpid: (nonnull NSNumber *) mpid sessionId:(nullable NSNumber *)sessionId messages:(nonnull NSArray<MPMessage *> *)messages sessionTimeout:(NSTimeInterval)sessionTimeout uploadInterval:(NSTimeInterval)uploadInterval {
     NSAssert(messages, @"Messages cannot be nil.");
     
     self = [super init];
@@ -44,14 +34,14 @@ using namespace std;
         return nil;
     }
     
-    _session = session;
+    _sessionId = sessionId;
     
     NSUInteger numberOfMessages = messages.count;
     NSMutableArray *messageDictionaries = [[NSMutableArray alloc] initWithCapacity:numberOfMessages];
     _preparedMessageIds = [[NSMutableArray alloc] initWithCapacity:numberOfMessages];
 
     [messages enumerateObjectsUsingBlock:^(MPMessage *message, NSUInteger idx, BOOL *stop) {
-        [_preparedMessageIds addObject:@(message.messageId)];
+        [self->_preparedMessageIds addObject:@(message.messageId)];
         
         NSDictionary *messageDictionaryRepresentation = [message dictionaryRepresentation];
         if (messageDictionaryRepresentation) {
@@ -60,9 +50,9 @@ using namespace std;
     }];
     
     NSNumber *ltv;
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    ltv = userDefaults[kMPLifeTimeValueKey];
-    if (!ltv) {
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
+    ltv = [userDefaults mpObjectForKey:kMPLifeTimeValueKey userId:mpid];
+    if (ltv == nil) {
         ltv = @0;
     }
     
@@ -91,7 +81,7 @@ using namespace std;
         uploadDictionary[kMPRemoteConfigCustomModuleSettingsKey] = customModulesDictionary;
     }
     
-    uploadDictionary[kMPRemoteConfigMPIDKey] = stateMachine.consumerInfo.mpId;
+    uploadDictionary[kMPRemoteConfigMPIDKey] = mpid;
     
     return self;
 }
@@ -99,8 +89,8 @@ using namespace std;
 - (NSString *)description {
     NSString *description;
     
-    if (_session) {
-        description = [NSString stringWithFormat:@"MPUploadBuilder\n Session Id: %lld\n UploadDictionary: %@", self.session.sessionId, uploadDictionary];
+    if (_sessionId != nil) {
+        description = [NSString stringWithFormat:@"MPUploadBuilder\n Session Id: %lld\n UploadDictionary: %@", self.sessionId.longLongValue, uploadDictionary];
     } else {
         description = [NSString stringWithFormat:@"MPUploadBuilder\n UploadDictionary: %@", uploadDictionary];
     }
@@ -109,22 +99,18 @@ using namespace std;
 }
 
 #pragma mark Public class methods
-+ (MPUploadBuilder *)newBuilderWithMessages:(nonnull NSArray<__kindof MPDataModelAbstract *> *)messages uploadInterval:(NSTimeInterval)uploadInterval {
-    MPUploadBuilder *uploadBuilder = [[MPUploadBuilder alloc] initWithSession:nil messages:messages sessionTimeout:0 uploadInterval:uploadInterval];
++ (nonnull MPUploadBuilder *)newBuilderWithMpid: (nonnull NSNumber *) mpid messages:(nonnull NSArray<MPMessage *> *)messages uploadInterval:(NSTimeInterval)uploadInterval {
+    MPUploadBuilder *uploadBuilder = [[MPUploadBuilder alloc] initWithMpid:mpid sessionId:nil messages:messages sessionTimeout:0 uploadInterval:uploadInterval];
     return uploadBuilder;
 }
 
-+ (MPUploadBuilder *)newBuilderWithSession:(MPSession *)session messages:(nonnull NSArray<__kindof MPDataModelAbstract *> *)messages sessionTimeout:(NSTimeInterval)sessionTimeout uploadInterval:(NSTimeInterval)uploadInterval {
-    MPUploadBuilder *uploadBuilder = [[MPUploadBuilder alloc] initWithSession:session messages:messages sessionTimeout:sessionTimeout uploadInterval:uploadInterval];
++ (nonnull MPUploadBuilder *)newBuilderWithMpid: (nonnull NSNumber *) mpid sessionId:(nullable NSNumber *)sessionId messages:(nonnull NSArray<MPMessage *> *)messages sessionTimeout:(NSTimeInterval)sessionTimeout uploadInterval:(NSTimeInterval)uploadInterval {
+    MPUploadBuilder *uploadBuilder = [[MPUploadBuilder alloc] initWithMpid:mpid sessionId:sessionId messages:messages sessionTimeout:sessionTimeout uploadInterval:uploadInterval];
     return uploadBuilder;
 }
 
 #pragma mark Public instance methods
-- (void)build:(void (^)(MPDataModelAbstract *upload))completionHandler {
-    [self buildAsync:YES completionHandler:completionHandler];
-}
-
-- (void)buildAsync:(BOOL)asyncBuild completionHandler:(void (^ _Nonnull)(MPDataModelAbstract * _Nullable upload))completionHandler {
+- (void)build:(void (^)(MPUpload *upload))completionHandler {
     MPStateMachine *stateMachine = [MPStateMachine sharedInstance];
     
     uploadDictionary[kMPMessageTypeKey] = kMPMessageTypeRequestHeader;
@@ -139,14 +125,16 @@ using namespace std;
     MPDevice *device = [[MPDevice alloc] init];
     uploadDictionary[kMPDeviceInformationKey] = [device dictionaryRepresentation];
     
-    NSDictionary *cookies = [stateMachine.consumerInfo cookiesDictionaryRepresentation];
+    MPConsumerInfo *consumerInfo = stateMachine.consumerInfo;
+    
+    NSDictionary *cookies = [consumerInfo cookiesDictionaryRepresentation];
     if (cookies) {
         uploadDictionary[kMPRemoteConfigCookiesKey] = cookies;
     }
     
-    NSDictionary *productBags = [stateMachine.bags dictionaryRepresentation];
-    if (productBags) {
-        uploadDictionary[kMPProductBagKey] = productBags;
+    NSString *deviceApplicationStamp = consumerInfo.deviceApplicationStamp;
+    if (deviceApplicationStamp) {
+        uploadDictionary[kMPDeviceApplicationStampKey] = deviceApplicationStamp;
     }
     
     MPPersistenceController *persistence = [MPPersistenceController sharedInstance];
@@ -167,6 +155,7 @@ using namespace std;
         
         if (fsr.count > 0) {
             uploadDictionary[kMPForwardStatsRecord] = fsr;
+            [persistence deleteForwardRecordsIds:forwardRecordsIds];
         }
     }
     
@@ -181,57 +170,17 @@ using namespace std;
         uploadDictionary[MPIntegrationAttributesKey] = integrationAttributesDictionary;
     }
     
-#ifdef SERVER_ECHO
-    uploadDictionary[@"echo"] = @true;
-#endif
-    
-    if (_session) { // MPUpload
-        dispatch_block_t completeBuild = ^{
-            MPUpload *upload = [[MPUpload alloc] initWithSession:_session uploadDictionary:uploadDictionary];
-            
-            completionHandler(upload);
-            
-            [persistence deleteForwardRecordsIds:forwardRecordsIds];
-        };
-
-#if TARGET_OS_IOS == 1
-        void (^processUserNotificationCampaign)(NSArray<MParticleUserNotification *> *) = ^(NSArray<MParticleUserNotification *> *userNotificationCampaignHistory) {
-            if (!userNotificationCampaignHistory) {
-                return;
-            }
-            
-            NSMutableDictionary *userNotificationCampaignHistoryDictionary = [[NSMutableDictionary alloc] initWithCapacity:userNotificationCampaignHistory.count];
-            
-            for (MParticleUserNotification *userNotification in userNotificationCampaignHistory) {
-                if (userNotification.campaignId && userNotification.contentId) {
-                    userNotificationCampaignHistoryDictionary[[userNotification.campaignId stringValue]] = @{kMPRemoteNotificationContentIdHistoryKey:userNotification.contentId,
-                                                                                                             kMPRemoteNotificationTimestampHistoryKey:MPMilliseconds([userNotification.receiptTime timeIntervalSince1970])};
-                }
-            }
-            
-            if (userNotificationCampaignHistoryDictionary.count > 0) {
-                uploadDictionary[kMPRemoteNotificationCampaignHistoryKey] = userNotificationCampaignHistoryDictionary;
-            }
-        };
-        
-        if (asyncBuild) {
-            [persistence fetchUserNotificationCampaignHistory:^(NSArray<MParticleUserNotification *> *userNotificationCampaignHistory) {
-                processUserNotificationCampaign(userNotificationCampaignHistory);
-                completeBuild();
-            }];
-        } else {
-            NSArray<MParticleUserNotification *> *userNotificationCampaignHistory = [persistence fetchUserNotificationCampaignHistorySync];
-            processUserNotificationCampaign(userNotificationCampaignHistory);
-            completeBuild();
+    MPConsentState *consentState = [MPPersistenceController consentStateForMpid:uploadDictionary[kMPRemoteConfigMPIDKey]];
+    if (consentState) {
+        NSDictionary *consentStateDictionary = [MPConsentSerialization serverDictionaryFromConsentState:consentState];
+        if (consentStateDictionary) {
+            uploadDictionary[kMPConsentState] = consentStateDictionary;
         }
-#else
-        completeBuild();
-#endif
-    } else { // MPStandaloneUpload
-        MPStandaloneUpload *standaloneUpload = [[MPStandaloneUpload alloc] initWithUploadDictionary:uploadDictionary];
-        
-        completionHandler(standaloneUpload);
     }
+    
+    
+    MPUpload *upload = [[MPUpload alloc] initWithSessionId:_sessionId uploadDictionary:uploadDictionary];
+    completionHandler(upload);
 }
 
 - (MPUploadBuilder *)withUserAttributes:(NSDictionary<NSString *, id> *)userAttributes deletedUserAttributes:(NSSet<NSString *> *)deletedUserAttributes {
@@ -258,7 +207,7 @@ using namespace std;
         }
     }
     
-    if (deletedUserAttributes.count > 0 && _session) {
+    if (deletedUserAttributes.count > 0 && _sessionId) {
         uploadDictionary[kMPUserAttributeDeletedKey] = [deletedUserAttributes allObjects];
     }
     

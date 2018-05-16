@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = "mParticle-Apple-SDK"
-    s.version          = "6.14.0"
+    s.version          = "7.3.5"
     s.summary          = "mParticle Apple SDK."
 
     s.description      = <<-DESC
@@ -54,4 +54,21 @@ Pod::Spec.new do |s|
 
         ss.tvos.frameworks      = 'AdSupport', 'CoreGraphics', 'Foundation', 'Security', 'SystemConfiguration', 'UIKit'
     end
+
+    s.subspec 'AppExtension' do |ext|
+        ext.public_header_files = `./Scripts/find_headers.rb --public`.split("\n")
+
+        ext.preserve_paths       = 'mParticle-Apple-SDK', 'mParticle-Apple-SDK/**', 'mParticle-Apple-SDK/**/*'
+        ext.source_files         = 'mParticle-Apple-SDK/**/*'
+        ext.libraries            = 'c++', 'sqlite3', 'z'
+
+        ext.ios.frameworks       = 'Accounts', 'AdSupport', 'CoreGraphics', 'CoreLocation', 'CoreTelephony', 'Foundation', 'Security', 'Social', 'SystemConfiguration', 'UIKit'
+        ext.ios.weak_frameworks  = 'iAd', 'UserNotifications'
+
+        ext.tvos.frameworks      = 'AdSupport', 'CoreGraphics', 'Foundation', 'Security', 'SystemConfiguration', 'UIKit'
+
+	# For app extensions, disabling code paths using unavailable API
+	ext.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'MPARTICLE_APP_EXTENSIONS=1' }
+    end
 end
+
