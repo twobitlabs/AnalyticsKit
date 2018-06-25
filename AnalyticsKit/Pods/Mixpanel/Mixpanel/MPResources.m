@@ -7,22 +7,27 @@
 //
 
 #import "MPResources.h"
+#import "MixpanelPrivate.h"
 
 @implementation MPResources
 
-+ (UIStoryboard *)storyboardWithName:(NSString *)name {
++ (UIStoryboard *)storyboardWithName:(NSString *)name
+{
     return [UIStoryboard storyboardWithName:name bundle:[MPResources frameworkBundle]];
 }
 
-+ (NSBundle *)frameworkBundle {
++ (NSBundle *)frameworkBundle
+{
     return [NSBundle bundleForClass:self.class];
 }
 
-+ (NSString *)notificationXibName {
++ (NSString *)notificationXibName
+{
     NSMutableString *xibFileName = [NSMutableString stringWithString:@"MPTakeoverNotificationViewController"];
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        BOOL isLandscape = UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation);
+        UIApplication *sharedApplication = [Mixpanel sharedUIApplication];
+        BOOL isLandscape = UIInterfaceOrientationIsLandscape(sharedApplication.statusBarOrientation);
         if (isLandscape) {
             [xibFileName appendString:@"~iphonelandscape"];
         } else {
@@ -35,7 +40,8 @@
     return [xibFileName copy];
 }
 
-+ (UIImage *)imageNamed:(NSString *)name {
++ (UIImage *)imageNamed:(NSString *)name
+{
     NSString *imagePath = [[MPResources frameworkBundle] pathForResource:name ofType:@"png"];
     return [UIImage imageWithContentsOfFile:imagePath];
 }

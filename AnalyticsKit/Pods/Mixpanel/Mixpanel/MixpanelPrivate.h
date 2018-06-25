@@ -8,8 +8,12 @@
 
 #import "Mixpanel.h"
 #import "MPNetwork.h"
+#import "SessionMetadata.h"
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IOS
+#import <UIKit/UIKit.h>
+#endif
+
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
@@ -21,7 +25,6 @@
 #import "AutomaticTracksConstants.h"
 #import "AutomaticEvents.h"
 #import "MixpanelExceptionHandler.h"
-#endif
 #endif
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
@@ -39,6 +42,10 @@
 #import "MPTweakStore.h"
 #import "MPVariant.h"
 #import "MPWebSocket.h"
+#endif
+
+#if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
+#import "MPConnectIntegrations.h"
 #endif
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
@@ -68,6 +75,10 @@
 @property (atomic, strong) AutomaticEvents *automaticEvents;
 #endif
 
+#if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
+@property (nonatomic, strong) MPConnectIntegrations *connectIntegrations;
+#endif
+
 #if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
 @property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
 @property (nonatomic, strong) UIViewController *notificationViewController;
@@ -88,8 +99,10 @@
 @property (nonatomic) dispatch_queue_t serialQueue;
 @property (nonatomic) dispatch_queue_t networkQueue;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
+@property (nonatomic, strong) SessionMetadata *sessionMetadata;
 
 @property (nonatomic) BOOL decideResponseCached;
+@property (nonatomic) BOOL hasAddedObserver;
 @property (nonatomic, strong) NSNumber *automaticEventsEnabled;
 @property (nonatomic, strong) NSArray *notifications;
 @property (nonatomic, strong) id currentlyShowingNotification;
@@ -98,9 +111,18 @@
 @property (nonatomic, strong) NSSet *variants;
 @property (nonatomic, strong) NSSet *eventBindings;
 
+@property (nonatomic, assign) BOOL optOutStatus;
+
+@property (nonatomic, strong) NSString *savedUrbanAirshipChannelID;
+
 @property (atomic, copy) NSString *switchboardURL;
 
 + (void)assertPropertyTypes:(NSDictionary *)properties;
+
++ (BOOL)isAppExtension;
+#if !MIXPANEL_NO_UIAPPLICATION_ACCESS
++ (UIApplication *)sharedUIApplication;
+#endif
 
 - (NSString *)deviceModel;
 - (NSString *)IFA;
@@ -111,8 +133,10 @@
 - (NSString *)eventsFilePath;
 - (NSString *)peopleFilePath;
 - (NSString *)propertiesFilePath;
+- (NSString *)optOutFilePath;
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
+- (void)trackPushNotification:(NSDictionary *)userInfo;
 - (void)showNotificationWithObject:(MPNotification *)notification;
 - (void)markVariantRun:(MPVariant *)variant;
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion;
