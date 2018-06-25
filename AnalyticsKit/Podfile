@@ -6,7 +6,7 @@ target 'AnalyticsKit' do
 
   # Pods for AnalyticsKit
 
-  pod 'Mixpanel', '~> 3.1.4'
+  pod 'Mixpanel', '~> 3.1'
   pod 'Adjust', '~> 4.5'
   pod 'Localytics'
   pod 'GoogleAnalytics'

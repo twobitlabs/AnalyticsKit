@@ -12,7 +12,7 @@ PODS:
   - GoogleAnalytics (3.17.0)
   - Intercom (3.2.5)
   - Localytics (5.1.0)
-  - Mixpanel (3.1.6)
+  - Mixpanel (3.3.3)
   - MobileCenter (0.14.0):
     - MobileCenter/Analytics (= 0.14.0)
     - MobileCenter/Crashes (= 0.14.0)
@@ -36,7 +36,7 @@ DEPENDENCIES:
   - GoogleAnalytics
   - Intercom
   - Localytics
-  - Mixpanel (~> 3.1.4)
+  - Mixpanel (~> 3.1)
   - MobileCenter
   - mParticle-Apple-SDK (~> 7)
   - NewRelicAgent
@@ -44,7 +44,7 @@ DEPENDENCIES:
   - Parse
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - Adjust
     - Bolts
     - Crashlytics
@@ -69,13 +69,13 @@ SPEC CHECKSUMS:
   GoogleAnalytics: f42cc53a87a51fe94334821868d9c8481ff47a7b
   Intercom: 09f72b37baccfc71733a63b896c9438d5ac0ec3d
   Localytics: 420a187fd1ba94d4a2afff66e100d1569389d9e4
-  Mixpanel: 55b7f2314316808e314876e0e2c36e81345e2b6b
+  Mixpanel: 3c3925c27f7a321d5978319a72f53f8f0885afc5
   MobileCenter: dbb6dc05ec373d29dccb4aaf98af5d697d6a874c
   mParticle-Apple-SDK: fce4d42269212245430331be3d38ecf464325107
   NewRelicAgent: 2679737d3601fcac3a11bf69a8968302d9fee497
   OCMock: 35ae71d6a8fcc1b59434d561d1520b9dd4f15765
   Parse: b0aa91d2c435e53d4a9af26e741e014c9b35c42e
 
-PODFILE CHECKSUM: 3670a817b9c212d871cbf65b01da135335b1b1eb
+PODFILE CHECKSUM: fa425b94a26e5c9e92b8b8adde39ad2751342009
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.5.3
