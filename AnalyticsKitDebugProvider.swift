@@ -61,7 +61,7 @@ public class AnalyticsKitDebugProvider: NSObject, AnalyticsKitProvider {
         }
 
         let alertController = UIAlertController(title: "AnalyticsKit Received Error", message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alertController)
         self.alertController = alertController
     }

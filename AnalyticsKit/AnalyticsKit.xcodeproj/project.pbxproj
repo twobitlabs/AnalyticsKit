@@ -447,7 +447,7 @@
 				TargetAttributes = {
 					9C3799A9181838FD00488101 = {
 						DevelopmentTeam = 699723NDVT;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 					};
 					9C3799CA181838FD00488101 = {
 						DevelopmentTeam = 699723NDVT;
@@ -796,8 +796,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "AnalyticsKit/AnalyticsKit-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -834,8 +833,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.twobitlabs.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "AnalyticsKit/AnalyticsKit-Bridging-Header.h";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
