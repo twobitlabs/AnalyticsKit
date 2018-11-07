@@ -73,7 +73,9 @@ public class AnalyticsKitDebugProvider: NSObject, AnalyticsKitProvider {
     }
 
     fileprivate func presentFromController(_ alertController: UIAlertController, controller: UIViewController) {
-        if  let navVC = controller as? UINavigationController, let visibleVC = navVC.visibleViewController {
+        if let presentedController = controller.presentedViewController {
+            presentFromController(alertController, controller: presentedController)
+        } else if let navVC = controller as? UINavigationController, let visibleVC = navVC.visibleViewController {
             presentFromController(alertController, controller: visibleVC)
         } else if let tabVC = controller as? UITabBarController, let selectedVC = tabVC.selectedViewController {
             presentFromController(alertController, controller: selectedVC)
