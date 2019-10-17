@@ -2,7 +2,7 @@
 
 @class MPCustomModulePreference;
 
-@interface MPCustomModule : NSObject <NSCopying, NSCoding>
+@interface MPCustomModule : NSObject <NSCopying, NSSecureCoding>
 
 @property (nonatomic, strong, readonly, nonnull) NSNumber *customModuleId;
 @property (nonatomic, strong, readonly, nullable) NSArray<MPCustomModulePreference *> *preferences;

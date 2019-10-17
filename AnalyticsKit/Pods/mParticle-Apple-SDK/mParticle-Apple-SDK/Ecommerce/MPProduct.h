@@ -20,7 +20,7 @@
  product[&#64;"Custom Key"] = &#64;"Custom Value";
  </code></pre>
  */
-@interface MPProduct : NSObject <NSCopying, NSCoding>
+@interface MPProduct : NSObject <NSCopying, NSSecureCoding>
 
 /**
  The product brand

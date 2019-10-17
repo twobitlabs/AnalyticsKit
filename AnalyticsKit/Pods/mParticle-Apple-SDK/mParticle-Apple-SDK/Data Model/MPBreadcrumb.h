@@ -1,7 +1,7 @@
 #import "MPDataModelAbstract.h"
 #import "MPDataModelProtocol.h"
 
-@interface MPBreadcrumb : MPDataModelAbstract <NSCopying, NSCoding, MPDataModelProtocol>
+@interface MPBreadcrumb : MPDataModelAbstract <NSCopying, NSSecureCoding, MPDataModelProtocol>
 
 @property (nonatomic, strong, nonnull) NSString *sessionUUID;
 @property (nonatomic, strong, nonnull) NSData *breadcrumbData;

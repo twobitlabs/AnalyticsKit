@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 
 @class MPConsentState;
+@class MPConsentKitFilter;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -9,6 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable NSDictionary *)serverDictionaryFromConsentState:(MPConsentState *)state;
 + (nullable NSString *)stringFromConsentState:(MPConsentState *)state;
 + (nullable MPConsentState *)consentStateFromString:(NSString *)string;
++ (nullable MPConsentKitFilter *)filterFromDictionary:(NSDictionary *)configDictionary;
 
 @end
 

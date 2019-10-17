@@ -5,10 +5,23 @@
 #import "MPKitContainer.h"
 #import "MPStateMachine.h"
 #import "MPIUserDefaults.h"
+#import "MPPersistenceController.h"
+#import "MPApplication.h"
+#import "MPBackendController.h"
 
 #if TARGET_OS_IOS == 1
     #import <CoreLocation/CoreLocation.h>
 #endif
+
+@interface MParticle ()
+
+@property (nonatomic, strong, nullable) NSArray<NSDictionary *> *deferredKitConfiguration;
+@property (nonatomic, strong, readonly) MPPersistenceController *persistenceController;
+@property (nonatomic, strong, readonly) MPStateMachine *stateMachine;
+@property (nonatomic, strong, readonly) MPKitContainer *kitContainer;
+@property (nonatomic, strong, nonnull) MPBackendController *backendController;
+
+@end
 
 @implementation MPResponseConfig
 
@@ -23,18 +36,66 @@
     }
 
     _configuration = [configuration copy];
-    MPStateMachine *stateMachine = [MPStateMachine sharedInstance];
+    MPStateMachine *stateMachine = [MParticle sharedInstance].stateMachine;
     
     if (dataReceivedFromServer) {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [[MPKitContainer sharedInstance] configureKits:self->_configuration[kMPRemoteConfigKitsKey]];
-        });
+        BOOL hasConsentFilters = NO;
+        
+        if (!MPIsNull(self->_configuration[kMPRemoteConfigKitsKey])) {
+            for (NSDictionary *kitDictionary in self->_configuration[kMPRemoteConfigKitsKey]) {
+                
+                NSDictionary *consentKitFilter = kitDictionary[kMPConsentKitFilter];
+                BOOL hasConsentKitFilter = MPIsNonEmptyDictionary(consentKitFilter);
+                
+                BOOL hasRegulationOrPurposeFilters = NO;
+                
+                NSDictionary *hashes = kitDictionary[kMPRemoteConfigKitHashesKey];
+                
+                if (MPIsNonEmptyDictionary(hashes)) {
+                    
+                    NSDictionary *regulationFilters = hashes[kMPConsentRegulationFilters];
+                    NSDictionary *purposeFilters = hashes[kMPConsentPurposeFilters];
+                    
+                    BOOL hasRegulationFilters = MPIsNonEmptyDictionary(regulationFilters);
+                    BOOL hasPurposeFilters = MPIsNonEmptyDictionary(purposeFilters);
+                    
+                    if (hasRegulationFilters || hasPurposeFilters) {
+                        hasRegulationOrPurposeFilters = YES;
+                    }
+                    
+                }
+                
+                if (hasConsentKitFilter || hasRegulationOrPurposeFilters) {
+       
+                    hasConsentFilters = YES;
+                    break;
+                    
+                }
+            }
+        }
+        
+        
+        NSNumber *mpid = [MPPersistenceController mpId];
+        BOOL hasInitialIdentity = mpid != nil && ![mpid isEqual:@0];
+        
+        BOOL shouldDefer = hasConsentFilters && !hasInitialIdentity;
+        
+        if (!shouldDefer) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[MParticle sharedInstance].kitContainer configureKits:self->_configuration[kMPRemoteConfigKitsKey]];
+            });
+        } else {
+            [MParticle sharedInstance].deferredKitConfiguration = [self->_configuration[kMPRemoteConfigKitsKey] copy];
+        }
+        
     }
     
     [stateMachine configureCustomModules:_configuration[kMPRemoteConfigCustomModuleSettingsKey]];
     [stateMachine configureRampPercentage:_configuration[kMPRemoteConfigRampKey]];
     [stateMachine configureTriggers:_configuration[kMPRemoteConfigTriggerKey]];
     [stateMachine configureRestrictIDFA:_configuration[kMPRemoteConfigRestrictIDFA]];
+    [stateMachine configureAliasMaxWindow:_configuration[kMPRemoteConfigAliasMaxWindow]];
+    stateMachine.allowASR = [_configuration[kMPRemoteConfigAllowASR] boolValue];
         
     // Exception handling
     NSString *auxString = !MPIsNull(_configuration[kMPRemoteConfigExceptionHandlingModeKey]) ? _configuration[kMPRemoteConfigExceptionHandlingModeKey] : nil;
@@ -49,7 +110,7 @@
     // Session timeout
     NSNumber *auxNumber = _configuration[kMPRemoteConfigSessionTimeoutKey];
     if (auxNumber != nil) {
-        [MParticle sharedInstance].sessionTimeout = [auxNumber doubleValue];
+        [MParticle sharedInstance].backendController.sessionTimeout = [auxNumber doubleValue];
     }
     
 #if TARGET_OS_IOS == 1
@@ -69,27 +130,25 @@
     return self;
 }
 
-#pragma mark NSCoding
+#pragma mark NSSecureCoding
 - (void)encodeWithCoder:(NSCoder *)coder {
     [coder encodeObject:_configuration forKey:@"configuration"];
 }
 
 - (id)initWithCoder:(NSCoder *)coder {
-    NSDictionary *configuration = [coder decodeObjectForKey:@"configuration"];
+    NSDictionary *configuration = [coder decodeObjectOfClass:[NSDictionary class] forKey:@"configuration"];
     self = [[MPResponseConfig alloc] initWithConfiguration:configuration dataReceivedFromServer:NO];
     
     return self;
 }
 
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 #pragma mark Private methods
 
 #pragma mark Public class methods
-+ (void)save:(nonnull MPResponseConfig *)responseConfig eTag:(nonnull NSString *)eTag {
-    if (responseConfig && responseConfig.configuration) {
-        [[MPIUserDefaults standardUserDefaults] setConfiguration:responseConfig.configuration andETag:eTag];
-    }
-}
-
 + (nullable MPResponseConfig *)restore {
     NSDictionary *configuration = [[MPIUserDefaults standardUserDefaults] getConfiguration];
     MPResponseConfig *responseConfig = [[MPResponseConfig alloc] initWithConfiguration:configuration dataReceivedFromServer:NO];
@@ -101,7 +160,7 @@
 #if TARGET_OS_IOS == 1
 - (void)configureLocationTracking:(NSDictionary *)locationDictionary {
     NSString *locationMode = locationDictionary[kMPRemoteConfigLocationModeKey];
-    [MPStateMachine sharedInstance].locationTrackingMode = locationMode;
+    [MParticle sharedInstance].stateMachine.locationTrackingMode = locationMode;
     
     if ([locationMode isEqualToString:kMPRemoteConfigForceTrue]) {
         NSNumber *accurary = locationDictionary[kMPRemoteConfigLocationAccuracyKey];
@@ -115,20 +174,20 @@
 
 - (void)configurePushNotifications:(NSDictionary *)pushNotificationDictionary {
     NSString *pushNotificationMode = pushNotificationDictionary[kMPRemoteConfigPushNotificationModeKey];
-    [MPStateMachine sharedInstance].pushNotificationMode = pushNotificationMode;
-#if !defined(MPARTICLE_APP_EXTENSIONS)
-    UIApplication *app = [UIApplication sharedApplication];
-    
-    if ([pushNotificationMode isEqualToString:kMPRemoteConfigForceTrue]) {
-        NSNumber *pushNotificationType = pushNotificationDictionary[kMPRemoteConfigPushNotificationTypeKey];
+    [MParticle sharedInstance].stateMachine.pushNotificationMode = pushNotificationMode;
+    if (![MPStateMachine isAppExtension]) {
+        UIApplication *app = [MPApplication sharedUIApplication];
+        
+        if ([pushNotificationMode isEqualToString:kMPRemoteConfigForceTrue]) {
+            NSNumber *pushNotificationType = pushNotificationDictionary[kMPRemoteConfigPushNotificationTypeKey];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        [app registerForRemoteNotificationTypes:[pushNotificationType integerValue]];
+            [app registerForRemoteNotificationTypes:[pushNotificationType integerValue]];
 #pragma clang diagnostic pop
-    } else if ([pushNotificationMode isEqualToString:kMPRemoteConfigForceFalse]) {
-        [app unregisterForRemoteNotifications];
+        } else if ([pushNotificationMode isEqualToString:kMPRemoteConfigForceFalse]) {
+            [app unregisterForRemoteNotifications];
+        }
     }
-#endif
 }
 #endif
 

@@ -52,7 +52,7 @@
     return copyObject;
 }
 
-#pragma mark NSCoding
+#pragma mark NSSecureCoding
 - (void)encodeWithCoder:(NSCoder *)coder {
     [coder encodeObject:self.sessionUUID forKey:@"sessionUUID"];
     [coder encodeInt64:self.breadcrumbId forKey:@"breadcrumbId"];
@@ -66,13 +66,17 @@
     NSString *content = [coder decodeObjectForKey:@"content"];
     NSData *breadcrumbData = [content dataUsingEncoding:NSUTF8StringEncoding];
     
-    self = [self initWithSessionUUID:[coder decodeObjectForKey:@"sessionUUID"]
+    self = [self initWithSessionUUID:[coder decodeObjectOfClass:[NSString class] forKey:@"sessionUUID"]
                         breadcrumbId:[coder decodeInt64ForKey:@"breadcrumbId"]
-                                UUID:[coder decodeObjectForKey:@"uuid"]
+                                UUID:[coder decodeObjectOfClass:[NSString class] forKey:@"uuid"]
                       breadcrumbData:breadcrumbData
                            timestamp:[coder decodeDoubleForKey:@"timestamp"]];
     
     return self;
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
 }
 
 #pragma mark Public methods

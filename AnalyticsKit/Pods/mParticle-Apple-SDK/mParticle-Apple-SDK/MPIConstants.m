@@ -1,7 +1,7 @@
 #import "MPIConstants.h"
 
 // mParticle SDK Version
-NSString *const kMParticleSDKVersion = @"7.3.5";
+NSString *const kMParticleSDKVersion = @"7.12.3";
 
 // Message Type (dt)
 NSString *const kMPMessageTypeKey = @"dt";
@@ -56,6 +56,7 @@ NSString *const kMPIsFirstTimeUserIdentityHasBeenSet = @"f";
 NSString *const kMPRemoteNotificationContentIdHistoryKey = @"cntid";
 NSString *const kMPRemoteNotificationTimestampHistoryKey = @"ts";
 NSString *const kMPForwardStatsRecord = @"fsr";
+NSString *const kMPEventCustomFlags = @"flags";
 
 // Consent
 NSString *const kMPConsentState = @"con";
@@ -77,6 +78,17 @@ NSString *const kMPConsentStateGDPRDocumentKey = @"document";
 NSString *const kMPConsentStateGDPRTimestampKey = @"timestamp";
 NSString *const kMPConsentStateGDPRLocationKey = @"location";
 NSString *const kMPConsentStateGDPRHardwareIdKey = @"hardware_id";
+
+// Consent filtering
+NSString *const kMPConsentKitFilter = @"crvf";
+NSString *const kMPConsentKitFilterIncludeOnMatch = @"i";
+NSString *const kMPConsentKitFilterItems = @"v";
+NSString *const kMPConsentKitFilterItemConsented = @"c";
+NSString *const kMPConsentKitFilterItemHash = @"h";
+NSString *const kMPConsentRegulationFilters = @"reg";
+NSString *const kMPConsentPurposeFilters = @"pur";
+NSString *const kMPConsentHashStringForGDPR = @"1";
+
 
 // Push Notifications
 NSString *const kMPDeviceTokenKey = @"to";
@@ -138,6 +150,8 @@ NSString *const kMPDeviceTokenTypeKey = @"tot";
 NSString *const kMPDeviceTokenTypeDevelopment = @"appleSandbox";
 NSString *const kMPDeviceTokenTypeProduction = @"appleProduction";
 NSString *const kMPHTTPETagHeaderKey = @"ETag";
+NSString *const kMPHTTPCacheControlHeaderKey = @"Cache-Control";
+NSString *const kMPHTTPAgeHeaderKey = @"Age";
 NSString *const kMResponseConfigurationKey = @"responseConfiguration";
 NSString *const kMResponseConfigurationMigrationKey = @"responseConfigurationMigrated";
 NSString *const kMPAppSearchAdsAttributionKey = @"asaa";
@@ -148,9 +162,13 @@ NSString *const kMPIsEphemeralKey = @"is_ephemeral";
 NSString *const kMPLastIdentifiedDate = @"last_date_used";
 NSString *const kMPDeviceApplicationStampKey = @"das";
 NSString *const kMPDeviceApplicationStampStorageKey = @"dast";
-NSString *const kMPLastConfigReceivedKey = @"LastConfigReceived";
+NSString *const kMPConfigProvisionedTimestampKey = @"ConfigProvisionedTimestamp";
+NSString *const kMPConfigMaxAgeKey = @"ConfigMaxAge";
+NSString *const kMPConfigParameters = @"ConfigParameters";
 NSString *const kMPUserAgentSystemVersionUserDefaultsKey = @"UserAgentSystemVersion";
 NSString *const kMPUserAgentValueUserDefaultsKey = @"UserAgentValue";
+NSString *const kMPFirstSeenUser = @"fsu";
+NSString *const kMPLastSeenUser = @"lsu";
 
 // Remote configuration
 NSString *const kMPRemoteConfigExceptionHandlingModeKey = @"cue";
@@ -161,6 +179,7 @@ NSString *const kMPRemoteConfigAppDefined = @"appdefined";
 NSString *const kMPRemoteConfigForceTrue = @"forcetrue";
 NSString *const kMPRemoteConfigForceFalse = @"forcefalse";
 NSString *const kMPRemoteConfigKitsKey = @"eks";
+NSString *const kMPRemoteConfigKitHashesKey = @"hs";
 NSString *const kMPRemoteConfigConsumerInfoKey = @"ci";
 NSString *const kMPRemoteConfigCookiesKey = @"ck";
 NSString *const kMPRemoteConfigMPIDKey = @"mpid";
@@ -190,18 +209,18 @@ NSString *const kMPRemoteConfigTriggerMessageTypesKey = @"dts";
 NSString *const kMPRemoteConfigUniqueIdentifierKey = @"das";
 NSString *const kMPRemoteConfigBracketKey = @"bk";
 NSString *const kMPRemoteConfigRestrictIDFA = @"rdlat";
+NSString *const kMPRemoteConfigAliasMaxWindow = @"alias_max_window";
+NSString *const kMPRemoteConfigAllowASR = @"iasr";
+NSString *const kMPRemoteConfigExcludeAnonymousUsersKey = @"eau";
 
 // Notifications
 NSString *const kMPCrashReportOccurredNotification = @"MPCrashReportOccurredNotification";
 NSString *const kMPConfigureExceptionHandlingNotification = @"MPConfigureExceptionHandlingNotification";
-NSString *const kMPRemoteNotificationReceivedNotification = @"MPRemoteNotificationReceivedNotification";
 NSString *const kMPUserNotificationDictionaryKey = @"MPUserNotificationDictionaryKey";
 NSString *const kMPUserNotificationActionKey = @"MPUserNotificationActionKey";
 NSString *const kMPRemoteNotificationDeviceTokenNotification = @"MPRemoteNotificationDeviceTokenNotification";
 NSString *const kMPRemoteNotificationDeviceTokenKey = @"MPRemoteNotificationDeviceTokenKey";
 NSString *const kMPRemoteNotificationOldDeviceTokenKey = @"MPRemoteNotificationOldDeviceTokenKey";
-NSString *const kMPLocalNotificationReceivedNotification = @"MPLocalNotificationReceivedNotification";
-NSString *const kMPUserNotificationRunningModeKey = @"MPUserNotificationRunningModeKey";
 
 // Config.plist keys
 NSString *const kMPConfigPlist = @"MParticleConfig";
@@ -210,6 +229,7 @@ NSString *const kMPConfigSecret = @"api_secret";
 NSString *const kMPConfigSharedGroupID = @"shared_group_id";
 NSString *const kMPConfigCustomUserAgent = @"custom_user_agent";
 NSString *const kMPConfigCollectUserAgent = @"collect_user_agent";
+NSString *const kMPConfigTrackNotifications = @"track_notifications";
 NSString *const kMPConfigSessionTimeout = @"session_timeout";
 NSString *const kMPConfigUploadInterval = @"upload_interval";
 NSString *const kMPConfigEnableSSL = @"enable_secure_transport";
@@ -254,6 +274,55 @@ NSString *const kMParticleWebViewPathIdentify = @"identify";
 NSString *const kMParticleWebViewPathLogout = @"logout";
 NSString *const kMParticleWebViewPathLogin = @"login";
 NSString *const kMParticleWebViewPathModify = @"modify";
+NSString *const kMParticleWebViewPathAlias = @"alias";
+
+// Message type strings
+NSString *const kMPMessageTypeStringUnknown = @"unknown";
+NSString *const kMPMessageTypeStringSessionStart = @"ss";
+NSString *const kMPMessageTypeStringSessionEnd = @"se";
+NSString *const kMPMessageTypeStringScreenView = @"v";
+NSString *const kMPMessageTypeStringEvent = @"e";
+NSString *const kMPMessageTypeStringCrashReport = @"x";
+NSString *const kMPMessageTypeStringOptOut = @"o";
+NSString *const kMPMessageTypeStringFirstRun = @"fr";
+NSString *const kMPMessageTypeStringPreAttribution = @"unknown";
+NSString *const kMPMessageTypeStringPushRegistration = @"pr";
+NSString *const kMPMessageTypeStringAppStateTransition = @"ast";
+NSString *const kMPMessageTypeStringPushNotification = @"pm";
+NSString *const kMPMessageTypeStringNetworkPerformance = @"npe";
+NSString *const kMPMessageTypeStringBreadcrumb = @"bc";
+NSString *const kMPMessageTypeStringProfile = @"pro";
+NSString *const kMPMessageTypeStringPushNotificationInteraction = @"pre";
+NSString *const kMPMessageTypeStringCommerceEvent = @"cm";
+NSString *const kMPMessageTypeStringUserAttributeChange = @"uac";
+NSString *const kMPMessageTypeStringUserIdentityChange = @"uic";
+NSString *const kMPMessageTypeStringMedia = @"media";
+
+// Event type strings
+NSString *const kMPEventTypeStringUnknown = @"Unknown";
+NSString *const kMPEventTypeStringNavigation = @"Navigation";
+NSString *const kMPEventTypeStringLocation = @"Location";
+NSString *const kMPEventTypeStringSearch = @"Search";
+NSString *const kMPEventTypeStringTransaction = @"Transaction";
+NSString *const kMPEventTypeStringUserContent = @"UserContent";
+NSString *const kMPEventTypeStringUserPreference = @"UserPreference";
+NSString *const kMPEventTypeStringSocial = @"Social";
+NSString *const kMPEventTypeStringOther = @"Other";
+NSString *const kMPEventTypeStringMediaDiscontinued = @"Media(discontinued)";
+NSString *const kMPEventTypeStringProductAddToCart = @"ProductAddToCart";
+NSString *const kMPEventTypeStringProductRemoveFromCart = @"ProductRemoveFromCart";
+NSString *const kMPEventTypeStringProductCheckout = @"ProductCheckout";
+NSString *const kMPEventTypeStringProductCheckoutOption = @"ProductCheckoutOption";
+NSString *const kMPEventTypeStringProductClick = @"ProductClick";
+NSString *const kMPEventTypeStringProductViewDetail = @"ProductViewDetail";
+NSString *const kMPEventTypeStringProductPurchase = @"ProductPurchase";
+NSString *const kMPEventTypeStringProductRefund = @"ProductRefund";
+NSString *const kMPEventTypeStringPromotionView = @"PromotionView";
+NSString *const kMPEventTypeStringPromotionClick = @"PromotionClick";
+NSString *const kMPEventTypeStringProductAddToWishlist = @"ProductAddToWishlist";
+NSString *const kMPEventTypeStringProductRemoveFromWishlist = @"ProductRemoveFromWishlist";
+NSString *const kMPEventTypeStringProductImpression = @"ProductImpression";
+NSString *const kMPEventTypeStringMedia = @"Media";
 
 //
 // Primitive data type constants
@@ -294,16 +363,24 @@ const NSTimeInterval DEFAULT_UPLOAD_INTERVAL =
     #endif
 
 // How long to block config requests after a successful response.
-const NSTimeInterval DEBUG_CONFIG_REQUESTS_QUIET_INTERVAL = 60.0;
-const NSTimeInterval CONFIG_REQUESTS_QUIET_INTERVAL = 10.0*60;
+const NSTimeInterval CONFIG_REQUESTS_DEFAULT_EXPIRATION_AGE = 10.0*60;
+const NSTimeInterval CONFIG_REQUESTS_MAX_EXPIRATION_AGE = 60*60*24.0;
+
+const NSTimeInterval SEARCH_ADS_ATTRIBUTION_GLOBAL_TIMEOUT_SECONDS = 30.0;
+const NSTimeInterval SEARCH_ADS_ATTRIBUTION_DELAY_BEFORE_RETRY = 3.0;
+const NSInteger SEARCH_ADS_ATTRIBUTION_MAX_RETRIES = 4;
 
 // Attributes limits
 const NSInteger LIMIT_ATTR_COUNT = 100;
-const NSInteger LIMIT_ATTR_LENGTH = 256;
-const NSInteger LIMIT_NAME = 256;
-const NSInteger LIMIT_USER_ATTR_LENGTH = 4096;
+const NSInteger LIMIT_ATTR_KEY_LENGTH = 256;
+const NSInteger LIMIT_ATTR_VALUE_LENGTH = 4096;
 const NSInteger MAX_USER_ATTR_LIST_SIZE = 1000;
 const NSInteger MAX_USER_ATTR_LIST_ENTRY_LENGTH = 512;
 
 // Consent limits
 const NSInteger MAX_GDPR_CONSENT_PURPOSES = 100;
+
+// Size limits
+const NSInteger MAX_BYTES_PER_EVENT = 100*1024;
+const NSInteger MAX_BYTES_PER_BATCH = 2 * MAX_BYTES_PER_EVENT;
+const NSInteger MAX_EVENTS_PER_BATCH = 100;

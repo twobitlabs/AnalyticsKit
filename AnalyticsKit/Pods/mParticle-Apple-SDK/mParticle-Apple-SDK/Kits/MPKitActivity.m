@@ -5,22 +5,28 @@
 #import "MPKitProtocol.h"
 #import "MPKitRegister.h"
 
+@interface MParticle ()
+
+@property (nonatomic, strong, readonly) MPKitContainer *kitContainer;
+
+@end
+
 #pragma mark - MPKitActivityMapping
 @interface MPKitActivityMapping : NSObject
 
-@property (nonatomic, strong, readonly) NSNumber *kitCode;
+@property (nonatomic, strong, readonly) NSNumber *integrationId;
 @property (nonatomic, copy, readonly) void (^handler)(id kitInstance);
 
-- (instancetype)initWithKitCode:(NSNumber *)kitCode handler:(void (^)(id kitInstance))handler;
+- (instancetype)initWithKitCode:(NSNumber *)integrationId handler:(void (^)(id kitInstance))handler;
 
 @end
 
 @implementation MPKitActivityMapping
 
-- (instancetype)initWithKitCode:(NSNumber *)kitCode handler:(void (^)(id kitInstance))handler {
+- (instancetype)initWithKitCode:(NSNumber *)integrationId handler:(void (^)(id kitInstance))handler {
     self = [super init];
     if (self) {
-        _kitCode = kitCode;
+        _integrationId = integrationId;
         _handler = handler;
     }
     
@@ -68,9 +74,9 @@
 }
 
 #pragma mark Private methods
-- (void)kitInstanceAndConfiguration:(NSNumber *)kitCode handler:(void(^)(id instance, NSDictionary *configuration))handler {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"code == %@", kitCode];
-    id<MPExtensionKitProtocol> kitRegister = [[[[MPKitContainer sharedInstance] activeKitsRegistry] filteredArrayUsingPredicate:predicate] firstObject];
+- (void)kitInstanceAndConfiguration:(NSNumber *)integrationId handler:(void(^)(id instance, NSDictionary *configuration))handler {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"code == %@", integrationId];
+    id<MPExtensionKitProtocol> kitRegister = [[[[MParticle sharedInstance].kitContainer activeKitsRegistry] filteredArrayUsingPredicate:predicate] firstObject];
     id<MPKitProtocol> wrapperInstance = kitRegister.wrapperInstance;
     
     id kitInstance = [wrapperInstance respondsToSelector:@selector(providerKitInstance)] ? [wrapperInstance providerKitInstance] : nil;
@@ -80,28 +86,28 @@
 }
 
 #pragma mark Public methods
-- (BOOL)isKitActive:(nonnull NSNumber *)kitCode {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"code == %@", kitCode];
-    id<MPExtensionKitProtocol> kitRegister = [[[[MPKitContainer sharedInstance] activeKitsRegistry] filteredArrayUsingPredicate:predicate] firstObject];
+- (BOOL)isKitActive:(nonnull NSNumber *)integrationId {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"code == %@", integrationId];
+    id<MPExtensionKitProtocol> kitRegister = [[[[MParticle sharedInstance].kitContainer activeKitsRegistry] filteredArrayUsingPredicate:predicate] firstObject];
     
     return kitRegister != nil;
 }
 
-- (nullable id)kitInstance:(nonnull NSNumber *)kitCode {
+- (nullable id)kitInstance:(nonnull NSNumber *)integrationId {
     __block id kitInstance = nil;
     
-    [self kitInstanceAndConfiguration:kitCode handler:^(id instance, NSDictionary *configuration) {
+    [self kitInstanceAndConfiguration:integrationId handler:^(id instance, NSDictionary *configuration) {
         kitInstance = instance;
     }];
     
     return kitInstance;
 }
 
-- (void)kitInstance:(nonnull NSNumber *)kitCode withHandler:(void (^ _Nonnull)(id _Nullable kitInstance))handler {
+- (void)kitInstance:(nonnull NSNumber *)integrationId withHandler:(void (^ _Nonnull)(id _Nullable kitInstance))handler {
     __block id kitInstance = nil;
     __block NSDictionary *kitConfiguration = nil;
     
-    [self kitInstanceAndConfiguration:kitCode handler:^(id instance, NSDictionary *configuration) {
+    [self kitInstanceAndConfiguration:integrationId handler:^(id instance, NSDictionary *configuration) {
         kitInstance = instance;
         kitConfiguration = configuration;
     }];
@@ -109,7 +115,7 @@
     if (kitInstance) {
         handler(kitInstance);
     } else {
-        MPKitActivityMapping *activityMapping = [[MPKitActivityMapping alloc] initWithKitCode:kitCode handler:handler];
+        MPKitActivityMapping *activityMapping = [[MPKitActivityMapping alloc] initWithKitCode:integrationId handler:handler];
         [self.activityMappings addObject:activityMapping];
     }
 }
@@ -117,8 +123,8 @@
 #pragma mark Notification handlers
 - (void)handleKitDidBecomeActive:(NSNotification *)notification {
     NSDictionary *userInfo = [notification userInfo];
-    NSNumber *kitCode = userInfo[mParticleKitInstanceKey];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"kitCode == %@", kitCode];
+    NSNumber *integrationId = userInfo[mParticleKitInstanceKey];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"integrationId == %@", integrationId];
     NSArray *activities = [self.activityMappings filteredArrayUsingPredicate:predicate];
     
     if (activities.count == 0) {
@@ -126,7 +132,7 @@
     }
     
     for (MPKitActivityMapping *activityMapping in activities) {
-        [self kitInstanceAndConfiguration:activityMapping.kitCode
+        [self kitInstanceAndConfiguration:activityMapping.integrationId
                                   handler:^(id instance, NSDictionary *configuration) {
                                       activityMapping.handler(instance);
                                   }];

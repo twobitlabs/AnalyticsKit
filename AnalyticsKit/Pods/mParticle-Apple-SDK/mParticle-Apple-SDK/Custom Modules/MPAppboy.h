@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 
-@interface MPAppboy : NSObject <NSCoding>
+@interface MPAppboy : NSObject <NSSecureCoding>
 
 @property (nonatomic, strong) NSArray *userInfoPerUser;
 @property (nonatomic, strong) NSData *pushToken;

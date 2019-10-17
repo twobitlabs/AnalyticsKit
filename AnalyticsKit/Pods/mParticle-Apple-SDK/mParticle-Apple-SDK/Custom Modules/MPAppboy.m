@@ -2,7 +2,7 @@
 
 @implementation MPAppboy
 
-#pragma mark NSCoding
+#pragma mark NSSecureCoding
 - (void)encodeWithCoder:(NSCoder *)coder {
     [coder encodeObject:_userInfoPerUser forKey:@"userInfoPerUser"];
     [coder encodeObject:_pushToken forKey:@"pushToken"];
@@ -19,15 +19,19 @@
         return nil;
     }
     
-    _userInfoPerUser = [coder decodeObjectForKey:@"userInfoPerUser"];
-    _pushToken = [coder decodeObjectForKey:@"pushToken"];
-    _deviceIdentifier = [coder decodeObjectForKey:@"deviceIdentifier"];
-    _sessionsPerUser = [coder decodeObjectForKey:@"sessionsPerUser"];
-    _feedArrayUpdateTime = [coder decodeObjectForKey:@"feedArrayUpdateTime"];
-    _acksPerUser = [coder decodeObjectForKey:@"acksPerUser"];
-    _externalUserId = [coder decodeObjectForKey:@"externalUserId"];
+    _userInfoPerUser = [coder decodeObjectOfClass:[NSString class] forKey:@"userInfoPerUser"];
+    _pushToken = [coder decodeObjectOfClass:[NSString class] forKey:@"pushToken"];
+    _deviceIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:@"deviceIdentifier"];
+    _sessionsPerUser = [coder decodeObjectOfClass:[NSString class] forKey:@"sessionsPerUser"];
+    _feedArrayUpdateTime = [coder decodeObjectOfClass:[NSArray class] forKey:@"feedArrayUpdateTime"];
+    _acksPerUser = [coder decodeObjectOfClass:[NSObject class] forKey:@"acksPerUser"];
+    _externalUserId = [coder decodeObjectOfClass:[NSString class] forKey:@"externalUserId"];
     
     return self;
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
 }
 
 #pragma mark Public methods

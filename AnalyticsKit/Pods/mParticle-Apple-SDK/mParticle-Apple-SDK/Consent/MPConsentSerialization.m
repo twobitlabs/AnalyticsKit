@@ -3,7 +3,8 @@
 #import "MPILogger.h"
 #import "MPIConstants.h"
 #import "MPGDPRConsent.h"
-
+#import "MPConsentKitFilter.h"
+#import "MParticle.h"
 
 @implementation MPConsentSerialization
 
@@ -226,6 +227,50 @@
         return nil;
     }
     return string;
+}
+
++ (MPConsentKitFilter *)filterFromDictionary:(NSDictionary *)configDictionary {
+    
+    MPConsentKitFilter *filter = nil;
+    
+    if (configDictionary && [configDictionary isKindOfClass:[NSDictionary class]]) {
+        
+        filter = [[MPConsentKitFilter alloc] init];
+        
+        if (configDictionary[kMPConsentKitFilterIncludeOnMatch]  && [configDictionary[kMPConsentKitFilterIncludeOnMatch] isKindOfClass:[NSNumber class]]) {
+            filter.shouldIncludeOnMatch = ((NSNumber *)configDictionary[kMPConsentKitFilterIncludeOnMatch]).boolValue;
+        }
+        
+        NSDictionary *itemsArray = configDictionary[kMPConsentKitFilterItems];
+        if (itemsArray && [itemsArray isKindOfClass:[NSArray class]]) {
+            NSMutableArray *items = [NSMutableArray array];
+            
+            for (NSDictionary *itemDictionary in itemsArray) {
+                
+                if ([itemDictionary isKindOfClass:[NSDictionary class]]) {
+                    
+                    MPConsentKitFilterItem *item = [[MPConsentKitFilterItem alloc] init];
+                    
+                    if (itemDictionary[kMPConsentKitFilterItemConsented] && [itemDictionary[kMPConsentKitFilterItemConsented] isKindOfClass:[NSNumber class]]) {
+                        item.consented = ((NSNumber *)itemDictionary[kMPConsentKitFilterItemConsented]).boolValue;
+                    }
+                    
+                    if (itemDictionary[kMPConsentKitFilterItemHash]  && [itemDictionary[kMPConsentKitFilterItemHash] isKindOfClass:[NSNumber class]]) {
+                        item.javascriptHash = ((NSNumber *)itemDictionary[kMPConsentKitFilterItemHash]).intValue;
+                    }
+                    
+                    [items addObject:item];
+                    
+                }
+                
+            }
+            
+            filter.filterItems = [items copy];
+            
+        }
+    }
+    
+    return filter;
 }
 
 @end

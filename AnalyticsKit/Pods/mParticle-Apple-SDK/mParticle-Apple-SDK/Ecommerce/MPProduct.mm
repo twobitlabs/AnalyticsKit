@@ -4,6 +4,7 @@
 #import "NSDictionary+MPCaseInsensitive.h"
 #import "NSNumber+MPFormatter.h"
 #import "MPILogger.h"
+#import "MParticle.h"
 
 // Internal
 NSString *const kMPProductBrand = @"br";
@@ -35,7 +36,6 @@ NSString *const kMPExpProductCouponCode = @"Coupon Code";
 NSString *const kMPExpProductVariant = @"Variant";
 NSString *const kMPExpProductPosition = @"Position";
 NSString *const kMPExpProductTotalAmount = @"Total Product Amount";
-
 
 @interface MPProduct()
 
@@ -191,7 +191,7 @@ NSString *const kMPExpProductTotalAmount = @"Total Product Amount";
     return copyObject;
 }
 
-#pragma mark NSCoding
+#pragma mark NSSecureCoding
 - (void)encodeWithCoder:(NSCoder *)coder {
     if (_beautifiedAttributes) {
         [coder encodeObject:_beautifiedAttributes forKey:@"beautifiedAttributes"];
@@ -211,18 +211,18 @@ NSString *const kMPExpProductTotalAmount = @"Total Product Amount";
     
     NSDictionary *dictionary;
     
-    dictionary = [coder decodeObjectForKey:@"beautifiedAttributes"];
+    dictionary = [coder decodeObjectOfClass:[NSDictionary class] forKey:@"beautifiedAttributes"];
     if (dictionary) {
         self->_beautifiedAttributes = [[NSMutableDictionary alloc] initWithDictionary:dictionary];
     }
     
-    dictionary = [coder decodeObjectForKey:@"productDictionary"];
+    dictionary = [coder decodeObjectOfClass:[NSDictionary class] forKey:@"productDictionary"];
     if (dictionary) {
         self->_objectDictionary = [[NSMutableDictionary alloc] initWithDictionary:dictionary];
     }
     
     @try {
-        dictionary = [coder decodeObjectForKey:@"userDefinedAttributes"];
+        dictionary = [coder decodeObjectOfClass:[NSDictionary class] forKey:@"userDefinedAttributes"];
     }
     
     @catch ( NSException *e) {
@@ -239,12 +239,16 @@ NSString *const kMPExpProductTotalAmount = @"Total Product Amount";
     return self;
 }
 
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 #pragma mark MPProduct+Dictionary
 - (NSDictionary<NSString *, id> *)commerceDictionaryRepresentation {
     NSMutableDictionary<NSString *, id> *commerceDictionary = [[NSMutableDictionary alloc] init];
     
     if (_userDefinedAttributes) {
-        commerceDictionary[@"attrs"] = [_userDefinedAttributes transformValuesToString];
+        commerceDictionary[kMPAttributesKey] = [_userDefinedAttributes transformValuesToString];
     }
     
     if (_objectDictionary) {

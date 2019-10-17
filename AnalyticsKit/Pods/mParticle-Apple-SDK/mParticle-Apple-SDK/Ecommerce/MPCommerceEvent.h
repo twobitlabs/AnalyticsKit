@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import "MPBaseEvent.h"
 
 @class MPProduct;
 @class MPPromotionContainer;
@@ -43,10 +44,7 @@ typedef NS_ENUM(NSUInteger, MPCommerceEventAction) {
  
  @see mParticle
  */
-@interface MPCommerceEvent : NSObject <NSCopying, NSCoding> {
-@protected
-    NSDate *_timestamp;
-}
+@interface MPCommerceEvent : MPBaseEvent <NSSecureCoding>
 
 /**
  Checkout option string describing what the options are.
@@ -166,42 +164,22 @@ typedef NS_ENUM(NSUInteger, MPCommerceEventAction) {
 - (void)removeProduct:(nonnull MPProduct *)product;
 
 /**
- Associates a custom dictionary of key/value pairs to the commerce event.
- 
- Alternatively you can set custom attributes using the regular notation for setting key/value pairs in an NSMutableDictionary.
- 
- <b>For example:</b>
- 
- <b>Swift</b>
- <pre><code>
- let commerceEvent = MPCommerceEvent(action: MPCommerceEventAction.AddToCart, product: product1)
- 
- commerceEvent.setCustomAttributes(dictionaryOfKeyValuePairs)
- 
- commerceEvent["Custom Key"] = "Custom Value"
- </code></pre>
- 
- <b>Objective-C</b>
- <pre><code>
- MPCommerceEvent *commerceEvent = [[MPCommerceEvent alloc] initWithAction:MPCommerceEventActionAddToCart product:product1];
- 
- [commerceEvent setCustomAttributes:dictionaryOfKeyValuePairs];
- 
- commerceEvent[&#64;"Custom Key"] = &#64;"Custom Value";
- </code></pre>
-
- @param customAttributes A dictionary containing the custom key/value pairs.
- */
-- (void)setCustomAttributes:(nullable NSDictionary<NSString *, NSString *> *)customAttributes;
-
-/**
  Returns an array with all keys in the custom attributes dictionary
  @returns An array with all keys in the custom attributes dictionary
+ @deprecated use customAttributes.allKeys instead
  */
-- (nullable NSArray *)allKeys;
+- (nullable NSArray *)allKeys DEPRECATED_MSG_ATTRIBUTE("use customAttributes.allKeys instead");
 
-- (nullable id)objectForKeyedSubscript:(nonnull NSString *const)key;
-- (void)setObject:(nonnull id)obj forKeyedSubscript:(nonnull NSString *)key;
+/**
+ A dictionary containing further information about the commerce event. The number of entries is
+ limited to 100 key value pairs. Keys must be strings (up to 255 characters) and values
+ can be strings (up to 4096 characters), numbers, booleans, or dates
+ @deprecated use customAttributes instead
+ */
+- (NSMutableDictionary * _Nullable)userDefinedAttributes DEPRECATED_MSG_ATTRIBUTE("use customAttributes instead");
+- (void)setUserDefinedAttributes:(NSMutableDictionary *_Nullable)userDefinedAttributes DEPRECATED_MSG_ATTRIBUTE("set customAttributes instead");
+- (nullable id)objectForKeyedSubscript:(nonnull NSString *const)key DEPRECATED_MSG_ATTRIBUTE("use customAttributes[key] instead");
+- (void)setObject:(nonnull id)obj forKeyedSubscript:(nonnull NSString *)key DEPRECATED_MSG_ATTRIBUTE("use customAttributes[key] = obj instead");
 
 @end
 

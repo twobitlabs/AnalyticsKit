@@ -6,7 +6,7 @@ extern NSString * _Nonnull const kMPCKContent;
 extern NSString * _Nonnull const kMPCKDomain;
 extern NSString * _Nonnull const kMPCKExpiration;
 
-@interface MPCookie : NSObject <NSCoding>
+@interface MPCookie : NSObject <NSSecureCoding>
 
 @property (nonatomic, unsafe_unretained) int64_t cookieId;
 @property (nonatomic, strong, nullable) NSString *content;
@@ -22,7 +22,7 @@ extern NSString * _Nonnull const kMPCKExpiration;
 
 
 #pragma mark - MPConsumerInfo
-@interface MPConsumerInfo : NSObject <NSCoding>
+@interface MPConsumerInfo : NSObject <NSSecureCoding>
 
 @property (nonatomic, unsafe_unretained) int64_t consumerInfoId;
 @property (nonatomic, strong, nullable) NSArray<MPCookie *> *cookies;

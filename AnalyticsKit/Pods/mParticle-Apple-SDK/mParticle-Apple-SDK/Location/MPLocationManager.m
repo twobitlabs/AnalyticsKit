@@ -4,17 +4,21 @@
 static BOOL trackingLocation = NO;
 
 #if TARGET_OS_IOS == 1
-@interface MPLocationManager() <CLLocationManagerDelegate>
+#ifndef MPARTICLE_LOCATION_DISABLE
+@interface MPLocationManager () <CLLocationManagerDelegate>
 
 @end
+#endif
 #endif
 
 @implementation MPLocationManager
 
 #if TARGET_OS_IOS == 1
 - (instancetype)initWithAccuracy:(CLLocationAccuracy)accuracy distanceFilter:(CLLocationDistance)distance authorizationRequest:(MPLocationAuthorizationRequest)authorizationRequest {
-    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
     self = [super init];
+    
+#ifndef MPARTICLE_LOCATION_DISABLE
+    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
     
     if (!self || authorizationStatus == kCLAuthorizationStatusRestricted || authorizationStatus == kCLAuthorizationStatusDenied) {
         return nil;
@@ -42,7 +46,8 @@ static BOOL trackingLocation = NO;
     } else {
         [self.locationManager startUpdatingLocation];
     }
-
+#endif
+    
     _authorizationRequest = authorizationRequest;
     _requestedAccuracy = accuracy;
     _requestedDistanceFilter = distance;
@@ -52,6 +57,7 @@ static BOOL trackingLocation = NO;
     return self;
 }
 
+#ifndef MPARTICLE_LOCATION_DISABLE
 #pragma mark CLLocationManager Delegate
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     trackingLocation = (status == kCLAuthorizationStatusAuthorizedAlways) || (status == kCLAuthorizationStatusAuthorizedWhenInUse);
@@ -60,15 +66,18 @@ static BOOL trackingLocation = NO;
         [self.locationManager startUpdatingLocation];
     }
 }
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-implementations"
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
     self.location = newLocation;
 }
 #pragma clang diagnostic pop
+#endif
 
 #pragma mark Public accessors
 - (CLLocationManager *)locationManager {
+#ifndef MPARTICLE_LOCATION_DISABLE
     if (_locationManager) {
         return _locationManager;
     }
@@ -88,22 +97,30 @@ static BOOL trackingLocation = NO;
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
     [self didChangeValueForKey:@"locationManager"];
-    
     return _locationManager;
+#else
+    return nil;
+#endif
 }
 
 #pragma mark Public methods
 - (void)endLocationTracking {
+#ifndef MPARTICLE_LOCATION_DISABLE
     [_locationManager stopUpdatingLocation];
+#endif
     _locationManager = nil;
     _location = nil;
     trackingLocation = NO;
 }
-#endif
+#endif // #if TARGET_OS_IOS == 1
 
 #pragma mark Class methods
 + (BOOL)trackingLocation {
+#ifndef MPARTICLE_LOCATION_DISABLE
     return trackingLocation;
+#else
+    return NO;
+#endif
 }
 
 @end

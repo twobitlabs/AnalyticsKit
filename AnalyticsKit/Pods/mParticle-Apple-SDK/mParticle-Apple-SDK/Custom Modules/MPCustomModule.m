@@ -78,7 +78,7 @@
     return copyObject;
 }
 
-#pragma mark NSCoding
+#pragma mark NSSecureCoding
 - (void)encodeWithCoder:(NSCoder *)coder {
     [coder encodeObject:_customModuleId forKey:@"customModuleId"];
     
@@ -90,11 +90,15 @@
 - (id)initWithCoder:(NSCoder *)coder {
     self = [super init];
     if (self) {
-        _customModuleId = [coder decodeObjectForKey:@"customModuleId"];
-        _preferences = [coder decodeObjectForKey:@"preferences"];
+        _customModuleId = [coder decodeObjectOfClass:[NSNumber class] forKey:@"customModuleId"];
+        _preferences = [coder decodeObjectOfClass:[NSArray<MPCustomModulePreference *> class] forKey:@"preferences"];
     }
     
     return self;
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
 }
 
 #pragma mark Public

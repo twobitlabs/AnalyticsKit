@@ -203,7 +203,7 @@
     return (NSString *)description;
 }
 
-#pragma mark NSCoding
+#pragma mark NSSecureCoding
 - (void)encodeWithCoder:(NSCoder *)coder {
     if (self.name) {
         [coder encodeObject:_name forKey:@"name"];
@@ -216,26 +216,31 @@
     [coder encodeObject:_configuration forKey:@"configuration"];
     [coder encodeInteger:_matchType forKey:@"matchType"];
     [coder encodeInteger:_projectionType forKey:@"projectionType"];
-    [coder encodeInteger:_propertyKind forKey:@"propertyKind"];
-    [coder encodeInteger:_projectionId forKey:@"projectionId"];
-    [coder encodeInteger:_attributeIndex forKey:@"attributeIndex"];
+    [coder encodeObject:[NSNumber numberWithUnsignedInteger:_propertyKind] forKey:@"propertyKind"];
+    [coder encodeObject:[NSNumber numberWithUnsignedInteger:_projectionId] forKey:@"projectionId"];
+    [coder encodeObject:[NSNumber numberWithUnsignedInteger:_attributeIndex] forKey:@"attributeIndex"];
 }
 
 - (id)initWithCoder:(NSCoder *)coder {
     self = [super init];
 
     if (self) {
-        _configuration = [coder decodeObjectForKey:@"configuration"];
-        _name = [coder decodeObjectForKey:@"name"];
-        _projectedName = [coder decodeObjectForKey:@"projectedName"];
+        [coder decodeObjectOfClass:[NSNumber class] forKey:@"propertyKind"];
+        _configuration = [coder decodeObjectOfClass:[NSDictionary class] forKey:@"configuration"];
+        _name = [coder decodeObjectOfClass:[NSString class] forKey:@"name"];
+        _projectedName = [coder decodeObjectOfClass:[NSString class] forKey:@"projectedName"];
         _matchType = (MPProjectionMatchType)[coder decodeIntegerForKey:@"matchType"];
         _projectionType = (MPProjectionType)[coder decodeIntegerForKey:@"projectionType"];
-        _propertyKind = (MPProjectionPropertyKind)[coder decodeObjectForKey:@"propertyKind"];
-        _projectionId = (NSUInteger)[coder decodeIntegerForKey:@"projectionId"];
-        _attributeIndex = (NSUInteger)[coder decodeIntegerForKey:@"attributeIndex"];
+        _propertyKind = (MPProjectionPropertyKind)[[coder decodeObjectOfClass:[NSNumber class] forKey:@"propertyKind"] unsignedIntegerValue];
+        _projectionId = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"projectionId"] unsignedIntegerValue];
+        _attributeIndex = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"attributeIndex"] unsignedIntegerValue];
     }
     
     return self;
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
 }
 
 #pragma mark NSCopying

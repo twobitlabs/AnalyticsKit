@@ -7,6 +7,7 @@
 #import <UIKit/UIKit.h>
 #import "MPStateMachine.h"
 #import "MPSearchAdsAttribution.h"
+#import "MParticle.h"
 
 NSString *const kMPApplicationInformationKey = @"ai";
 NSString *const kMPApplicationNameKey = @"an";
@@ -31,6 +32,12 @@ NSString *const kMPAppStoreReceiptKey = @"asr";
 
 static NSString *kMPAppStoreReceiptString = nil;
 
+@interface MParticle ()
+
+@property (nonatomic, strong, readonly) MPStateMachine *stateMachine;
+
+@end
+
 @interface MPApplication() {
     NSDictionary *appInfo;
     MPIUserDefaults *userDefaults;
@@ -47,15 +54,6 @@ static NSString *kMPAppStoreReceiptString = nil;
 @synthesize environment = _environment;
 @synthesize initialLaunchTime = _initialLaunchTime;
 @synthesize pirated = _pirated;
-
-+ (void)initialize {
-    NSURL *url = [[NSBundle mainBundle] appStoreReceiptURL];
-    NSData *appStoreReceiptData = [NSData dataWithContentsOfURL:url];
-    
-    if (appStoreReceiptData) {
-        kMPAppStoreReceiptString = [appStoreReceiptData base64EncodedStringWithOptions:0];
-    }
-}
 
 - (id)init {
     self = [super init];
@@ -150,7 +148,7 @@ static NSString *kMPAppStoreReceiptString = nil;
 }
 
 - (NSNumber *)firstSeenInstallation {
-    return [MPStateMachine sharedInstance].firstSeenInstallation;
+    return [MParticle sharedInstance].stateMachine.firstSeenInstallation;
 }
 
 - (NSNumber *)initialLaunchTime {
@@ -177,7 +175,7 @@ static NSString *kMPAppStoreReceiptString = nil;
 - (NSNumber *)lastUseDate {
     NSNumber *lastUseDate = userDefaults[kMPAppLastUseDateKey];
     if (lastUseDate == nil) {
-        lastUseDate = MPMilliseconds([[MPStateMachine sharedInstance].launchDate timeIntervalSince1970]);
+        lastUseDate = MPMilliseconds([[MParticle sharedInstance].stateMachine.launchDate timeIntervalSince1970]);
     }
     
     return lastUseDate;
@@ -258,59 +256,65 @@ static NSString *kMPAppStoreReceiptString = nil;
     return bundleInfoDictionary[@"CFBundleShortVersionString"];
 }
 
++ (UIApplication *)sharedUIApplication {
+    if ([[UIApplication class] respondsToSelector:@selector(sharedApplication)]) {
+        return [[UIApplication class] performSelector:@selector(sharedApplication)];
+    }
+    return nil;
+}
+
 #if TARGET_OS_IOS == 1
 - (NSNumber *)badgeNumber {
-#if !defined(MPARTICLE_APP_EXTENSIONS)
-    __block NSInteger appBadgeNumber = 0;
-    if ([NSThread isMainThread]) {
-        appBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber;
-    } else {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            appBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber;
-        });
+    if (![MPStateMachine isAppExtension]) {
+        __block NSInteger appBadgeNumber = 0;
+        if ([NSThread isMainThread]) {
+            appBadgeNumber = [MPApplication sharedUIApplication].applicationIconBadgeNumber;
+        } else {
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                appBadgeNumber = [MPApplication sharedUIApplication].applicationIconBadgeNumber;
+            });
+        }
+        NSNumber *badgeNumber = appBadgeNumber != 0 ? @(appBadgeNumber) : nil;
+        
+        return badgeNumber;
     }
-    NSNumber *badgeNumber = appBadgeNumber != 0 ? @(appBadgeNumber) : nil;
-    
-    return badgeNumber;
-#endif
     return 0;
 }
 
 - (NSNumber *)remoteNotificationTypes {
     NSNumber *notificationTypes;
     
-#if !defined(MPARTICLE_APP_EXTENSIONS)
-    UIApplication *app = [UIApplication sharedApplication];
-    
-    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        __block UIUserNotificationSettings *userNotificationSettings = nil;
-        if ([NSThread isMainThread]) {
-           userNotificationSettings = [app currentUserNotificationSettings];
-        } else {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                userNotificationSettings = [app currentUserNotificationSettings];
-            });
-        }
+    if (![MPStateMachine isAppExtension]) {
+        UIApplication *app = [[UIApplication class] performSelector:@selector(sharedApplication)];
         
-#pragma clang diagnostic pop
-        notificationTypes = @(userNotificationSettings.types);
-    } else {
+        if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        notificationTypes = @([app enabledRemoteNotificationTypes]);
+            __block UIUserNotificationSettings *userNotificationSettings = nil;
+            if ([NSThread isMainThread]) {
+                userNotificationSettings = [app currentUserNotificationSettings];
+            } else {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    userNotificationSettings = [app currentUserNotificationSettings];
+                });
+            }
+            
 #pragma clang diagnostic pop
+            notificationTypes = @(userNotificationSettings.types);
+        } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+            notificationTypes = @([app enabledRemoteNotificationTypes]);
+#pragma clang diagnostic pop
+        }
     }
-#endif
     
     return notificationTypes;
 }
 #endif
 
 - (NSDictionary *)searchAdsAttribution {
-    MPSearchAdsAttribution *searchAttribution = [MPStateMachine sharedInstance].searchAttribution;
-    return [searchAttribution dictionaryRepresentation];
+    return MParticle.sharedInstance.stateMachine.searchAdsInfo;
 }
 
 #pragma mark NSCopying
@@ -329,6 +333,15 @@ static NSString *kMPAppStoreReceiptString = nil;
 
 #pragma mark Class methods
 + (NSString *)appStoreReceipt {
+    if (MPIsNull(kMPAppStoreReceiptString)) {
+        NSURL *url = [[NSBundle mainBundle] appStoreReceiptURL];
+        NSData *appStoreReceiptData = [NSData dataWithContentsOfURL:url];
+        
+        if (appStoreReceiptData) {
+            kMPAppStoreReceiptString = [appStoreReceiptData base64EncodedStringWithOptions:0];
+        }
+    }
+    
     return kMPAppStoreReceiptString;
 }
 
@@ -449,8 +462,8 @@ static NSString *kMPAppStoreReceiptString = nil;
         applicationInfo[kMPAppBuildNumberKey] = auxString;
     }
     
-    if (kMPAppStoreReceiptString) {
-        applicationInfo[kMPAppStoreReceiptKey] = kMPAppStoreReceiptString;
+    if ([MParticle sharedInstance].stateMachine.allowASR && [MPApplication appStoreReceipt]) {
+        applicationInfo[kMPAppStoreReceiptKey] = [MPApplication appStoreReceipt];
     }
     
 #if TARGET_OS_IOS == 1

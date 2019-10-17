@@ -33,7 +33,7 @@
  
  @see MPCommerceEvent
  */
-@interface MPTransactionAttributes : NSObject <NSCopying, NSCoding>
+@interface MPTransactionAttributes : NSObject <NSCopying, NSSecureCoding>
 
 /**
  A string describing the affiliation.

@@ -5,6 +5,14 @@
 #import "MPStateMachine.h"
 #import "MPIUserDefaults.h"
 #import "MPSession.h"
+#import "MParticle.h"
+
+@interface MParticle ()
+
+@property (nonatomic, strong, readonly) MPPersistenceController *persistenceController;
+@property (nonatomic, strong, readonly) MPStateMachine *stateMachine;
+
+@end
 
 @implementation MPResponseEvents
 
@@ -13,15 +21,15 @@
         return;
     }
     
-    MPPersistenceController *persistence = [MPPersistenceController sharedInstance];
+    MPPersistenceController *persistence = [MParticle sharedInstance].persistenceController;
 
     // Consumer Information
-    MPConsumerInfo *consumerInfo = [MPStateMachine sharedInstance].consumerInfo;
+    MPConsumerInfo *consumerInfo = [MParticle sharedInstance].stateMachine.consumerInfo;
     [consumerInfo updateWithConfiguration:configuration[kMPRemoteConfigConsumerInfoKey]];
     [persistence updateConsumerInfo:consumerInfo];
     MPConsumerInfo *persistenceInfo = [persistence fetchConsumerInfoForUserId:[MPPersistenceController mpId]];
     if (persistenceInfo.cookies != nil) {
-        [MPStateMachine sharedInstance].consumerInfo.cookies = persistenceInfo.cookies;
+        [MParticle sharedInstance].stateMachine.consumerInfo.cookies = persistenceInfo.cookies;
     }
 }
 

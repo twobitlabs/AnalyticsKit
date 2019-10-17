@@ -520,7 +520,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-AnalyticsKitTests/Pods-AnalyticsKitTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-AnalyticsKitTests/Pods-AnalyticsKitTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/OCMock/OCMock.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -529,7 +529,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AnalyticsKitTests/Pods-AnalyticsKitTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AnalyticsKitTests/Pods-AnalyticsKitTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BEA7C8531B56D12924A55E68 /* [CP] Embed Pods Frameworks */ = {
@@ -538,7 +538,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-AnalyticsKit/Pods-AnalyticsKit-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-AnalyticsKit/Pods-AnalyticsKit-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Adjust/Adjust.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK/Flurry_iOS_SDK.framework",
@@ -559,7 +559,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AnalyticsKit/Pods-AnalyticsKit-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AnalyticsKit/Pods-AnalyticsKit-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C93E86C48A85F977CBF8E2B9 /* [CP] Check Pods Manifest.lock */ = {
@@ -586,7 +586,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-AnalyticsKit/Pods-AnalyticsKit-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-AnalyticsKit/Pods-AnalyticsKit-resources.sh",
 				"${PODS_ROOT}/Intercom/Intercom/Intercom.framework/Versions/A/Resources/Intercom.bundle",
 				"${PODS_ROOT}/Intercom/Intercom/Intercom.framework/Versions/A/Resources/IntercomTranslations.bundle",
 			);
@@ -597,7 +597,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AnalyticsKit/Pods-AnalyticsKit-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AnalyticsKit/Pods-AnalyticsKit-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

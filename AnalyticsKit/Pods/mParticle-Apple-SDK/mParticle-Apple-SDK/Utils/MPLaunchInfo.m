@@ -3,6 +3,7 @@
 #import <UIKit/UIKit.h>
 #import "MPDateFormatter.h"
 #import "MPILogger.h"
+#import "MParticle.h"
 
 @interface MPLaunchInfo() {
     NSString *sourceApp;
@@ -70,7 +71,9 @@
 #pragma clang diagnostic ignored "-Wtautological-pointer-compare"
 #pragma clang diagnostic ignored "-Wunreachable-code"
     if (@available(iOS 9.0, *)) {
-        _annotationKey = &UIApplicationOpenURLOptionsAnnotationKey != NULL ? UIApplicationOpenURLOptionsAnnotationKey : @"UIApplicationOpenURLOptionsAnnotationKey";
+        _annotationKey = UIApplicationOpenURLOptionsAnnotationKey;
+    } else {
+        _annotationKey = @"UIApplicationOpenURLOptionsAnnotationKey";
     }
 #pragma clang diagnostic pop
     
@@ -85,7 +88,9 @@
 #pragma clang diagnostic ignored "-Wtautological-pointer-compare"
 #pragma clang diagnostic ignored "-Wunreachable-code"
     if (@available(iOS 9.0, *)) {
-        _sourceAppKey = &UIApplicationOpenURLOptionsSourceApplicationKey != NULL ? UIApplicationOpenURLOptionsSourceApplicationKey : @"UIApplicationOpenURLOptionsSourceApplicationKey" ;
+        _sourceAppKey = UIApplicationOpenURLOptionsSourceApplicationKey;
+    } else {
+        _sourceAppKey = @"UIApplicationOpenURLOptionsSourceApplicationKey";
     }
 #pragma clang diagnostic pop
 
@@ -126,11 +131,6 @@
         }
         
         NSString *serializedAnnotation = !error ? [[NSString alloc] initWithData:annotationData encoding:NSUTF8StringEncoding] : nil;
-        
-        if (serializedAnnotation.length > LIMIT_USER_ATTR_LENGTH) {
-            serializedAnnotation = nil;
-        }
-        
         return serializedAnnotation;
     };
     
@@ -159,7 +159,7 @@
         
         _annotation = serializeDataObject(annotationArray);
     } else if ([annotation isKindOfClass:[NSString class]]) {
-        _annotation = [annotation length] < LIMIT_USER_ATTR_LENGTH ? annotation : nil;
+        _annotation = annotation;
     } else if ([annotation isKindOfClass:[NSNumber class]]) {
         _annotation = [annotation stringValue];
     } else if ([annotation isKindOfClass:NSDateClass]) {

@@ -30,12 +30,7 @@ typedef NS_ENUM(NSInteger, HTTPStatusCode) {
 
 @interface MPConnector : NSObject
 
-@property (nonatomic, unsafe_unretained, readonly) BOOL active;
-@property (nonatomic, unsafe_unretained, readonly, getter = characterEncoding) NSStringEncoding characterEncoding;
-@property (nonatomic, strong, nonnull) NSString *connectionId;
-
 - (nonnull MPConnectorResponse *)responseFromGetRequestToURL:(nonnull NSURL *)url;
 - (nonnull MPConnectorResponse *)responseFromPostRequestToURL:(nonnull NSURL *)url message:(nullable NSString *)message serializedParams:(nullable NSData *)serializedParams;
-- (void)cancelRequest;
 
 @end

@@ -13,6 +13,11 @@
 @property(readonly, strong, nonnull) NSNumber *userId;
 
 /**
+ Returns whether this user is currently logged in
+ */
+@property(readonly) BOOL isLoggedIn;
+
+/**
  Gets current user identities (readonly)
  @returns A dictionary containing the collection of user identities
  @see MPUserIdentity

@@ -4,7 +4,7 @@
 
 @class MPSession;
 
-@interface MPMessage : MPDataModelAbstract <NSCopying, MPDataModelProtocol>
+@interface MPMessage : MPDataModelAbstract <NSCopying, NSSecureCoding, MPDataModelProtocol>
 
 @property (nonatomic, strong, readonly, nonnull) NSString *messageType;
 @property (nonatomic, strong, readonly, nonnull) NSData *messageData;

@@ -2,25 +2,23 @@
 
 # mParticle Apple SDK
 
-Hello! This is the public repository of the unified mParticle Apple SDK built for the iOS and tvOS platforms.
+This is the mParticle Apple SDK for iOS and tvOS.
 
-At mParticle our mission is straightforward: make it really easy for apps and app services to connect and take ownership of your 1st party data. Like most app owners, you end up implementing and maintaining numerous SDKs ranging from analytics, attribution, push notification, remarketing, monetization, etc. However, embedding multiple 3rd party libraries creates a number of unintended consequences and hidden costs.
+At mParticle our mission is straightforward: make it really easy for apps and app services to connect and allow you to take ownership of your 1st party data.
+Like most app owners, you end up implementing and maintaining numerous SDKs ranging from analytics, attribution, push notification, remarketing,
+monetization, etc. However, embedding multiple 3rd party libraries creates a number of unintended consequences and hidden costs.
 
-The mParticle platform addresses all these problems. We support an ever growing number of integrations with services and SDKs, including developer tools, analytics, attribution, messaging, advertising, and more. mParticle has been designed to be the central hub connecting all these services – check [our site](https://www.mparticle.com), or hit us at <support@mparticle.com> to learn more.
-
+The mParticle platform addresses all these problems. We support an ever growing number of integrations with services and SDKs, including developer
+tools, analytics, attribution, messaging, advertising, and more. mParticle has been designed to be the central hub connecting all these services –
+read the [docs](https://docs.mparticle.com/developers/sdk/ios/) or contact us at <support@mparticle.com> to learn more.
 
 ## Overview
 
 This document will help you:
 
-* Obtain the mParticle SDK via [CocoaPods](https://cocoapods.org/?q=mparticle) or via [Carthage](https://github.com/Carthage/Carthage)
-* Extend the mParticle SDK with [*Kits*](#currently-supported-kits)
+* Install the mParticle SDK using [CocoaPods](https://cocoapods.org/?q=mparticle) or [Carthage](https://github.com/Carthage/Carthage)
+* Add any desired [kits](#currently-supported-kits)
 * Initialize the mParticle SDK
-
-The mParticle SDK is composed of the _core_ library and a series of _kit_ libraries that depend on the core. With each integration with a partner we strive to implement as many features as possible in the server-to-server layer, however some times a deeper integration to work side-by-side with a 3rd party SDK comes with greater benefits to our clients. We use the term **Kit** to describe such integrations.
-
-The core SDK takes care of initializing the kits depending on what you've configured in [your app's dashboard](https://app.mparticle.com), so you just have to decide which kits you may use prior to submission to the App Store. You can easily include all of the kits, none of the kits, or individual kits – the choice is yours.
-
 
 ## Get the SDK
 
@@ -60,7 +58,7 @@ In the cases above, the _Appboy_, _Branch Metrics_, and _Localytics_ kits would 
 
 #### Working with Static Libraries
 
-mParticle's iOS SDK and its embedded kits are [dynamic libraries](https://developer.apple.com/library/content/documentation/DeveloperTools/Conceptual/DynamicLibraries/100-Articles/OverviewOfDynamicLibraries.html), meaning their code is loaded into an app's address space only as needed, as opposed to a 'static' library, which is always included in full in the app's executable file. Some mParticle embedded kits rely on static libraries maintained by our partners. A static framework, wrapped in a dynamic library is incompatible with CocoaPods' `use frameworks!` option. Affected kits are: Appboy, AppsFlyer, comScore, Kahuna, Kochava and Localytics.
+mParticle's iOS SDK and its embedded kits are [dynamic libraries](https://developer.apple.com/library/content/documentation/DeveloperTools/Conceptual/DynamicLibraries/100-Articles/OverviewOfDynamicLibraries.html), meaning their code is loaded into an app's address space only as needed, as opposed to a 'static' library, which is always included in full in the app's executable file. Some mParticle embedded kits rely on static libraries maintained by our partners. A static framework, wrapped in a dynamic library is incompatible with CocoaPods' `use frameworks!` option. Affected kits are: Appboy, AppsFlyer, comScore, Kahuna, Kochava, Localytics and Radar.
 
 Attempting to use these kits with `use_frameworks!` will result in the following error message:
 
@@ -101,30 +99,40 @@ In this case, only the _Branch Metrics_ kit would be integrated; all other kits 
 
 #### Currently Supported Kits
 
+Several integrations require additional client-side add-on libraries called "kits." Some kits embed other SDKs, others just contain a bit of additional functionality. Kits are designed to feel just like server-side integrations; you enable, disable, filter, sample, and otherwise tweak kits completely from the mParticle platform UI. The Core SDK will detect kits at runtime, but you need to add them as dependencies to your app.
+
 Kit | CocoaPods | Carthage
 ----|:---------:|:-------:
 [Adjust](https://github.com/mparticle-integrations/mparticle-apple-integration-adjust)                |  ✓ | ✓
 [Appboy](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy)                |  ✓ | ✓
 [Adobe](https://github.com/mparticle-integrations/mparticle-apple-integration-adobe)                  |  ✓ | ✓
 [AppsFlyer](https://github.com/mparticle-integrations/mparticle-apple-integration-appsflyer)          |  ✓ | ✓ 
+[Appsee](https://github.com/mparticle-integrations/mparticle-apple-integration-appsee)                |  ✓ |
 [Apptentive](https://github.com/mparticle-integrations/mparticle-apple-integration-apptentive)        |  ✓ | ✓ 
 [Apptimize](https://github.com/mparticle-integrations/mparticle-apple-integration-apptimize)          |  ✓ |   
 [Apteligent](https://github.com/mparticle-integrations/mparticle-apple-integration-apteligent)        |  ✓ |  
 [Branch Metrics](https://github.com/mparticle-integrations/mparticle-apple-integration-branchmetrics) |  ✓ | ✓
 [Button](https://github.com/mparticle-integrations/mparticle-apple-integration-button)                |  ✓ | ✓
+[CleverTap](https://github.com/mparticle-integrations/mparticle-apple-integration-clevertap)          |  ✓ | ✓
 [comScore](https://github.com/mparticle-integrations/mparticle-apple-integration-comscore)            |  ✓ |  
 [Flurry](https://github.com/mparticle-integrations/mparticle-apple-integration-flurry)                |  ✓ |  
+[Google Analytics for Firebase](https://github.com/mparticle-integrations/mparticle-apple-integration-google-analytics-firebase) |  ✓ |  
 [Instabot](https://github.com/mparticle-integrations/mparticle-apple-integration-instabot)            |  ✓ |  
 [Iterable](https://github.com/mparticle-integrations/mparticle-apple-integration-iterable)            |  ✓ | ✓ 
 [Kahuna](https://github.com/mparticle-integrations/mparticle-apple-integration-kahuna)                |  ✓ |  
 [Kochava](https://github.com/mparticle-integrations/mparticle-apple-integration-kochava)              |  ✓ |  
 [Leanplum](https://github.com/mparticle-integrations/mparticle-apple-integration-leanplum)            |  ✓ | ✓
-[Localytics](https://github.com/mparticle-integrations/mparticle-apple-integration-localytics)        |  ✓ |  
+[Localytics](https://github.com/mparticle-integrations/mparticle-apple-integration-localytics)        |  ✓ | ✓
+[Optimizely](https://github.com/mparticle-integrations/mparticle-apple-integration-optimizely)        |  ✓ | ✓
+[OneTrust](https://github.com/mparticle-integrations/mparticle-apple-integration-onetrust)            |  ✓ | ✓
+[Pilgrim](https://github.com/mparticle-integrations/mparticle-apple-integration-pilgrim)              |  ✓ | ✓
 [Primer](https://github.com/mparticle-integrations/mparticle-apple-integration-primer)                |  ✓ | ✓
-[Radar](https://github.com/mparticle-integrations/mparticle-apple-integration-radar)                  |  ✓ | 
+[Radar](https://github.com/mparticle-integrations/mparticle-apple-integration-radar)                  |  ✓ | ✓
+[Responsys](https://github.com/mparticle-integrations/mparticle-apple-integration-responsys)          |    |
 [Reveal Mobile](https://github.com/mparticle-integrations/mparticle-apple-integration-revealmobile)   |  ✓ |  
 [Singular](https://github.com/mparticle-integrations/mparticle-apple-integration-singular)            |  ✓ |  
 [Skyhook](https://github.com/mparticle-integrations/mparticle-apple-integration-skyhook)              |  ✓ |  
+[Taplytics](https://github.com/mparticle-integrations/mparticle-apple-integration-taplytics)          |  ✓ |
 [Tune](https://github.com/mparticle-integrations/mparticle-apple-integration-tune)                    |  ✓ | ✓
 [Urban Airship](https://github.com/mparticle-integrations/mparticle-apple-integration-urbanairship)   |  ✓ |  
 [Wootric](https://github.com/mparticle-integrations/mparticle-apple-integration-wootric)              |  ✓ |  
@@ -232,8 +240,8 @@ Just by initializing the SDK you'll be set up to track user installs, engagement
 
 ## Support
 
-Questions? Have an issue? Consult the [Troubleshooting](https://github.com/mParticle/mparticle-apple-sdk/wiki/Troubleshooting) page or contact our **Customer Success** team at <support@mparticle.com>.
+Questions? Have an issue? Read the [docs](https://docs.mparticle.com/developers/sdk/ios/) or contact our **Customer Success** team at <support@mparticle.com>.
 
 ## License
 
-The mParticle-Apple-SDK is available under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0). See the LICENSE file for more info.
+Apache 2.0

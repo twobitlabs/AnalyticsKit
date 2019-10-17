@@ -14,7 +14,6 @@
 @interface MPAppNotificationHandler : NSObject
 
 #if TARGET_OS_IOS == 1
-@property (nonatomic, unsafe_unretained, readonly) MPUserNotificationRunningMode runningMode;
 
 - (void)didFailToRegisterForRemoteNotificationsWithError:(nullable NSError *)error;
 - (void)didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken;
@@ -24,7 +23,7 @@
 #pragma clang diagnostic pop
 - (void)handleActionWithIdentifier:(nullable NSString *)identifier forRemoteNotification:(nullable NSDictionary *)userInfo;
 - (void)handleActionWithIdentifier:(nullable NSString *)identifier forRemoteNotification:(nullable NSDictionary *)userInfo withResponseInfo:(nullable NSDictionary *)responseInfo;
-- (void)receivedUserNotification:(nonnull NSDictionary *)userInfo actionIdentifier:(nullable NSString *)actionIdentifier userNotificationMode:(MPUserNotificationMode)userNotificationMode;
+- (void)didReceiveRemoteNotification:(NSDictionary *_Nonnull)userInfo;
 - (void)didUpdateUserActivity:(nonnull NSUserActivity *)userActivity;
 #endif
 
@@ -33,8 +32,7 @@
 - (void)userNotificationCenter:(nonnull UNUserNotificationCenter *)center didReceiveNotificationResponse:(nonnull UNNotificationResponse *)response NS_AVAILABLE_IOS(10.0);
 #endif
 
-+ (nonnull instancetype)sharedInstance;
-- (BOOL)continueUserActivity:(nonnull NSUserActivity *)userActivity restorationHandler:(void(^ _Nonnull)(NSArray * _Nullable restorableObjects))restorationHandler;
+- (BOOL)continueUserActivity:(nonnull NSUserActivity *)userActivity restorationHandler:(void(^ _Nonnull)(NSArray<id<UIUserActivityRestoring>> * __nullable restorableObjects))restorationHandler;
 - (void)openURL:(nonnull NSURL *)url options:(nullable NSDictionary<NSString *, id> *)options;
 - (void)openURL:(nonnull NSURL *)url sourceApplication:(nullable NSString *)sourceApplication annotation:(nullable id)annotation;
 

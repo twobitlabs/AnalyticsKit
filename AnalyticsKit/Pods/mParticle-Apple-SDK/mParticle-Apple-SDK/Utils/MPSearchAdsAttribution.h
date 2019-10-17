@@ -2,7 +2,6 @@
 
 @interface MPSearchAdsAttribution : NSObject
 
-- (void)requestAttributionDetailsWithBlock:(void (^ _Nonnull)(void))completionHandler;
-- (nullable NSDictionary *)dictionaryRepresentation;
+- (void)requestAttributionDetailsWithBlock:(void (^ _Nonnull)(void))completionHandler requestsCompleted:(int)requestsCompleted;
 
 @end

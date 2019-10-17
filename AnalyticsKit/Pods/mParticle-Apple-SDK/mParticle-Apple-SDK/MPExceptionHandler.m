@@ -18,6 +18,9 @@
 #import "MPPersistenceController.h"
 #import "MPILogger.h"
 #import "MPMessageBuilder.h"
+#import "MPApplication.h"
+#import "mParticle.h"
+#import "MPArchivist.h"
 
 #if defined(MP_CRASH_REPORTER) && TARGET_OS_IOS == 1
     #import <mParticle-CrashReporter/CrashReporter.h>
@@ -30,7 +33,6 @@ NSString *const kMPAppImageSizeKey = @"is";
 static BOOL handlingExceptions;
 
 void SignalHandler(int signal);
-//void BeginUncaughtExceptionLogging();
 void EndUncaughtExceptionLogging(void);
 void handleException(NSException *exception);
 static bool debuggerRunning(void);
@@ -63,6 +65,12 @@ static BinaryImage *nextImageList(BinaryImageList *list, BinaryImage *current);
 static void addImageListCallback(const struct mach_header *mh, intptr_t vmaddr_slide);
 static void processBinaryImage(const char *name, const void *header, struct uuid_command *out_uuid, uintptr_t *out_baseaddr, uintptr_t *out_cmdsize);
 
+@interface MParticle ()
+
+@property (nonatomic, strong, readonly) MPPersistenceController *persistenceController;
+@property (nonatomic, strong, readonly) MPStateMachine *stateMachine;
+
+@end
 
 @implementation MPExceptionHandler
 
@@ -112,7 +120,7 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
 #pragma mark Private methods
 - (MPSession *)crashSession {
     MPSession *crashSession = nil;
-    NSArray<MPSession *> *sessions = [[MPPersistenceController sharedInstance] fetchPossibleSessionsFromCrash];
+    NSArray<MPSession *> *sessions = [[MParticle sharedInstance].persistenceController fetchPossibleSessionsFromCrash];
     
     for (MPSession *session in sessions) {
         if (![session isEqual:_session]) {
@@ -138,7 +146,7 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
     }
     
     MPMessageBuilder *messageBuilder = [MPMessageBuilder newBuilderWithMessageType:MPMessageTypeCrashReport session:self.session messageInfo:exceptionInfo];
-    MPMessage *message = (MPMessage *)[messageBuilder build];
+    MPMessage *message = [messageBuilder build];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *crashLogsDirectoryPath = CRASH_LOGS_DIRECTORY_PATH;
@@ -147,9 +155,10 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
     }
     
     NSString *crashLogPath = [crashLogsDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@-%.0f.log", message.uuid, message.timestamp]];
-    BOOL crashLogArchived = [NSKeyedArchiver archiveRootObject:message toFile:crashLogPath];
-    if (!crashLogArchived) {
-        NSLog(@"mParticle -> Crash log not archived.");
+    NSError *error = nil;
+    BOOL success = [MPArchivist archiveDataWithRootObject:message toFile:crashLogPath error:&error];
+    if (!success) {
+        NSLog(@"mParticle -> Crash log not archived. error=%@", error);
     }
 }
 
@@ -166,12 +175,12 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
 }
 
 - (NSString *)topmostContext {
-#if !defined(MPARTICLE_APP_EXTENSIONS)
-    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    id topmostContext = [self topViewControllerForController:rootViewController];
-    NSString *topmostContextName = [[topmostContext class] description];
-    return topmostContextName;
-#endif
+    if (![MPStateMachine isAppExtension]) {
+        UIViewController *rootViewController = [MPApplication sharedUIApplication].keyWindow.rootViewController;
+        id topmostContext = [self topViewControllerForController:rootViewController];
+        NSString *topmostContextName = [[topmostContext class] description];
+        return topmostContextName;
+    }
     return @"extension_context";
 }
 
@@ -220,11 +229,11 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
             id value = nil;
             switch (idx) {
                 case CrashArchiveTypeCurrentState:
-                    value = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+                    value = [MPArchivist unarchiveObjectOfClass:[NSObject class] withFile:filePath error:nil];
                     break;
 
                 case CrashArchiveTypeException: {
-                    NSException *exception = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+                    NSException *exception = [MPArchivist unarchiveObjectOfClass:[NSException class] withFile:filePath error:nil];
                     
                     crashInfo[kMPErrorMessage] = [exception reason];
                     crashInfo[kMPCrashingClass] = [exception name];
@@ -232,7 +241,8 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
                     break;
                     
                 case CrashArchiveTypeAppImageInfo:
-                    unarchivedDictionary = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+                    unarchivedDictionary = [MPArchivist unarchiveObjectOfClass:[NSDictionary class] withFile:filePath error:nil];
+                    
                     key = kMPAppImageBaseAddressKey;
                     value = unarchivedDictionary[key];
                     crashInfo[key] = value;
@@ -242,7 +252,7 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
                     break;
                     
                 default:
-                    unarchivedDictionary = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+                    unarchivedDictionary = [MPArchivist unarchiveObjectOfClass:[NSDictionary class] withFile:filePath error:nil];
                     value = unarchivedDictionary[key];
                     break;
             }
@@ -274,13 +284,6 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
 #endif
     
     if (crashData) {
-#if defined(MP_CRASH_REPORTER) && TARGET_OS_IOS == 1
-//--- Do Not Uncomment, for debugging purposes only.
-//        PLCrashReport *report = [[PLCrashReport alloc] initWithData:crashData error:&error];
-//        NSString *reportString = [PLCrashReportTextFormatter stringValueForCrashReport:report withTextFormat:PLCrashReportTextFormatiOS];
-//        NSLog(@"\nCrash report: %@", reportString);
-//---
-#endif
         NSString *base64CrashString = [crashData base64EncodedStringWithOptions:0];
         
         NSMutableDictionary *messageInfo = [@{kMPCrashingSeverity:@"fatal",
@@ -293,7 +296,7 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
         
         MPSession *crashSession = [self crashSession];
         
-        MPPersistenceController *persistence = [MPPersistenceController sharedInstance];
+        MPPersistenceController *persistence = [MParticle sharedInstance].persistenceController;
         NSArray<MPBreadcrumb *> *fetchedbreadcrumbs = [persistence fetchBreadcrumbs];
         
         if (fetchedbreadcrumbs) {
@@ -307,7 +310,7 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
         }
         
         MPMessageBuilder *messageBuilder = [MPMessageBuilder newBuilderWithMessageType:MPMessageTypeCrashReport session:crashSession messageInfo:messageInfo];
-        MPMessage *message = (MPMessage *)[messageBuilder build];
+        MPMessage *message = [messageBuilder build];
         [persistence saveMessage:message];
 #if defined(MP_CRASH_REPORTER) && TARGET_OS_IOS == 1
     } else {
@@ -362,14 +365,15 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
     
     NSTimeInterval timestamp = trunc([[NSDate date] timeIntervalSince1970]);
     NSString *filePath;
-    BOOL fileArchived;
+    BOOL success;
 
     // Current State
     filePath = [archivedMessagesDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"CurrentState-%.0f.cs", timestamp]];
     MPCurrentState *currentState = [[MPCurrentState alloc] init];
-    fileArchived = [NSKeyedArchiver archiveRootObject:[currentState dictionaryRepresentation] toFile:filePath];
-    if (!fileArchived) {
-        MPILogError(@"Application will crash, current state not archived.");
+    NSError *error = nil;
+    success = [MPArchivist archiveDataWithRootObject:[currentState dictionaryRepresentation] toFile:filePath error:&error];
+    if (!success) {
+        MPILogError(@"Application will crash, current state not archived. error=%@", error);
     }
     
     // Topmost Context
@@ -378,9 +382,10 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
     if (topmostContextName) {
         archiveDictionary = @{kMPTopmostContext:topmostContextName};
         filePath = [archivedMessagesDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"TopmostContext-%.0f.tc", timestamp]];
-        fileArchived = [NSKeyedArchiver archiveRootObject:archiveDictionary toFile:filePath];
-        if (!fileArchived) {
-            MPILogError(@"Application will crash, topmost context not archived.");
+        NSError *error = nil;
+        success = [MPArchivist archiveDataWithRootObject:archiveDictionary toFile:filePath error:&error];
+        if (!success) {
+            MPILogError(@"Application will crash, topmost context not archived. error=%@", error);
         }
     }
     
@@ -389,9 +394,10 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
     NSException *exception = userInfo[kMPCrashExceptionKey];
     if (exception) {
         filePath = [archivedMessagesDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"Exception-%.0f.ex", timestamp]];
-        fileArchived = [NSKeyedArchiver archiveRootObject:exception toFile:filePath];
-        if (!fileArchived) {
-            MPILogError(@"Application will crash, exception not archived.");
+        NSError *error = nil;
+        success = [MPArchivist archiveDataWithRootObject:exception toFile:filePath error:&error];
+        if (!success) {
+            MPILogError(@"Application will crash, topmost context not archived. error=%@", error);
         }
     }
 
@@ -400,9 +406,10 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
     if (callStack) {
         archiveDictionary = @{kMPStackTrace:[callStack componentsJoinedByString:@"\n"]};
         filePath = [archivedMessagesDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"StackTrace-%.0f.st", timestamp]];
-        fileArchived = [NSKeyedArchiver archiveRootObject:archiveDictionary toFile:filePath];
-        if (!fileArchived) {
-            MPILogError(@"Application will crash, stack trace not archived.");
+        NSError *error = nil;
+        success = [MPArchivist archiveDataWithRootObject:archiveDictionary toFile:filePath error:&error];
+        if (!success) {
+            MPILogError(@"Application will crash, stack trace not archived. error=%@", error);
         }
     }
     
@@ -410,15 +417,16 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
     archiveDictionary = [MPExceptionHandler appImageInfo];
     if (archiveDictionary) {
         filePath = [archivedMessagesDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"AppImageInfo-%.0f.aii", timestamp]];
-        fileArchived = [NSKeyedArchiver archiveRootObject:archiveDictionary toFile:filePath];
-        if (!fileArchived) {
-            MPILogError(@"Application will crash, app image info not archived.");
+        NSError *error = nil;
+        success = [MPArchivist archiveDataWithRootObject:archiveDictionary toFile:filePath error:&error];
+        if (!success) {
+            MPILogError(@"Application will crash, app image info not archived. error=%@", error);
         }
     }
 }
 
 - (void)handleConfigureExceptionHandling:(NSNotification *)notification {
-    MPStateMachine *stateMachine = [MPStateMachine sharedInstance];
+    MPStateMachine *stateMachine = [MParticle sharedInstance].stateMachine;
     
     if ([stateMachine.exceptionHandlingMode isEqualToString:kMPRemoteConfigExceptionHandlingModeIgnore] && handlingExceptions) {
         [self endUncaughtExceptionLogging];
@@ -481,12 +489,6 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
     
 #if defined(MP_CRASH_REPORTER) && TARGET_OS_IOS == 1
     liveExceptionReport = [[MPExceptionHandler crashReporter] generateLiveReportAndReturnError:&error];
-    
-//--- Do Not Uncomment. For debugging purposes only
-//    PLCrashReport *report = [[PLCrashReport alloc] initWithData:liveExceptionReport error:&error];
-//    NSString *reportString = [PLCrashReportTextFormatter stringValueForCrashReport:report withTextFormat:PLCrashReportTextFormatiOS];
-//    NSLog(@"\nLive exception report: %@", reportString);
-//---
 #endif
     
     if (error) {
@@ -498,7 +500,7 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
 
 #pragma mark Public methods
 - (void)beginUncaughtExceptionLogging {
-    if (handlingExceptions || [[MPStateMachine sharedInstance].exceptionHandlingMode isEqualToString:kMPRemoteConfigExceptionHandlingModeIgnore]) {
+    if (handlingExceptions || [[MParticle sharedInstance].stateMachine.exceptionHandlingMode isEqualToString:kMPRemoteConfigExceptionHandlingModeIgnore]) {
         return;
     }
     
@@ -521,7 +523,7 @@ static void processBinaryImage(const char *name, const void *header, struct uuid
 }
 
 - (void)endUncaughtExceptionLogging {
-    if ([[MPStateMachine sharedInstance].exceptionHandlingMode isEqualToString:kMPRemoteConfigExceptionHandlingModeForce]) {
+    if ([[MParticle sharedInstance].stateMachine.exceptionHandlingMode isEqualToString:kMPRemoteConfigExceptionHandlingModeForce]) {
         return;
     }
     
@@ -542,20 +544,10 @@ void SignalHandler(int signal) {
 	NSString *callStack = [MPExceptionHandler callStack];
 	NSDictionary *userInfo = @{kMPCrashSignal:@(signal), kMPStackTrace:callStack};
 	
-    MPExceptionHandler *exceptionHandler = [[MPExceptionHandler alloc] initWithSession:[MPStateMachine sharedInstance].currentSession];
+    MPExceptionHandler *exceptionHandler = [[MPExceptionHandler alloc] initWithSession:[MParticle sharedInstance].stateMachine.currentSession];
     NSException *exceptionToLog = [NSException exceptionWithName:@"UncaughtExceptionSignal" reason:[NSString stringWithFormat:@"Signal %d raised.", signal] userInfo:userInfo];
     [exceptionHandler logException:exceptionToLog];
 }
-
-//void BeginUncaughtExceptionLogging() {
-//	NSSetUncaughtExceptionHandler(&handleException);
-//	signal(SIGABRT, SignalHandler);
-//	signal(SIGILL, SignalHandler);
-//	signal(SIGSEGV, SignalHandler);
-//	signal(SIGFPE, SignalHandler);
-//	signal(SIGBUS, SignalHandler);
-//	signal(SIGPIPE, SignalHandler);
-//}
 
 void EndUncaughtExceptionLogging() {
 	NSSetUncaughtExceptionHandler(nil);
@@ -576,7 +568,7 @@ void handleException(NSException *exception) {
     NSArray *callStack = [exception callStackSymbols];
     userInfo[kMPStackTrace] = [callStack componentsJoinedByString:@"\n"];
     
-    MPExceptionHandler *exceptionHandler = [[MPExceptionHandler alloc] initWithSession:[MPStateMachine sharedInstance].currentSession];
+    MPExceptionHandler *exceptionHandler = [[MPExceptionHandler alloc] initWithSession:[MParticle sharedInstance].stateMachine.currentSession];
     NSException *exceptionToLog = [NSException exceptionWithName:exception.name reason:exception.reason userInfo:userInfo];
     [exceptionHandler logException:exceptionToLog];
 }

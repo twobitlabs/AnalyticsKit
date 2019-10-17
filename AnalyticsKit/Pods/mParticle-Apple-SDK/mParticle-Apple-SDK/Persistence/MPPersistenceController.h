@@ -16,28 +16,22 @@
     @class MParticleUserNotification;
 #endif
 
-typedef NS_ENUM(NSUInteger, MPPersistenceOperation) {
-    MPPersistenceOperationDelete = 0,
-    MPPersistenceOperationFlag
-};
-
 @interface MPPersistenceController : NSObject
 
 @property (nonatomic, readonly, getter = isDatabaseOpen) BOOL databaseOpen;
 
-+ (nonnull instancetype)sharedInstance;
 + (nullable NSNumber *)mpId;
 + (void)setMpid:(nonnull NSNumber *)mpId;
 + (nullable MPConsentState *)consentStateForMpid:(nonnull NSNumber *)mpid;
 + (void)setConsentState:(nullable MPConsentState *)state forMpid:(nonnull NSNumber *)mpid;
 - (nullable MPSession *)archiveSession:(nonnull MPSession *)session;
 - (BOOL)closeDatabase;
+- (void)resetDatabase;
 - (void)deleteConsumerInfo;
 - (void)deleteCookie:(nonnull MPCookie *)cookie;
 - (void)deleteForwardRecordsIds:(nonnull NSArray<NSNumber *> *)forwardRecordsIds;
 - (void)deleteAllIntegrationAttributes;
-- (void)deleteIntegrationAttributes:(nonnull MPIntegrationAttributes *)integrationAttributes;
-- (void)deleteIntegrationAttributesForKitCode:(nonnull NSNumber *)kitCode;
+- (void)deleteIntegrationAttributesForIntegrationId:(nonnull NSNumber *)integrationId;
 - (void)deleteMessages:(nonnull NSArray<MPMessage *> *)messages;
 - (void)deleteNetworkPerformanceMessages;
 - (void)deletePreviousSession;
@@ -52,6 +46,7 @@ typedef NS_ENUM(NSUInteger, MPPersistenceOperation) {
 - (nullable NSArray<MPCookie *> *)fetchCookiesForUserId:(NSNumber * _Nonnull)userId;
 - (nullable NSArray<MPForwardRecord *> *)fetchForwardRecords;
 - (nullable NSArray<MPIntegrationAttributes *> *)fetchIntegrationAttributes;
+- (nullable NSDictionary*)fetchIntegrationAttributesForId:(NSNumber * _Nonnull)integrationId;
 - (nullable NSMutableDictionary *)fetchMessagesForUploading;
 - (nullable NSArray<MPSession *> *)fetchPossibleSessionsFromCrash;
 - (nullable MPSession *)fetchPreviousSession;
@@ -64,14 +59,14 @@ typedef NS_ENUM(NSUInteger, MPPersistenceOperation) {
 - (void)moveContentFromMpidZeroToMpid:(nonnull NSNumber *)mpid;
 - (void)purgeMemory;
 - (BOOL)openDatabase;
-- (void)saveBreadcrumb:(nonnull MPMessage *)message session:(nonnull MPSession *)session;
+- (void)saveBreadcrumb:(nonnull MPMessage *)message;
 - (void)saveConsumerInfo:(nonnull MPConsumerInfo *)consumerInfo;
 - (void)saveForwardRecord:(nonnull MPForwardRecord *)forwardRecord;
 - (void)saveIntegrationAttributes:(nonnull MPIntegrationAttributes *)integrationAttributes;
 - (void)saveMessage:(nonnull MPMessage *)message;
 - (void)saveSegment:(nonnull MPSegment *)segment;
 - (void)saveSession:(nonnull MPSession *)session;
-- (void)saveUpload:(nonnull MPUpload *)upload messageIds:(nonnull NSArray<NSNumber *> *)messageIds operation:(MPPersistenceOperation)operation;
+- (void)saveUpload:(nonnull MPUpload *)upload;
 - (void)updateConsumerInfo:(nonnull MPConsumerInfo *)consumerInfo;
 - (void)updateSession:(nonnull MPSession *)session;
 

@@ -6,6 +6,11 @@
 #import "MPDevice.h"
 #import "MPNotificationController.h"
 #import "MPIConstants.h"
+#import "MPStateMachine.h"
+
+@interface MPIdentityApiRequest ()
+@property (nonatomic) NSMutableDictionary *mutableUserIdentities;
+@end
 
 @implementation MPIdentityApiRequest
 
@@ -13,18 +18,18 @@
 {
     self = [super init];
     if (self) {
-        _userIdentities = [NSMutableDictionary dictionary];
+        _mutableUserIdentities = [NSMutableDictionary dictionary];
     }
     return self;
 }
 
 - (void)setUserIdentity:(NSString *)identityString identityType:(MPUserIdentity)identityType {
-    if (!identityString || [identityString length] > 0) {
-        if (!identityString) {
-            identityString = (NSString *)[NSNull null];
-        }
-        
-        [_userIdentities setObject:identityString forKey:@(identityType)];
+    if (MPIsNull(identityString)) {
+        [_mutableUserIdentities setObject:(NSString *)[NSNull null]
+                            forKey:@(identityType)];
+    } else if ([identityString length] > 0) {
+        [_mutableUserIdentities setObject:identityString
+                            forKey:@(identityType)];
     }
 }
 
@@ -45,7 +50,7 @@
 - (NSDictionary<NSString *, id> *)dictionaryRepresentation {
     NSMutableDictionary *knownIdentities = [NSMutableDictionary dictionary];
     
-    [_userIdentities enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+    [_mutableUserIdentities enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         
         MPUserIdentity identityType = [key intValue];
         switch (identityType) {
@@ -114,19 +119,19 @@
     }
     
 #if TARGET_OS_IOS == 1
-#if !defined(MPARTICLE_APP_EXTENSIONS)
-    NSString *deviceToken = [[NSString alloc] initWithData:[MPNotificationController deviceToken] encoding:NSUTF8StringEncoding];
-    if (deviceToken && [deviceToken length] > 0) {
-        knownIdentities[@"push_token"] = deviceToken;
+    if (![MPStateMachine isAppExtension]) {
+        NSString *deviceToken = [[NSString alloc] initWithData:[MPNotificationController deviceToken] encoding:NSUTF8StringEncoding];
+        if (deviceToken && [deviceToken length] > 0) {
+            knownIdentities[@"push_token"] = deviceToken;
+        }
     }
-#endif
 #endif
     
     return knownIdentities;
 }
 
 - (NSString *)email {
-    return _userIdentities[@(MPUserIdentityEmail)];
+    return _mutableUserIdentities[@(MPUserIdentityEmail)];
 }
 
 - (void)setEmail:(NSString *)email {
@@ -134,11 +139,15 @@
 }
 
 - (NSString *)customerId {
-    return _userIdentities[@(MPUserIdentityCustomerId)];
+    return _mutableUserIdentities[@(MPUserIdentityCustomerId)];
 }
 
 - (void)setCustomerId:(NSString *)customerId {
     [self setUserIdentity:customerId identityType:MPUserIdentityCustomerId];
+}
+
+- (NSDictionary *)userIdentities {
+    return [_mutableUserIdentities copy];
 }
 
 @end

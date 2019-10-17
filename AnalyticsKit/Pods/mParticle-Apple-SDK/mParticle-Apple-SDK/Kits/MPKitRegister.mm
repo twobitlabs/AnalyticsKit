@@ -1,7 +1,7 @@
 #import "MPKitRegister.h"
-#import "MPStateMachine.h"
 #import "MPIConstants.h"
 #import "MPILogger.h"
+#import "MParticle.h"
 
 @implementation MPKitRegister
 

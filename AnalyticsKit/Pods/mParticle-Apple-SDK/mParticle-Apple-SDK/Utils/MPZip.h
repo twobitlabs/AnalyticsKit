@@ -1,18 +1,11 @@
-#ifndef __mParticle__Zip__
-#define __mParticle__Zip__
+#import <Foundation/Foundation.h>
 
-#include <stdio.h>
-#include <tuple>
-#include <memory>
+NS_ASSUME_NONNULL_BEGIN
 
-using namespace std;
+@interface MPZip : NSObject
 
-namespace mParticle {
-    class Zip final {
-    public:
-        static tuple<unsigned char *, unsigned int> compress(const unsigned char *data, unsigned int length);
-        static tuple<unsigned char *, unsigned int> expand(const unsigned char *data, unsigned int length);
-    };
-}
++ (nullable NSData *)compressedDataFromData:(NSData *)data;
 
-#endif
+@end
+
+NS_ASSUME_NONNULL_END

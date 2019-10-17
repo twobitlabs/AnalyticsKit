@@ -8,12 +8,12 @@ typedef NS_ENUM(NSUInteger, MPProjectionBehaviorSelector) {
     MPProjectionBehaviorSelectorLast
 };
 
-@interface MPProjectionMatch : NSObject <NSCopying, NSCoding>
+@interface MPProjectionMatch : NSObject <NSCopying, NSSecureCoding>
 @property (nonatomic, strong, nullable) NSString *attributeKey;
 @property (nonatomic, strong, nullable) NSArray<NSString *> *attributeValues;
 @end
 
-@interface MPEventProjection : MPBaseProjection <NSCopying, NSCoding>
+@interface MPEventProjection : MPBaseProjection <NSCopying, NSSecureCoding>
 
 @property (nonatomic, strong, nullable) NSArray<MPProjectionMatch *> *projectionMatches;
 @property (nonatomic, strong, nullable) NSArray<MPAttributeProjection *> *attributeProjections;

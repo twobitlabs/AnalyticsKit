@@ -6,6 +6,8 @@
 #import "MPIConstants.h"
 #import "mParticle.h"
 #import "MPILogger.h"
+#import "MPArchivist.h"
+#import "MPListenerController.h"
 
 @interface MPCart()
 
@@ -78,9 +80,8 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:self.cartFile]) {
         MPCart *cart = nil;
-        @try {
-            cart = (MPCart *)[NSKeyedUnarchiver unarchiveObjectWithFile:oldCartFile];
-        } @catch(NSException *ex) { }
+        
+        cart = [MPArchivist unarchiveObjectOfClass:[MPCart class] withFile:oldCartFile error:nil];
         
         if (!cart) {
             MPILogError(@"Unable to migrate cart.");
@@ -100,8 +101,10 @@
     }
     
     if (self.productsList.count > 0) {
-        if (![NSKeyedArchiver archiveRootObject:self toFile:self.cartFile]) {
-            MPILogError(@"Cart was not persisted.");
+        NSError *error = nil;
+        BOOL success = [MPArchivist archiveDataWithRootObject:self toFile:self.cartFile error:&error];
+        if (!success) {
+            MPILogError(@"Cart was not persisted. error=%@", error);
         }
     }
 }
@@ -121,11 +124,14 @@
         return nil;
     }
     
-    MPCart *cart = (MPCart *)[NSKeyedUnarchiver unarchiveObjectWithFile:_cartFile];
+    MPCart *cart;
+    NSError *error = nil;
+    cart = [MPArchivist unarchiveObjectOfClass:[MPCart class] withFile:_cartFile error:&error];
+    
     return cart;
 }
 
-#pragma mark NSCoding
+#pragma mark NSSecureCoding
 - (void)encodeWithCoder:(NSCoder *)coder {
     if (_productsList) {
         [coder encodeObject:_productsList forKey:@"productsList"];
@@ -135,7 +141,7 @@
 - (id)initWithCoder:(NSCoder *)coder {
     self = [[MPCart alloc] init];
     if (self) {
-        NSArray *productList = [coder decodeObjectForKey:@"productsList"];
+        NSArray *productList = [coder decodeObjectOfClass:[NSArray<MPProduct *> class] forKey:@"productsList"];
         if (productList) {
             _productsList = [[NSMutableArray alloc] initWithArray:productList];
         }
@@ -144,8 +150,14 @@
     return self;
 }
 
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 #pragma mark MPCart+Dictionary
 - (void)addProducts:(NSArray<MPProduct *> *)products logEvent:(BOOL)logEvent updateProductList:(BOOL)updateProductList {
+    [MPListenerController.sharedInstance onAPICalled:_cmd parameter1:products parameter2:@(logEvent) parameter3:@(updateProductList)];
+    
     if (logEvent) {
         for (MPProduct *product in products) {
             [product setTimeAddedToCart:[NSDate date]];
@@ -155,7 +167,9 @@
         [commerceEvent addProducts:products];
         
         [[MParticle sharedInstance] logCommerceEvent:commerceEvent];
-    } else if (updateProductList) {
+    }
+    
+    if (updateProductList) {
         [self.productsList addObjectsFromArray:products];
         [self persistCart];
     }
@@ -185,22 +199,30 @@
 }
 
 - (void)removeProducts:(NSArray<MPProduct *> *)products logEvent:(BOOL)logEvent updateProductList:(BOOL)updateProductList {
+    [MPListenerController.sharedInstance onAPICalled:_cmd parameter1:products parameter2:@(logEvent) parameter3:@(updateProductList)];
+    
     if (logEvent) {
         MPCommerceEvent *commerceEvent = [[MPCommerceEvent alloc] initWithAction:MPCommerceEventActionRemoveFromCart];
         [commerceEvent removeProducts:products];
         [[MParticle sharedInstance] logCommerceEvent:commerceEvent];
-    } else if (updateProductList) {
+    }
+    
+    if (updateProductList) {
         [self.productsList removeObjectsInArray:products];
         [self persistCart];
     }
 }
 
 - (BOOL)validateProduct:(MPProduct *)product {
+    [MPListenerController.sharedInstance onAPICalled:_cmd parameter1:product];
+    
     BOOL valid = !MPIsNull(product) && [product isKindOfClass:[MPProduct class]];
     return valid;
 }
 
 - (BOOL)validateProducts:(NSArray<MPProduct *> *)products {
+    [MPListenerController.sharedInstance onAPICalled:_cmd parameter1:products];
+    
     __block BOOL allValidProducts = YES;
     [products enumerateObjectsUsingBlock:^(MPProduct * _Nonnull product, NSUInteger idx, BOOL * _Nonnull stop) {
         BOOL thisProductValid = [self validateProduct:product];
@@ -214,38 +236,46 @@
 
 #pragma mark Public methods
 - (void)addProduct:(MPProduct *)product {
+    [MPListenerController.sharedInstance onAPICalled:_cmd parameter1:product];
+
     BOOL validProduct = [self validateProduct:product];
     NSAssert(validProduct, @"The 'product' variable is not valid.");
     
     if (validProduct) {
-        [self addProducts:@[product] logEvent:YES updateProductList:NO];
+        [self addProducts:@[product] logEvent:YES updateProductList:YES];
     }
 }
 
 - (void)addAllProducts:(NSArray<MPProduct *> *)products shouldLogEvents:(BOOL)shouldLogEvents {
+    [MPListenerController.sharedInstance onAPICalled:_cmd parameter1:products];
+
     BOOL validProducts = [self validateProducts:products];
     NSAssert(validProducts, @"The 'products' array is not valid");
     
     if (validProducts) {
-        [self addProducts:products logEvent:shouldLogEvents updateProductList:NO];
+        [self addProducts:products logEvent:shouldLogEvents updateProductList:YES];
     }
 }
 
 - (void)clear {
+    [MPListenerController.sharedInstance onAPICalled:_cmd];
+
     _productsList = nil;
     [self removePersistedCart];
 }
 
 - (NSArray<MPProduct *> *)products {
-    return _productsList.count > 0 ? (NSArray *)_productsList : nil;
+    return self.productsList.count > 0 ? (NSArray *)_productsList : nil;
 }
 
 - (void)removeProduct:(MPProduct *)product {
+    [MPListenerController.sharedInstance onAPICalled:_cmd parameter1:product];
+
     BOOL validProduct = !MPIsNull(product) && [product isKindOfClass:[MPProduct class]];
     NSAssert(validProduct, @"The 'product' variable is not valid.");
 
     if (validProduct) {
-        [self removeProducts:@[product] logEvent:YES updateProductList:NO];
+        [self removeProducts:@[product] logEvent:YES updateProductList:YES];
     }
 }
 

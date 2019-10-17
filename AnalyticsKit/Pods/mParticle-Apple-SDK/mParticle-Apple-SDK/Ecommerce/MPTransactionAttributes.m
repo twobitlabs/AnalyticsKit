@@ -1,6 +1,8 @@
 #import "MPTransactionAttributes.h"
 #import "NSDictionary+MPCaseInsensitive.h"
 #import "NSNumber+MPFormatter.h"
+#import "MPILogger.h"
+#import "MParticle.h"
 
 // Internal keys
 NSString *const kMPTAAffiliation = @"ta";
@@ -78,7 +80,7 @@ NSString *const kMPExpTACouponCode = @"Coupon Code";
     return copyObject;
 }
 
-#pragma mark NSCoding
+#pragma mark NSSecureCoding
 - (void)encodeWithCoder:(NSCoder *)coder {
     if (_attributes) {
         [coder encodeObject:_attributes forKey:@"attributes"];
@@ -92,18 +94,34 @@ NSString *const kMPExpTACouponCode = @"Coupon Code";
 - (id)initWithCoder:(NSCoder *)coder {
     self = [self init];
     if (self) {
-        NSDictionary *dictionary = [coder decodeObjectForKey:@"attributes"];
-        if (dictionary.count > 0) {
-            self->_attributes = [[NSMutableDictionary alloc] initWithDictionary:dictionary];
+        NSDictionary *dictionary;
+        
+        @try {
+            dictionary = [coder decodeObjectOfClass:[NSDictionary class] forKey:@"attributes"];
         }
         
-        dictionary = [coder decodeObjectForKey:@"beautifiedAttributes"];
+        @catch ( NSException *e) {
+            dictionary = nil;
+            MPILogError(@"Exception decoding MPTransactionAttributes: %@", [e reason]);
+        }
+        
+        @finally {
+            if (dictionary.count > 0) {
+                self->_attributes = [[NSMutableDictionary alloc] initWithDictionary:dictionary];
+            }
+        }
+        
+        dictionary = [coder decodeObjectOfClass:[NSDictionary class] forKey:@"beautifiedAttributes"];
         if (dictionary) {
             self->_beautifiedAttributes = [[NSMutableDictionary alloc] initWithDictionary:dictionary];
         }
     }
     
     return self;
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
 }
 
 #pragma mark MPTransactionAttributes+Dictionary

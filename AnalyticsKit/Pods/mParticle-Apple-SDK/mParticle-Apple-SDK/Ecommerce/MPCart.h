@@ -12,7 +12,7 @@
  @see MPCommerce
  @see mParticle
  */
-@interface MPCart : NSObject <NSCoding>
+@interface MPCart : NSObject <NSSecureCoding>
 
 /**
  Adds a product to the shopping cart. 

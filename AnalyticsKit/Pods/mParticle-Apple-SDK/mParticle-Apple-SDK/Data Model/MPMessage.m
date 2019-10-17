@@ -1,6 +1,7 @@
 #import "MPMessage.h"
 #import "MPSession.h"
 #import "MPILogger.h"
+#import "MParticle.h"
 
 @interface MPMessage()
 
@@ -78,6 +79,35 @@
                                                           userId:_userId];
     
     return copyObject;
+}
+
+#pragma mark NSSecureCoding
+- (void)encodeWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.sessionId forKey:@"sessionId"];
+    [coder encodeInt64:self.messageId forKey:@"messageId"];
+    [coder encodeObject:self.uuid forKey:@"uuid"];
+    [coder encodeObject:self.messageType forKey:@"messageType"];
+    [coder encodeObject:self.messageData forKey:@"messageData"];
+    [coder encodeDouble:self.timestamp forKey:@"timestamp"];
+    [coder encodeInteger:self.uploadStatus forKey:@"uploadStatus"];
+    [coder encodeInt64:_userId.longLongValue forKey:@"mpid"];
+}
+
+- (id)initWithCoder:(NSCoder *)coder {
+    self = [self initWithSessionId:[coder decodeObjectOfClass:[NSNumber class] forKey:@"sessionId"]
+                         messageId:[coder decodeInt64ForKey:@"messageId"]
+                              UUID:[coder decodeObjectOfClass:[NSString class] forKey:@"uuid"]
+                       messageType:[coder decodeObjectOfClass:[NSString class] forKey:@"messageType"]
+                       messageData:[coder decodeObjectOfClass:[NSData class] forKey:@"messageData"]
+                         timestamp:[coder decodeDoubleForKey:@"timestamp"]
+                      uploadStatus:[coder decodeIntegerForKey:@"uploadStatus"]
+                            userId:@([coder decodeInt64ForKey:@"mpid"])];
+    
+    return self;
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
 }
 
 #pragma mark Public methods

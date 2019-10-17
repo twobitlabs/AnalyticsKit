@@ -4,6 +4,9 @@
 #import "MPEventProjection.h"
 #import "MPStateMachine.h"
 #include "MessageTypeName.h"
+#import "MPILogger.h"
+#import "MPConsentSerialization.h"
+#import "MParticle.h"
 
 @interface MPKitConfiguration()
 @property (nonatomic, strong) NSDictionary *configurationDictionary;
@@ -40,7 +43,7 @@
     }
     
     // Filters
-    [self setFilters:configurationDictionary[@"hs"]];
+    [self setFilters:configurationDictionary[kMPRemoteConfigKitHashesKey]];
     
     // Configuration
     _configuration = configurationDictionary[@"as"];
@@ -59,19 +62,32 @@
             configDictionary[@"eas"] = _singleItemEventAttributeList;
         }
         
+        for (NSString *key in configDictionary.allKeys) {
+            id value = configDictionary[key];
+            if ((NSNull *)value == [NSNull null]) {
+                [configDictionary removeObjectForKey:key];
+            }
+        }
+        
         _configuration = [configDictionary copy];
     }
     
     // Projections
     [self configureProjections:configurationDictionary[@"pr"]];
     
+    // Consent kit filter
+    if (configurationDictionary[kMPConsentKitFilter]) {
+        _consentKitFilter = [MPConsentSerialization filterFromDictionary:configurationDictionary[kMPConsentKitFilter]];
+    }
+    
     // Kit instance
     _bracketConfiguration = !MPIsNull(configurationDictionary[kMPRemoteConfigBracketKey]) ? configurationDictionary[kMPRemoteConfigBracketKey] : nil;
     
-    _kitCode = !MPIsNull(configurationDictionary[@"id"]) ? configurationDictionary[@"id"] : nil;
+    _integrationId = !MPIsNull(configurationDictionary[@"id"]) ? configurationDictionary[@"id"] : nil;
     
-    if (_kitCode != nil) {
+    if (_integrationId != nil) {
         _configurationDictionary = configurationDictionary;
+        _excludeAnonymousUsers = [configurationDictionary[kMPRemoteConfigExcludeAnonymousUsersKey] boolValue];
     } else {
         return nil;
     }
@@ -83,13 +99,26 @@
     return [_configurationHash isEqualToNumber:object.configurationHash];
 }
 
-#pragma mark NSCoding
+#pragma mark NSSecureCoding
 - (void)encodeWithCoder:(NSCoder *)coder {
     [coder encodeObject:self.configurationDictionary forKey:@"configurationDictionary"];
 }
 
 - (id)initWithCoder:(NSCoder *)coder {
-    NSDictionary *configurationDictionary = [coder decodeObjectForKey:@"configurationDictionary"];
+    NSDictionary *configurationDictionary;
+    
+    @try {
+        configurationDictionary = [coder decodeObjectOfClass:[NSDictionary class] forKey:@"configurationDictionary"];
+    }
+    
+    @catch ( NSException *e) {
+        configurationDictionary = nil;
+        MPILogError(@"Exception decoding MPKitConfiguration Attributes: %@", [e reason]);
+    }
+    
+    @finally {
+        self = [self initWithDictionary:configurationDictionary];
+    }
     
     self = [self initWithDictionary:configurationDictionary];
     if (!self) {
@@ -97,6 +126,10 @@
     }
     
     return self;
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
 }
 
 #pragma mark NSCopying
@@ -141,6 +174,8 @@
     _addEventAttributeList = _filters[@"eaa"];
     _removeEventAttributeList = _filters[@"ear"];
     _singleItemEventAttributeList = _filters[@"eas"];
+    _consentRegulationFilters = _filters[kMPConsentRegulationFilters];
+    _consentPurposeFilters = _filters[kMPConsentPurposeFilters];
 }
 
 #pragma mark Public methods

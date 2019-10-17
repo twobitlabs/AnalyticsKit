@@ -6,6 +6,21 @@
 @class MPTransactionAttributes;
 @class MPProduct;
 @class MPIdentityApiRequest;
+@class MPAliasRequest;
+
+typedef NS_ENUM(NSUInteger, MPJSCommerceEventAction) {
+    MPJSCommerceEventActionUnknown = 0,
+    MPJSCommerceEventActionAddToCart,
+    MPJSCommerceEventActionRemoveFromCart,
+    MPJSCommerceEventActionCheckout,
+    MPJSCommerceEventActionCheckoutOptions,
+    MPJSCommerceEventActionClick,
+    MPJSCommerceEventActionViewDetail,
+    MPJSCommerceEventActionPurchase,
+    MPJSCommerceEventActionRefund,
+    MPJSCommerceEventActionAddToWishList,
+    MPJSCommerceEventActionRemoveFromWishlist
+};
 
 @interface MPConvertJS : NSObject
 

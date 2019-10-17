@@ -67,7 +67,7 @@ public class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
             if MParticle.sharedInstance().event(withName: event) != nil {
                 endTimedEvent(event, withProperties: properties)
             } else if let mpEvent = MPEvent(name: event, type: extractEventTypeFromProperties(properties)) {
-                mpEvent.info = properties
+                mpEvent.customAttributes = properties
                 MParticle.sharedInstance().beginTimedEvent(mpEvent)
             }
         } else {
@@ -79,7 +79,7 @@ public class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
         if let event = MParticle.sharedInstance().event(withName: event) {
             if properties.count > 0 {
                 // Replace the parameters if parameters are passed
-                event.info = properties
+                event.customAttributes = properties
             }
             MParticle.sharedInstance().endTimedEvent(event)
         }

@@ -1,4 +1,5 @@
 #import "MPEnums.h"
+#import "MPCommerceEvent.h"
 #import "MPCommerceEventInstruction.h"
 
 typedef NS_ENUM(NSInteger, MPCommerceEventKind) {
@@ -22,11 +23,8 @@ typedef NS_ENUM(NSInteger, MPCommerceEventKind) {
 - (void)removeProducts:(NSArray<MPProduct *> *)products;
 - (NSArray<MPProduct *> *const)removedProducts;
 - (void)resetLatestProducts;
-- (MPEventType)type;
 - (NSMutableDictionary *)beautifiedAttributes;
 - (void)setBeautifiedAttributes:(NSMutableDictionary *)beautifiedAttributes;
-- (NSMutableDictionary *)userDefinedAttributes;
-- (void)setUserDefinedAttributes:(NSMutableDictionary *)userDefinedAttributes;
 - (void)setImpressions:(NSDictionary<NSString *, __kindof NSSet<MPProduct *> *> *)impressions;
 - (void)setProducts:(NSArray<MPProduct *> *)products;
 - (NSMutableDictionary<NSString *, __kindof NSSet<MPProduct *> *> *)copyImpressionsMatchingHashedProperties:(NSDictionary *)hashedMap;

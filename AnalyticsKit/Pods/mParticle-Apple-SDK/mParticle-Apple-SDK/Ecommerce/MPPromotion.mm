@@ -92,7 +92,7 @@ static NSArray *actionNames;
     return copyObject;
 }
 
-#pragma mark NSCoding
+#pragma mark NSSecureCoding
 - (void)encodeWithCoder:(NSCoder *)coder {
     if (_attributes) {
         [coder encodeObject:_attributes forKey:@"attributes"];
@@ -106,18 +106,22 @@ static NSArray *actionNames;
 - (id)initWithCoder:(NSCoder *)coder {
     self = [self init];
     if (self) {
-        NSDictionary<NSString *, NSString *> *dictionary = [coder decodeObjectForKey:@"attributes"];
+        NSDictionary<NSString *, NSString *> *dictionary = [coder decodeObjectOfClass:[NSDictionary class] forKey:@"attributes"];
         if (dictionary.count > 0) {
             self->_attributes = [[NSMutableDictionary alloc] initWithDictionary:dictionary];
         }
         
-        dictionary = [coder decodeObjectForKey:@"beautifiedAttributes"];
+        dictionary = [coder decodeObjectOfClass:[NSDictionary class] forKey:@"beautifiedAttributes"];
         if (dictionary) {
             self->_beautifiedAttributes = [[NSMutableDictionary alloc] initWithDictionary:dictionary];
         }
     }
     
     return self;
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
 }
 
 #pragma mark MPPromotion+Dictionary
@@ -267,7 +271,7 @@ static NSArray *actionNames;
     return copyObject;
 }
 
-#pragma mark NSCoding
+#pragma mark NSSecureCoding
 - (void)encodeWithCoder:(NSCoder *)coder {
     [coder encodeInteger:(NSUInteger)_action forKey:@"action"];
     
@@ -281,13 +285,17 @@ static NSArray *actionNames;
     if (self) {
         _action = (MPPromotionAction)[coder decodeIntegerForKey:@"action"];
         
-        NSArray *array = [coder decodeObjectForKey:@"promotionsArray"];
+        NSArray *array = [coder decodeObjectOfClass:[NSArray class] forKey:@"promotionsArray"];
         if (array) {
             _promotionsArray = [[NSMutableArray alloc] initWithArray:array];
         }
     }
     
     return self;
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
 }
 
 #pragma mark MPPromotionContainer+Dictionary

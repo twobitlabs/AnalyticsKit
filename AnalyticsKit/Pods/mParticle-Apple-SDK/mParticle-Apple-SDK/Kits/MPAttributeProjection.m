@@ -38,7 +38,7 @@
     return isEqual;
 }
 
-#pragma mark NSCoding
+#pragma mark NSSecureCoding
 - (void)encodeWithCoder:(NSCoder *)coder {
     [super encodeWithCoder:coder];
 
@@ -56,6 +56,10 @@
     _required = [coder decodeBoolForKey:@"required"];
     
     return self;
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
 }
 
 #pragma mark NSCopying

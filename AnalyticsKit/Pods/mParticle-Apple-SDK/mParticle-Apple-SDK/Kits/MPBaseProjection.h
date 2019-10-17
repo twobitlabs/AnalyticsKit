@@ -22,7 +22,7 @@ typedef NS_ENUM(NSUInteger, MPProjectionPropertyKind) {
     MPProjectionPropertyKindPromotionAttribute
 };
 
-@interface MPBaseProjection : NSObject <NSCopying, NSCoding> {
+@interface MPBaseProjection : NSObject <NSCopying, NSSecureCoding> {
     @protected
     NSDictionary *_configuration;
     NSString *_name;

@@ -22,45 +22,226 @@
 #import "MPKitAPI.h"
 #import "MPConsentState.h"
 #import "MPGDPRConsent.h"
+#import "MPListenerController.h"
 #import <UIKit/UIKit.h>
 
 #if TARGET_OS_IOS == 1
     #import <CoreLocation/CoreLocation.h>
+    #import <WebKit/WebKit.h>
 #endif
 
 #if TARGET_OS_IOS == 1 && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
     #import <UserNotifications/UserNotifications.h>
-    #import <UserNotifications/UNUserNotificationCenter.h>
 #endif
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ An SDK session.
+ 
+ Sessions are typically started and ended automatically by the SDK based on App lifecycle events.
+ 
+ Automatic session management can be disabled if desired and is always disabled in App Extensions.
+ 
+ @see currentSession
+ */
+@interface MParticleSession : NSObject
+
+/**
+ A hash of the session UUID.
+ */
+@property (nonatomic, readonly) NSNumber *sessionID;
+
+/**
+ The session UUID.
+ */
+@property (nonatomic, readonly) NSString *UUID;
+
+@end
+
+/**
+ Attribution information returned by a kit.
+ */
 @interface MPAttributionResult : NSObject
 
+/**
+ Free-form attribution info dictionary.
+ */
 @property (nonatomic) NSDictionary *linkInfo;
 @property (nonatomic, readonly) NSNumber *kitCode;
 @property (nonatomic, readonly) NSString *kitName;
 
 @end
 
+/**
+ Allows you to override the default HTTPS hosts and certificates used by the SDK.
+ */
+@interface MPNetworkOptions : NSObject
+
+@property (nonatomic) NSString *configHost;
+@property (nonatomic) NSString *eventsHost;
+@property (nonatomic) NSString *identityHost;
+@property (nonatomic) NSArray<NSData *> *certificates;
+
+@property (nonatomic) BOOL pinningDisabledInDevelopment;
+
+@end
+
+/**
+ Main configuration object for initial SDK setup.
+ */
 @interface MParticleOptions : NSObject
 
+/**
+ Creates an options object with your specified App key and Secret.
+ 
+ These values can be retrieved from your App's dashboard within the mParticle platform.
+ */
 + (MParticleOptions*)optionsWithKey:(NSString *)apiKey secret:(NSString *)secret;
+
+/*
+ App key. mParticle uses this to attribute incoming data to your app's acccount/workspace/platform.
+ */
 @property (nonatomic, strong, readwrite) NSString *apiKey;
+
+/*
+ App secret. An additional authentication token used to produce a signature header required by the server.
+ */
 @property (nonatomic, strong, readwrite) NSString *apiSecret;
+
+/*
+ If you have an App and App Extension, setting this value will share user defaults data between them.
+ */
 @property (nonatomic, strong, readwrite) NSString *sharedGroupID;
+
+
+/*
+ Allows you to specify a specific installation type, or specify that the SDK should detect automatically.
+ 
+ You can specify that this is a known-install, known-upgrade or known-same-version.
+ 
+ For the first release of your app with the SDK, all users will appear as new to the SDK since it has no persistence.
+ To avoid inflated install count, you will want to override this setting from autodetect and specifically
+ tell the SDK whether or not this is an install, based on your app's existing persistence mechanisms.
+ 
+ For future releases, the mParticle SDK will already be in the installed app, so you can change this value back to auto detect.
+ */
 @property (nonatomic, unsafe_unretained, readwrite) MPInstallationType installType;
+
+/*
+ This identity request object allows you to customize the information included in the initial Identify request sent by the SDK.
+ */
 @property (nonatomic, strong, readwrite) MPIdentityApiRequest *identifyRequest;
+
+/*
+ SDK Environment. Autodetected as development or production, you can also override.
+ */
 @property (nonatomic, unsafe_unretained, readwrite) MPEnvironment environment;
+
+/*
+ Whether the SDK should automatically collect UIApplicationDelegate information.
+ 
+ If set to NO, you will need to manually add some calls to the SDK within certain AppDelegate methods.
+ If set to YES (the default), the SDK will intercept app delegate messages before forwarding them to your app.
+ 
+ This mechanism is acheived using NSProxy and without introducing dangerous swizzling.
+ */
 @property (nonatomic, unsafe_unretained, readwrite) BOOL proxyAppDelegate;
+
+/*
+ Whether the SDK should automatically attempt to measure sessions. Ignored in App Extensions.
+ 
+ If set to YES, the SDK will start a timer when the app enters the background and will end the session if a
+ user leaves the app for a configurable number of seconds without bringing it back to foreground.
+ 
+ Note that the above behavior does not apply to apps with long-running background sessions.
+ */
 @property (nonatomic, unsafe_unretained, readwrite) BOOL automaticSessionTracking;
-@property (atomic, strong, nullable) NSString *customUserAgent;
-@property (atomic, unsafe_unretained, readwrite) BOOL collectUserAgent;
-@property (atomic, unsafe_unretained, readwrite) BOOL startKitsAsync;
-@property (atomic, unsafe_unretained, readwrite) MPILogLevel logLevel;
-@property (atomic, unsafe_unretained, readwrite) NSTimeInterval uploadInterval;
+
+/*
+ The browser user agent.
+ 
+ This is normally collected by the SDK automatically. If you are already incurring the cost of instantiating
+ a webview to collect this, and wish to avoid the performance cost of duplicate work, (or if you need to customize
+ the value) you can pass this into the SDK as a string.
+ */
+@property (nonatomic, strong, nullable) NSString *customUserAgent;
+
+/*
+ Whether browser user agent should be collected by the SDK. This value is ignored (always NO) if you specify a non-nil custom user agent.
+ */
+@property (nonatomic, unsafe_unretained, readwrite) BOOL collectUserAgent;
+
+/*
+ Whether the SDK should attempt to collect Apple Search Ads attribution information. Defaults to YES
+ */
+@property (nonatomic, unsafe_unretained, readwrite) BOOL collectSearchAdsAttribution;
+
+/**
+ Determines whether the mParticle Apple SDK will automatically track Remote and Local Notification events. Defaults to YES
+ */
+@property (nonatomic, unsafe_unretained, readwrite) BOOL trackNotifications;
+
+/*
+ This value is not currently read by the SDK and should not be used at this time.
+ */
+@property (nonatomic, unsafe_unretained, readwrite) BOOL startKitsAsync;
+
+/*
+ Log level. (Defaults to 'None'.)
+ 
+ This controls the verbosity of the SDK.
+ 
+ By default the SDK will produce no output. If you modify this for your development builds, please consider using
+ a preprocessor directive or similar mechanism to ensure your change is not accidentally applied in production.
+ */
+@property (nonatomic, unsafe_unretained, readwrite) MPILogLevel logLevel;
+
+/**
+ Upload interval.
+ 
+ Batches of data are sent periodically to the mParticle servers at the rate defined by this property. Batches are also uploaded
+ when the application is sent to the background.
+ */
+@property (nonatomic, unsafe_unretained, readwrite) NSTimeInterval uploadInterval;
+
+/**
+ Session timeout.
+ 
+ Sets the user session timeout interval. A session is ended if the app goes into the background for longer than the session timeout interval or when more than 1000 events are logged.
+ */
+@property (nonatomic, unsafe_unretained, readwrite) NSTimeInterval sessionTimeout;
+
+/**
+ Allows you to override the default HTTPS hosts and certificates used by the SDK, if required.
+ 
+ (Provided to accomodate certain advanced use cases. Most integrations of the SDK will not require modifying this property.)
+ */
+@property (nonatomic, strong, readwrite) MPNetworkOptions *networkOptions;
+
+/**
+ Consent state.
+ 
+ Allows you to record one or more consent purposes and whether or not the user agreed to each one.
+ */
+@property (nonatomic, strong, nullable) MPConsentState *consentState;
+
+/**
+ Identify callback.
+ 
+ This will be called when an identify request completes.
+ 
+ This applies to both the initial identify request triggered by the SDK and any identify requests you may send.
+ */
 @property (nonatomic, copy) void (^onIdentifyComplete)(MPIdentityApiResult *_Nullable apiResult, NSError *_Nullable error);
+
+/**
+ Attribution callback.
+ 
+ This will be called each time a kit returns attribution info.
+ */
 @property (nonatomic, copy) void (^onAttributionComplete)(MPAttributionResult *_Nullable attributionResult, NSError *_Nullable error);
+
 @end
 
 /**
@@ -98,21 +279,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) MPIdentityApi *identity;
 
 /**
- Forwards setting/resetting the debug mode for third party kits.
- This is a write only property.
- */
-@property (nonatomic, unsafe_unretained) BOOL debugMode;
-- (BOOL)debugMode UNAVAILABLE_ATTRIBUTE;
-
-/**
- Enables or disables log outputs to the console. If set to YES development logs will be output to the
+ If set to YES development logs will be output to the
  console, if set to NO the development logs will be suppressed. This property works in conjunction with
  the environment property. If the environment is Production, consoleLogging will always be NO,
  regardless of the value you assign to it.
  @see environment
  @see logLevel
  */
-@property (nonatomic, unsafe_unretained) BOOL consoleLogging;
+@property (nonatomic, unsafe_unretained, readonly) BOOL consoleLogging DEPRECATED_MSG_ATTRIBUTE("set logLevel on MParticleOptions instead");
 
 /**
  The environment property returns the running SDK environment: Development or Production.
@@ -129,8 +303,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Specifies the log level output to the console while the app is under development: none, error, warning, and debug.
- If consoleLogging is set to false, the log level will be set to none automatically. When the environment is
- Production, the log level will always be none, regardless of the value you assign to it.
+ When the environment is Production, the log level will always be none, regardless of the value you assign to it.
  @see environment
  */
 @property (nonatomic, unsafe_unretained) MPILogLevel logLevel;
@@ -156,17 +329,33 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, unsafe_unretained, readonly) BOOL automaticSessionTracking;
 
 /**
- Gets/Sets the user agent to a custom value.
+ The current session. You can access properties for Session ID and UUID.
  */
-@property (atomic, strong, nullable) NSString *customUserAgent;
+@property (atomic, strong, nullable, readonly) MParticleSession *currentSession;
 
 /**
- Determines whether the mParticle Apple SDK will instantiate a UIWebView in order to collect the browser user agent.
+ Gets/Sets the user agent to a custom value.
+ */
+@property (atomic, strong, nullable, readonly) NSString *customUserAgent;
+
+/**
+ Determines whether the mParticle Apple SDK will instantiate a webview in order to collect the browser user agent.
  This value is required by attribution providers for fingerprint identification, when device IDs are not available.
  If you disable this flag, consider populating the user agent via the customUserAgent property above if you are using
  an attribution provider (such as Kochava or Tune) via mParticle. Defaults to YES
  */
-@property (atomic, unsafe_unretained, readwrite) BOOL collectUserAgent;
+@property (atomic, unsafe_unretained, readonly) BOOL collectUserAgent;
+
+/*
+ Determines whether the SDK will attempt to collect Apple Search Ads attribution information. Defaults to YES
+ */
+@property (atomic, unsafe_unretained, readonly) BOOL collectSearchAdsAttribution;
+
+/**
+ Allows you to proxy SDK traffic by overriding the default network endpoints and certificates used by the SDK.
+ @see MParticleOptions
+ */
+@property (nonatomic, readonly) MPNetworkOptions *networkOptions;
  
  #if TARGET_OS_IOS == 1
  /**
@@ -176,10 +365,14 @@ NS_ASSUME_NONNULL_BEGIN
 #endif
 
 /**
- Gets/Sets the user session timeout interval. A session is ended if the app goes into the background for longer than the session timeout interval or
- when more than 1000 events are logged.
+ Determines whether the mParticle Apple SDK will automatically track Remote and Local Notification events. Defaults to YES
  */
-@property (nonatomic, unsafe_unretained, readwrite) NSTimeInterval sessionTimeout;
+@property (atomic, unsafe_unretained, readonly) BOOL trackNotifications;
+
+/**
+ Gets the user session timeout interval. A session is ended if the app goes into the background for longer than the session timeout interval or when more than 1000 events are logged.
+ */
+@property (nonatomic, unsafe_unretained, readonly) NSTimeInterval sessionTimeout;
 
 /**
  Unique identifier for this app running on this device. This unique identifier is synchronized with the mParticle servers.
@@ -193,7 +386,7 @@ NS_ASSUME_NONNULL_BEGIN
  Batches of data are sent periodically to the mParticle servers at the rate defined by the uploadInterval. Batches are also uploaded
  when the application is sent to the background or before they are terminated.
  */
-@property (nonatomic, unsafe_unretained, readwrite) NSTimeInterval uploadInterval;
+@property (nonatomic, unsafe_unretained, readonly) NSTimeInterval uploadInterval;
 
 
 
@@ -211,11 +404,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)sharedInstance;
 
 /**
- *
- */
-- (void)start;
-
-/**
  Starts the SDK with your API key and secret and installation type.
  It is required that you use either this method or `start` to authorize the SDK before
  using the other API methods. The apiKey and secret that are passed in to this method
@@ -226,16 +414,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Application notifications
 #if TARGET_OS_IOS == 1
-#if !defined(MPARTICLE_APP_EXTENSIONS)
-/**
- Informs the mParticle SDK a local notification has been received. This method should be called only if proxiedAppDelegate is disabled.
- @param notification A local notification received by the app
- @see proxiedAppDelegate
- */
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-- (void)didReceiveLocalNotification:(UILocalNotification *)notification;
-#pragma clang diagnostic pop
 
 /**
  Informs the mParticle SDK a remote notification has been received. This method should be called only if proxiedAppDelegate is disabled.
@@ -259,18 +437,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
 
 /**
- Informs the mParticle SDK the app has been activated because the user selected a custom action from the alert panel of a local notification.
- This method should be called only if proxiedAppDelegate is disabled.
- @param identifier The identifier associated with the custom action
- @param notification The local notification object that was triggered
- @see proxiedAppDelegate
- */
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-- (void)handleActionWithIdentifier:(nullable NSString *)identifier forLocalNotification:(nullable UILocalNotification *)notification;
-#pragma clang diagnostic pop
-
-/**
  Informs the mParticle SDK the app has been activated because the user selected a custom action from the alert panel of a remote notification.
  This method should be called only if proxiedAppDelegate is disabled.
  @param identifier The identifier associated with the custom action
@@ -278,7 +444,17 @@ NS_ASSUME_NONNULL_BEGIN
  @see proxiedAppDelegate
  */
 - (void)handleActionWithIdentifier:(nullable NSString *)identifier forRemoteNotification:(nullable NSDictionary *)userInfo;
-#endif
+
+/**
+ Informs the mParticle SDK the app has been activated because the user selected a custom action from the alert panel of a remote notification.
+ This method should be called only if proxiedAppDelegate is disabled.
+ @param identifier The identifier associated with the custom action
+ @param userInfo A dictionary that contains information related to the remote notification
+ @param responseInfo The data dictionary sent by the action
+ @see proxiedAppDelegate
+ */
+- (void)handleActionWithIdentifier:(nullable NSString *)identifier forRemoteNotification:(nullable NSDictionary *)userInfo withResponseInfo:(nonnull NSDictionary *)responseInfo;
+
 #endif
 
 /**
@@ -298,7 +474,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param options The dictionary of launch options
  @see proxiedAppDelegate
  */
-- (void)openURL:(NSURL *)url options:(nullable NSDictionary<NSString *, id> *)options;
+- (void)openURL:(NSURL *)url options:(nullable NSDictionary *)options;
 
 /**
  Informs the mParticle SDK the app has been asked to open to continue an NSUserActivity.
@@ -307,7 +483,15 @@ NS_ASSUME_NONNULL_BEGIN
  @param restorationHandler A block to execute if your app creates objects to perform the task.
  @see proxiedAppDelegate
  */
-- (BOOL)continueUserActivity:(nonnull NSUserActivity *)userActivity restorationHandler:(void(^ _Nonnull)(NSArray * _Nullable restorableObjects))restorationHandler;
+- (BOOL)continueUserActivity:(nonnull NSUserActivity *)userActivity restorationHandler:(void(^ _Nonnull)(NSArray<id<UIUserActivityRestoring>> * __nullable restorableObjects))restorationHandler;
+
+/**
+ This method will permanently remove ALL MParticle data from the device, including MParticle UserDefaults and Database, it will also halt any further upload or download behavior that may be prepared
+
+ If you have any reference to the MParticle instance, you must remove your reference by setting it to "nil", in order to avoid any unexpected behavior
+ The SDK will be shut down and [MParticle sharedInstance] will return a new instance without apiKey or secretKey. MParticle can be restarted by calling MParticle.startWithOptions
+ */
+- (void)reset;
 
 #pragma mark - Basic Tracking
 /**
@@ -347,12 +531,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Logs an event. This is one of the most fundamental methods of the SDK. You can define all the characteristics
- of an event (name, type, attributes, etc) in an instance of MPEvent and pass that instance to this method to
- log its data to the mParticle SDK.
- @param event An instance of MPEvent
+ of an event in an instance of MPEvent (or any other subclass of MPBaseEvent) and pass that instance to this
+ method to log its data to the mParticle SDK.
+ @param event An instance of a subclass of MPBaseEvent (e.g MPEvent, MPCommerceEvent)
  @see MPEvent
+ @see MPCommerceEvent
  */
-- (void)logEvent:(MPEvent *)event;
+- (void)logEvent:(MPBaseEvent *)event;
 
 /**
  Logs an event. This is a convenience method for logging simple events; internally it creates an instance of MPEvent
@@ -360,12 +545,11 @@ NS_ASSUME_NONNULL_BEGIN
  @param eventName The name of the event to be logged (required not nil.) The string cannot be longer than 255 characters
  @param eventType An enum value that indicates the type of event to be logged
  @param eventInfo A dictionary containing further information about the event. This dictionary is limited to 100 key
-                  value pairs. Keys must be strings (up to 255 characters) and values can be strings (up to 255 characters), 
+                  value pairs. Keys must be strings (up to 255 characters) and values can be strings (up to 4096 characters),
                   numbers, booleans, or dates
  @see logEvent:
  */
 - (void)logEvent:(NSString *)eventName eventType:(MPEventType)eventType eventInfo:(nullable NSDictionary<NSString *, id> *)eventInfo;
-
 /**
  Logs a screen event. You can define all the characteristics of a screen event (name, attributes, etc) in an
  instance of MPEvent and pass that instance to this method to log its data to the mParticle SDK.
@@ -379,7 +563,7 @@ NS_ASSUME_NONNULL_BEGIN
  of MPEvent and calls logScreenEvent:
  @param screenName The name of the screen to be logged (required not nil and up to 255 characters)
  @param eventInfo A dictionary containing further information about the screen. This dictionary is limited to 100 key
- value pairs. Keys must be strings (up to 255 characters) and values can be strings (up to 255 characters), numbers,
+ value pairs. Keys must be strings (up to 255 characters) and values can be strings (up to 4096 characters), numbers,
  booleans, or dates
  @see logScreenEvent:
  */
@@ -426,7 +610,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Logs an error with a message and an attributes dictionary. The eventInfo is limited to
- 100 key value pairs. The strings in eventInfo cannot contain more than 255 characters.
+ 100 key value pairs. The values in eventInfo cannot contain more than 4096 characters.
  @param message The name of the error event (required not nil)
  @param eventInfo A dictionary containing further information about the error
  */
@@ -479,9 +663,57 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)registerExtension:(id<MPExtensionProtocol>)extension;
 
 #pragma mark - Integration Attributes
-- (MPKitExecStatus *)setIntegrationAttributes:(NSDictionary<NSString *, NSString *> *)attributes forKit:(NSNumber *)kitCode;
 
-- (MPKitExecStatus *)clearIntegrationAttributesForKit:(NSNumber *)kitCode;
+/**
+ * Set the integration attributes for a given integration ID.
+ *
+ * Integration attributes are keys and values specific to a given integration. For example,
+ * many integrations have their own internal user/device ID. mParticle will store integration attributes
+ * for a given device, and will be able to use these values for server-to-server communication to services.
+ * This is often useful when used in combination with a server-to-server feed, allowing the feed to be enriched
+ * with the necessary integration attributes to be properly forwarded to the given integration.
+ *
+ * Note: this action will be performed asynchronously.
+ *
+ * @param attributes a dictionary of attributes that will replace any current attributes. The keys are predefined by mParticle.
+ *                   Please consult with the mParticle docs or your solutions consultant for the correct value. You may
+ *                   also pass a null or empty map here to remove all of the attributes.
+ * @param integrationId mParticle integration ID. This may be the ID for a kit, or any mParticle integration.
+ * @see MPKitInstance
+ */
+- (MPKitExecStatus *)setIntegrationAttributes:(NSDictionary<NSString *, NSString *> *)attributes forKit:(NSNumber *)integrationId;
+
+/**
+ * Clear the integration attributes for a given integration ID.
+ *
+ * Integration attributes are keys and values specific to a given integration. For example,
+ * many integrations have their own internal user/device ID. mParticle will store integration attributes
+ * for a given device, and will be able to use these values for server-to-server communication to services.
+ * This is often useful when used in combination with a server-to-server feed, allowing the feed to be enriched
+ * with the necessary integration attributes to be properly forwarded to the given integration.
+ *
+ * Note: this action will be performed asynchronously.
+ *
+ * @param integrationId mParticle integration ID. This may be the ID for a kit, or any mParticle integration.
+ * @see MPKitInstance
+ */
+- (MPKitExecStatus *)clearIntegrationAttributesForKit:(NSNumber *)integrationId;
+
+/**
+ * Get the integration attributes for a given integration ID.
+ *
+ * Integration attributes are keys and values specific to a given integration. For example,
+ * many integrations have their own internal user/device ID. mParticle will store integration attributes
+ * for a given device, and will be able to use these values for server-to-server communication to services.
+ * This is often useful when used in combination with a server-to-server feed, allowing the feed to be enriched
+ * with the necessary integration attributes to be properly forwarded to the given integration.
+ *
+ * Note: this will make a direct call to SQLite and should not be called on the main thread.
+ *
+ * @param integrationId mParticle integration ID. This may be the ID for a kit, or any mParticle integration.
+ * @see MPKitInstance
+ */
+- (nullable NSDictionary *)integrationAttributesForKit:(NSNumber *)integrationId;
 
 #pragma mark - Kits
 /**
@@ -495,21 +727,21 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Returns whether a kit is active or not. You can retrieve if a kit has been already initialized and
  can be used.
- @param kitCode An NSNumber representing the kit to be checked
+ @param integrationId An NSNumber representing the kit to be checked
  @returns Whether the kit is active or not.
  */
-- (BOOL)isKitActive:(NSNumber *)kitCode;
+- (BOOL)isKitActive:(NSNumber *)integrationId;
 
 /**
  Retrieves the internal instance of a kit, for cases where you need to use properties and methods of that kit directly.
  
  This method is only applicable to kits that allocate themselves as an object instance or as a singleton. For the cases
  where kits are implemented with class methods, you can call those class methods directly
- @param kitCode An NSNumber representing the kit to be retrieved
+ @param integrationId An NSNumber representing the kit to be retrieved
  @returns The internal instance of the kit, or nil, if the kit is not active
  @see MPKitInstance
  */
-- (nullable id const)kitInstance:(NSNumber *)kitCode;
+- (nullable id const)kitInstance:(NSNumber *)integrationId;
 
 /**
  Asynchronously retrieves the internal instance of a kit, for cases where you need to use properties and methods of that kit directly.
@@ -607,6 +839,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setSessionAttribute:(NSString *)key value:(id)value;
 
 /**
+ Manually begins a new session. Calling this method is a no-op if a session already exists.
+ */
+- (void)beginSession;
+
+/**
+ Manually ends the current session. Calling this method is a no-op if no session exists.
+ */
+- (void)endSession;
+
+/**
  Force uploads queued messages to mParticle.
  */
 - (void)upload;
@@ -642,22 +884,33 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Web Views
 #if TARGET_OS_IOS == 1
 /**
- Updates isIOS flag to true in JS API via given webview.
+ Create a bridge between the mParticle web SDK and iOS SDK.
+ 
+ This API will add a persistent [WKScriptMessageHandler](https://developer.apple.com/documentation/webkit/wkscriptmessagehandler) to the given `WKWebView`, signaling to the mParticle web SDK that it should delegate all API calls out to the native iOS SDK, rather than sending API calls directly. Note that this handler will persist across page loads.
  @param webView The web view to be initialized
  */
-- (void)initializeWebView:(UIWebView *)webView;
+- (void)initializeWKWebView:(WKWebView *)webView;
 
 /**
- Verifies if the url is mParticle sdk url i.e mp-sdk://
- @param requestUrl The request URL
+ Create a bridge between the mParticle web SDK and iOS SDK.
+ 
+ This API will add a persistent [WKScriptMessageHandler](https://developer.apple.com/documentation/webkit/wkscriptmessagehandler) to the given `WKWebView`, signaling to the mParticle web SDK that it should delegate all API calls out to the native iOS SDK, rather than sending API calls directly. Note that this handler will persist across page loads.
+ @param webView The web view to be initialized
+ @param bridgeName The name of the webview bridge
  */
-- (BOOL)isMParticleWebViewSdkUrl:(NSURL *)requestUrl;
+- (void)initializeWKWebView:(WKWebView *)webView bridgeName:(nullable NSString *)bridgeName;
+
+#pragma mark - Manual Notification logging
+/**
+ Logs a Notification event for a notification that has been reviewed but not acted upon. This is a convenience method for manually logging Notification events; Set trackNotifications to false on MParticleOptions to disable automatic tracking of Notifications and only set Notification manually:
+ */
+- (void)logNotificationReceivedWithUserInfo:(nonnull NSDictionary *)userInfo;
 
 /**
- Process log event from hybrid apps that are using iOS UIWebView control.
- @param requestUrl The request URL
+ Logs a Notification event for a notification that has been reviewed and acted upon. This is a convenience method for manually logging Notification events; Set trackNotifications to false on MParticleOptions to disable automatic tracking of Notifications and only set Notification manually:
  */
-- (void)processWebViewLogEvent:(NSURL *)requestUrl;
+- (void)logNotificationOpenedWithUserInfo:(nonnull NSDictionary *)userInfo;
+
 #endif
 
 @end

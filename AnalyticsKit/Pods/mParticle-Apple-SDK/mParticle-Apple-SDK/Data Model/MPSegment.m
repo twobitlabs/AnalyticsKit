@@ -64,13 +64,6 @@ NSString *const kMPSegmentMembershipListKey = @"c";
 }
 
 - (BOOL)isEqual:(MPSegment *)object {
-//    unsigned int numberOfProperties;
-//    class_copyPropertyList([self class], &numberOfProperties);
-//    
-//    if (numberOfProperties != 6) {
-//        return NO;
-//    }
-    
     BOOL isEqual = [_segmentId isEqualToNumber:object.segmentId] &&
                    [_name isEqualToString:object.name] &&
                    [_memberships isEqualToArray:object.memberships];

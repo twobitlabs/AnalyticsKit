@@ -7,19 +7,6 @@
 #import "mParticle.h"
 #import "MPILogger.h"
 
-typedef NS_ENUM(NSUInteger, MPJSCommerceEventAction) {
-    MPJSCommerceEventActionAddToCart = 0,
-    MPJSCommerceEventActionRemoveFromCart,
-    MPJSCommerceEventActionCheckout,
-    MPJSCommerceEventActionCheckoutOptions,
-    MPJSCommerceEventActionClick,
-    MPJSCommerceEventActionViewDetail,
-    MPJSCommerceEventActionPurchase,
-    MPJSCommerceEventActionRefund,
-    MPJSCommerceEventActionAddToWishList,
-    MPJSCommerceEventActionRemoveFromWishlist
-};
-
 typedef NS_ENUM(NSUInteger, MPJSIdentityType) {
     MPJSIdentityTypeOther = 0,
     MPJSIdentityTypeCustomerId,
@@ -125,21 +112,27 @@ typedef NS_ENUM(NSUInteger, MPJSIdentityType) {
 
     NSMutableArray *products = [NSMutableArray array];
     NSArray *jsonProducts = json[@"ProductAction"][@"ProductList"];
-    [jsonProducts enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        MPProduct *product = [MPConvertJS MPProduct:obj];
-        [products addObject:product];
-    }];
+    if ((NSNull *)jsonProducts != [NSNull null]) {
+        [jsonProducts enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            MPProduct *product = [MPConvertJS MPProduct:obj];
+            [products addObject:product];
+        }];
+    }
     [commerceEvent addProducts:products];
 
     NSArray *jsonImpressions = json[@"ProductImpressions"];
-    [jsonImpressions enumerateObjectsUsingBlock:^(NSDictionary *jsonImpression, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *listName = jsonImpression[@"ProductImpressionList"];
-        NSArray *jsonProducts = jsonImpression[@"ProductList"];
-        [jsonProducts enumerateObjectsUsingBlock:^(id  _Nonnull jsonProduct, NSUInteger idx, BOOL * _Nonnull stop) {
-            MPProduct *product = [MPConvertJS MPProduct:jsonProduct];
-            [commerceEvent addImpression:product listName:listName];
+    if ((NSNull *)jsonImpressions != [NSNull null]) {
+        [jsonImpressions enumerateObjectsUsingBlock:^(NSDictionary *jsonImpression, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *listName = jsonImpression[@"ProductImpressionList"];
+            NSArray *jsonProducts = jsonImpression[@"ProductList"];
+            if ((NSNull *)jsonProducts != [NSNull null]) {
+                [jsonProducts enumerateObjectsUsingBlock:^(id  _Nonnull jsonProduct, NSUInteger idx, BOOL * _Nonnull stop) {
+                    MPProduct *product = [MPConvertJS MPProduct:jsonProduct];
+                    [commerceEvent addImpression:product listName:listName];
+                }];
+            }
         }];
-    }];
+    }
 
     return commerceEvent;
 }
@@ -190,9 +183,11 @@ typedef NS_ENUM(NSUInteger, MPJSIdentityType) {
     product.quantity = json[@"Quantity"];
 
     NSDictionary *jsonAttributes = json[@"Attributes"];
-    for (NSString *key in jsonAttributes) {
-        NSString *value = jsonAttributes[key];
-        [product setObject:value forKeyedSubscript:key];
+    if ((NSNull *)jsonAttributes != [NSNull null]) {
+        for (NSString *key in jsonAttributes) {
+            NSString *value = jsonAttributes[key];
+            [product setObject:value forKeyedSubscript:key];
+        }
     }
     return product;
 }

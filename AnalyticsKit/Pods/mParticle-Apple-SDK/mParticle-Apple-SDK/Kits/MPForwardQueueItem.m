@@ -9,22 +9,21 @@
 
 @synthesize queueItemType = _queueItemType;
 
-- (nullable instancetype)initWithCommerceEvent:(nonnull MPCommerceEvent *)commerceEvent completionHandler:(void (^ _Nonnull)(_Nonnull id<MPKitProtocol> kit, MPKitFilter * _Nonnull kitFilter, MPKitExecStatus * _Nonnull * _Nonnull execStatus))completionHandler {
+- (nullable instancetype)initWithCommerceEvent:(nonnull MPCommerceEvent *)commerceEvent {
     self = [super init];
-    if (!self || !commerceEvent || !completionHandler) {
+    if (!self || !commerceEvent) {
         return nil;
     }
     
     _queueItemType = MPQueueItemTypeEcommerce;
     _commerceEvent = commerceEvent;
-    _commerceEventCompletionHandler = [completionHandler copy];
     
     return self;
 }
 
-- (nullable instancetype)initWithSelector:(nonnull SEL)selector event:(nonnull MPEvent *)event messageType:(MPMessageType)messageType completionHandler:(void (^ _Nonnull)(_Nonnull id<MPKitProtocol> kit, MPEvent * _Nonnull forwardEvent, MPKitExecStatus * _Nonnull * _Nonnull execStatus))completionHandler {
+- (nullable instancetype)initWithSelector:(nonnull SEL)selector event:(nonnull MPBaseEvent *)event messageType:(MPMessageType)messageType {
     self = [super init];
-    if (!self || !selector || !event || !completionHandler) {
+    if (!self || !selector || !event) {
         return nil;
     }
     
@@ -32,20 +31,18 @@
     _selector = selector;
     _event = event;
     _messageType = messageType;
-    _eventCompletionHandler = [completionHandler copy];
     
     return self;
 }
 
-- (nullable instancetype)initWithSelector:(nonnull SEL)selector parameters:(nullable MPForwardQueueParameters *)parameters messageType:(MPMessageType)messageType completionHandler:(void (^ _Nonnull)(_Nonnull id<MPKitProtocol> kit, MPForwardQueueParameters * _Nullable forwardParameters, MPKitExecStatus * _Nonnull * _Nonnull execStatus))completionHandler {
+- (nullable instancetype)initWithSelector:(nonnull SEL)selector parameters:(nullable MPForwardQueueParameters *)parameters messageType:(MPMessageType)messageType {
     self = [super init];
-    if (!self || !selector || !completionHandler) {
+    if (!self || !selector) {
         return nil;
     }
     
     _queueItemType = MPQueueItemTypeGeneralPurpose;
     _selector = selector;
-    _generalPurposeCompletionHandler = [completionHandler copy];
     _queueParameters = parameters;
     _messageType = messageType;
     

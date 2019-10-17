@@ -15,11 +15,21 @@
 #import "MPIntegrationAttributes.h"
 #import "MPConsentState.h"
 #import "MPConsentSerialization.h"
+#import "mParticle.h"
+#include "MessageTypeName.h"
 
 using namespace std;
 
+@interface MParticle ()
+
+@property (nonatomic, strong, readonly) MPPersistenceController *persistenceController;
+@property (nonatomic, strong, readonly) MPStateMachine *stateMachine;
+
+@end
+
 @interface MPUploadBuilder() {
     NSMutableDictionary<NSString *, id> *uploadDictionary;
+    BOOL containsOptOutMessage;
 }
 
 @end
@@ -35,12 +45,17 @@ using namespace std;
     }
     
     _sessionId = sessionId;
+    containsOptOutMessage = NO;
     
     NSUInteger numberOfMessages = messages.count;
     NSMutableArray *messageDictionaries = [[NSMutableArray alloc] initWithCapacity:numberOfMessages];
     _preparedMessageIds = [[NSMutableArray alloc] initWithCapacity:numberOfMessages];
 
     [messages enumerateObjectsUsingBlock:^(MPMessage *message, NSUInteger idx, BOOL *stop) {
+        if ([message.messageType isEqualToString:[NSString stringWithCString:mParticle::MessageTypeName::nameForMessageType(static_cast<mParticle::MessageType>(MPMessageTypeOptOut)).c_str() encoding:NSUTF8StringEncoding]]) {
+            self->containsOptOutMessage = YES;
+        }
+        
         [self->_preparedMessageIds addObject:@(message.messageId)];
         
         NSDictionary *messageDictionaryRepresentation = [message dictionaryRepresentation];
@@ -56,7 +71,7 @@ using namespace std;
         ltv = @0;
     }
     
-    MPStateMachine *stateMachine = [MPStateMachine sharedInstance];
+    MPStateMachine *stateMachine = [MParticle sharedInstance].stateMachine;
     
     uploadDictionary = [@{kMPOptOutKey:@(stateMachine.optOut),
                           kMPUploadIntervalKey:@(uploadInterval),
@@ -111,7 +126,7 @@ using namespace std;
 
 #pragma mark Public instance methods
 - (void)build:(void (^)(MPUpload *upload))completionHandler {
-    MPStateMachine *stateMachine = [MPStateMachine sharedInstance];
+    MPStateMachine *stateMachine = [MParticle sharedInstance].stateMachine;
     
     uploadDictionary[kMPMessageTypeKey] = kMPMessageTypeRequestHeader;
     uploadDictionary[kMPmParticleSDKVersionKey] = kMParticleSDKVersion;
@@ -137,7 +152,7 @@ using namespace std;
         uploadDictionary[kMPDeviceApplicationStampKey] = deviceApplicationStamp;
     }
     
-    MPPersistenceController *persistence = [MPPersistenceController sharedInstance];
+    MPPersistenceController *persistence = [MParticle sharedInstance].persistenceController;
     NSArray<MPForwardRecord *> *forwardRecords = [persistence fetchForwardRecords];
     NSMutableArray<NSNumber *> *forwardRecordsIds = nil;
     
@@ -180,6 +195,7 @@ using namespace std;
     
     
     MPUpload *upload = [[MPUpload alloc] initWithSessionId:_sessionId uploadDictionary:uploadDictionary];
+    upload.containsOptOutMessage = containsOptOutMessage;
     completionHandler(upload);
 }
 

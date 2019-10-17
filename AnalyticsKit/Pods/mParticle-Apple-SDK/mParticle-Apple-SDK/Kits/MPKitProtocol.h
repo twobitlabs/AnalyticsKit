@@ -10,10 +10,12 @@
 #endif
 
 @class MPCommerceEvent;
+@class MPBaseEvent;
 @class MPEvent;
 @class MPKitExecStatus;
 @class MPUserSegments;
 @class MPKitAPI;
+@class MPConsentState;
 @class FilteredMParticleUser;
 @class FilteredMPIdentityApiRequest;
 
@@ -65,8 +67,8 @@
 
 #pragma mark User Notifications
 #if TARGET_OS_IOS == 1 && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
-- (nonnull MPKitExecStatus *)userNotificationCenter:(nonnull UNUserNotificationCenter *)center willPresentNotification:(nonnull UNNotification *)notification;
-- (nonnull MPKitExecStatus *)userNotificationCenter:(nonnull UNUserNotificationCenter *)center didReceiveNotificationResponse:(nonnull UNNotificationResponse *)response;
+- (nonnull MPKitExecStatus *)userNotificationCenter:(nonnull UNUserNotificationCenter *)center willPresentNotification:(nonnull UNNotification *)notification API_AVAILABLE(ios(10.0));
+- (nonnull MPKitExecStatus *)userNotificationCenter:(nonnull UNUserNotificationCenter *)center didReceiveNotificationResponse:(nonnull UNNotificationResponse *)response API_AVAILABLE(ios(10.0));
 #endif
 
 #pragma mark Location tracking
@@ -98,12 +100,16 @@
 - (nonnull MPKitExecStatus *)onLogoutComplete:(nonnull FilteredMParticleUser *)user request:(nonnull FilteredMPIdentityApiRequest *)request;
 - (nonnull MPKitExecStatus *)onModifyComplete:(nonnull FilteredMParticleUser *)user request:(nonnull FilteredMPIdentityApiRequest *)request;
 
+#pragma mark Consent state
+- (nonnull MPKitExecStatus *)setConsentState:(nullable MPConsentState *)state;
+
 #pragma mark e-Commerce
-- (nonnull MPKitExecStatus *)logCommerceEvent:(nonnull MPCommerceEvent *)commerceEvent;
+- (nonnull MPKitExecStatus *)logCommerceEvent:(nonnull MPCommerceEvent *)commerceEvent __attribute__ ((deprecated));
 - (nonnull MPKitExecStatus *)logLTVIncrease:(double)increaseAmount event:(nonnull MPEvent *)event;
 
 #pragma mark Events
-- (nonnull MPKitExecStatus *)logEvent:(nonnull MPEvent *)event;
+- (nonnull MPKitExecStatus *)logBaseEvent:(nonnull MPBaseEvent *)event;
+- (nonnull MPKitExecStatus *)logEvent:(nonnull MPEvent *)event __attribute__ ((deprecated));
 - (nonnull MPKitExecStatus *)logInstall;
 - (nonnull MPKitExecStatus *)logout;
 - (nonnull MPKitExecStatus *)logScreen:(nonnull MPEvent *)event;
@@ -119,7 +125,6 @@
 - (nonnull MPKitExecStatus *)logException:(nonnull NSException *)exception;
 
 #pragma mark Assorted
-- (nonnull MPKitExecStatus *)setDebugMode:(BOOL)debugMode;
 - (nonnull MPKitExecStatus *)setKitAttribute:(nonnull NSString *)key value:(nullable id)value;
 - (nonnull MPKitExecStatus *)setOptOut:(BOOL)optOut;
 - (nullable NSString *)surveyURLWithUserAttributes:(nonnull NSDictionary *)userAttributes;

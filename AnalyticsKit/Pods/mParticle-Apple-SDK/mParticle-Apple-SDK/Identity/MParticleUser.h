@@ -11,9 +11,30 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ A single user as represented by the mParticle SDK
+ */
 @interface MParticleUser : NSObject
 
+/**
+ The mParticle id associated with this user (MPID)
+ */
 @property(readonly, strong, nonnull) NSNumber *userId;
+
+/**
+ The date when this user was first seen by the SDK
+ */
+@property(readonly, strong, nonnull) NSDate *firstSeen;
+
+/**
+ The date when this user was most recently seen by the SDK
+ */
+@property(readonly, strong, nonnull) NSDate *lastSeen;
+
+/**
+ Returns whether this user is currently logged in
+ */
+@property(readonly) BOOL isLoggedIn;
 
 /**
  Gets current user identities (readonly)
@@ -85,7 +106,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param endpointId The endpoint id
  @param completionHandler A block to be called when the results are available. The user segments array is passed to this block
  */
-- (void)userSegments:(NSTimeInterval)timeout endpointId:(NSString *)endpointId completionHandler:(MPUserSegmentsHandler)completionHandler;
+- (void)userSegments:(NSTimeInterval)timeout endpointId:(NSString *)endpointId completionHandler:(MPUserSegmentsHandler)completionHandler __attribute__((deprecated("")));
 
 #pragma mark - Consent State
 /**

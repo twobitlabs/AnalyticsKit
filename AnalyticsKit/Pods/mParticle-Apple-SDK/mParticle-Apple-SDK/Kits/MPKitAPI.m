@@ -5,6 +5,13 @@
 #import "MPILogger.h"
 #import "FilteredMParticleUser.h"
 
+@interface MParticle ()
+
+@property (nonatomic, strong, readonly) MPPersistenceController *persistenceController;
+@property (nonatomic, strong, readonly) MPKitContainer *kitContainer;
+
+@end
+
 @interface MPAttributionResult ()
 
 @property (nonatomic, readwrite) NSNumber *kitCode;
@@ -90,7 +97,7 @@
 }
 
 - (NSDictionary<NSString *, NSString *> *)integrationAttributes {
-    NSDictionary *dictionary = [[MPKitContainer sharedInstance] integrationAttributesForKit:_kitCode];
+    NSDictionary *dictionary = [[MParticle sharedInstance].kitContainer integrationAttributesForKit:_kitCode];
     return dictionary;
 }
 
@@ -115,20 +122,20 @@
         
         userInfo[MPKitAPIErrorKey] = errorMessage;
         NSError *attributionError = [NSError errorWithDomain:MPKitAPIErrorDomain code:0 userInfo:userInfo];
-        [MPKitContainer sharedInstance].attributionCompletionHandler(nil, attributionError);
+        [MParticle sharedInstance].kitContainer.attributionCompletionHandler(nil, attributionError);
         return;
     }
     
     result.kitCode = _kitCode;
     result.kitName = [self kitName];
     
-    [MPKitContainer sharedInstance].attributionCompletionHandler(result, nil);
+    [MParticle sharedInstance].kitContainer.attributionCompletionHandler(result, nil);
 }
 
 #pragma mark Kit Identity methods
 
 - (FilteredMParticleUser *_Nonnull)getCurrentUserWithKit:(id<MPKitProtocol> _Nonnull)kit {
-    return [[FilteredMParticleUser alloc] initWithMParticleUser:[[[MParticle sharedInstance] identity] currentUser] kitConfiguration:[MPKitContainer sharedInstance].kitConfigurations[[[kit class] kitCode]]];
+    return [[FilteredMParticleUser alloc] initWithMParticleUser:[[[MParticle sharedInstance] identity] currentUser] kitConfiguration:[MParticle sharedInstance].kitContainer.kitConfigurations[[[kit class] kitCode]]];
 }
 
 - (nullable NSNumber *)incrementUserAttribute:(NSString *_Nonnull)key byValue:(NSNumber *_Nonnull)value forUser:(FilteredMParticleUser *_Nonnull)filteredUser {

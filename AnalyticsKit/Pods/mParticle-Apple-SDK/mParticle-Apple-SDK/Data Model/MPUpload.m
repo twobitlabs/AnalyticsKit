@@ -11,10 +11,11 @@
                           uploadId:0
                               UUID:uploadDictionary[kMPMessageIdKey]
                         uploadData:uploadData
-                         timestamp:[uploadDictionary[kMPTimestampKey] doubleValue]];
+                         timestamp:[uploadDictionary[kMPTimestampKey] doubleValue]
+                        uploadType:MPUploadTypeMessage];
 }
 
-- (instancetype)initWithSessionId:(NSNumber *)sessionId uploadId:(int64_t)uploadId UUID:(NSString *)uuid uploadData:(NSData *)uploadData timestamp:(NSTimeInterval)timestamp {
+- (instancetype)initWithSessionId:(NSNumber *)sessionId uploadId:(int64_t)uploadId UUID:(NSString *)uuid uploadData:(NSData *)uploadData timestamp:(NSTimeInterval)timestamp uploadType:(MPUploadType)uploadType {
     self = [super init];
     if (self) {
         _sessionId = sessionId;
@@ -22,6 +23,8 @@
         _uuid = uuid;
         _timestamp = timestamp;
         _uploadData = uploadData;
+        _uploadType = uploadType;
+        _containsOptOutMessage = NO;
     }
     
     return self;
@@ -52,7 +55,8 @@
                                                       uploadId:_uploadId
                                                           UUID:[_uuid copy]
                                                     uploadData:[_uploadData copy]
-                                                     timestamp:_timestamp];
+                                                     timestamp:_timestamp
+                                                    uploadType:_uploadType];
     
     return copyObject;
 }

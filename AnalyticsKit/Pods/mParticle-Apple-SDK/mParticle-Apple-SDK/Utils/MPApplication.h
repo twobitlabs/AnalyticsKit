@@ -1,6 +1,8 @@
 #import "MPIConstants.h"
 #import "MPEnums.h"
 
+@class UIApplication;
+
 extern NSString * _Nonnull const kMPApplicationInformationKey;
 
 @interface MPApplication : NSObject <NSCopying>
@@ -32,6 +34,7 @@ extern NSString * _Nonnull const kMPApplicationInformationKey;
 + (void)updateLastUseDate:(nonnull NSDate *)date;
 + (void)updateLaunchCountsAndDates;
 + (void)updateStoredVersionAndBuildNumbers;
++ (UIApplication *_Nullable)sharedUIApplication;
 - (nonnull NSDictionary<NSString *, id> *)dictionaryRepresentation;
 
 @end

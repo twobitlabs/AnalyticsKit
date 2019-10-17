@@ -5,7 +5,7 @@ typedef NS_ENUM(NSUInteger, MPCustomModuleId) {
     MPCustomModuleIdAppBoy = 28
 };
 
-@interface MPCustomModulePreference : NSObject <NSCoding>
+@interface MPCustomModulePreference : NSObject <NSSecureCoding>
 
 @property (nonatomic, strong, readonly, nonnull) NSNumber *moduleId;
 @property (nonatomic, strong, readonly, nonnull) NSString *defaultValue;

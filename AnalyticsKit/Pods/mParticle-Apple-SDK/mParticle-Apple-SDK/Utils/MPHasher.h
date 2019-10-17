@@ -16,7 +16,7 @@ namespace mParticle {
         static vector<string> hashedEventTypes(const vector<int> &eventTypes);
         static vector<string> hashedAllEventTypes();
         static string hashEvent(string eventName, string eventType);
-        static uint64_t hashFNV1a(const char *bytes, int length);
+        static int64_t hashFNV1a(const char *bytes, int length);
     };
 }
 

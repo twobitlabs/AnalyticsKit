@@ -1,6 +1,8 @@
 #import "MPCurrentState.h"
 #import <mach/mach.h>
 #import "MPStateMachine.h"
+#import "MPApplication.h"
+#import "MParticle.h"
 
 #if TARGET_OS_IOS == 1
     #import <CoreLocation/CoreLocation.h>
@@ -23,6 +25,12 @@ NSString *const kMPStateDataConnectionKey = @"dct";
 NSString *const kMPStateGPSKey = @"gps";
 NSString *const kMPStateTotalDiskSpaceKey = @"tds";
 NSString *const kMPStateFreeDiskSpaceKey = @"fds";
+
+@interface MParticle ()
+
+@property (nonatomic, strong, readonly) MPStateMachine *stateMachine;
+
+@end
 
 @interface MPCurrentState () {
 #if TARGET_OS_IOS == 1
@@ -68,24 +76,17 @@ NSString *const kMPStateFreeDiskSpaceKey = @"fds";
         return @{kMPStateCPUKey:@"0.0"};
     }
     
-//    task_basic_info_t basic_info;
     thread_array_t thread_list;
     mach_msg_type_number_t thread_count;
     thread_info_data_t thinfo;
     mach_msg_type_number_t thread_info_count;
     thread_basic_info_t basic_info_th;
-//    uint32_t stat_thread = 0; // Mach threads
-
-//    basic_info = (task_basic_info_t)tinfo;
     
     // get threads in the task
     kr = task_threads(mach_task_self(), &thread_list, &thread_count);
     if (kr != KERN_SUCCESS) {
         return @{kMPStateCPUKey:@"0.0"};
     }
-    
-//    if (thread_count > 0)
-//        stat_thread += thread_count;
     
     long tot_sec = 0;
     long tot_usec = 0;
@@ -116,7 +117,7 @@ NSString *const kMPStateFreeDiskSpaceKey = @"fds";
 - (NSString *)dataConnectionStatus {
     NSString *dataConnectionStatus;
     
-    switch ([MPStateMachine sharedInstance].networkStatus) {
+    switch ([MParticle sharedInstance].stateMachine.networkStatus) {
         case MParticleNetworkStatusReachableViaWAN:
             dataConnectionStatus = kDataConnectionMobile;
             break;
@@ -163,7 +164,7 @@ NSString *const kMPStateFreeDiskSpaceKey = @"fds";
 
 - (NSNumber *)timeSinceStart {
     NSDate *now = [NSDate date];
-    NSNumber *timeSinceStart = MPMilliseconds([now timeIntervalSinceDate:[MPStateMachine sharedInstance].startTime]);
+    NSNumber *timeSinceStart = MPMilliseconds([now timeIntervalSinceDate:[MParticle sharedInstance].stateMachine.startTime]);
     return timeSinceStart;
 }
 
@@ -189,12 +190,11 @@ NSString *const kMPStateFreeDiskSpaceKey = @"fds";
 }
 
 - (NSNumber *)statusBarOrientation {
-#if !defined(MPARTICLE_APP_EXTENSIONS)
-    if ([NSThread isMainThread]) {
-        _statusBarOrientation = @([[UIApplication sharedApplication] statusBarOrientation]);
+    if (![MPStateMachine isAppExtension]) {
+        if ([NSThread isMainThread]) {
+            _statusBarOrientation = @([[MPApplication sharedUIApplication] statusBarOrientation]);
+        }
     }
-#endif
-    
     return _statusBarOrientation;
 }
 #endif

@@ -21,9 +21,9 @@ PODS:
   - MobileCenter/Core (0.14.0)
   - MobileCenter/Crashes (0.14.0):
     - MobileCenter/Core
-  - mParticle-Apple-SDK (7.3.5):
-    - mParticle-Apple-SDK/mParticle (= 7.3.5)
-  - mParticle-Apple-SDK/mParticle (7.3.5)
+  - mParticle-Apple-SDK (7.12.3):
+    - mParticle-Apple-SDK/mParticle (= 7.12.3)
+  - mParticle-Apple-SDK/mParticle (7.12.3)
   - NewRelicAgent (5.13.0)
   - OCMock (3.4)
   - Parse (1.14.4):
@@ -44,7 +44,7 @@ DEPENDENCIES:
   - Parse
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - Adjust
     - Bolts
     - Crashlytics
@@ -71,11 +71,11 @@ SPEC CHECKSUMS:
   Localytics: 420a187fd1ba94d4a2afff66e100d1569389d9e4
   Mixpanel: 3c3925c27f7a321d5978319a72f53f8f0885afc5
   MobileCenter: dbb6dc05ec373d29dccb4aaf98af5d697d6a874c
-  mParticle-Apple-SDK: fce4d42269212245430331be3d38ecf464325107
+  mParticle-Apple-SDK: 418f646fe97dc04bdb6460db95e17b963294f592
   NewRelicAgent: 2679737d3601fcac3a11bf69a8968302d9fee497
   OCMock: 35ae71d6a8fcc1b59434d561d1520b9dd4f15765
   Parse: b0aa91d2c435e53d4a9af26e741e014c9b35c42e
 
 PODFILE CHECKSUM: fa425b94a26e5c9e92b8b8adde39ad2751342009
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.8.4

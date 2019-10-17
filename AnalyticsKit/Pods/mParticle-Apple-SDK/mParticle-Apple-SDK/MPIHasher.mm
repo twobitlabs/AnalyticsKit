@@ -13,4 +13,11 @@
     return result;
 }
 
++ (NSString *)hashStringUTF16:(NSString *)stringToHash {
+    NSData *data = [stringToHash dataUsingEncoding:NSUTF16LittleEndianStringEncoding];
+    int64_t hash = mParticle::Hasher::hashFNV1a((const char *)[data bytes], (int)[data length]);
+    NSString *result = @(hash).stringValue;
+    return result;
+}
+
 @end

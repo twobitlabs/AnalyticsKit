@@ -20,7 +20,7 @@ using namespace std;
     return isEqual;
 }
 
-#pragma mark NSCoding
+#pragma mark NSSecureCoding
 - (void)encodeWithCoder:(NSCoder *)coder {
     if (self.attributeKey) {
         [coder encodeObject:_attributeKey forKey:@"attributeKey"];
@@ -34,11 +34,15 @@ using namespace std;
 - (id)initWithCoder:(NSCoder *)coder {
     self = [super init];
     if (self) {
-        _attributeKey = [coder decodeObjectForKey:@"attributeKey"];
-        _attributeValues = [coder decodeObjectForKey:@"attributeValues"];
+        _attributeKey = [coder decodeObjectOfClass:[NSString class] forKey:@"attributeKey"];
+        _attributeValues = [coder decodeObjectOfClass:[NSArray<NSString *> class] forKey:@"attributeValues"];
     }
     
     return self;
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
 }
 
 #pragma mark NSCopying
@@ -174,7 +178,7 @@ using namespace std;
     return isEqual;
 }
 
-#pragma mark NSCoding
+#pragma mark NSSecureCoding
 - (void)encodeWithCoder:(NSCoder *)coder {
     [super encodeWithCoder:coder];
     
@@ -197,8 +201,9 @@ using namespace std;
 - (id)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
     if (self) {
-        _projectionMatches = [coder decodeObjectForKey:@"projectionMatches"];
-        _attributeProjections = [coder decodeObjectForKey:@"attributeProjections"];
+        
+        _projectionMatches = [coder decodeObjectOfClass:[NSArray<MPProjectionMatch *> class] forKey:@"projectionMatches"];
+        _attributeProjections = [coder decodeObjectOfClass:[NSArray<MPAttributeProjection *> class] forKey:@"attributeProjections"];
         _behaviorSelector = (MPProjectionBehaviorSelector)[coder decodeIntegerForKey:@"behaviorSelector"];
         _eventType = (MPEventType)[coder decodeIntegerForKey:@"eventType"];
         _messageType = (MPMessageType)[coder decodeIntegerForKey:@"messageType"];
@@ -208,6 +213,10 @@ using namespace std;
     }
     
     return self;
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
 }
 
 #pragma mark NSCopying

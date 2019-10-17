@@ -1,10 +1,10 @@
 #import "MPCustomModulePreference.h"
 #import "MPIUserDefaults.h"
 #import "MPAppboy.h"
-#import "MPStateMachine.h"
 #import "MPILogger.h"
 #import "MPDateFormatter.h"
 #import "MPPersistenceController.h"
+#import "MParticle.h"
 
 @interface MPCustomModulePreference()
 
@@ -69,7 +69,7 @@
     return self;
 }
 
-#pragma mark NSCoding
+#pragma mark NSSecureCoding
 - (void)encodeWithCoder:(NSCoder *)coder {
     [coder encodeObject:self.defaultValue forKey:@"defaultValue"];
     [coder encodeObject:self.location forKey:@"location"];
@@ -83,16 +83,20 @@
 - (id)initWithCoder:(NSCoder *)coder {
     self = [super init];
     if (self) {
-        _defaultValue = [coder decodeObjectForKey:@"defaultValue"];
-        _location = [coder decodeObjectForKey:@"location"];
-        _readKey = [coder decodeObjectForKey:@"readKey"];
-        _value = [coder decodeObjectForKey:@"value"];
-        _writeKey = [coder decodeObjectForKey:@"writeKey"];
+        _defaultValue = [coder decodeObjectOfClass:[NSString class] forKey:@"defaultValue"];
+        _location = [coder decodeObjectOfClass:[NSString class] forKey:@"location"];
+        _readKey = [coder decodeObjectOfClass:[NSString class] forKey:@"readKey"];
+        _value = [coder decodeObjectOfClass:[NSObject class] forKey:@"value"];
+        _writeKey = [coder decodeObjectOfClass:[NSString class] forKey:@"writeKey"];
         _dataType = [coder decodeIntegerForKey:@"dataType"];
         _moduleId = @([coder decodeInt64ForKey:@"moduleId"]);
     }
     
     return self;
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
 }
 
 #pragma mark Private methods
@@ -208,8 +212,11 @@
         if ([_moduleId isEqual:@(MPCustomModuleIdAppBoy)]) {
             NSData *appboyData = [[NSUserDefaults standardUserDefaults] objectForKey:_readKey];
             if (appboyData) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
                 id appboy = [NSKeyedUnarchiver unarchiveObjectWithData:appboyData];
-                
+#pragma clang diagnostic pop
+
                 if ([appboy isKindOfClass:[NSDictionary class]]) {
                     _value = [self appBoyJSONStringFromDictionary:appboy];
                 } else {

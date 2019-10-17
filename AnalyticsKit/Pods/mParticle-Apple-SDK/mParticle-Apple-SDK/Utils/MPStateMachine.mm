@@ -16,6 +16,7 @@
 #import "MPKitContainer.h"
 #import "MPSearchAdsAttribution.h"
 #import <UIKit/UIKit.h>
+#import "MPForwardQueueParameters.h"
 
 #if TARGET_OS_IOS == 1
     #import <CoreLocation/CoreLocation.h>
@@ -23,12 +24,18 @@
 
 NSString *const kCookieDateKey = @"e";
 NSString *const kMinUploadDateKey = @"MinUploadDate";
+NSString *const kMinAliasDateKey = @"MinAliasDate";
+NSString *const kMPStateKey = @"state";
 
 static MPEnvironment runningEnvironment = MPEnvironmentAutoDetect;
 static BOOL runningInBackground = NO;
 
 @interface MParticle ()
 + (dispatch_queue_t)messageQueue;
+@property (nonatomic, strong, readonly) MPPersistenceController *persistenceController;
+@property (nonatomic, strong, readonly) MPStateMachine *stateMachine;
+@property (nonatomic, strong, readonly) MPKitContainer *kitContainer;
+
 @end
 
 @interface MPStateMachine() {
@@ -46,14 +53,12 @@ static BOOL runningInBackground = NO;
 
 @implementation MPStateMachine
 
-@synthesize consoleLogging = _consoleLogging;
 @synthesize consumerInfo = _consumerInfo;
 @synthesize deviceTokenType = _deviceTokenType;
 @synthesize firstSeenInstallation = _firstSeenInstallation;
 @synthesize installationType = _installationType;
 @synthesize locationTrackingMode = _locationTrackingMode;
 @synthesize logLevel = _logLevel;
-@synthesize minUploadDate = _minUploadDate;
 @synthesize optOut = _optOut;
 @synthesize alwaysTryToCollectIDFA = _alwaysTryToCollectIDFA;
 @synthesize pushNotificationMode = _pushNotificationMode;
@@ -61,6 +66,8 @@ static BOOL runningInBackground = NO;
 @synthesize triggerEventTypes = _triggerEventTypes;
 @synthesize triggerMessageTypes = _triggerMessageTypes;
 @synthesize automaticSessionTracking = _automaticSessionTracking;
+@synthesize allowASR = _allowASR;
+@synthesize networkStatus = _networkStatus;
 
 #if TARGET_OS_IOS == 1
 @synthesize location = _location;
@@ -76,7 +83,6 @@ static BOOL runningInBackground = NO;
         _uploadStatus = MPUploadStatusBatch;
         _startTime = [NSDate dateWithTimeIntervalSinceNow:-1];
         _backgrounded = NO;
-        _consoleLogging = MPConsoleLoggingAutoDetect;
         _dataRamped = NO;
         _installationType = MPInstallationTypeAutodetect;
         _launchDate = [NSDate date];
@@ -93,7 +99,7 @@ static BOOL runningInBackground = NO;
             strongSelf.storedSDKVersion = kMParticleSDKVersion;
             
             [strongSelf.reachability startNotifier];
-            strongSelf.networkStatus = [strongSelf->_reachability currentReachabilityStatus];
+            strongSelf.networkStatus = [strongSelf.reachability currentReachabilityStatus];
             
             [notificationCenter addObserver:strongSelf
                                    selector:@selector(handleApplicationDidEnterBackground:)
@@ -135,6 +141,10 @@ static BOOL runningInBackground = NO;
     [notificationCenter removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
     [notificationCenter removeObserver:self name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
     [notificationCenter removeObserver:self name:MParticleReachabilityChangedNotification object:nil];
+    
+    if (_reachability != nil) {
+        [_reachability stopNotifier];
+    }
 }
 
 #pragma mark Private accessors
@@ -150,25 +160,16 @@ static BOOL runningInBackground = NO;
     return _reachability;
 }
 
-- (void)setNetworkStatus:(MParticleNetworkStatus)networkStatus {
-    _networkStatus = networkStatus;
-
-    NSString *networkStatusDescription;
-    switch (networkStatus) {
-        case MParticleNetworkStatusReachableViaWiFi:
-            networkStatusDescription = @"Reachable via Wi-Fi";
-            break;
-            
-        case MParticleNetworkStatusReachableViaWAN:
-            networkStatusDescription = @"Reachable via WAN";
-            break;
-            
-        case MParticleNetworkStatusNotReachable:
-            networkStatusDescription = @"Not reachable";
-            break;
+- (MParticleNetworkStatus)networkStatus {
+    @synchronized(self) {
+        return _networkStatus;
     }
-    
-    MPILogVerbose(@"Network Status: %@", networkStatusDescription);
+}
+
+- (void)setNetworkStatus:(MParticleNetworkStatus)networkStatus {
+    @synchronized(self) {
+        _networkStatus = networkStatus;
+    }
 }
 
 - (NSString *)storedSDKVersion {
@@ -282,39 +283,26 @@ static BOOL runningInBackground = NO;
 }
 
 - (void)handleReachabilityChanged:(NSNotification *)notification {
-    MParticleReachability *currentReachability = [notification object];
-    
-    if ([currentReachability isKindOfClass:[MParticleReachability class]]) {
-        [self willChangeValueForKey:@"networkStatus"];
-        self.networkStatus = [currentReachability currentReachabilityStatus];
-        [self didChangeValueForKey:@"networkStatus"];
-    }
+    self.networkStatus = [self.reachability currentReachabilityStatus];
 }
 
 #pragma mark Class methods
-+ (instancetype)sharedInstance {
-    static MPStateMachine *sharedInstance = nil;
-    static dispatch_once_t stateMachinePredicate;
-    
-    dispatch_once(&stateMachinePredicate, ^{
-        sharedInstance = [[MPStateMachine alloc] init];
-    });
-    
-    return sharedInstance;
-}
-
 + (MPEnvironment)environment {
-    if (runningEnvironment != MPEnvironmentAutoDetect) {
+    @synchronized(self) {
+        if (runningEnvironment != MPEnvironmentAutoDetect) {
+            return runningEnvironment;
+        }
+        
+        runningEnvironment = [MPStateMachine getEnvironment];
+        
         return runningEnvironment;
     }
-    
-    runningEnvironment = [MPStateMachine getEnvironment];
-    
-    return runningEnvironment;
 }
 
 + (void)setEnvironment:(MPEnvironment)environment {
-    runningEnvironment = environment;
+    @synchronized(self) {
+        runningEnvironment = environment;
+    }
 }
 
 + (NSString *)provisioningProfileString {
@@ -339,43 +327,32 @@ static BOOL runningInBackground = NO;
 }
 
 + (BOOL)runningInBackground {
-    return runningInBackground;
+    @synchronized(self) {
+        return runningInBackground;
+    }
 }
 
 + (void)setRunningInBackground:(BOOL)background {
-    runningInBackground = background;
+    @synchronized(self) {
+        runningInBackground = background;
+    }
+}
+
++ (BOOL)isAppExtension {
+#if TARGET_OS_IOS == 1
+    return [[NSBundle mainBundle].bundlePath hasSuffix:@".appex"];
+#else
+    return NO;
+#endif
 }
 
 #pragma mark Public accessors
-- (MPConsoleLogging)consoleLogging {
-    if (_consoleLogging != MPConsoleLoggingAutoDetect) {
-        return _consoleLogging;
-    }
-    
-    _consoleLogging = [MPStateMachine environment] == MPEnvironmentProduction ? MPConsoleLoggingSuppress : MPConsoleLoggingDisplay;
-    if (_consoleLogging == MPConsoleLoggingSuppress) {
-        _logLevel = MPILogLevelNone;
-    }
-    
-    return _consoleLogging;
-}
-
-- (void)setConsoleLogging:(MPConsoleLogging)consoleLogging {
-    if (consoleLogging == MPConsoleLoggingSuppress) {
-        _logLevel = MPILogLevelNone;
-    } else if ([MPStateMachine environment] == MPEnvironmentDevelopment && _consoleLogging != MPConsoleLoggingSuppress) {
-        _logLevel = MPILogLevelWarning;
-    }
-    
-    _consoleLogging = consoleLogging;
-}
-
 - (MPConsumerInfo *)consumerInfo {
     if (_consumerInfo) {
         return _consumerInfo;
     }
     
-    MPPersistenceController *persistence = [MPPersistenceController sharedInstance];
+    MPPersistenceController *persistence = [MParticle sharedInstance].persistenceController;
     _consumerInfo = [persistence fetchConsumerInfoForUserId:[MPPersistenceController mpId]];
     
     if (!_consumerInfo) {
@@ -387,11 +364,10 @@ static BOOL runningInBackground = NO;
 }
 
 - (void)setLogLevel:(MPILogLevel)logLevel {
-    _logLevel = logLevel;
-    
-    if (logLevel == MPILogLevelNone) {
-        _consoleLogging = MPConsoleLoggingSuppress;
+    @synchronized(self) {
+        _logLevel = logLevel;
     }
+    
 }
 
 - (NSString *)deviceTokenType {
@@ -554,45 +530,45 @@ static BOOL runningInBackground = NO;
     });
 }
 
-- (NSDate *)minUploadDate {
-    if (_minUploadDate) {
-        return _minUploadDate;
+- (NSString *)minDefaultsKeyForUploadType:(MPUploadType)uploadType {
+    NSString *defaultsKey = nil;
+    if (uploadType == MPUploadTypeMessage) {
+        defaultsKey = kMinUploadDateKey;
+    } else if (uploadType == MPUploadTypeAlias) {
+        defaultsKey = kMinAliasDateKey;
     }
-    
-    [self willChangeValueForKey:@"minUploadDate"];
-    
-    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
-    NSDate *minUploadDate = userDefaults[kMinUploadDateKey];
-    if (minUploadDate) {
-        if ([minUploadDate compare:[NSDate date]] == NSOrderedDescending) {
-            _minUploadDate = minUploadDate;
-        } else {
-            _minUploadDate = [NSDate distantPast];
-        }
-    } else {
-        _minUploadDate = [NSDate distantPast];
-    }
-
-    [self didChangeValueForKey:@"minUploadDate"];
-    
-    return _minUploadDate;
+    return defaultsKey;
 }
 
-- (void)setMinUploadDate:(NSDate *)minUploadDate {
-    _minUploadDate = minUploadDate;
-    
+- (NSDate *)minUploadDateForUploadType:(MPUploadType)uploadType {
     MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
+    NSString *defaultsKey = [self minDefaultsKeyForUploadType:uploadType];
+    NSDate *minUploadDate = userDefaults[defaultsKey];
+    if (minUploadDate) {
+        if ([minUploadDate compare:[NSDate date]] == NSOrderedDescending) {
+            return minUploadDate;
+        } else {
+            return [NSDate distantPast];
+        }
+    }
+    
+    return [NSDate distantPast];
+}
+
+- (void)setMinUploadDate:(NSDate *)minUploadDate uploadType:(MPUploadType)uploadType {
+    MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
+    NSString *defaultsKey = [self minDefaultsKeyForUploadType:uploadType];
     if ([minUploadDate compare:[NSDate date]] == NSOrderedDescending) {
-        userDefaults[kMinUploadDateKey] = minUploadDate;
-    } else if (userDefaults[kMinUploadDateKey]) {
-        [userDefaults removeMPObjectForKey:kMinUploadDateKey];
+        userDefaults[defaultsKey] = minUploadDate;
+    } else if (userDefaults[defaultsKey]) {
+        [userDefaults removeMPObjectForKey:defaultsKey];
     }
 }
 
 - (BOOL)optOut {
-    [self willChangeValueForKey:@"optOut"];
-    
-    optOutSet = YES;
+    if (optOutSet) {
+        return _optOut;
+    }
     
     MPIUserDefaults *userDefaults = [MPIUserDefaults standardUserDefaults];
     NSNumber *optOutNumber = userDefaults[kMPOptOutStatus];
@@ -605,9 +581,8 @@ static BOOL runningInBackground = NO;
             [userDefaults synchronize];
         });
     }
-    
-    [self didChangeValueForKey:@"optOut"];
-    
+    optOutSet = YES;
+        
     return _optOut;
 }
 
@@ -791,7 +766,7 @@ static BOOL runningInBackground = NO;
         }
     }
     
-    NSString *messageTypeCommerceEventKey = [NSString stringWithCString:mParticle::MessageTypeName::nameForMessageType(mParticle::CommerceEvent).c_str() encoding:NSUTF8StringEncoding];
+    NSString *messageTypeCommerceEventKey = kMPMessageTypeStringCommerceEvent;
     NSMutableArray *messageTypes = [@[messageTypeCommerceEventKey] mutableCopy];
     NSArray *configMessageTypes = triggerDictionary[kMPRemoteConfigTriggerMessageTypesKey];
     
@@ -809,6 +784,13 @@ static BOOL runningInBackground = NO;
         restrictIDFA = @YES;
     }
     self.alwaysTryToCollectIDFA = [restrictIDFA isEqual:@NO];
+}
+
+- (void)configureAliasMaxWindow:(NSNumber *)aliasMaxWindow {
+    if (MPIsNull(aliasMaxWindow)) {
+        aliasMaxWindow = @90;
+    }
+    self.aliasMaxWindow = aliasMaxWindow;
 }
 
 @end

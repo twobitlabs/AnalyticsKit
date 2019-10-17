@@ -85,17 +85,8 @@ static void PrintReachabilityFlags(SCNetworkReachabilityFlags flags, const char*
 
 static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void* info)
 {
-    if ((info == NULL) || ![(__bridge NSObject *)info isKindOfClass:[MParticleReachability class]]) {
-        return;
-    }
-    
-#pragma unused (target, flags)
-	NSCAssert(info != NULL, @"info was NULL in ReachabilityCallback");
-	NSCAssert([(__bridge NSObject*) info isKindOfClass: [MParticleReachability class]], @"info was wrong class in ReachabilityCallback");
-
-    MParticleReachability* noteObject = (__bridge MParticleReachability *)info;
     // Post a notification to notify the client that the network reachability changed.
-    [[NSNotificationCenter defaultCenter] postNotificationName:MParticleReachabilityChangedNotification object:noteObject];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MParticleReachabilityChangedNotification object:nil];
 }
 
 
@@ -242,7 +233,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 		return MParticleNetworkStatusNotReachable;
 	}
 
-	BOOL returnValue = MParticleNetworkStatusNotReachable;
+	MParticleNetworkStatus returnValue = MParticleNetworkStatusNotReachable;
 
 	if ((flags & kSCNetworkReachabilityFlagsConnectionRequired) == 0)
 	{

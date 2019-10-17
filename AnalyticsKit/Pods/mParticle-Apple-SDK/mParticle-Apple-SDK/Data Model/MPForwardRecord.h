@@ -3,6 +3,7 @@
 
 @class MPKitFilter;
 @class MPKitExecStatus;
+@class MPBaseEvent;
 
 @interface MPForwardRecord : NSObject
 
@@ -14,7 +15,7 @@
 - (nonnull instancetype)initWithId:(int64_t)forwardRecordId data:(nonnull NSData *)data mpid:(nonnull NSNumber *)mpid;
 - (nonnull instancetype)initWithMessageType:(MPMessageType)messageType execStatus:(nonnull MPKitExecStatus *)execStatus;
 - (nonnull instancetype)initWithMessageType:(MPMessageType)messageType execStatus:(nonnull MPKitExecStatus *)execStatus stateFlag:(BOOL)stateFlag;
-- (nonnull instancetype)initWithMessageType:(MPMessageType)messageType execStatus:(nonnull MPKitExecStatus *)execStatus kitFilter:(nullable MPKitFilter *)kitFilter originalEvent:(nullable id)originalEvent;
+- (nonnull instancetype)initWithMessageType:(MPMessageType)messageType execStatus:(nonnull MPKitExecStatus *)execStatus kitFilter:(nullable MPKitFilter *)kitFilter originalEvent:(nullable MPBaseEvent *)originalEvent;
 - (nullable NSData *)dataRepresentation;
 
 @end

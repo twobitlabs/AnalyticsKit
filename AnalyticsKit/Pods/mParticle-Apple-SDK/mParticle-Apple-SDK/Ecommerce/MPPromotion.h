@@ -36,7 +36,7 @@ typedef NS_ENUM(NSUInteger, MPPromotionAction) {
  
  @see MPPromotionContainer
  */
-@interface MPPromotion : NSObject <NSCopying, NSCoding>
+@interface MPPromotion : NSObject <NSCopying, NSSecureCoding>
 
 /**
  Description for the promotion creative.
@@ -93,7 +93,7 @@ typedef NS_ENUM(NSUInteger, MPPromotionAction) {
  @see MPCommerceEvent
  @see mParticle
  */
-@interface MPPromotionContainer : NSObject <NSCopying, NSCoding>
+@interface MPPromotionContainer : NSObject <NSCopying, NSSecureCoding>
 
 /**
  List of promotions under an <i>action</i>

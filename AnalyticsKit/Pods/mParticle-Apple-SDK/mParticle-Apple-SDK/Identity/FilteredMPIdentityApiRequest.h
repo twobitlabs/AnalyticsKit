@@ -8,6 +8,9 @@
 NS_ASSUME_NONNULL_BEGIN
 @class MPIdentityApiRequest;
 
+/**
+ A filtered version of the identity request object for sending to kits
+ */
 @interface FilteredMPIdentityApiRequest : NSObject
 
 @property (nonatomic, strong, nullable, readonly) NSString *email;

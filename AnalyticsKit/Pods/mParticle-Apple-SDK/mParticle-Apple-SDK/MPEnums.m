@@ -3,6 +3,7 @@
 NSString *const mParticleSessionDidBeginNotification = @"mParticleSessionDidBeginNotification";
 NSString *const mParticleSessionDidEndNotification = @"mParticleSessionDidEndNotification";
 NSString *const mParticleSessionId = @"mParticleSessionId";
+NSString *const mParticleSessionUUID = @"mParticleSessionUUID";
 NSString *const mParticleDidFinishInitializing = @"mParticleDidFinishInitializing";
 
 NSString *const mParticleUserAttributeMobileNumber = @"$Mobile";
@@ -25,6 +26,7 @@ NSString *const mParticleEmbeddedSDKInstanceKey = @"mParticleEmbeddedSDKInstance
 
 NSString *const mParticleIdentityStateChangeListenerNotification = @"mParticleIdentityStateChangeListenerNotification";
 NSString *const mParticleUserKey = @"mParticleUserKey";
+NSString *const mParticlePreviousUserKey = @"mParticlePreviousUserKey";
 NSString *const mParticleIdentityErrorDomain = @"mParticle Identity Error Domain";
 NSString *const mParticleIdentityErrorKey = @"mParticle Identity Error";
 

@@ -51,7 +51,9 @@ namespace mParticle {
         /** Internal. Used when a product is removed from the wishlist */
         RemoveFromWishlist = 21,
         /** Internal. Used when a product is displayed in a promotion */
-        Impression = 22
+        Impression = 22,
+        /** Internal. Used when a media event is provided to the SDK */
+        MPEventTypeMedia = 23
     };
     
     class EventTypeName final {

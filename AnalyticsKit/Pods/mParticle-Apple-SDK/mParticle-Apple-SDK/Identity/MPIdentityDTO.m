@@ -10,6 +10,13 @@
 #import "MPStateMachine.h"
 #import "MPConsumerInfo.h"
 
+@interface MParticle ()
+
+@property (nonatomic, strong, readonly) MPPersistenceController *persistenceController;
+@property (nonatomic, strong, readonly) MPStateMachine *stateMachine;
+
+@end
+
 @implementation MPIdentityHTTPBaseRequest
 
 - (NSDictionary *)dictionaryRepresentation {
@@ -30,9 +37,9 @@
         dictionary[@"request_id"] = requestId;
     }
     
-    NSNumber *requestTimestamp = @(floor([[NSDate date] timeIntervalSince1970]));
+    NSNumber *requestTimestamp = @(floor([NSDate date].timeIntervalSince1970*1000));
     if (requestTimestamp != nil) {
-        dictionary[@"request_timestamp_ms"] = @([requestTimestamp longLongValue] * 1000);
+        dictionary[@"request_timestamp_ms"] = @(requestTimestamp.longLongValue);
     }
     
     return dictionary;
@@ -64,18 +71,18 @@
             _knownIdentities.vendorId = vendorId;
         }
         
-        NSString *deviceApplicationStamp = [MPStateMachine sharedInstance].consumerInfo.deviceApplicationStamp;
+        NSString *deviceApplicationStamp = [MParticle sharedInstance].stateMachine.consumerInfo.deviceApplicationStamp;
         if (deviceApplicationStamp) {
             _knownIdentities.deviceApplicationStamp = deviceApplicationStamp;
         }
         
 #if TARGET_OS_IOS == 1
-#if !defined(MPARTICLE_APP_EXTENSIONS)
-        NSString *deviceToken = [[NSString alloc] initWithData:[MPNotificationController deviceToken] encoding:NSUTF8StringEncoding];
-        if (deviceToken) {
-            _knownIdentities.pushToken = deviceToken;
+        if (![MPStateMachine isAppExtension]) {
+            NSString *deviceToken = [[NSString alloc] initWithData:[MPNotificationController deviceToken] encoding:NSUTF8StringEncoding];
+            if (deviceToken) {
+                _knownIdentities.pushToken = deviceToken;
+            }
         }
-#endif
 #endif
     }
     return self;
@@ -145,6 +152,63 @@
     if (identityChanges) {
         dictionary[@"identity_changes"] = identityChanges;
     }
+    
+    return dictionary;
+}
+
+@end
+
+@implementation MPIdentityHTTPAliasRequest
+
+- (id)initWithIdentityApiAliasRequest:(MPAliasRequest *)aliasRequest {
+    if (self = [super init]) {
+        _sourceMPID = aliasRequest.sourceMPID;
+        _destinationMPID = aliasRequest.destinationMPID;
+        _startTime = aliasRequest.startTime;
+        _endTime = aliasRequest.endTime;
+    }
+    return self;
+}
+
+- (NSDictionary *)dictionaryRepresentation {
+    NSMutableDictionary *dictionary = [[super dictionaryRepresentation] mutableCopy];
+    [dictionary removeObjectForKey:@"client_sdk"];
+    [dictionary removeObjectForKey:@"request_timestamp_ms"];
+    
+    dictionary[@"request_type"] = @"alias";
+    
+    dictionary[@"api_key"] = MParticle.sharedInstance.stateMachine.apiKey;
+    
+    NSMutableDictionary *dataDictionary = [NSMutableDictionary dictionary];
+    
+    if (_sourceMPID != nil) {
+        dataDictionary[@"source_mpid"] = _sourceMPID;
+    }
+    
+    if (_destinationMPID != nil) {
+        dataDictionary[@"destination_mpid"] = _destinationMPID;
+    }
+    
+    if (_startTime) {
+        NSNumber *requestTimestamp = @(floor(_startTime.timeIntervalSince1970*1000));
+        if (requestTimestamp != nil) {
+            dataDictionary[@"start_unixtime_ms"] = @(requestTimestamp.longLongValue);
+        }
+    }
+    
+    if (_endTime) {
+        NSNumber *requestTimestamp = @(floor(_endTime.timeIntervalSince1970*1000));
+        if (requestTimestamp != nil) {
+            dataDictionary[@"end_unixtime_ms"] = @(requestTimestamp.longLongValue);
+        }
+    }
+    
+    NSString *deviceApplicationStamp = [MParticle sharedInstance].stateMachine.consumerInfo.deviceApplicationStamp;
+    if (deviceApplicationStamp) {
+        dataDictionary[@"device_application_stamp"] = deviceApplicationStamp;
+    }
+    
+    dictionary[@"data"] = dataDictionary;
     
     return dictionary;
 }
@@ -335,6 +399,36 @@
     }
 }
 
++ (NSNumber *)identityTypeForString:(NSString *)identityString {
+    if ([identityString isEqualToString:@"customerid"]){
+        return @(MPUserIdentityCustomerId);
+    } else if ([identityString isEqualToString:@"email"]){
+        return @(MPUserIdentityEmail);
+    } else if ([identityString isEqualToString:@"facebook"]){
+        return @(MPUserIdentityFacebook);
+    } else if ([identityString isEqualToString:@"facebookcustomaudienceid"]){
+        return @(MPUserIdentityFacebookCustomAudienceId);
+    } else if ([identityString isEqualToString:@"google"]){
+        return @(MPUserIdentityGoogle);
+    } else if ([identityString isEqualToString:@"microsoft"]){
+        return @(MPUserIdentityMicrosoft);
+    } else if ([identityString isEqualToString:@"other"]){
+        return @(MPUserIdentityOther);
+    } else if ([identityString isEqualToString:@"twitter"]){
+        return @(MPUserIdentityTwitter);
+    } else if ([identityString isEqualToString:@"yahoo"]){
+        return @(MPUserIdentityYahoo);
+    } else if ([identityString isEqualToString:@"other2"]){
+        return @(MPUserIdentityOther2);
+    } else if ([identityString isEqualToString:@"other3"]){
+        return @(MPUserIdentityOther3);
+    } else if ([identityString isEqualToString:@"other4"]){
+        return @(MPUserIdentityOther4);
+    } else {
+        return nil;
+    }
+}
+
 @end
 
 @implementation MPIdentityHTTPIdentityChange
@@ -376,13 +470,14 @@
 - (instancetype)initWithJsonObject:(NSDictionary *)dictionary {
     self = [super init];
     if (self) {
-        _context = dictionary[@"context"];
-        NSString *mpidString = dictionary[@"mpid"];
+        _context = dictionary[kMPIdentityRequestKeyContext];
+        NSString *mpidString = dictionary[kMPIdentityRequestKeyMPID];
         if (mpidString) {
             _mpid = [NSNumber numberWithLongLong:(long long)[mpidString longLongValue]];
         }
-        _isEphemeral = [[dictionary valueForKey:@"is_ephemeral"] boolValue];
-        
+        _isEphemeral = [[dictionary objectForKey:kMPIdentityRequestKeyIsEphemeral] boolValue];
+        _isLoggedIn =  [[dictionary objectForKey:kMPIdentityRequestKeyIsLoggedIn] boolValue];
+
     }
     return self;
 }
@@ -396,7 +491,10 @@
 @implementation MPIdentityHTTPModifySuccessResponse
 
 - (instancetype)initWithJsonObject:(NSDictionary *)dictionary {
-    self = [super init];
+    self = [super initWithJsonObject:dictionary];
+    if (self) {
+        _changeResults = [dictionary objectForKey:kMPIdentityRequestKeyChangeResults];
+    }
     return self;
 }
 

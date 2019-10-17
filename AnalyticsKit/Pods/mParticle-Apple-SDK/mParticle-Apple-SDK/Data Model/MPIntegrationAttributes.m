@@ -1,40 +1,41 @@
 #import "MPIntegrationAttributes.h"
-#import "MPKitInstanceValidator.h"
 #import "MPILogger.h"
+#import "MParticle.h"
+#import "MPStateMachine.h"
 
 @implementation MPIntegrationAttributes
 
-- (nonnull instancetype)initWithKitCode:(nonnull NSNumber *)kitCode attributes:(nonnull NSDictionary<NSString *, NSString *> *)attributes {
-    BOOL validKitCode = [MPKitInstanceValidator isValidKitCode:kitCode];
+- (nonnull instancetype)initWithIntegrationId:(nonnull NSNumber *)integrationId attributes:(nonnull NSDictionary<NSString *, NSString *> *)attributes {
     
-    __block BOOL validIntegrationAttributes = !MPIsNull(attributes) && attributes.count > 0;
-    
-    if (validKitCode && validIntegrationAttributes) {
-        Class NSStringClass = [NSString class];
-        [attributes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-            validIntegrationAttributes = [key isKindOfClass:NSStringClass] && [obj isKindOfClass:NSStringClass];
-            
-            if (!validIntegrationAttributes) {
-                MPILogError(@"Integration attributes must be a dictionary of string, string.");
-                *stop = YES;
-            }
-        }];
+    if (![integrationId isKindOfClass:[NSNumber class]] || MPIsNull(attributes) || attributes.count == 0) {
+        return nil;
     }
-
-    if (!validKitCode || !validIntegrationAttributes) {
+    
+    __block BOOL validIntegrationAttributes = YES;
+    Class NSStringClass = [NSString class];
+    [attributes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        validIntegrationAttributes = [key isKindOfClass:NSStringClass] && [obj isKindOfClass:NSStringClass];
+        
+        if (!validIntegrationAttributes) {
+            MPILogError(@"Integration attributes must be a dictionary of string, string.");
+            *stop = YES;
+        }
+    }];
+    
+    if (!validIntegrationAttributes) {
         return nil;
     }
     
     self = [super init];
     if (self) {
-        _kitCode = kitCode;
+        _integrationId = integrationId;
         _attributes = attributes;
     }
 
     return self;
 }
 
-- (nonnull instancetype)initWithKitCode:(nonnull NSNumber *)kitCode attributesData:(nonnull NSData *)attributesData {
+- (nonnull instancetype)initWithIntegrationId:(nonnull NSNumber *)integrationId attributesData:(nonnull NSData *)attributesData {
     NSError *error = nil;
     NSDictionary *attributes = nil;
     
@@ -51,13 +52,13 @@
         return nil;
     }
     
-    self = [self initWithKitCode:kitCode attributes:attributes];
+    self = [self initWithIntegrationId:integrationId attributes:attributes];
     return self;
 }
 
 #pragma mark MPDataModelProtocol
 - (NSDictionary *)dictionaryRepresentation {
-    NSDictionary<NSString *, NSDictionary<NSString *, NSString*> *> *dictionary = @{[_kitCode stringValue]:_attributes};
+    NSDictionary<NSString *, NSDictionary<NSString *, NSString*> *> *dictionary = @{[_integrationId stringValue]:_attributes};
     return dictionary;
 }
 
