@@ -43,7 +43,7 @@ public class AnalyticsKitUnitTestProvider: NSObject, AnalyticsKitProvider {
 
     public func firstEventLoggedWithName(_ eventName: String) -> AnalyticsKitEvent? {
         var event: AnalyticsKitEvent?
-        var matchingEvents: [AnalyticsKitEvent] = eventsLoggedWithName(eventName)
+        let matchingEvents: [AnalyticsKitEvent] = eventsLoggedWithName(eventName)
         if matchingEvents.count > 0 {
             event = matchingEvents[0]
         }
