@@ -51,9 +51,6 @@ public class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
 
     public func logEvent(_ event: String, timed: Bool) {
         if timed {
-            if MParticle.sharedInstance().event(withName: event) != nil {
-                endTimedEvent(event, withProperties: [String: Any]())
-            }
             if let event = MPEvent(name: event, type: defaultEventType) {
                 MParticle.sharedInstance().beginTimedEvent(event)
             }
@@ -64,9 +61,7 @@ public class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
 
     public func logEvent(_ event: String, withProperties properties: [String: Any], timed: Bool) {
         if timed {
-            if MParticle.sharedInstance().event(withName: event) != nil {
-                endTimedEvent(event, withProperties: properties)
-            } else if let mpEvent = MPEvent(name: event, type: extractEventTypeFromProperties(properties)) {
+            if let mpEvent = MPEvent(name: event, type: extractEventTypeFromProperties(properties)) {
                 mpEvent.customAttributes = properties
                 MParticle.sharedInstance().beginTimedEvent(mpEvent)
             }
@@ -81,6 +76,9 @@ public class AnalyticsKitMParticleProvider: NSObject, AnalyticsKitProvider {
                 // Replace the parameters if parameters are passed
                 event.customAttributes = properties
             }
+            // The mParticle SDK's endTimedEvent call became asynchronous in 7.3.0,
+            // so calling event(withName:) immediately after calling endTimedEvent is likely to still return an event.
+            // https://github.com/mParticle/mparticle-apple-sdk/commit/ead0fc8
             MParticle.sharedInstance().endTimedEvent(event)
         }
     }
