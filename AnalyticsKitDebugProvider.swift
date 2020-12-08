@@ -67,7 +67,14 @@ public class AnalyticsKitDebugProvider: NSObject, AnalyticsKitProvider {
     }
 
     fileprivate func present(_ alertController: UIAlertController) {
-        if let rootVC = UIApplication.shared.keyWindow?.rootViewController {
+        let keyWindow: UIWindow? = {
+            if #available(iOS 13, *) {
+                return UIApplication.shared.windows.first { $0.isKeyWindow }
+            } else {
+                return UIApplication.shared.keyWindow
+            }
+        }()
+        if let rootVC = keyWindow?.rootViewController {
             presentFromController(alertController, controller: rootVC)
         }
     }
