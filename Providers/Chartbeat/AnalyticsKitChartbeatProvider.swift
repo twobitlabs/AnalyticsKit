@@ -25,11 +25,7 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
     public func logError(_ name: String, message: String?, properties: [String : Any]?, error: Error?) {}
     
     public func logEvent(_ event: String, withProperties properties: [String : Any]) {
-        print("Chartbeat123456 EVENT: \(event)")
-        
-        if event == "Content Selected" {
-            print("Chartbeat123456 EVENT: \(event)")
-            
+        if event == AnalyticsEvent.Content.contentSelected {
             let streamName = getValue(for: "streamName", in: properties)
             let contentID = getValue(for: "contentID", in: properties)
             let title = getValue(for: "title", in: properties)
@@ -40,8 +36,8 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
             }
             
             print("Chartbeat12345 values to send are SECTION: \(streamName), VIEWiD: \(contentID), TITLE: \(title), for EVENT: \(event) - Author \(author) ")
+        
             CBTracker.shared().sections.append(streamName)
-            
             CBTracker.shared().trackView(nil, viewId: contentID, title: title)
         }
     }
