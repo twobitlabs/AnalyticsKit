@@ -25,17 +25,25 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
     public func logError(_ name: String, message: String?, properties: [String : Any]?, error: Error?) {}
     
     public func logEvent(_ event: String, withProperties properties: [String : Any]) {
-        let streamName = getValue(for: "streamName", in: properties)
-        let contentID = getValue(for: "contentID", in: properties)
-        let title = getValue(for: "title", in: properties)
+        print("Chartbeat123456 EVENT: \(event)")
         
-        if CBTracker.shared().sections.isEmpty {
-            CBTracker.shared().sections = []
+        if event == "Content Selected" {
+            print("Chartbeat123456 EVENT: \(event)")
+            
+            let streamName = getValue(for: "streamName", in: properties)
+            let contentID = getValue(for: "contentID", in: properties)
+            let title = getValue(for: "title", in: properties)
+            let author = getValue(for: "author", in: properties)
+            
+            if CBTracker.shared().sections.isEmpty {
+                CBTracker.shared().sections = []
+            }
+            
+            print("Chartbeat12345 values to send are SECTION: \(streamName), VIEWiD: \(contentID), TITLE: \(title), for EVENT: \(event) - Author \(author) ")
+            CBTracker.shared().sections.append(streamName)
+            
+            CBTracker.shared().trackView(nil, viewId: contentID, title: title)
         }
-        
-        print("Chartbeat12345 values to send are SECTION: \(streamName), VIEWiD: \(contentID), TITLE: \(title) ")
-        CBTracker.shared().sections.append(streamName)
-        CBTracker.shared().trackView(nil, viewId: contentID, title: title)
     }
     
     private func getValue(for key: String, in properties: [String: Any]) -> String {
@@ -43,6 +51,7 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
         
         for i in properties {
             if i.key == key {
+                
                 value = "\(i.value)"
             }
         }
