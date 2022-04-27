@@ -25,6 +25,7 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
     public func logError(_ name: String, message: String?, properties: [String : Any]?, error: Error?) {}
     
     public func logEvent(_ event: String, withProperties properties: [String : Any]) {
+        
         if event == AnalyticsEvent.Content.contentSelected {
             let streamName = getValue(for: "streamName", in: properties)
             let contentID = getValue(for: "contentID", in: properties)
@@ -44,10 +45,8 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
     
     private func getValue(for key: String, in properties: [String: Any]) -> String {
         var value = ""
-        
         for i in properties {
             if i.key == key {
-                
                 value = "\(i.value)"
             }
         }
