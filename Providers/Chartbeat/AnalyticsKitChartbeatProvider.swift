@@ -24,26 +24,53 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
     public func logError(_ name: String, message: String?, properties: [String : Any]?, exception: NSException?) {}
     public func logError(_ name: String, message: String?, properties: [String : Any]?, error: Error?) {}
     
+    private func trackViewFor(_ title: String, _ viewID: String, forSection section: String, inEvent event: String) {
+        checkSections()
+        
+        let joinedTitle = title.replacingLastOccurrenceOfString("\n", with: " ")
+        let trimToCharacter = 5
+        let shortString = String(joinedTitle.prefix(trimToCharacter))
+        
+        print("CB1234 -- Pushing to CB -> SECTION: \(section), VIEWID: \(viewID), TITLE: \(shortString), for EVENT: \(event)")
+        
+        CBTracker.shared().sections.append(section)
+        CBTracker.shared().trackView(nil, viewId: viewID, title: shortString)
+    }
+    
     public func logEvent(_ event: String, withProperties properties: [String : Any]) {
         
         print("CB123 -> event: \(event)")
         
         if event == AnalyticsEvent.Content.contentSelected {
-            let streamName = getValue(for: "streamName", in: properties)
-            let contentID = getValue(for: "contentID", in: properties)
+            let section = getValue(for: "streamName", in: properties)
+            let viewID = getValue(for: "contentID", in: properties)
             let title = getValue(for: "title", in: properties)
             
-            if CBTracker.shared().sections.isEmpty {
-                CBTracker.shared().sections = []
-            }
-            
-            print("CB123 -- Pushing to CB -> SECTION: \(streamName), VIEWID: \(contentID), TITLE: \(title), for EVENT: \(event)")
-            CBTracker.shared().sections.append(streamName)
-            CBTracker.shared().trackView(nil, viewId: contentID, title: title)
+            trackViewFor(title, viewID, forSection: section, inEvent: event)
         } else if event == AnalyticsEvent.Content.contentViewed {
-            print("CB123 -> Event outside Content Selected: \(event)")
-            CBTracker.shared().stop()
+            stopTrackerFor(event)
+            
+        } else if event == AnalyticsEvent.Gamecast.gamecastSelected {
+            let streamName = getValue(for: "streamName", in: properties)
+            let streamID = getValue(for: "streamID", in: properties)
+            let title = getValue(for: "title", in: properties)
+            
+            trackViewFor(title, streamID, forSection: streamName, inEvent: event)
+        } else if event == "Gamecast Summary" {
+            stopTrackerFor(event)
+            
         }
+    }
+    
+    private func checkSections() {
+        if CBTracker.shared().sections.isEmpty {
+            CBTracker.shared().sections = []
+        }
+    }
+    
+    private func stopTrackerFor(_ event: String) {
+        print("CB1234 -- Stopping Tracker for EVENT: \(event)")
+        CBTracker.shared().stop()
     }
     
     private func getValue(for key: String, in properties: [String: Any]) -> String {
