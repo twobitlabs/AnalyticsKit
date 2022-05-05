@@ -24,19 +24,6 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
     public func logError(_ name: String, message: String?, properties: [String : Any]?, exception: NSException?) {}
     public func logError(_ name: String, message: String?, properties: [String : Any]?, error: Error?) {}
     
-    private func trackViewFor(_ title: String, _ viewID: String, forSection section: String, inEvent event: String) {
-        checkSections()
-        
-        let joinedTitle = title.replacingLastOccurrenceOfString("\n", with: " ")
-        let trimToCharacter = 5
-        let shortString = String(joinedTitle.prefix(trimToCharacter))
-        
-        print("CB1234 -- Pushing to CB -> SECTION: \(section), VIEWID: \(viewID), TITLE: \(shortString), for EVENT: \(event)")
-        
-        CBTracker.shared().sections.append(section)
-        CBTracker.shared().trackView(nil, viewId: viewID, title: shortString)
-    }
-    
     public func logEvent(_ event: String, withProperties properties: [String : Any]) {
         
         print("CB123 -> event: \(event)")
@@ -46,20 +33,36 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
             let viewID = getValue(for: "contentID", in: properties)
             let title = getValue(for: "title", in: properties)
             
-            trackViewFor(title, viewID, forSection: section, inEvent: event)
-        } else if event == AnalyticsEvent.Content.contentViewed {
-            stopTrackerFor(event)
-            
+            trackView(withTitle: title, withViewID: viewID, forSection: section, inEvent: event)
         } else if event == AnalyticsEvent.Gamecast.gamecastSelected {
             let streamName = getValue(for: "streamName", in: properties)
             let streamID = getValue(for: "streamID", in: properties)
             let title = getValue(for: "title", in: properties)
             
-            trackViewFor(title, streamID, forSection: streamName, inEvent: event)
-        } else if event == "Gamecast Summary" {
-            stopTrackerFor(event)
+            trackView(withTitle: title + " (Gamecast)", withViewID: streamName, forSection: streamID, inEvent: event)
+        } else if event == AnalyticsEvent.Stream.streamInteracted {
+            let screenReached = getValue(for: "screenReached", in: properties)
+            let streamID = getValue(for: "streamID", in: properties)
+            let contentCategory = getValue(for: "contentCategory", in: properties)
+            let title = getValue(for: "title", in: properties)
             
+            let screen = screenReached.replacingLastOccurrenceOfString("Stream - ", with: "")
+            
+            trackView(withTitle: title + " (\(screen))", withViewID: streamID, forSection: contentCategory, inEvent: event)
         }
+    }
+    
+    private func trackView(withTitle title: String, withViewID viewID: String, forSection section: String, inEvent event: String) {
+        checkSections()
+        
+        let joinedTitle = title.replacingLastOccurrenceOfString("\n", with: " ")
+        let trimToCharacter = 60
+        let shortString = String(joinedTitle.prefix(trimToCharacter))
+        
+        print("CB1234 -- Pushing to CB -> SECTION: \(section), VIEWID: \(String(describing: viewID)), TITLE: \(shortString), for EVENT: \(event)")
+        
+        CBTracker.shared().sections.append(section)
+        CBTracker.shared().trackView(nil, viewId: viewID, title: shortString)
     }
     
     private func checkSections() {
