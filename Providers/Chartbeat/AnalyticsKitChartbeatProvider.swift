@@ -26,8 +26,6 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
     
     public func logEvent(_ event: String, withProperties properties: [String : Any]) {
         
-        print("CB123 -> event: \(event)")
-        
         switch event {
         case AnalyticsEvent.Content.contentSelected:
             let section = getValue(for: "streamName", in: properties)
@@ -42,14 +40,23 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
             let title = getValue(for: "title", in: properties)
 
             trackView(withTitle: title + " (Gamecast)", withViewID: streamName, forSection: streamID, inEvent: event)
+            
+        //Not yet tested since dk where to fire it
+        case AnalyticsEvent.Content.roomSelected:
+            let roomName = getValue(for: "roomName", in: properties)
+
+            trackView(withTitle: roomName + " (Room)", withViewID: roomName, forSection: roomName, inEvent: event)
+            
+        case AnalyticsEvent.Betting.packSelected:
+            let packTitle = getValue(for: "packTitle", in: properties)
+
+            trackView(withTitle: packTitle + " (Perfect Picks)", withViewID: packTitle, forSection: packTitle, inEvent: event)
 
         case "Screen Viewed":
             let screenValue = getValue(for: "screenValue", in: properties)
             let screen = getValue(for: "screen", in: properties)
             let tag = getValue(for: "tag", in: properties)
 
-            print("CB123 -> event Screen Viewed: \(event), screen: \(screen), screenValue: \(screenValue), tag: \(tag)")
-            
             for allowed in ScreenViewedScreensAllowed.allCases {
                 if screen == allowed.rawValue  {
                     trackView(withTitle: "\(screenValue) \(tag) (\(screen))", withViewID: screen, forSection: screen, inEvent: event)
@@ -61,7 +68,7 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
         }
     }
     
-    enum ScreenViewedScreensAllowed: String, CaseIterable {
+    private enum ScreenViewedScreensAllowed: String, CaseIterable {
         case streamNews = "Stream - News"
         case streamCommunity = "Stream - Community"
         case streamStandings = "Stream - Standings" //this one is dinamyc - let's see.
@@ -71,6 +78,7 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
         case tabMyBR = "My B/R"
         case tabFire = "Fire"
         case tabAlerts = "Alerts"
+        case happeningNow = "Happening Now"
     }
 
     private func trackView(withTitle title: String, withViewID viewID: String, forSection section: String, inEvent event: String) {
