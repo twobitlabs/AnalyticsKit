@@ -71,6 +71,7 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
     private enum ScreenViewedScreensAllowed: String, CaseIterable {
         case streamNews = "Stream - News"
         case streamCommunity = "Stream - Community"
+        case streamStandings = "Standings"
         case streamSchedule = "Stream - Team - Schedule"
         case tabHome = "Home"
         case tabScores = "Scores"
