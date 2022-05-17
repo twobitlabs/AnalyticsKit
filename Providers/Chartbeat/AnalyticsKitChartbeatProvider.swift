@@ -28,35 +28,56 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
         
         print("CB123 -> event: \(event)")
         
-        if event == AnalyticsEvent.Content.contentSelected {
+        switch event {
+        case AnalyticsEvent.Content.contentSelected:
             let section = getValue(for: "streamName", in: properties)
             let viewID = getValue(for: "contentID", in: properties)
             let title = getValue(for: "title", in: properties)
-            
+
             trackView(withTitle: title, withViewID: viewID, forSection: section, inEvent: event)
-        } else if event == AnalyticsEvent.Gamecast.gamecastSelected {
+
+        case AnalyticsEvent.Gamecast.gamecastSelected:
             let streamName = getValue(for: "streamName", in: properties)
             let streamID = getValue(for: "streamID", in: properties)
             let title = getValue(for: "title", in: properties)
-            
+
             trackView(withTitle: title + " (Gamecast)", withViewID: streamName, forSection: streamID, inEvent: event)
-        } else if event == AnalyticsEvent.Stream.streamInteracted {
-            let screenReached = getValue(for: "screenReached", in: properties)
-            let streamID = getValue(for: "streamID", in: properties)
-            let contentCategory = getValue(for: "contentCategory", in: properties)
-            let title = getValue(for: "title", in: properties)
+
+        case "Screen Viewed":
+            let screenValue = getValue(for: "screenValue", in: properties)
+            let screen = getValue(for: "screen", in: properties)
+            let tag = getValue(for: "tag", in: properties)
+
+            print("CB123 -> event Screen Viewed: \(event), screen: \(screen), screenValue: \(screenValue), tag: \(tag)")
             
-            let screen = screenReached.replacingLastOccurrenceOfString("Stream - ", with: "")
-            
-            trackView(withTitle: title + " (\(screen))", withViewID: streamID, forSection: contentCategory, inEvent: event)
+            for allowed in ScreenViewedScreensAllowed.allCases {
+                if screen == allowed.rawValue  {
+                    trackView(withTitle: "\(screenValue) \(tag) (\(screen))", withViewID: screen, forSection: screen, inEvent: event)
+                }
+            }
+
+        default:
+            print("some")
         }
     }
     
+    enum ScreenViewedScreensAllowed: String, CaseIterable {
+        case streamNews = "Stream - News"
+        case streamCommunity = "Stream - Community"
+        case streamStandings = "Stream - Standings" //this one is dinamyc - let's see.
+        case streamSchedule = "Stream - Team - Schedule"
+        case tabHome = "Home"
+        case tabScores = "Scores"
+        case tabMyBR = "My B/R"
+        case tabFire = "Fire"
+        case tabAlerts = "Alerts"
+    }
+
     private func trackView(withTitle title: String, withViewID viewID: String, forSection section: String, inEvent event: String) {
         checkSections()
         
         let joinedTitle = title.replacingLastOccurrenceOfString("\n", with: " ")
-        let trimToCharacter = 60
+        let trimToCharacter = 90
         let shortString = String(joinedTitle.prefix(trimToCharacter))
         
         print("CB1234 -- Pushing to CB -> SECTION: \(section), VIEWID: \(String(describing: viewID)), TITLE: \(shortString), for EVENT: \(event)")
