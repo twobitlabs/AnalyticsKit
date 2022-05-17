@@ -146,28 +146,6 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
         case streamStandings65 = "Standings - NBA - Conference"
         case streamStandings66 = "Standings - World_Football - Premier League"
         case streamStandings67 = "Standings - - Premier League"
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
     }
 
     private func trackView(withTitle title: String, withViewID viewID: String, forSection section: String, inEvent event: String) {
