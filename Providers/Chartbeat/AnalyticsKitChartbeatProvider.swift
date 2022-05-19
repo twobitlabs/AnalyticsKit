@@ -64,7 +64,7 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
             }
 
         default:
-            print("some")
+            print("Not tracked event \(event)")
         }
     }
     
@@ -79,7 +79,6 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
         case tabFire = "Fire"
         case tabAlerts = "Alerts"
         case happeningNow = "Happening Now"
-        
         case streamStandings1 = "Standings - World_Football - Africa Cup of Nations"
         case streamStandings2 = "Standings - College_Football - Mountain West"
         case streamStandings3 = "Standings - World_Football - Copa America"
@@ -169,7 +168,6 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
     }
     
     private func stopTrackerFor(_ event: String) {
-        print("CB1234 -- Stopping Tracker for EVENT: \(event)")
         CBTracker.shared().stop()
     }
     
