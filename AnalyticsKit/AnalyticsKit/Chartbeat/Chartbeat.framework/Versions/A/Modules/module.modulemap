@@ -1,0 +1,6 @@
+framework module Chartbeat {
+  umbrella header "CBTracker.h"
+
+  export *
+  module * { export * }
+}

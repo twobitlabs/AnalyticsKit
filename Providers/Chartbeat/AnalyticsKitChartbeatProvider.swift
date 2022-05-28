@@ -68,6 +68,42 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
         }
     }
     
+    private func trackView(withTitle title: String, withViewID viewID: String, forSection section: String, inEvent event: String) {
+        checkSections()
+        
+        let joinedTitle = title.replacingLastOccurrenceOfString("\n", with: " ")
+        let trimToCharacter = 90
+        let shortString = String(joinedTitle.prefix(trimToCharacter))
+        
+        print("CB1234 -- Pushing to CB -> SECTION: \(section), VIEWID: \(String(describing: viewID)), TITLE: \(shortString), for EVENT: \(event)")
+        
+        print("CB1234 Domain Endpoint --> \(CBTracker.shared().domain) ")
+        
+        CBTracker.shared().sections.append(section)
+        CBTracker.shared().trackView(nil, viewId: viewID, title: shortString)
+    }
+    
+    private func checkSections() {
+        if CBTracker.shared().sections.isEmpty {
+            CBTracker.shared().sections = []
+        }
+    }
+    
+    private func stopTrackerFor(_ event: String) {
+        CBTracker.shared().stop()
+    }
+    
+    private func getValue(for key: String, in properties: [String: Any]) -> String {
+        var value = ""
+        for i in properties {
+            if i.key == key {
+                value = "\(i.value)"
+            }
+        }
+        return value
+    }
+    
+    
     private enum ScreenViewedScreensAllowed: String, CaseIterable {
         case streamNews = "Stream - News"
         case streamCommunity = "Stream - Community"
@@ -146,40 +182,5 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
         case streamStandings65 = "Standings - NBA - Conference"
         case streamStandings66 = "Standings - World_Football - Premier League"
         case streamStandings67 = "Standings - - Premier League"
-    }
-
-    private func trackView(withTitle title: String, withViewID viewID: String, forSection section: String, inEvent event: String) {
-        checkSections()
-        
-        let joinedTitle = title.replacingLastOccurrenceOfString("\n", with: " ")
-        let trimToCharacter = 90
-        let shortString = String(joinedTitle.prefix(trimToCharacter))
-        
-        print("CB1234 -- Pushing to CB -> SECTION: \(section), VIEWID: \(String(describing: viewID)), TITLE: \(shortString), for EVENT: \(event)")
-        
-        print("CB1234 Domain Endpoint --> \(CBTracker.shared().domain) ")
-        
-        CBTracker.shared().sections.append(section)
-        CBTracker.shared().trackView(nil, viewId: viewID, title: shortString)
-    }
-    
-    private func checkSections() {
-        if CBTracker.shared().sections.isEmpty {
-            CBTracker.shared().sections = []
-        }
-    }
-    
-    private func stopTrackerFor(_ event: String) {
-        CBTracker.shared().stop()
-    }
-    
-    private func getValue(for key: String, in properties: [String: Any]) -> String {
-        var value = ""
-        for i in properties {
-            if i.key == key {
-                value = "\(i.value)"
-            }
-        }
-        return value
     }
 }
