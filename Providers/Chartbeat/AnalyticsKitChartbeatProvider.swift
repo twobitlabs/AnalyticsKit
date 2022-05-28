@@ -77,7 +77,7 @@ public class AnalyticsKitChartbeatProvider: NSObject, AnalyticsKitProvider {
         
         print("CB1234 -- Pushing to CB -> SECTION: \(section), VIEWID: \(String(describing: viewID)), TITLE: \(shortString), for EVENT: \(event)")
         
-        print("CB1234 Domain Endpoint --> \(CBTracker.shared().domain) ")
+        print("CB1234 Domain Endpoint --> \(CBTracker.shared().domain ?? "no domain")")
         
         CBTracker.shared().sections.append(section)
         CBTracker.shared().trackView(nil, viewId: viewID, title: shortString)
