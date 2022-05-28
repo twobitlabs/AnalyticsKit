@@ -18,7 +18,7 @@
 		6E73BDF91ECF968000657CDE /* AnalyticsKitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E73BDF81ECF968000657CDE /* AnalyticsKitViewController.swift */; };
 		6E73BDFB1ECF96D000657CDE /* AnalyticsKitAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E73BDFA1ECF96D000657CDE /* AnalyticsKitAppDelegate.swift */; };
 		6E73BDFE1ECFB90000657CDE /* AnalyticsKitIntercomProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E73BDFD1ECFB90000657CDE /* AnalyticsKitIntercomProvider.swift */; };
-		760065FB284244DB00B99891 /* Chartbeat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 760065FA284244DB00B99891 /* Chartbeat.framework */; };
+		76042B3D28426F5B009E4756 /* Chartbeat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76042B3C28426F5B009E4756 /* Chartbeat.framework */; };
 		760D68C0284127C400A69EE1 /* AnalyticsKitChartbeatProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760D68BF284127C400A69EE1 /* AnalyticsKitChartbeatProvider.swift */; };
 		8B0964DD1D53D25500F7762D /* AnalyticsKitUnitTestProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0964DC1D53D25400F7762D /* AnalyticsKitUnitTestProvider.swift */; };
 		8B0964DF1D53DE8E00F7762D /* AnalyticsKitEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0964DE1D53DE8E00F7762D /* AnalyticsKitEvent.swift */; };
@@ -75,7 +75,7 @@
 		6E73BDF81ECF968000657CDE /* AnalyticsKitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitViewController.swift; sourceTree = "<group>"; };
 		6E73BDFA1ECF96D000657CDE /* AnalyticsKitAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitAppDelegate.swift; sourceTree = "<group>"; };
 		6E73BDFD1ECFB90000657CDE /* AnalyticsKitIntercomProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitIntercomProvider.swift; sourceTree = "<group>"; };
-		760065FA284244DB00B99891 /* Chartbeat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Chartbeat.framework; sourceTree = "<group>"; };
+		76042B3C28426F5B009E4756 /* Chartbeat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Chartbeat.framework; sourceTree = "<group>"; };
 		760D68BF284127C400A69EE1 /* AnalyticsKitChartbeatProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitChartbeatProvider.swift; sourceTree = "<group>"; };
 		8B0964DC1D53D25400F7762D /* AnalyticsKitUnitTestProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsKitUnitTestProvider.swift; sourceTree = "<group>"; };
 		8B0964DE1D53DE8E00F7762D /* AnalyticsKitEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnalyticsKitEvent.swift; path = ../../AnalyticsKitEvent.swift; sourceTree = "<group>"; };
@@ -126,7 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				760065FB284244DB00B99891 /* Chartbeat.framework in Frameworks */,
+				76042B3D28426F5B009E4756 /* Chartbeat.framework in Frameworks */,
 				2E80B4831C526EFC00F8AD7A /* libicucore.tbd in Frameworks */,
 				9C0EF37C18E0F4AB00D19A2C /* libsqlite3.dylib in Frameworks */,
 				9C0EF37618E0F12A00D19A2C /* AdSupport.framework in Frameworks */,
@@ -167,12 +167,13 @@
 			path = Intercom;
 			sourceTree = "<group>";
 		};
-		760065FC284244E700B99891 /* Chartbeat */ = {
+		76042B3B28426F5B009E4756 /* Chartbeat */ = {
 			isa = PBXGroup;
 			children = (
-				760065FA284244DB00B99891 /* Chartbeat.framework */,
+				76042B3C28426F5B009E4756 /* Chartbeat.framework */,
 			);
-			path = Chartbeat;
+			name = Chartbeat;
+			path = ProviderLibraries/Chartbeat;
 			sourceTree = "<group>";
 		};
 		760D68BE284127C400A69EE1 /* Chartbeat */ = {
@@ -194,7 +195,7 @@
 		9C0EF30E18E0D0F300D19A2C /* ProviderLibraries */ = {
 			isa = PBXGroup;
 			children = (
-				760065FC284244E700B99891 /* Chartbeat */,
+				76042B3B28426F5B009E4756 /* Chartbeat */,
 				9C0EF32218E0DB7F00D19A2C /* ApSalar */,
 			);
 			name = ProviderLibraries;
@@ -805,6 +806,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/AnalyticsKit",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries",
+					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Chartbeat",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AnalyticsKit/AnalyticsKit-Prefix.pch";
@@ -844,6 +846,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/AnalyticsKit",
 					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries",
+					"$(PROJECT_DIR)/AnalyticsKit/ProviderLibraries/Chartbeat",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AnalyticsKit/AnalyticsKit-Prefix.pch";
