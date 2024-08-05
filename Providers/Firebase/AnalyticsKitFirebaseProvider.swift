@@ -11,7 +11,9 @@ class AnalyticsKitFirebaseProvider: NSObject, AnalyticsKitProvider {
 
     override init() {
         super.init()
-        FirebaseApp.configure()
+        if (FirebaseApp.app() == nil) {
+            FirebaseApp.configure()
+        }
     }
 
     // Lifecycle

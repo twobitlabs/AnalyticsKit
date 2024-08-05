@@ -68,10 +68,15 @@ public class AnalyticsKitDebugProvider: NSObject, AnalyticsKitProvider {
 
     fileprivate func present(_ alertController: UIAlertController) {
         let keyWindow: UIWindow? = {
-            if #available(iOS 13, *) {
-                return UIApplication.shared.windows.first { $0.isKeyWindow }
+            if #available(iOS 15, *) {
+                // Use connectedScenes to find the key window for iOS 15 and later
+                return UIApplication.shared.connectedScenes
+                    .compactMap { $0 as? UIWindowScene }
+                    .flatMap { $0.windows }
+                    .first { $0.isKeyWindow }
             } else {
-                return UIApplication.shared.keyWindow
+                // Use windows for iOS 13 and 14, and keyWindow for iOS 12 and earlier
+                return UIApplication.shared.windows.first { $0.isKeyWindow } ?? UIApplication.shared.keyWindow
             }
         }()
         if let rootVC = keyWindow?.rootViewController {
